@@ -17,14 +17,16 @@
         }
 
         body {
+            background-color: #F8F5F5;
         }
 
         nav {
             display: flex;
             align-items: center;
             justify-content: space-around;
-            border: 1px solid red;
+/*            border: 1px solid red;*/
             box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 8px 2px;
+            background-color: #FFFFFF;
         }
 
         .md-stepper-horizontal {
@@ -174,17 +176,27 @@
             position: relative;
         }
 
-        .contact-info-label fieldset {
-            border: 1px gray solid;
-            border-radius: 8px;
+        .contact-info {
+            border: 1px solid #c1cbe0;
+            border-radius: 15px;
+            background-color: #FFFFFF;
         }
 
-        .contact-info-label legend {
-            margin-left: 1em;
-            font-size: 1em;
-            font-weight: 600;
-            padding: 0 10px;
-            color: #B185A7;
+        .contact-info-label label {
+            font-size: 12px;
+        }
+
+        .user-info {
+            border: 1px solid #c1cbe0;
+            border-radius: 15px;
+            margin-top: 1em;
+            padding: 1em;
+            background-color: #FFFFFF;
+        }
+
+        .user-info hr {
+            height: 0.5px;
+            margin: 1.5em 5px;
         }
     </style>
 </head>
@@ -224,8 +236,8 @@
     <main>
         <section class="left-section">
             <form action="" method="post">
-                <div class="contact-info border border-secondary p-3">
-                    <div class="contact-info-static border border-primary">
+                <div class="contact-info p-3">
+                    <div class="contact-info-static mb-2">
                         <div class="text-xs text-gray-500">針對所有預定</div>
                         <div class="fw-bold">聯絡資訊</div>
                         <div class="text-sm pt-1 pb-1">您的確認信將寄至此</div>
@@ -234,46 +246,68 @@
                     <div class="contact-info-label">
                         <div class="d-flex">
                             <div class="w-100 m-1">
-                                <fieldset>
-                                    <legend class="text-xs">名字*</legend>
-                                    <label for="firstname" class="form-label"></label>
-                                    <input type="text" id="firstname" name="firstname" value="" class="form-control">
-                                </fieldset>
+                                <!--<fieldset>-->
+                                <!--<legend class="text-xs">名字*</legend>-->
+                                <label for="firstname">名字*</label>
+                                <input type="text" id="firstname" name="firstname" value="" class="form-control">
+                                <!--</fieldset>-->
                             </div>
-                            <div class="w-100">
-                                <fieldset>
-                                    <legend class="text-xs">姓氏*</legend>
-                                    <label for="lastname"></label>
-                                    <input type="text" id="lastname" name="lastname" value="">
-                                </fieldset>
+                            <div class="w-100 m-1">
+                                <!--<legend class="text-xs">姓氏*</legend>-->
+                                <label for="lastname">姓氏*</label>
+                                <input type="text" id="lastname" name="lastname" value="" class="form-control">
                             </div>
                         </div>
                         <div class="d-flex">
-                            <div class="w-100">
-                                <fieldset>
-                                    <legend class="text-xs">電子郵件地址*</legend>
-                                    <label for="email"></label>
-                                    <input type="email" id="email" name="email" value="">
-                                </fieldset>
+                            <div class="w-100 m-1">
+                                <!--<fieldset>-->
+                                <!--<legend class="text-xs">電子郵件地址*</legend>-->
+                                <label for="email">電子郵件地址*</label>
+                                <input type="email" id="email" name="email" value="" class="form-control">
+                                <!--</fieldset>-->
                             </div>
-                            <div class="w-100">
-                                <fieldset>
-                                    <legend class="text-xs">居住地*</legend>
-                                    <label for="country"></label>
-                                    <input type="text" id="country" name="country" value="">
-                                </fieldset>
+                            <div class="w-100 m-1">
+                                <!--<fieldset>
+                                <legend class="text-xs">居住地*</legend>-->
+                                <label for="country">居住地*</label>
+                                <input type="text" id="country" name="country" value="" class="form-control">
+                                <!--</fieldset>-->
                             </div>
                         </div>
                         <div>
-                            <fieldset>
-                                <legend class="text-xs">電話號碼*</legend>
-                                <label for="phone"></label>
-                                <input type="text" id="phone" name="phone" value="">
-                            </fieldset>
+                            <!--<fieldset>
+                            <legend class="text-xs">電話號碼*</legend>-->
+                            <label for="phone">電話號碼*</label>
+                            <input type="text" id="phone" name="phone" value="" class="form-control w-50">
+                            <!--</fieldset>-->
                         </div>
                     </div>
                 </div>
-                <div class="user-info"></div>
+                <div class="user-info">
+                    <div>住客資料</div>
+                    <hr>
+                    <div class="contact-info-label">
+                        <div class="d-flex">
+                            <div class="w-100 m-1">
+                                <label for="firstname">名字</label>
+                                <input type="text" id="firstname" name="firstname" value="" class="form-control">
+                            </div>
+                            <div class="w-100 m-1">
+                                <label for="lastname">姓氏</label>
+                                <input type="text" id="lastname" name="lastname" value="" class="form-control">
+                            </div>
+                        </div>
+                        <div class="d-flex">
+                            <div class="w-100 m-1">
+                                <label for="phone">居住地</label>
+                                <input type="text" id="phone" name="phone" value="" class="form-control w-50">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end mt-3">
+                    <button type="submit" class="btn btn-primary col-4 rounded-pill fw-bold">前往付款頁面</button>
+                </div>
             </form>
         </section>
         <section class="right-section">
@@ -282,8 +316,6 @@
                 <div class="reservation-container-info"></div>
             </div>
             <div class="payment-detail">
-                <p>test</p>
-                <p>test again</p>
             </div>
         </section>
     </main>
