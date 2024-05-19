@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PrjFunNowWeb")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+35552db02abd46530f2427e013d465089145acae")]
 [assembly: System.Reflection.AssemblyProductAttribute("PrjFunNowWeb")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PrjFunNowWeb")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
