@@ -1,0 +1,315 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>購物車</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        /*  body {
+
+        }*/
+        main {
+            display: flex;
+            flex-grow: 1;
+            max-width: 1240px;
+            margin: 0 auto;
+        }
+
+        .cartLists {
+            /* outline: 5px solid black;*/
+            height: 500px;
+            margin: 0 auto;
+            flex-grow: 2;
+            flex-shrink: 1;
+            flex-basis: 0%;
+            margin: 24px 16px 0 0;
+        }
+
+        .totalPrice {
+            /*outline: 5px solid black;*/
+            height: 500px;
+            margin: 0 auto;
+            flex-grow: 1;
+            flex-shrink: 1;
+            flex-basis: 0%;
+            margin: 24px 0 0 0;          
+            position: relative;
+        }
+
+        .cartLists-title {
+            border: 1px solid #D5D9E2;
+            border-radius: 4px;
+            margin-bottom: 16px;
+            width: 90%;
+            margin: 0 auto;
+        }
+
+        .cartLists-title-font {
+            line-height: 40px;
+            padding: 8px;
+            font-size: 24px
+        }
+
+        .cartRoom {
+            border: 1px solid #D5D9E2;
+            border-radius: 4px;
+            width: 90%;
+            margin: 16px auto;
+        }
+
+        .cartRoom-basicInfo {
+        
+            padding: 5px 5px 0 5px;
+            display: flex;
+            position: relative;
+        }
+
+        .cartRoom-basicInfo-image-img {
+            width: 68px;
+            height: 90px;
+            overflow: clip;
+        }
+
+        .cartRoom-basicInfo-content {
+            margin-left: 1em;
+        }
+
+        .cartRoom-basicInfo-content-icon {
+            display: inline-block;
+            text-align: center;
+            line-height: 25px;
+            margin: 10px 5px 0 0;
+            height: 25px;
+            width: 25px;
+            background-color: rgb(62, 108, 234);
+        }
+
+        .cartRoom-basicInfo-content-div3 {
+            display: flex;
+            align-items: baseline;
+            margin-bottom: 8px;
+        }
+
+        .cartRoom-basicInfo-content-icon-number {
+            color: white;
+        }
+
+        .cartRoom-basicInfo-content-icon-comment {
+            font-size: 10px;
+            color: #3E6CEA;
+            display: block;
+            margin-right: 5px;
+        }
+
+        .cartRoom-basicInfo-content-icon-count {
+            font-size: 15px;
+            color: #707070;
+        }
+
+        .cartRoom-basicInfo-content-div2 {
+            margin-top: 8px;
+        }
+
+        .cartRoom-basicInfo-content-icon-star {
+            display: inline-block;
+            text-align: center;
+            margin-right: 10px;
+        }
+
+        .trash-can {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+        }
+
+        .trash-can-btn {
+            all: unset;
+            cursor: pointer;
+        }
+
+        .cartRoom-bookingInfo {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            border-top: 1px solid #D5D9E2;
+            padding: 5px;
+            font-size: 0.8em;
+            background-color: #EBF0FC
+        }
+
+        .cartRoom-bookingInfo-div4 {
+            display: flex;
+            justify-content: flex-end;
+            align-items: baseline;
+            font-weight: 800;
+            font-size: 1.5em;
+        }
+
+        .cartRoom-bookingInfo-div4 :first-child {
+            font-size: 0.3em;
+            margin-right: 2px;
+        }
+
+        .cartRoom-bookingInfo-div5 {
+            display: flex;
+            justify-content: flex-end;
+            font-size: 10px;
+            color: #6B7388;
+        }
+
+        .cartCheck-container-div2 {
+            font-size: 12px;
+            color: rgb(112, 112, 112);
+        }
+        .cartCheck-container {
+            position:fixed;
+            top:150px;
+            z-index:99;
+            width:408px;
+        
+        }
+    </style>
+
+</head>
+<body>
+    <main>
+        <section class="cartLists">
+            <div class="cartLists-title">
+                <h3 class="cartLists-title-font">您的購物車(2)</h3>
+            </div>
+            <div class="cartRoom">
+                <div class="cartRoom-basicInfo">
+                    <div class="cartRoom-basicInfo-image">
+                        <img class="cartRoom-basicInfo-image-img" src="https://pix8.agoda.net/hotelImages/445007/-1/9498d2a3865159bceb3899bb59330f5e.jpg?ce=0&s=828x464&ar=16x9" alt="">
+                    </div>
+
+                    <div class="cartRoom-basicInfo-content">
+                        <span>沃客商旅正義館 (Walker Hotel ZhengYi)</span>
+                        <div class="cartRoom-basicInfo-content-div2"><div class="cartRoom-basicInfo-content-icon-star"><i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> </div>  <i class="fa-solid fa-earth-americas"></i> <span>台北市</span></div>
+                        <div class="cartRoom-basicInfo-content-div3"> <div class="cartRoom-basicInfo-content-icon"><span class="cartRoom-basicInfo-content-icon-number">7</span></div> <span class="cartRoom-basicInfo-content-icon-comment">很好</span> <span class="cartRoom-basicInfo-content-icon-count">5,688篇評鑑</span></div>
+                    </div>
+                    <div class="trash-can"><button class="trash-can-btn"><i class="fa-solid fa-lg fa-trash-can fa-beat"></i></button></div>
+                </div>
+                <div class="cartRoom-bookingInfo">
+                    <div class="cartRoom-bookingInfo-div1">
+                        <label for=""><input type="checkbox" name=""><span>1 x 經濟雙人房</span></label>
+                    </div>
+                    <div class="cartRoom-bookingInfo-div2">
+                        <span>2024年7月18日</span><span>-</span><span>2024年7月19日</span>
+                    </div>
+                    <div class="cartRoom-bookingInfo-div3">
+                        <i class="fa-solid fa-users"></i> <span>住客人數</span><span>  </span><span>2位大人</span>
+                    </div>
+                    <div class="cartRoom-bookingInfo-div4">
+                        <span>NT $</span> <span>1,013</span>
+                    </div>
+                    <div class="cartRoom-bookingInfo-div5">
+                        包含稅金及附加費用
+                    </div>
+                </div>
+            </div>
+
+            <div class="cartRoom">
+                <div class="cartRoom-basicInfo">
+                    <div class="cartRoom-basicInfo-image">
+                        <img class="cartRoom-basicInfo-image-img" src="https://pix8.agoda.net/hotelImages/445007/-1/9498d2a3865159bceb3899bb59330f5e.jpg?ce=0&s=828x464&ar=16x9" alt="">
+                    </div>
+
+                    <div class="cartRoom-basicInfo-content">
+                        <span>沃客商旅正義館 (Walker Hotel ZhengYi)</span>
+                        <div class="cartRoom-basicInfo-content-div2"><div class="cartRoom-basicInfo-content-icon-star"><i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> </div>  <i class="fa-solid fa-earth-americas"></i> <span>台北市</span></div>
+                        <div class="cartRoom-basicInfo-content-div3"> <div class="cartRoom-basicInfo-content-icon"><span class="cartRoom-basicInfo-content-icon-number">7</span></div> <span class="cartRoom-basicInfo-content-icon-comment">很好</span> <span class="cartRoom-basicInfo-content-icon-count">5,688篇評鑑</span></div>
+                    </div>
+                    <div class="trash-can"><button class="trash-can-btn"><i class="fa-solid fa-lg fa-trash-can fa-beat"></i></button></div>
+                </div>
+                <div class="cartRoom-bookingInfo">
+                    <div class="cartRoom-bookingInfo-div1">
+                        <label for=""><input type="checkbox" name=""><span>1 x 經濟雙人房</span></label>
+                    </div>
+                    <div class="cartRoom-bookingInfo-div2">
+                        <span>2024年7月18日</span><span>-</span><span>2024年7月19日</span>
+                    </div>
+                    <div class="cartRoom-bookingInfo-div3">
+                        <i class="fa-solid fa-users"></i> <span>住客人數</span><span>  </span><span>2位大人</span>
+                    </div>
+                    <div class="cartRoom-bookingInfo-div4">
+                        <span>NT $</span> <span>1,013</span>
+                    </div>
+                    <div class="cartRoom-bookingInfo-div5">
+                        包含稅金及附加費用
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="cartRoom">
+                <div class="cartRoom-basicInfo">
+                    <div class="cartRoom-basicInfo-image">
+                        <img class="cartRoom-basicInfo-image-img" src="https://pix8.agoda.net/hotelImages/445007/-1/9498d2a3865159bceb3899bb59330f5e.jpg?ce=0&s=828x464&ar=16x9" alt="">
+                    </div>
+
+                    <div class="cartRoom-basicInfo-content">
+                        <span>沃客商旅正義館 (Walker Hotel ZhengYi)</span>
+                        <div class="cartRoom-basicInfo-content-div2"><div class="cartRoom-basicInfo-content-icon-star"><i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> </div>  <i class="fa-solid fa-earth-americas"></i> <span>台北市</span></div>
+                        <div class="cartRoom-basicInfo-content-div3"> <div class="cartRoom-basicInfo-content-icon"><span class="cartRoom-basicInfo-content-icon-number">7</span></div> <span class="cartRoom-basicInfo-content-icon-comment">很好</span> <span class="cartRoom-basicInfo-content-icon-count">5,688篇評鑑</span></div>
+                    </div>
+                    <div class="trash-can"><button class="trash-can-btn"><i class="fa-solid fa-lg fa-trash-can fa-beat"></i></button></div>
+                </div>
+                <div class="cartRoom-bookingInfo">
+                    <div class="cartRoom-bookingInfo-div1">
+                        <label for=""><input type="checkbox" name=""><span>1 x 經濟雙人房</span></label>
+                    </div>
+                    <div class="cartRoom-bookingInfo-div2">
+                        <span>2024年7月18日</span><span>-</span><span>2024年7月19日</span>
+                    </div>
+                    <div class="cartRoom-bookingInfo-div3">
+                        <i class="fa-solid fa-users"></i> <span>住客人數</span><span>  </span><span>2位大人</span>
+                    </div>
+                    <div class="cartRoom-bookingInfo-div4">
+                        <span>NT $</span> <span>1,013</span>
+                    </div>
+                    <div class="cartRoom-bookingInfo-div5">
+                        包含稅金及附加費用
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+
+        <section class="totalPrice">
+            <div class="cartCheck-container p-2 border border-1 rounded ">
+                <div class="cartCheck-container-div1 d-flex justify-content-between">
+                    <div>總價</div>
+                    <div class="text-danger fw-bolder fs-5">NT$ 1,784</div>
+                </div>
+                <div class="cartCheck-container-div2">
+                    <div><span>2項</span>（含稅及其他費用）</div>
+                </div>
+                <div class="d-grid gap-2 mt-3 ">
+                    <button class="btn btn-primary rounded-pill" type="button">繼續預定</button>
+                </div>
+            </div>
+
+            <div class="cartCheck-container-2 p-2 border border-1 rounded ">
+                <div class="cartCheck-container-div1 d-flex justify-content-between">
+                    <div>總價</div>
+                </div>
+                <div class="cartCheck-container-div2">
+                    <div>尚未選擇</div>
+                </div>
+                <div class="d-grid gap-2 mt-3 ">
+                    <button class="btn btn-light rounded-pill" type="button">繼續預定</button>
+                </div>
+            </div>
+        </section>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/e5eef540c2.js" crossorigin="anonymous"></script>
+    </main>
+</body>
+</html> 

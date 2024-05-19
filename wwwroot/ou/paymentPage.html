@@ -1,0 +1,293 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>客戶資訊</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+        }
+
+        body {
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            border: 1px solid red;
+            box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 8px 2px;
+        }
+
+        .md-stepper-horizontal {
+            display: table;
+            width: 70%;
+            background-color: #FFFFFF;
+        }
+
+            .md-stepper-horizontal .md-step {
+                display: table-cell;
+                position: relative;
+                padding: 12px;
+            }
+
+
+                .md-stepper-horizontal .md-step:first-child:active {
+                    border-top-left-radius: 0;
+                    border-bottom-left-radius: 0;
+                }
+
+                .md-stepper-horizontal .md-step:last-child:active {
+                    border-top-right-radius: 0;
+                    border-bottom-right-radius: 0;
+                }
+
+                .md-stepper-horizontal .md-step:first-child .md-step-bar-left,
+                .md-stepper-horizontal .md-step:last-child .md-step-bar-right {
+                    display: none;
+                }
+
+                .md-stepper-horizontal .md-step .md-step-circle {
+                    width: 25px;
+                    height: 25px;
+                    margin: 0 auto;
+                    background-color: #999999;
+                    border-radius: 50%;
+                    text-align: center;
+                    line-height: 25px;
+                    font-size: 12px;
+                    font-weight: 600;
+                    color: #FFFFFF;
+                }
+
+            .md-stepper-horizontal.green .md-step.active .md-step-circle {
+                background-color: #00AE4D;
+            }
+
+            .md-stepper-horizontal.orange .md-step.active .md-step-circle {
+                background-color: #5392F9;
+            }
+
+            .md-stepper-horizontal .md-step.active .md-step-circle {
+                background-color: rgb(33,150,243);
+            }
+
+            .md-stepper-horizontal .md-step.done .md-step-circle *,
+            .md-stepper-horizontal .md-step.editable .md-step-circle * {
+                display: none;
+            }
+
+
+            .md-stepper-horizontal .md-step .md-step-title {
+                font-size: 14px;
+                font-weight: 600;
+            }
+
+            .md-stepper-horizontal .md-step .md-step-title,
+            .md-stepper-horizontal .md-step .md-step-optional {
+                text-align: center;
+                color: rgba(0,0,0,.26);
+            }
+
+            .md-stepper-horizontal .md-step.active .md-step-title {
+                font-weight: 600;
+                color: rgba(0,0,0,.87);
+            }
+
+            .md-stepper-horizontal .md-step.active.done .md-step-title,
+            .md-stepper-horizontal .md-step.active.editable .md-step-title {
+                font-weight: 600;
+            }
+
+            .md-stepper-horizontal .md-step .md-step-optional {
+                font-size: 12px;
+            }
+
+            .md-stepper-horizontal .md-step.active .md-step-optional {
+                color: rgba(0,0,0,.54);
+            }
+
+            .md-stepper-horizontal .md-step .md-step-bar-left,
+            .md-stepper-horizontal .md-step .md-step-bar-right {
+                position: absolute;
+                top: 24px;
+                height: 1px;
+                border-top: 4px solid #DDDDDD;
+            }
+
+            .md-stepper-horizontal .md-step .md-step-bar-right {
+                right: 0;
+                left: 48%;
+                margin-left: 20px;
+            }
+
+            .md-stepper-horizontal .md-step .md-step-bar-left {
+                left: 0;
+                right: 48%;
+                margin-right: 20px;
+            }
+
+        .logo img {
+            width: 7vw;
+        }
+
+        .user-container {
+            padding: 0 0.5em;
+            border-left: 1px solid grey;
+            border-right: 1px solid grey;
+        }
+
+
+        main {
+            display: flex;
+            flex-grow: 1;
+            max-width: 1240px;
+            margin: 0 auto;
+        }
+
+        .left-section {
+            /* border: 5px solid black;*/
+            height: 500px;
+            margin: 0 auto;
+            flex-grow: 2;
+            flex-shrink: 1;
+            flex-basis: 0%;
+            margin: 24px 16px 0 0;
+        }
+
+        .right-section {
+            border: 5px solid black;
+            height: 500px;
+            margin: 0 auto;
+            flex-grow: 1;
+            flex-shrink: 1;
+            flex-basis: 0%;
+            margin: 24px 0 0 0;
+            position: relative;
+        }
+
+        .contact-info-label fieldset {
+            border: 1px gray solid;
+            border-radius: 8px;
+        }
+
+        .contact-info-label legend {
+            margin-left: 1em;
+            font-size: 1em;
+            font-weight: 600;
+            padding: 0 10px;
+            color: #B185A7;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <img src="image/FunNow_Logo_Horizontal_Orange.png" alt="LOGO">
+        </div>
+        <div class="md-stepper-horizontal orange">
+            <div class="md-step active">
+                <div class="md-step-circle"><span>1</span></div>
+                <div class="md-step-title">填寫住客資料</div>
+                <div class="md-step-bar-left"></div>
+                <div class="md-step-bar-right"></div>
+            </div>
+            <div class="md-step">
+                <div class="md-step-circle"><span>2</span></div>
+                <div class="md-step-title">選擇付款方式</div>
+                <div class="md-step-bar-left"></div>
+                <div class="md-step-bar-right"></div>
+            </div>
+            <div class="md-step">
+                <div class="md-step-circle"><span>3</span></div>
+                <div class="md-step-title">預訂已確認！</div>
+                <div class="md-step-bar-left"></div>
+                <div class="md-step-bar-right"></div>
+            </div>
+        </div>
+        <div class="user-container">
+            <button type="button">
+                <img src="" alt="O">
+                <span>Oliver</span>
+                <i class="fa-solid fa-caret-down"></i>
+            </button>
+        </div>
+    </nav>
+    <main>
+        <section class="left-section">
+            <form action="" method="post">
+                <div class="contact-info border border-secondary p-3">
+                    <div class="contact-info-static border border-primary">
+                        <div class="text-xs text-gray-500">針對所有預定</div>
+                        <div class="fw-bold">聯絡資訊</div>
+                        <div class="text-sm pt-1 pb-1">您的確認信將寄至此</div>
+                        <div class="text-red-500 text-sm">*必填欄位</div>
+                    </div>
+                    <div class="contact-info-label">
+                        <div class="d-flex">
+                            <div class="w-100 m-1">
+                                <fieldset>
+                                    <legend class="text-xs">名字*</legend>
+                                    <label for="firstname" class="form-label"></label>
+                                    <input type="text" id="firstname" name="firstname" value="" class="form-control">
+                                </fieldset>
+                            </div>
+                            <div class="w-100">
+                                <fieldset>
+                                    <legend class="text-xs">姓氏*</legend>
+                                    <label for="lastname"></label>
+                                    <input type="text" id="lastname" name="lastname" value="">
+                                </fieldset>
+                            </div>
+                        </div>
+                        <div class="d-flex">
+                            <div class="w-100">
+                                <fieldset>
+                                    <legend class="text-xs">電子郵件地址*</legend>
+                                    <label for="email"></label>
+                                    <input type="email" id="email" name="email" value="">
+                                </fieldset>
+                            </div>
+                            <div class="w-100">
+                                <fieldset>
+                                    <legend class="text-xs">居住地*</legend>
+                                    <label for="country"></label>
+                                    <input type="text" id="country" name="country" value="">
+                                </fieldset>
+                            </div>
+                        </div>
+                        <div>
+                            <fieldset>
+                                <legend class="text-xs">電話號碼*</legend>
+                                <label for="phone"></label>
+                                <input type="text" id="phone" name="phone" value="">
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+                <div class="user-info"></div>
+            </form>
+        </section>
+        <section class="right-section">
+            <div class="reservation-container">
+                <div class="reservation-container-title">預訂摘要</div>
+                <div class="reservation-container-info"></div>
+            </div>
+            <div class="payment-detail">
+            </div>
+        </section>
+    </main>
+
+    <script src="https://kit.fontawesome.com/e5eef540c2.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</body>
+</html> 
