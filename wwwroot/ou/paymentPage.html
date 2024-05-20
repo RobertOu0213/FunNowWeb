@@ -166,7 +166,6 @@
         }
 
         .right-section {
-            border: 5px solid black;
             height: 500px;
             margin: 0 auto;
             flex-grow: 1;
@@ -197,6 +196,53 @@
         .user-info hr {
             height: 0.5px;
             margin: 1.5em 5px;
+        }
+
+
+        .reservation-container-info {
+            border: 1px solid #c1cbe0;
+            border-radius: 0 0 8px 8px;
+            padding: 0.7em;
+            background-color: #FFFFFF;
+            margin-bottom: 1em;
+        }
+        .reservation-container-title {
+            border-radius: 8px 8px 0 0;
+            border-top: 1px solid #c1cbe0;
+            border-left: 1px solid #c1cbe0;
+            border-right: 1px solid #c1cbe0;
+            border-bottom: none;
+            background-color: rgb(243, 249, 242);
+            font-size: 20px;
+            line-height: 45px;
+            font-weight: 500;
+
+            padding: 0 0.5em;
+        }
+
+        .payment-detail {
+            border: 1px solid #c1cbe0;
+            padding: 1em;
+            background-color: #FFFFFF;
+        }
+
+        .reservation-container-info-img {
+            width: 80px;
+            height: 92px;
+
+            object-fit: cover;
+            border-radius: 3px;
+        }
+
+        .reservation-container-info-score {
+            display: inline-block;
+            text-align: center;
+            line-height: 25px;
+            margin: 10px 5px 0 0;
+            height: 25px;
+            width: 25px;
+            background-color: rgb(62, 108, 234);
+            color:aliceblue;
         }
     </style>
 </head>
@@ -313,9 +359,56 @@
         <section class="right-section">
             <div class="reservation-container">
                 <div class="reservation-container-title">預訂摘要</div>
-                <div class="reservation-container-info"></div>
+                <div class="reservation-container-info">
+                    <div class="mb-3">
+                        <i class="fa-solid fa-city fa-xs"></i>
+                        <span>住宿</span>
+                        <span class="text-xs text-neutral-400">台北市</span>
+                    </div>
+                    <div class="d-flex">
+                        <div ><img class="reservation-container-info-img" src="https://pix8.agoda.net/hotelImages/445007/-1/9498d2a3865159bceb3899bb59330f5e.jpg?ce=0&s=414x232&ar=16x9" alt="..."/></div>
+                        <div class="ms-2">
+                            <div class="fw-bolder">沃客商旅正義館</div>
+                            <div><i class="fa-solid fa-star fa-xs"></i> <i class="fa-solid fa-star fa-xs"></i> <i class="fa-solid fa-star fa-xs"></i></div>
+                            <div class="d-flex">
+                                <div class="reservation-container-info-score">7</div>
+                                <div class="d-flex flex-column mt-2">
+                                    <span class="text-xs">滿意</span>
+                                    <span class="text-xs text-neutral-500">得分自3539篇評鑑</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <span>2024年7月18日</span>
+                        <span>-</span>
+                        <span>2024年7月19日</span>
+                        <span>|</span>
+                        <span>1晚</span>
+                    </div>
+                    <div>
+                        <span></span>
+                        <span>1 x 經濟雙人房</span>
+                    </div>
+                    <div>
+                        <span>入住人數限制：</span>
+                        <span>2位大人</span>
+                    </div>
+                    <div>
+                        <span>旅客：</span>
+                        <span>2位大人</span>
+                    </div>                
+                </div>
             </div>
             <div class="payment-detail">
+                <div>收費明細</div>
+                <div>
+                    <div>總價</div>
+                    <div>NT2,955</div>
+                </div>
+                <div>
+                    含稅與附加費用
+                </div>
             </div>
         </section>
     </main>
