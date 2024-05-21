@@ -201,10 +201,9 @@
 
         .reservation-container-info {
             border: 1px solid #c1cbe0;
-            border-radius: 0 0 8px 8px;
+            border-radius: 0 0 0 0;
             padding: 0.7em;
             background-color: #FFFFFF;
-            margin-bottom: 1em;
         }
         .reservation-container-title {
             border-radius: 8px 8px 0 0;
@@ -357,7 +356,7 @@
             </form>
         </section>
         <section class="right-section">
-            <div class="reservation-container">
+            <div class="reservation-container mb-3">
                 <div class="reservation-container-title">預訂摘要</div>
                 <div class="reservation-container-info">
                     <div class="mb-3">
@@ -365,8 +364,8 @@
                         <span>住宿</span>
                         <span class="text-xs text-neutral-400">台北市</span>
                     </div>
-                    <div class="d-flex">
-                        <div ><img class="reservation-container-info-img" src="https://pix8.agoda.net/hotelImages/445007/-1/9498d2a3865159bceb3899bb59330f5e.jpg?ce=0&s=414x232&ar=16x9" alt="..."/></div>
+                    <div class="d-flex mb-4">
+                        <div><img class="reservation-container-info-img" src="https://pix8.agoda.net/hotelImages/445007/-1/9498d2a3865159bceb3899bb59330f5e.jpg?ce=0&s=414x232&ar=16x9" alt="..." /></div>
                         <div class="ms-2">
                             <div class="fw-bolder">沃客商旅正義館</div>
                             <div><i class="fa-solid fa-star fa-xs"></i> <i class="fa-solid fa-star fa-xs"></i> <i class="fa-solid fa-star fa-xs"></i></div>
@@ -380,6 +379,7 @@
                         </div>
                     </div>
                     <div>
+                        <i class="fa-solid fa-calendar-days me-2"></i>
                         <span>2024年7月18日</span>
                         <span>-</span>
                         <span>2024年7月19日</span>
@@ -387,26 +387,71 @@
                         <span>1晚</span>
                     </div>
                     <div>
+                        <i class="fa-solid fa-bed me-1"></i>
                         <span></span>
                         <span>1 x 經濟雙人房</span>
                     </div>
-                    <div>
+                    <div class="mb-2">
                         <span>入住人數限制：</span>
                         <span>2位大人</span>
                     </div>
-                    <div>
+                    <div class="mb-4">
                         <span>旅客：</span>
                         <span>2位大人</span>
-                    </div>                
+                    </div>
+                </div>
+
+
+                <div class="reservation-container-info">
+                    <div class="mb-3">
+                        <i class="fa-solid fa-city fa-xs"></i>
+                        <span>住宿</span>
+                        <span class="text-xs text-neutral-400">台北市</span>
+                    </div>
+                    <div class="d-flex mb-4">
+                        <div><img class="reservation-container-info-img" src="https://pix8.agoda.net/hotelImages/445007/-1/9498d2a3865159bceb3899bb59330f5e.jpg?ce=0&s=414x232&ar=16x9" alt="..." /></div>
+                        <div class="ms-2">
+                            <div class="fw-bolder">沃客商旅正義館</div>
+                            <div><i class="fa-solid fa-star fa-xs"></i> <i class="fa-solid fa-star fa-xs"></i> <i class="fa-solid fa-star fa-xs"></i></div>
+                            <div class="d-flex">
+                                <div class="reservation-container-info-score">7</div>
+                                <div class="d-flex flex-column mt-2">
+                                    <span class="text-xs">滿意</span>
+                                    <span class="text-xs text-neutral-500">得分自3539篇評鑑</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <i class="fa-solid fa-calendar-days me-2"></i>
+                        <span>2024年7月18日</span>
+                        <span>-</span>
+                        <span>2024年7月19日</span>
+                        <span>|</span>
+                        <span>1晚</span>
+                    </div>
+                    <div>
+                        <i class="fa-solid fa-bed me-1"></i>
+                        <span></span>
+                        <span>1 x 經濟雙人房</span>
+                    </div>
+                    <div class="mb-2">
+                        <span>入住人數限制：</span>
+                        <span>2位大人</span>
+                    </div>
+                    <div class="mb-4">
+                        <span>旅客：</span>
+                        <span>2位大人</span>
+                    </div>
                 </div>
             </div>
             <div class="payment-detail">
-                <div>收費明細</div>
-                <div>
+                <div class="fs-5">收費明細</div>
+                <div class="d-flex justify-content-between">
                     <div>總價</div>
                     <div>NT2,955</div>
                 </div>
-                <div>
+                <div class="text-xs text-slate-400">
                     含稅與附加費用
                 </div>
             </div>
