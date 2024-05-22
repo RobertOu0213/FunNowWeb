@@ -1,0 +1,150 @@
+﻿* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+$nav-border: #e5e5e5;
+$primary-color: #FFFFFF;
+$main-color: #FCFCFC;
+
+@mixin getStepNums($num) {
+    @for $i from 1 through $num {
+        &:nth-child(#{$i}) .circle-container::after {
+            content: "#{$i}";
+        }
+    }
+}
+
+
+nav {
+    display: flex;
+    border-bottom: 1px solid $nav-border;
+    align-items: center;
+    height: 3.7em;
+
+    > div > img {
+        width: 5em;
+        margin-left: 1em;
+    }
+}
+
+main {
+    background-color: $main-color;
+    display: flex;
+}
+
+.stepper {
+    position: sticky;
+    top: 0;
+    width: 250px;
+    height: 100vh;
+    overflow-y: auto;
+    background-color: $primary-color;
+    padding: 10px;
+    border-right: 1px solid $nav-border;
+
+
+    .right-content {
+        display: flex;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .stepper-panel {
+        padding: 10px;
+    }
+
+    .stepper-container {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+    }
+
+    .step {
+        display: flex;
+        align-items: center;
+        margin-bottom: 40px;
+        position: relative;
+        @include getStepNums(6);
+
+        .circle-container {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+            margin-right: 20px;
+
+            .active & {
+                background-color: #2196F3;
+            }
+
+            &::after {
+                position: absolute;
+                /*top: 8%;*/
+                left: 5%;
+                /*transform: translate(-50%, -50%);*/
+                /* margin-left: 5px*/
+
+                color: white;
+                font-size: 12px;
+            }
+        }
+
+        .label-container {
+            font-size: 16px;
+        }
+
+        .connect-line {
+            position: absolute;
+            width: 2px;
+            height: 45px;
+            background-color: #ddd;
+            left: 9px; // 中心對齊圓圈
+            top: 22px; // 讓連接線從圓圈底部開始
+        }
+    }
+}
+
+
+
+.leftSection {
+    width: 20%;
+/*    border: 1px solid black;*/
+}
+
+.rightSection {
+    width: 100%;
+
+    .content__container {
+        width: 90%;
+        margin: 0 auto;
+        /*padding:20px;*/
+        height:1000px;
+
+        border: 1px solid black;
+    }
+}
+
+.hero {
+    .hero__content {
+        width: 50%;
+        padding: 40px;
+
+        .hero__content__title {
+            font-size: 40px;
+        }
+
+        .hero__content__description {
+            font-size: 20px;
+        }
+    }
+
+    &__image {
+        width: 50%;
+
+        img {
+            width: 100%;
+        }
+    }
+}
