@@ -1,7 +1,16 @@
+using Microsoft.EntityFrameworkCore;
+using PrjFunNowWeb.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<FunNowContext>(
+    options => options.UseSqlServer(
+        builder.Configuration.GetConnectionString("FunNowConnection")
+));
+
 
 var app = builder.Build();
 
