@@ -16,6 +16,10 @@ $main-color: #FCFCFC;
     }
 }
 
+%middle_title {
+    font-size:30px;
+    font-weight: bold;
+}
 
 nav {
     display: flex;
@@ -120,9 +124,50 @@ main {
         width: 90%;
         margin: 0 auto;
         /*padding:20px;*/
-        height:1000px;
-
+        height: 1000px;
         border: 1px solid black;
+
+
+        .panel {
+            background-color: #fff;
+            border: 1px solid grey;
+            border-radius: 5px;
+            width: 100%;
+            padding: 15px 15px 30px 15px;
+        }
+
+        .custom-radio {
+            width: 20px;
+            height: 20px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            outline: none;
+            cursor: pointer;
+            position: relative;
+            margin-right: 10px;
+            box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+            transition: box-shadow 0.2s ease-in-out;
+        }
+
+        .custom-radio:checked {
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+        }
+
+        .custom-radio:checked::before {
+            content: '';
+            display: block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #007bff;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
     }
 }
 
