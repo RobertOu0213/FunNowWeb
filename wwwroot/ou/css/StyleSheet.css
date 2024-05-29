@@ -117,7 +117,7 @@ main {
   height: 4000px;
   border: 1px solid black;
 }
-.rightSection .content__container .panel {
+.rightSection .content__container .panel, .rightSection .content__container .panel__room {
   background-color: #fff;
   border: 1px solid grey;
   border-radius: 5px;
@@ -250,10 +250,10 @@ main {
 }
 
 .btn_delete {
-  min-width: 100px;
-  padding: 4px 12px;
+  min-width: 10px;
+  padding: 4px 10px;
   position: absolute;
-  top: 6%;
+  top: 1px;
   right: 10%;
 }
 
@@ -263,5 +263,9 @@ main {
   right: 15px;
   cursor: pointer;
   color: #727272;
-  font-size: 15px;
+  font-size: 14px;
+}
+
+.panel__content {
+  display: none;
 }
