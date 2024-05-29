@@ -14,7 +14,10 @@ namespace PrjFunNowWeb.Controllers
             _logger = logger;
             _context = context;
         }
-
+        public IActionResult pgHotel()
+        {
+            return View();
+        }
         public IActionResult test()
         {
           
