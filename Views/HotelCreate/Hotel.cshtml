@@ -261,8 +261,9 @@
                     <div>
                         <button type="button" class="btn_delete">刪除房型</button>
                     </div>
-                    <div>
-                        <button type="button" class="btn-toggle">收起</button>
+                    <div class="btn-toggle">
+                        <span class="me-3">收起</span>
+                        <i class="fa-solid fa-chevron-down"></i>
                     </div>
                 </div>
                 <div class="fw-bold fs-5 mb-4">基本資訊</div>
@@ -329,7 +330,7 @@
     <script>
        
         $(document).ready(function () {
-            $('#plus-btn').click(function () {
+            $('#plus-btn').on('click',function () {
                 const input = $('#room-size-input');
                 const currentValue = parseInt(input.val());
                 if (currentValue < parseInt(input.attr('max'))) {
@@ -337,7 +338,7 @@
                 }
             });
 
-            $('#minus-btn').click(function () {
+            $('#minus-btn').on('click',function () {
                 const input = $('#room-size-input');
                 const currentValue = parseInt(input.val());
                 if (currentValue > parseInt(input.attr('min'))) {

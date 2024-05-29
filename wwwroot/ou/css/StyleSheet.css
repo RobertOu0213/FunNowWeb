@@ -259,6 +259,9 @@ main {
 
 .btn-toggle {
   position: absolute;
-  top: 3px;
-  right: 10px;
+  top: 6px;
+  right: 15px;
+  cursor: pointer;
+  color: #727272;
+  font-size: 15px;
 }
