@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewData["Title"] = "test";
+}
+@model IEnumerable<PrjFunNowWeb.Models.Country>
+
+<h1 class="ms-4 text-2xl">test</h1>
+<ul>
+
+    @foreach (var item in Model)
+    {
+        <li>@item.CountryName</li>
+    }
+</ul>
+
