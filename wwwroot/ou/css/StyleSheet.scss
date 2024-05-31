@@ -124,10 +124,10 @@ main {
     width: 100%;
 
     .content__container {
-        width: 90%;
+        width: 85%;
         margin: 0 auto;
         /*padding:20px;*/
-        height: 4000px;
+        height: 6000px;
         border: 1px solid black;
 
 
@@ -298,4 +298,93 @@ main {
 
 .panel__room {
     @extend .panel;
+}
+
+
+.content__container__image {
+    &__text {
+        width: 80%;
+    }
+
+    .reminder__background {
+        width: 95%;
+        background-color: #E3EDFF;
+        padding: 15px;
+        border-radius: 16px;
+        margin-top: 10px;
+
+        &__text {
+            color: rgb(2, 70, 207);
+            font-weight: 700;
+            padding-left: 30px;
+        }
+    }
+
+
+    @mixin uploadButtonStyles {
+        color: #fff;
+        background-color: #1174a6;
+        border: 1px solid #1174a6;
+        text-align: center;
+        cursor: pointer;
+        border-radius: 3px;
+        padding: 10px 15px;
+        font-size: 14px;
+        font-weight: 600;
+
+        &:hover {
+            background-color: #0C5478;
+        }
+    }
+
+
+    .file__upload {
+        width: 100%;
+        height: 480px;
+        border: 3px dashed #CCCCCC;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #FFFFFF;
+        color: gray;
+
+
+        #uploadButton {
+            @include uploadButtonStyles;
+        }
+    }
+
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+
+        .card {
+            position: relative;
+            width: 18rem;
+            margin-top: 10px;
+
+            .delete-button {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+            }
+        }
+    }
+
+
+    .uploaded {
+        border: 3px dashed #CCCCCC;
+        text-align: center;
+        background-color: #FFFFFF;
+        color: gray;
+        width: 100%;
+        height: auto;
+
+        #uploadButton {
+            @include uploadButtonStyles;
+            margin-bottom: 10px;
+        }
+    }
 }
