@@ -313,6 +313,43 @@
                                 <div class="form-Room-size-unit">TWD</div>
                             </div>
                         </div>
+                        @* 設備 *@
+                        <h5 class="fw-bold">房間設施</h5>
+                        <div class="sm_titlt mb-3">房間有提供的設備</div>
+                        <div class="panel">
+                            <div class="row row-cols-3">
+                                <div class="col mb-2">
+                                    <label >
+                                        <input type="checkbox"  />
+                                        專人辦理入住/退房服務
+                                    </label>
+                                </div>
+                                <div class="col">
+                                    <label >
+                                        <input type="checkbox"  />
+                                        專人辦理入住/退房服務
+                                    </label>
+                                </div>
+                                <div class="col">
+                                    <label >
+                                        <input type="checkbox" />
+                                        專人辦理入住/退房服務
+                                    </label>
+                                </div>
+                                <div class="col">
+                                    <label >
+                                        <input type="checkbox" />
+                                        專人辦理入住/退房服務
+                                    </label>
+                                </div>
+                                <div class="col">
+                                    <label >
+                                        <input type="checkbox" />
+                                        專人辦理入住/退房服務
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -546,6 +583,8 @@
 
                 newPanel.find('.panel__room__count').text(`客房${roomCount}`);
                 newPanel.find('input').val('');
+                newPanel.find('select').prop('selectedIndex', 0); // 重置下拉框選項
+                newPanel.find('input[type="checkbox"]').prop('checked', false); // 重置所有checkbox
                 newPanel.find('.panel__content').hide();
                 newPanel.find('.btn-toggle span').text('展開');
                 newPanel.find('.btn-toggle i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
