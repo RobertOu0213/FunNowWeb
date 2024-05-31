@@ -1,0 +1,193 @@
+﻿* {
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+body {
+    background-color: #FCFCFC;
+}
+
+@mixin uploadButtonStyles {
+    color: #fff;
+    background-color: #1174a6;
+    border: 1px solid #1174a6;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 3px;
+    padding: 10px 40px;
+    font-size: 14px;
+    font-weight: 600;
+
+    &:hover {
+        background-color: #0C5478;
+    }
+}
+
+nav {
+    width: 100%;
+    background-color: #1174A6;
+
+    .nav__container {
+        width: 100%;
+        border: 1px #1174A6 solid;
+        line-height: 60px;
+        /*       ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }*/
+        li {
+            display: inline-block;
+            margin-right: 15px;
+            position: relative;
+        }
+
+        li::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            background: #F7F7F7;
+            bottom: 0;
+            left: 0;
+            transform: scaleY(0);
+            transform-origin: bottom;
+            transition: transform 0.3s ease;
+        }
+
+        li:hover::before {
+            transform: scaleY(1);
+        }
+
+
+        a {
+            text-decoration: none;
+            color: white;
+            font-weight: 800;
+        }
+
+
+
+        .avatar {
+            text-align: center;
+            vertical-align: middle;
+            color: #fff;
+            background-position: 50%;
+            background-repeat: no-repeat;
+            background-size: contain;
+            border-radius: 50%;
+            width: 2.5em;
+            height: 2.5em;
+            font-size: 1em;
+            font-weight: 700;
+            line-height: 2.5em;
+            display: inline-block;
+            background-color: grey;
+        }
+    }
+}
+
+
+.search__container {
+    width: 100%;
+    background-color:#FFFFFF;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 80px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+
+    &__search {
+        width: 35%;
+        margin-left: 20px;
+    }
+
+    .uploadButton {
+        @include uploadButtonStyles;
+    }
+}
+
+.hotelCard {
+    width: 95%;
+    height: 120px;
+    margin: 0 auto;
+    border-radius: 5px;
+    background-color: #FFFFFF;
+    border: 1px solid #E5E6E8;
+
+    &__img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 3px;
+        margin: 5px;
+    }
+
+    &__status {
+        border: 1px solid #E7F9F0;
+        padding: 2px 6px;
+        background-color: #E7F9F0;
+        color: #528C20;
+        font-weight: 800;
+        font-size: 14px;
+        border-radius: 3px;
+    }
+
+    &__info {
+        border-bottom: 1px solid #E5E6E8;
+
+        .city, .country {
+            font-size: 14px;
+            color: #777777;
+        }
+    }
+
+    &__connect a {
+        display: flex;
+        align-items: center;
+        height: 50px;
+        text-decoration: none;
+        font-weight: 800;
+        color: #1174A6;
+        padding: 0 10px;
+        position: relative;
+    }
+
+    &__connect a:hover::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 2px; 
+        width: 100%;
+        height: 2px; 
+        background-color: #1174A6; 
+    }
+}
+
+.tab__container {
+    width: 100%;
+
+
+
+    &__content a {
+        display: flex;
+        align-items: center;
+        height: 50px;
+        text-decoration: none;
+        font-weight: 800;
+        color: black;
+        padding: 0 10px;
+        position: relative;
+        border-bottom: 1px solid #DDDFE2;
+    }
+
+    &__content a:hover::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0.2px;
+        width: 100%;
+        height: 2px;
+        background-color: #1174A6;
+    }
+}

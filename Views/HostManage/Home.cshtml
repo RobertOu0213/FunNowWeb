@@ -1,0 +1,149 @@
+﻿
+@{
+    ViewData["Title"] = "FunNow Home";
+    Layout = "_Layout_HotelHome";
+}
+
+<nav>
+    <div class="nav__container">
+        <div class="row">
+            <div class="col ps-5">
+               <img src="~/ou/image/funnow_logo_horizontal_orange.png" class="w-50" />
+            </div>
+          
+            <div class="col-8">
+                 <a href="#"><li><i class="fa-solid fa-house me-2"></i>物業清單</li></a>
+                 <a href="#"><li><i class="fa-solid fa-square-check me-2"></i>預訂</li></a>
+                 <a href="#"><li><i class="fa-solid fa-comment-dots me-2"></i>訊息</li></a>
+                 <a href="#"><li><i class="fa-solid fa-person me-2"></i>個人資料</li></a>       
+            </div>
+          
+            <div class="col-2 ps-5">
+                <a href="#">
+                    <img class="avatar" />
+                    <span>Oliver</span>
+                    <span>Ou</span>
+                    <i class="fa-solid fa-caret-down"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="search__container">
+    <div class="search__container__search">
+        <form class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="搜尋房源名稱或編號" aria-label="Search">
+            <button class="btn btn-outline-primary" type="submit">Search</button>
+        </form>
+    </div>
+   <div class="me-3">
+       <button class="uploadButton">新增房源</button>
+   </div>
+</div>
+
+<main>
+@*     <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Active</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+        </li>
+    </ul> *@
+
+    <div class="tab__container">
+        <div class="tab__container__content d-flex align-items-center ms-4 mb-4 mt-4">
+            <a href="#">
+                <div>已啟用</div>
+            </a>
+            <a href="#">
+                <div>審核中</div>
+            </a>
+        </div>
+    </div>
+
+    <div class="hotelCard mb-4">
+        <div class="d-flex align-items-center hotelCard__info">
+            <div>
+                <img src="~/image/ou/001.jpg" alt="..." class="hotelCard__img" />
+            </div>
+            <div>
+                <div class="fw-bold">
+                    <span>[55637200]</span>
+                    <span>士林好所在</span>
+                </div>
+                <div>
+                    <span class="hotelCard__status">已啟用</span>
+                    <span class="city">Taipei,</span>
+                    <span class="country">台灣</span>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex align-items-center ms-3 hotelCard__connect">
+            <a href="#">
+                <div>
+                    編輯物業
+                </div>
+            </a>
+            <a href="#" >
+                <div>
+                    行事曆
+                </div>
+            </a>
+            <a href="#">
+                <div>
+                    訂單&收入
+                </div>
+            </a>        
+        </div>
+    </div>
+
+    <div class="hotelCard">
+        <div class="d-flex align-items-center hotelCard__info">
+            <div>
+                <img src="~/image/ou/001.jpg" alt="..." class="hotelCard__img" />
+            </div>
+            <div>
+                <div class="fw-bold">
+                    <span>[55637200]</span>
+                    <span>士林好所在</span>
+                </div>
+                <div>
+                    <span class="hotelCard__status">已啟用</span>
+                    <span class="city">Taipei,</span>
+                    <span class="country">台灣</span>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex align-items-center ms-3 hotelCard__connect">
+            <a href="#">
+                <div>
+                    編輯物業
+                </div>
+            </a>
+            <a href="#">
+                <div>
+                    行事曆
+                </div>
+            </a>
+            <a href="#">
+                <div>
+                    訂單&收入
+                </div>
+            </a>
+        </div>
+    </div>
+
+
+</main>
+
+
+@section Scripts {
+    <script>
+
+    </script>
+}
+@section Styles {
+    <link href="~/ou/css/HostManage.css" rel="stylesheet" />
+}
