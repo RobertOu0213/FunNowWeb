@@ -381,10 +381,10 @@ main {
         color: gray;
         width: 100%;
         height: auto;
+    }
 
-        #uploadButton {
-            @include uploadButtonStyles;
-            margin-bottom: 10px;
-        }
+    .uploadButton {
+        @include uploadButtonStyles;
+        margin-bottom: 10px;
     }
 }

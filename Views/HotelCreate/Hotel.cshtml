@@ -330,7 +330,6 @@
 
             @* 圖片 *@
             <div class="content__container__image">
-
                 <div class="d-flex align-items-center">
                     <div class="mb-4">
                         <h4 class="fw-bold mt-5">向房客們展示物業的特色</h4>
@@ -345,22 +344,43 @@
                     <div class="reminder__background__text">小提醒：房源上架後仍可管理照片。您可以先從最簡單的開始，並隨時更改或新增內容。</div>
                 </div>
 
-                <h4 class="fw-bold mt-5">飯店照片</h4>
-                <p>建築外觀、停車位、入口，以及任何其他開放使用的設施</p>
+                <div class="mb-5">
+                    <h4 class="fw-bold mt-5">飯店照片</h4>
+                    <p>建築外觀、停車位、入口，以及任何其他開放使用的設施</p>
 
-                <div class="file__upload"> 
-                    <div id="uploadSection">
-                        <img src="~/image/ou/upload.png" alt="..." />
-                        <div class="fw-bold">請將照片拖放至此</div>
-                        <p>僅限JPG和PNG格式（上限5 MB）</p>
-                        <input type="file" id="fileInput" accept=".jpg,.png" multiple style="display: none;" />
-                        <button id="uploadButton">選擇照片</button>
+                    <div class="file__upload">
+                        <div id="uploadSection">
+                            <img src="~/image/ou/upload.png" alt="..." />
+                            <div class="fw-bold">請將照片拖放至此</div>
+                            <p>僅限JPG和PNG格式（上限5 MB）</p>
+                            <input type="file" id="fileInput" accept=".jpg,.png" multiple style="display: none;" />
+                            <button id="uploadButton">選擇照片</button>
+                        </div>
                     </div>
-                
+                    <div class="container" id="preview"></div>
                 </div>
-                <div class="container" id="preview"></div>
-             
 
+                <div class="mb-5">
+                    <h4 class="fw-bold mt-5">名字</h4>
+                    <p>住宿單位裡的臥室、浴室、廚房、用餐區域和起居空間。</p>
+                    <div class="file__upload">
+                        <div id="uploadSection">
+                            <img src="~/image/ou/upload.png" alt="..." />
+                            <div class="fw-bold">請將照片拖放至此</div>
+                            <p>僅限JPG和PNG格式（上限5 MB）</p>
+                            <input type="file" id="fileInput" accept=".jpg,.png" multiple style="display: none;" />
+                            <button id="uploadButton">選擇照片</button>
+                        </div>
+                    </div>
+                    <div class="container" id="preview"></div>
+                </div>
+
+            </div>
+
+            @*   button *@
+            <div class="d-flex justify-content-end mt-5">
+                <button type="button" class="btn_previous">上一步</button>
+                <button type="button" class="btn_next">開始上線銷售！</button>
             </div>
 
         </div>
