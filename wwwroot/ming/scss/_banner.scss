@@ -1,15 +1,14 @@
 /*============= Start banner_area css =============*/
-.banner_area {
+.banner_area{
     background: #04091e;
-    position: relative;
+    
+	position: relative;
     z-index: 1;
-
-    .bg-parallax {
-        background: url("~/image/ming_img/banner_bg.jpg") no-repeat scroll center 0 / cover;
+    .bg-parallax{
+        background: url("../image/banner_bg.jpg") no-repeat scroll center 0 / cover;
         opacity: 0.50;
     }
-
-    .position {
+    .position{
         width: 100%;
         bottom: 0;
         left: 0;
