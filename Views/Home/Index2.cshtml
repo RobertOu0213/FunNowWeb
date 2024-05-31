@@ -1,23 +1,319 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Home Page2";
-    Layout = "_Layout";
-
-
+    Layout = "_Layout_index2";
 }
-
-
 @section Scripts {
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const rangeSlider = document.getElementById('rangeSlider');
+            const lowerHandle = document.getElementById('lowerHandle');
+            const upperHandle = document.getElementById('upperHandle');
+            const lowerLabel = document.getElementById('lowerLabel');
+            const upperLabel = document.getElementById('upperLabel');
+            const lowerInput = document.getElementById('lowerInput');
+            const upperInput = document.getElementById('upperInput');
 
+            let isLowerDragging = false;
+            let isUpperDragging = false;
 
+            lowerHandle.addEventListener('mousedown', () => {
+                isLowerDragging = true;
+            });
+
+            upperHandle.addEventListener('mousedown', () => {
+                isUpperDragging = true;
+            });
+
+            document.addEventListener('mouseup', () => {
+                isLowerDragging = false;
+                isUpperDragging = false;
+            });
+
+            document.addEventListener('mousemove', (event) => {
+                if (isLowerDragging) {
+                    handleDrag(event, lowerHandle, lowerLabel, upperLabel, lowerInput, upperInput);
+                } else if (isUpperDragging) {
+                    handleDrag(event, upperHandle, upperLabel, lowerLabel, lowerInput, upperInput);
+                }
+            });
+
+            function handleDrag(event, handle, label, oppositeLabel, lowerInput, upperInput) {
+                const sliderRect = rangeSlider.getBoundingClientRect();
+                const sliderWidth = sliderRect.width;
+                const min = parseFloat(rangeSlider.getAttribute('min'));
+                const max = parseFloat(rangeSlider.getAttribute('max'));
+                const range = max - min;
+
+                let position = (event.clientX - sliderRect.left) / sliderWidth;
+                position = Math.min(1, Math.max(0, position)); // Clamp position between 0 and 1
+                const value = Math.round(min + position * range);
+
+                if (handle === lowerHandle) {
+                    if (value >= parseFloat(upperLabel.textContent.split('：')[1])) {
+                        return; // Lower handle cannot exceed upper handle
+                    }
+                    handle.style.left = `${position * 100}%`;
+                    label.textContent = `下限：${value}`;
+                    lowerInput.value = value;
+                } else {
+                    if (value <= parseFloat(lowerLabel.textContent.split('：')[1])) {
+                        return; // Upper handle cannot be less than lower handle
+                    }
+                    handle.style.left = `${position * 100}%`;
+                    label.textContent = `上限：${value}`;
+                    upperInput.value = value;
+                }
+            }
+
+            lowerInput.addEventListener('input', () => {
+                const value = parseFloat(lowerInput.value);
+                if (value >= parseFloat(upperLabel.textContent.split('：')[1])) {
+                    return; // Lower input cannot exceed upper handle
+                }
+                const position = (value - parseFloat(rangeSlider.getAttribute('min'))) / (parseFloat(rangeSlider.getAttribute('max')) - parseFloat(rangeSlider.getAttribute('min')));
+                lowerHandle.style.left = `${position * 100}%`;
+                lowerLabel.textContent = `下限：${value}`;
+            });
+
+            upperInput.addEventListener('input', () => {
+                const value = parseFloat(upperInput.value);
+                if (value <= parseFloat(lowerLabel.textContent.split('：')[1])) {
+                    return; // Upper input cannot be less than lower handle
+                }
+                const position = (value - parseFloat(rangeSlider.getAttribute('min'))) / (parseFloat(rangeSlider.getAttribute('max')) - parseFloat(rangeSlider.getAttribute('min')));
+                upperHandle.style.left = `${position * 100}%`;
+                upperLabel.textContent = `上限：${value}`;
+            });
+        });
     </script>
 }
 
 @section Styles {
     <style>
+        .slider-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .range-slider {
+            position: absolute;
+            width: 83%;
+            height: 6px;
+            background: #ddd;
+            border-radius: 3px;
+        }
+
+        .slider-handle {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #007bff;
+            border-radius: 50%;
+            cursor: pointer;
+            top: -7px;
+            z-index: 10;
+        }
+
+        .label-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .input-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+            .input-container input {
+                width: 45%;
+                z-index: 1; 
+            }
 
     </style>
 }
 
-<h2>首頁2</h2>
+<br />
+<br />
+<br />
+<br />
+<!--================ 台灣熱門城市 Area  =================-->
+<section class="accomodation_area section_gap">
+
+    <br />
+    <br />
+    <br />
+    <br />
+
+
+    <div class="container">
+        <div class="row mb_30">
+            <div class="col-lg-3 col-sm-6" ">
+
+                <div class="hotel_img">
+                    <img src="image/ming_img/map.png" alt="">
+                    <a href="#" class="btn theme_btn button_hover"></a>
+                </div>
+
+                <div>
+                    <a class="book_now_btn button_hover" href="#" style="border-radius: 20px;background: #F0F0F0; text-align:left">
+                        <img src="image/search.png" alt="">搜尋關鍵字
+                    </a>
+                </div>
+                <br />
+                <p style="margin:0px 10px">每晚預算</p>
+
+                <!--//價格搜尋拉霸start-->
+                <div class="slider-container" style="margin: 10px">
+                    <div class="range-slider" id="rangeSlider" min="0" max="100" >
+                        <div class="slider-handle lower-handle" id="lowerHandle"></div>
+                        <div class="slider-handle upper-handle" id="upperHandle"></div>
+                    </div>
+                    <div class="label-container" >
+                        <span id="lowerLabel">下限：0</span>
+                        <span id="upperLabel">上限：100</span>
+                    </div>
+                    <div class="input-container" ;">
+                        <input type="number" id="lowerInput" value="0" style="margin-right: 10px;">
+                        <input type="number" id="upperInput" value="100">
+                    </div>
+                </div>
+                <!--//價格搜尋拉霸end-->
+                <br />
+                <br />
+                <!--//住宿類型Start-->
+                <div style="margin:20px 10px">
+                    <p>住宿類型</p>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Default checkbox
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+                        <label class="form-check-label" for="flexCheckChecked">
+                            Checked checkbox
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Default checkbox
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+                        <label class="form-check-label" for="flexCheckChecked">
+                            Checked checkbox
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Default checkbox
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+                        <label class="form-check-label" for="flexCheckChecked">
+                            Checked checkbox
+                        </label>
+                    </div>
+                </div>
+                <!--//住宿設施End-->
+                <hr />
+
+                <!--//熱門景點start-->
+                <div style="margin:20px 10px">
+                    <p>熱門景點</p>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Default checkbox
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+                        <label class="form-check-label" for="flexCheckChecked">
+                            Checked checkbox
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Default checkbox
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+                        <label class="form-check-label" for="flexCheckChecked">
+                            Checked checkbox
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Default checkbox
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+                        <label class="form-check-label" for="flexCheckChecked">
+                            Checked checkbox
+                        </label>
+                    </div>
+                </div>
+                <!--//熱門景點End-->
+                <hr />
+            </div>
+
+            <div class="col-lg-9 col-sm-12">
+                <div class="col-lg-12" style="padding: 0; margin: 0;">
+                    <div class="row" style=" padding:0;margin:0;">
+                        <div class="col-lg-4 col-sm-8">
+                            <div class="row" style="width: 100%; height: auto; margin: 0; object-fit:contain;">
+                                <div class="col-lg-12">
+                                    <div>
+                                        <div>
+                                            <img src="image/room2.jpg" alt="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12" style="padding: 0; margin: 0;">
+                                    <div class="row">
+                                        <div class="col-lg-4 col-sm-6" style="padding: 0; margin: 0;">
+                                            <!-- 第一张小照片 -->
+                                            <img src="image/room1.jpg" alt="" style="width: 100%; height: auto; margin: 0;">
+                                        </div>
+                                        <div class="col-lg-4 col-sm-6" style="padding: 0; margin: 0;">
+                                            <!-- 第二张小照片 -->
+                                            <img src="image/room2.jpg" alt="" style="width: 100%; height: auto; margin: 0;">
+                                        </div>
+                                        <div class="col-lg-4 col-sm-6" style="padding: 0; margin: 0;">
+                                            <!-- 第三张小照片 -->
+                                            <img src="image/room3.jpg" alt="" style="width: 100%; height: auto; margin: 0;">
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-lg-5 col-sm-10" style="border:1px solid red">
+                            <h3>WORK INN at Taipei 101 (WORK INN at Taipei 101 )</h3>
+
+
+                        </div>
+                        <div class="col-lg-3 col-sm-12" style="border:1px solid red">
+                            <h3>我是價格</h3>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</section>
+<!--================ 台灣熱門城市 Area  =================-->
