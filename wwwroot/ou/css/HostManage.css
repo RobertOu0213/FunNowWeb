@@ -16,18 +16,13 @@ nav .nav__container {
   width: 100%;
   border: 1px #1174A6 solid;
   line-height: 60px;
-  /*       ul {
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-  }*/
 }
-nav .nav__container li {
+nav .nav__container .items {
   display: inline-block;
   margin-right: 15px;
   position: relative;
 }
-nav .nav__container li::before {
+nav .nav__container .items::before {
   content: "";
   position: absolute;
   width: 100%;
@@ -39,7 +34,7 @@ nav .nav__container li::before {
   transform-origin: bottom;
   transition: transform 0.3s ease;
 }
-nav .nav__container li:hover::before {
+nav .nav__container .items:hover::before {
   transform: scaleY(1);
 }
 nav .nav__container a {
