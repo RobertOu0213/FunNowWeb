@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewData["Title"] = "Hotel";
+    ViewData["Title"] = "免費刊登!";
     Layout = "_Layout_HotelCreate";
 }
 
@@ -175,7 +175,7 @@
             @* 住宿資訊 *@
             <div class="d-flex align-items-center justify-content-between">
                 <div>
-                    <h5 class="fw-bold">住宿資訊</h5>
+                    <h4 class="fw-bold">住宿資訊</h4>
                     <div class="sm_titlt mb-3">設定您住宿的重要政策並列出所有設施，讓旅客大概知道您的房源所能提供的住宿體驗。</div>
                 </div>
                 <div>
@@ -255,68 +255,169 @@
                 <div>使用通路管理平台？完成房型對應後，我們將同步平台之間的價格。</div>
             </div>
 
-            <div class="panel">
-                <div class="position-relative">
-                    <div class="fw-bold pb-3 mb-3 border-bottom">客房1</div>
-                    <div>
-                        <button type="button" class="btn_delete">刪除房型</button>
-                    </div>
-                    <div class="btn-toggle">
-                        <span class="me-3">收起</span>
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </div>
-                </div>
-                <div class="fw-bold fs-5 mb-4">基本資訊</div>
-                <div class="mb-3">
-                    <div class="mb-2 fw-bold">為住宿命名</div>
-                    <input type="text" class="form-control" placeholder="請輸入房間名稱" />
-                </div>
-                <div class="mb-4">
-                    <div class="mb-2 fw-bold">請選擇房型</div>
-                    <select class="form-select" aria-label="Default select example">
-                        <option selected>請選擇房型</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <div class="mb-2 fw-bold">Room size</div>
-                    <div class="d-flex">
+
+           @*  room card *@
+            <div id="panels-container">
+                <div class="panel__room mb-4">
+                    <div class="position-relative">
+                        <div class="fw-bold pb-3 mb-3 border-bottom panel__room__count">客房1</div>
                         <div>
-                            <input type="number" min="0" class="form-Room-size" />
+                            <button type="button" class="btn_delete me-4" style="display: none;">刪除房型</button>
                         </div>
-                        <div class="form-Room-size-unit">平方公尺</div>
-                    </div>
-                </div>
-
-                <div class="mb-4">
-                    <div class="fw-bold mb-2">客房人數限制</div>
-                    <div>
-
-                        <button class="btn-icon" id="minus-btn"><i class="fa-solid fa-minus"></i></button>                       
-                        <input value="1" type="number" min="1" step="1" max="99" class="form-Room-size" id="room-size-input" />                     
-                        <button class="btn-icon" id="plus-btn"><i class="fa-solid fa-plus"></i></button>
-                    
-                    </div>
-                </div>
-
-                <div class="mb-4">
-                    <div class="fw-bold mb-2">房價設定</div>
-                    <div>該房型的最低房價，不包括促銷優惠、稅金或其他費用。</div>
-                    <div class="d-flex mt-2">
-                        <div>
-                            <input type="number" min="0" step="1" class="form-Room-size" />
+                        <div class="btn-toggle">
+                            <span class="me-2">收起</span>
+                            <i class="fa-solid fa-chevron-up"></i>
                         </div>
-                        <div class="form-Room-size-unit">TWD</div>
+                    </div>
+                    <div class="panel__content" style="display: block;">
+                        <div class="fw-bold fs-5 mb-4">基本資訊</div>
+                        <div class="mb-3">
+                            <div class="mb-2 fw-bold">為住宿命名</div>
+                            <input type="text" class="form-control" placeholder="請輸入房間名稱" />
+                        </div>
+                        <div class="mb-4">
+                            <div class="mb-2 fw-bold">請選擇房型</div>
+                            <select class="form-select" aria-label="Default select example">
+                                <option selected>請選擇房型</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <div class="mb-2 fw-bold">Room size</div>
+                            <div class="d-flex">
+                                <div>
+                                    <input type="number" min="0" class="form-Room-size" />
+                                </div>
+                                <div class="form-Room-size-unit">平方公尺</div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="fw-bold mb-2">客房人數限制</div>
+                            <div>
+                                <button class="btn-icon" id="minus-btn"><i class="fa-solid fa-minus"></i></button>
+                                <input value="1" type="number" min="1" step="1" max="99" class="form-Room-size" id="room-size-input" />
+                                <button class="btn-icon" id="plus-btn"><i class="fa-solid fa-plus"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="fw-bold mb-2">房價設定</div>
+                            <div>該房型的最低房價，不包括促銷優惠、稅金或其他費用。</div>
+                            <div class="d-flex mt-2">
+                                <div>
+                                    <input type="number" min="0" step="1" class="form-Room-size" />
+                                </div>
+                                <div class="form-Room-size-unit">TWD</div>
+                            </div>
+                        </div>
+                        @* 設備 *@
+                        <h5 class="fw-bold">房間設施</h5>
+                        <div class="sm_titlt mb-3">房間有提供的設備</div>
+                        <div class="panel">
+                            <div class="row row-cols-3">
+                                <div class="col mb-2">
+                                    <label >
+                                        <input type="checkbox"  />
+                                        專人辦理入住/退房服務
+                                    </label>
+                                </div>
+                                <div class="col">
+                                    <label >
+                                        <input type="checkbox"  />
+                                        專人辦理入住/退房服務
+                                    </label>
+                                </div>
+                                <div class="col">
+                                    <label >
+                                        <input type="checkbox" />
+                                        專人辦理入住/退房服務
+                                    </label>
+                                </div>
+                                <div class="col">
+                                    <label >
+                                        <input type="checkbox" />
+                                        專人辦理入住/退房服務
+                                    </label>
+                                </div>
+                                <div class="col">
+                                    <label >
+                                        <input type="checkbox" />
+                                        專人辦理入住/退房服務
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-
             </div>
 
             <div class="mt-5">
                 <button type="button" class="btn_create">新增一間房</button>
+            </div>
+
+
+            @*   button *@
+            <div class="d-flex justify-content-end mt-5">
+                <button type="button" class="btn_previous">上一步</button>
+                <button type="button" class="btn_next">下一步</button>
+            </div>
+
+            @* 圖片 *@
+            <div class="content__container__image">
+                <div class="d-flex align-items-center">
+                    <div class="mb-4">
+                        <h4 class="fw-bold mt-5">向房客們展示物業的特色</h4>
+                        <div class="content__container__image__text">對於旅客來說，現場實景照片往往成為影響是否訂房的重要參考。因此，建議你上傳完整的高畫質實景照片，吸引旅客下訂，當然也可以晚點再增加照片囉。想獲得更多小撇步嗎？</div>
+                    </div>
+                    <div class="mt-2 me-5">
+                        <img class="equip_image w-100" src="~/image/ou/create_hotel_image.png" alt="..." />
+                    </div>
+                </div>
+
+                <div class="reminder__background"> 
+                    <div class="reminder__background__text">小提醒：房源上架後仍可管理照片。您可以先從最簡單的開始，並隨時更改或新增內容。</div>
+                </div>
+
+                <div class="mb-5">
+                    <h4 class="fw-bold mt-5">飯店照片</h4>
+                    <p>建築外觀、停車位、入口，以及任何其他開放使用的設施</p>
+
+                    <div class="file__upload">
+                        <div id="uploadSection">
+                            <img src="~/image/ou/upload.png" alt="..." />
+                            <div class="fw-bold">請將照片拖放至此</div>
+                            <p>僅限JPG和PNG格式（上限5 MB）</p>
+                            <input type="file" id="fileInput" accept=".jpg,.png" multiple style="display: none;" />
+                            <button id="uploadButton">選擇照片</button>
+                        </div>
+                    </div>
+                    <div class="container" id="preview"></div>
+                </div>
+
+                <div class="mb-5">
+                    <h4 class="fw-bold mt-5">名字</h4>
+                    <p>住宿單位裡的臥室、浴室、廚房、用餐區域和起居空間。</p>
+                    <div class="file__upload">
+                        <div id="uploadSection">
+                            <img src="~/image/ou/upload.png" alt="..." />
+                            <div class="fw-bold">請將照片拖放至此</div>
+                            <p>僅限JPG和PNG格式（上限5 MB）</p>
+                            <input type="file" id="fileInput" accept=".jpg,.png" multiple style="display: none;" />
+                            <button id="uploadButton">選擇照片</button>
+                        </div>
+                    </div>
+                    <div class="container" id="preview"></div>
+                </div>
+
+            </div>
+
+            @*   button *@
+            <div class="d-flex justify-content-end mt-5">
+                <button type="button" class="btn_previous">上一步</button>
+                <button type="button" class="btn_next">開始上線銷售！</button>
             </div>
 
         </div>
@@ -328,9 +429,208 @@
 }
 @section Scripts {
     <script>
-       
-        $(document).ready(function () {
-            $('#plus-btn').on('click',function () {
+        const maxTotalSize = 5 * 1024 * 1024; // 5MB
+        let totalSize = 0;
+        let filenames = new Set();
+        const uploadSection = $('.file__upload');
+
+        $('#uploadButton').on('click', function () {
+            $('#fileInput').trigger('click');
+        });
+
+
+        $('#fileInput').on('change', async function (e) {
+          
+            const allowedTypes = ['image/jpeg', 'image/png'];
+            const files = Array.from(e.target.files);
+          
+            const fileInput = $('#fileInput');
+            let newSize = 0;
+    
+            files.forEach((file, index)=> {
+                
+              
+                if (!allowedTypes.includes(file.type)) {
+                    alert('只允許上傳 JPG 和 PNG 格式的圖片');
+                    return;
+                }
+
+                if (filenames.has(file.name)) {
+                    alert(`檔名 ${file.name} 已存在，請選擇不同的檔案。`);
+                    return;
+                }
+
+                newSize += file.size;
+                if (totalSize + newSize > maxTotalSize) {
+                    alert('所有照片加起來不能超過 5MB。');
+                    return;
+                }
+
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+              
+                  const string = `
+                            <div class="card">
+                                        <img src="${e.target.result}" class="card-img-top h-100" alt="..." data-file-name="${file.name}" data-file-size="${file.size}">
+                                <div class="card-body">
+                                    <select class="form-select" aria-label="Default select example">
+                                        <option selected>請選擇標題</option>
+                                        <option value="1">One</option>
+                                        <option value="2">Two</option>
+                                        <option value="3">Three</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-danger delete-button" style="display: none;">刪除照片</button>
+                            </div>
+                        `;
+
+                    $('#preview').append(string);
+                    // 當所有文件都讀取完畢後，改變樣式、儲存fileName到set及計算儲存的容量
+                    if (index === files.length - 1) {
+                     
+                        uploadSection.removeClass('file__upload').addClass('uploaded');
+                    
+                        files.forEach(f => filenames.add(f.name));
+                        totalSize += newSize;
+
+                        fileInput.val('');
+                    }
+                };
+
+                reader.readAsDataURL(file);
+            });
+
+            
+
+        });
+
+
+        $('#preview').on('mouseover', '.card', function () {
+            $(this).find('.delete-button').css('display', 'block');
+        });
+
+        $('#preview').on('mouseout', '.card', function () {
+            $(this).find('.delete-button').css('display', 'none');
+        });
+
+        $('#preview').on('click', '.delete-button', function () {
+            const card = $(this).closest('.card');
+            const imgElement = card.find('img');
+            const fileName = imgElement.data('file-name');
+            const fileSize = parseInt(imgElement.data('file-size'), 10);
+          
+            filenames.delete(fileName);
+            totalSize -= fileSize;
+
+            if (confirm('確定要刪除這張圖片嗎？')) {
+                card.remove();
+            }
+
+            if (filenames.size === 0) {          
+                uploadSection.removeClass('uploaded').addClass('file__upload');           
+            }
+
+        });
+
+        $(document).ready(() => {
+
+            let roomCount = 1;
+
+            // 單一客房toggle 內容
+            const togglePanel = (panel) => {
+                const panelContent = panel.find('.panel__content');
+                const toggleText = panel.find('.btn-toggle span');
+                const toggleIcon = panel.find('.btn-toggle i');
+
+                panelContent.slideToggle();
+
+                if (toggleText.text() === '收起') {
+                    toggleText.text('展開');
+                    toggleIcon.removeClass('fa-chevron-up').addClass('fa-chevron-down');
+                } else {
+                    toggleText.text('收起');
+                    toggleIcon.removeClass('fa-chevron-down').addClass('fa-chevron-up');
+                }
+            };
+
+
+            //更新button 的visibility & re-number
+            const updateDeleteButtonsAndRenumberRooms = () => {
+                const rooms = $('.panel__room');
+                rooms.each((index, room) => {
+                    $(room).find('.panel__room__count').text(`客房${index + 1}`);
+                    $(room).find('.btn_delete').toggle(rooms.length > 1);
+                });
+            };
+
+            // 繫結button to 單一客房
+            $('.btn-toggle').on('click',function () {
+                togglePanel($(this).closest('.panel__room'));
+            });
+
+            $('.btn_delete').on('click', function () {
+                if (confirm('確定要刪除這個房型嗎？')) {
+                    $(this).closest('.panel__room').remove();
+                    updateDeleteButtonsAndRenumberRooms();
+                }
+            });
+
+            // create 新客房
+            const createPanel = () => {
+                roomCount++;
+                const newPanel = $('.panel__room:first').clone();
+
+                newPanel.find('.panel__room__count').text(`客房${roomCount}`);
+                newPanel.find('input').val('');
+                newPanel.find('select').prop('selectedIndex', 0); // 重置下拉框選項
+                newPanel.find('input[type="checkbox"]').prop('checked', false); // 重置所有checkbox
+                newPanel.find('.panel__content').hide();
+                newPanel.find('.btn-toggle span').text('展開');
+                newPanel.find('.btn-toggle i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+                newPanel.find('.btn_delete').show();
+              
+                // 收合現有的客房
+                $('#panels-container .panel__room .panel__content').slideUp();
+                $('#panels-container .panel__room .btn-toggle span').text('展開');
+                $('#panels-container .panel__room .btn-toggle i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+
+                // 將新的客房加入
+                $('#panels-container').append(newPanel);
+
+                // 新的客房展開資料
+                newPanel.find('.panel__content').slideDown();
+                newPanel.find('.btn-toggle span').text('收起');
+                newPanel.find('.btn-toggle i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+
+
+                // 繫結button to 新的客房
+                newPanel.find('.btn-toggle').on('click',function () {
+                    togglePanel($(this).closest('.panel__room'));
+                });
+
+
+                newPanel.find('.btn_delete').on('click',function () {
+                    if (confirm('確定要刪除這個房型嗎？')) {
+                        $(this).closest('.panel__room').remove();
+                        updateDeleteButtonsAndRenumberRooms();
+                    }
+                });
+
+                updateDeleteButtonsAndRenumberRooms();
+               
+            };
+
+            // Add new panel on button click
+            $('.btn_create').on('click',() => {
+                createPanel();
+            });
+
+
+            updateDeleteButtonsAndRenumberRooms();
+
+            // 客房人數限制
+            $('#plus-btn').on('click', () => {
                 const input = $('#room-size-input');
                 const currentValue = parseInt(input.val());
                 if (currentValue < parseInt(input.attr('max'))) {
@@ -338,13 +638,15 @@
                 }
             });
 
-            $('#minus-btn').on('click',function () {
+            $('#minus-btn').on('click', () => {
                 const input = $('#room-size-input');
                 const currentValue = parseInt(input.val());
                 if (currentValue > parseInt(input.attr('min'))) {
-                    input.val(currentValue - 1);            
+                    input.val(currentValue - 1);
                 }
             });
         });
+
+
     </script>
 }

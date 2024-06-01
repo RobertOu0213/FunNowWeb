@@ -2,5 +2,9 @@
   {
     "outputFile": "wwwroot/ou/css/StyleSheet.css",
     "inputFile": "wwwroot/ou/css/StyleSheet.scss"
+  },
+  {
+    "outputFile": "wwwroot/ou/css/HostManage.css",
+    "inputFile": "wwwroot/ou/css/HostManage.scss"
   }
 ]
