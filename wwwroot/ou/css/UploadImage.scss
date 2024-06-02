@@ -1,0 +1,261 @@
+﻿* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+$nav-border: #e5e5e5;
+$primary-color: #FFFFFF;
+$main-color: #FCFCFC;
+
+@mixin getStepNums($num) {
+    @for $i from 1 through $num {
+        &:nth-child(#{$i}) .circle-container::after {
+            content: "#{$i}";
+        }
+    }
+}
+
+%middle_title {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.sm_titlt {
+    font-size: 14px;
+}
+
+
+
+main {
+    background-color: $main-color;
+    display: flex;
+}
+
+.stepper {
+    position: sticky;
+    top: 0;
+    width: 250px;
+    height: 100vh;
+    background-color: $primary-color;
+    padding: 10px;
+    border-right: 1px solid $nav-border;
+    z-index: 100;
+
+
+    .content {
+        display: flex;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .stepper-panel {
+        padding: 10px;
+    }
+
+    .stepper-container {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+    }
+
+    .step {
+        display: flex;
+        align-items: center;
+        margin-bottom: 40px;
+        position: relative;
+        color: #777777;
+        font-weight: 700;
+        @include getStepNums(6);
+
+        .circle-container {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #1174A6;
+            margin-right: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 12px;
+
+
+            .active & {
+                background-color: #2196F3;
+            }
+
+            &::after {
+                /*    position: absolute;*/
+                /*top: 8%;*/
+                /* left: 5%;*/
+                /*     transform: translate(-50%, -50%);*/
+                /* margin-left: 5px*/
+            }
+        }
+
+        .label-container {
+            font-size: 16px;
+        }
+
+        .connect-line {
+            position: absolute;
+            width: 2px;
+            height: 45px;
+            background-color: #ddd;
+            left: 9px; // 中心對齊圓圈
+            top: 22px; // 讓連接線從圓圈底部開始
+        }
+    }
+}
+
+
+.leftSection {
+    width: 20%;
+}
+
+.rightSection {
+    width: 100%;
+
+    .content__container {
+        width: 85%;
+        margin: 0 auto;
+        /*padding:20px;*/
+
+
+
+        .panel {
+            background-color: #fff;
+            border: 1px solid grey;
+            border-radius: 5px;
+            width: 100%;
+            padding: 15px 15px 30px 15px;
+        }
+    }
+}
+
+
+.btn_previous {
+    min-width: 180px;
+    min-height: 42px;
+    color: #1174a6;
+    background-color: #fff;
+    border: 1px solid #1174a6;
+    padding: 10px 15px;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 3px;
+    padding: 10px 15px;
+}
+
+.btn_previous:hover {
+    background-color: #E6E6E6;
+}
+
+.btn_next {
+    min-width: 180px;
+    min-height: 42px;
+    padding: 10px 15px;
+    color: #fff;
+    background-color: #1174a6;
+    border: 1px solid #1174a6;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 3px;
+    padding: 10px 15px;
+    margin-left: 5px;
+}
+
+.btn_next:hover {
+    background-color: #0C5478;
+}
+
+
+
+.content__container__image {
+    &__text {
+        width: 80%;
+    }
+
+    .reminder__background {
+        width: 95%;
+        background-color: #E3EDFF;
+        padding: 15px;
+        border-radius: 16px;
+        margin-top: 10px;
+
+        &__text {
+            color: rgb(2, 70, 207);
+            font-weight: 700;
+            padding-left: 30px;
+        }
+    }
+
+
+    @mixin uploadButtonStyles {
+        color: #fff;
+        background-color: #1174a6;
+        border: 1px solid #1174a6;
+        text-align: center;
+        cursor: pointer;
+        border-radius: 3px;
+        padding: 10px 15px;
+        font-size: 14px;
+        font-weight: 600;
+
+        &:hover {
+            background-color: #0C5478;
+        }
+    }
+
+
+    .file__upload {
+        width: 100%;
+        height: 480px;
+        border: 3px dashed #CCCCCC;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #FFFFFF;
+        color: gray;
+
+
+        #uploadButton {
+            @include uploadButtonStyles;
+        }
+    }
+
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+
+        .card {
+            position: relative;
+            width: 18rem;
+            margin-top: 10px;
+
+            .delete-button {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+            }
+        }
+    }
+
+
+    .uploaded {
+        border: 3px dashed #CCCCCC;
+        text-align: center;
+        background-color: #FFFFFF;
+        color: gray;
+        width: 100%;
+        height: auto;
+    }
+
+    .uploadButton {
+        @include uploadButtonStyles;
+        margin-bottom: 10px;
+    }
+}
