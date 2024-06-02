@@ -12,7 +12,7 @@
 <main>
     <section class="leftSection">
         <div class="stepper">
-            <div class="right-content">
+            <div class="content">
                 <div id="step-control" class="stepper-panel">
                     <div class="stepper-container container">
                         <div class="step active">
@@ -24,12 +24,7 @@
                             <div class="circle-container"></div>
                             <span class="connect-line"></span>
                             <div class="label-container">住宿位置</div>
-                        </div>
-                        <div class="step">
-                            <div class="circle-container"></div>
-                            <span class="connect-line"></span>
-                            <div class="label-container">住宿資訊</div>
-                        </div>
+                        </div>            
                         <div class="step">
                             <div class="circle-container"></div>
                             <span class="connect-line"></span>
@@ -114,9 +109,47 @@
                 <input type="number" min="1" max="5" class="form-control" />
             </div>
             <h5 class="fw-bold mt-5">旅館電話</h5>
-            <div class="panel">
+            <div class="panel mb-5">
                 <input type="tel" class="form-control" placeholder="請輸入電話" />
             </div>
+            @* 設備 *@
+            <h5 class="fw-bold">旅館設施</h5>
+            <div class="sm_titlt mb-3">旅館有提供的設備</div>
+            <div class="panel">
+                <div class="row row-cols-3">
+                    <div class="col mb-2">
+                        <label for="test">
+                            <input type="checkbox" id="test" />
+                            專人辦理入住/退房服務
+                        </label>
+                    </div>
+                    <div class="col">
+                        <label for="test2">
+                            <input type="checkbox" id="test2" />
+                            專人辦理入住/退房服務
+                        </label>
+                    </div>
+                    <div class="col">
+                        <label for="test3">
+                            <input type="checkbox" id="test3" />
+                            專人辦理入住/退房服務
+                        </label>
+                    </div>
+                    <div class="col">
+                        <label for="test4">
+                            <input type="checkbox" id="test4" />
+                            專人辦理入住/退房服務
+                        </label>
+                    </div>
+                    <div class="col">
+                        <label for="test5">
+                            <input type="checkbox" id="test5" />
+                            專人辦理入住/退房服務
+                        </label>
+                    </div>
+                </div>
+            </div>
+
             <h5 class="fw-bold mt-5">旅館簡介</h5>
             <div class="panel">
                 <div class="form-floating">
@@ -171,73 +204,6 @@
                 <button type="button" class="btn_next">下一步</button>
             </div>
 
-
-            @* 住宿資訊 *@
-            <div class="d-flex align-items-center justify-content-between">
-                <div>
-                    <h4 class="fw-bold">住宿資訊</h4>
-                    <div class="sm_titlt mb-3">設定您住宿的重要政策並列出所有設施，讓旅客大概知道您的房源所能提供的住宿體驗。</div>
-                </div>
-                <div>
-                    <img class="equip_image w-75" src="~/image/ou/createHotel_equipment.png" alt="..." />
-                </div>
-            </div>
-            <div class="panel mb-5">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="fw-bold mb-2">入住時間</div>
-                        <input type="time" class="form-control" />
-                    </div>
-                    <div class="col-md-6">
-                        <div class="fw-bold mb-2">退房時間</div>
-                        <input type="time" class="form-control" />
-                    </div>
-                </div>
-            </div>
-
-            @* 設備 *@
-            <h5 class="fw-bold">旅館設施</h5>
-            <div class="sm_titlt mb-3">旅館有提供的設備</div>
-            <div class="panel">
-                <div class="row row-cols-3">
-                    <div class="col mb-2">
-                        <label for="test">
-                            <input type="checkbox" id="test" />
-                            專人辦理入住/退房服務
-                        </label>
-                    </div>
-                    <div class="col">
-                        <label for="test2">
-                            <input type="checkbox" id="test2" />
-                            專人辦理入住/退房服務
-                        </label>
-                    </div>
-                    <div class="col">
-                        <label for="test3">
-                            <input type="checkbox" id="test3" />
-                            專人辦理入住/退房服務
-                        </label>
-                    </div>
-                    <div class="col">
-                        <label for="test4">
-                            <input type="checkbox" id="test4" />
-                            專人辦理入住/退房服務
-                        </label>
-                    </div>
-                    <div class="col">
-                        <label for="test5">
-                            <input type="checkbox" id="test5" />
-                            專人辦理入住/退房服務
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            @*   button *@
-            <div class="d-flex justify-content-end mt-5">
-                <button type="button" class="btn_previous">上一步</button>
-                <button type="button" class="btn_next">下一步</button>
-            </div>
 
             @* 客房基本資料 *@
             <div class="d-flex align-items-center justify-content-between">
@@ -348,6 +314,13 @@
                                         專人辦理入住/退房服務
                                     </label>
                                 </div>
+                            </div>
+                        </div>
+                        <h5 class="fw-bold mt-5">房間簡介</h5>
+                        <div class="panel">
+                            <div class="form-floating">
+                                <textarea class="form-control" placeholder="請介紹您的房間" style="height: 200px; resize: none"></textarea>
+                                <label>請介紹您的房間</label>
                             </div>
                         </div>
                     </div>

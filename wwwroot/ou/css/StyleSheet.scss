@@ -47,13 +47,13 @@ main {
     top: 0;
     width: 250px;
     height: 100vh;
-    overflow-y: auto;
     background-color: $primary-color;
     padding: 10px;
     border-right: 1px solid $nav-border;
+    z-index: 100;
 
 
-    .right-content {
+    .content {
         display: flex;
         justify-content: center;
         padding: 20px;
@@ -74,28 +74,33 @@ main {
         align-items: center;
         margin-bottom: 40px;
         position: relative;
+        color: #777777;
+        font-weight: 700;
         @include getStepNums(6);
 
         .circle-container {
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background-color: #4CAF50;
+            background-color: #1174A6;
             margin-right: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 12px;
+
 
             .active & {
                 background-color: #2196F3;
             }
 
             &::after {
-                position: absolute;
+                /*    position: absolute;*/
                 /*top: 8%;*/
-                left: 5%;
-                /*transform: translate(-50%, -50%);*/
+                /* left: 5%;*/
+                /*     transform: translate(-50%, -50%);*/
                 /* margin-left: 5px*/
-
-                color: white;
-                font-size: 12px;
             }
         }
 
@@ -117,7 +122,6 @@ main {
 
 .leftSection {
     width: 20%;
-/*    border: 1px solid black;*/
 }
 
 .rightSection {

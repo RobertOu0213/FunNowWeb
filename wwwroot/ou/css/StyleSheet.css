@@ -29,12 +29,12 @@ main {
   top: 0;
   width: 250px;
   height: 100vh;
-  overflow-y: auto;
   background-color: #FFFFFF;
   padding: 10px;
   border-right: 1px solid #e5e5e5;
+  z-index: 100;
 }
-.stepper .right-content {
+.stepper .content {
   display: flex;
   justify-content: center;
   padding: 20px;
@@ -52,6 +52,8 @@ main {
   align-items: center;
   margin-bottom: 40px;
   position: relative;
+  color: #777777;
+  font-weight: 700;
 }
 .stepper .step:nth-child(1) .circle-container::after {
   content: "1";
@@ -75,20 +77,23 @@ main {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: #4CAF50;
+  background-color: #1174A6;
   margin-right: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 12px;
 }
 .active .stepper .step .circle-container {
   background-color: #2196F3;
 }
 .stepper .step .circle-container::after {
-  position: absolute;
+  /*    position: absolute;*/
   /*top: 8%;*/
-  left: 5%;
-  /*transform: translate(-50%, -50%);*/
+  /* left: 5%;*/
+  /*     transform: translate(-50%, -50%);*/
   /* margin-left: 5px*/
-  color: white;
-  font-size: 12px;
 }
 .stepper .step .label-container {
   font-size: 16px;
@@ -104,7 +109,6 @@ main {
 
 .leftSection {
   width: 20%;
-  /*    border: 1px solid black;*/
 }
 
 .rightSection {
