@@ -13,5 +13,10 @@ namespace PrjFunNowWeb.Controllers
         {
             return View();
         }
+
+        public IActionResult comment_page()
+        {
+            return View();
+        }
     }
 }
