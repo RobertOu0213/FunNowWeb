@@ -160,6 +160,8 @@ main {
   font-size: 14px;
   border-radius: 3px;
   padding: 10px 15px;
+  text-align: center;
+  text-decoration: none;
 }
 
 .btn_previous:hover {

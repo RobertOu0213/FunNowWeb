@@ -50,7 +50,7 @@
                     <h5 class="fw-bold">為住宿命名</h5>
                     <div class="sm_titlt mb-3">住宿名稱要有吸引力，讓人印象深刻！</div>
                     <div class="panel mb-5">
-                        <input type="text" class="form-control" placeholder="住宿名稱" />
+                        <input type="text" class="form-control" placeholder="住宿名稱" name="HotelName" id="iptHotelName" />
                     </div>
                 </div>
                 <div>
@@ -69,11 +69,11 @@
                 <h5 class="fw-bold mt-5">星級評等</h5>
                 <div class="sm_titlt mb-3">旅客對不同星等的住宿有不同的期待，為住宿提供一個適合的星級評等吧！</div>
                 <div class="panel">
-                    <input type="number" min="1" max="5" class="form-control" />
+                    <input type="number" min="1" max="5" class="form-control" name="LevelStar" id="iptLevelStar" />
                 </div>
                 <h5 class="fw-bold mt-5">旅館電話</h5>
                 <div class="panel mb-5">
-                    <input type="tel" class="form-control" placeholder="請輸入電話" />
+                    <input type="tel" class="form-control" placeholder="請輸入電話" name="HotelPhone" id="iptHotelPhone" />
                 </div>
                 @* 設備 *@
                 <h5 class="fw-bold">旅館設施</h5>
@@ -86,7 +86,7 @@
                 <h5 class="fw-bold mt-5">旅館簡介</h5>
                 <div class="panel">
                     <div class="form-floating">
-                        <textarea class="form-control" placeholder="請介紹您的旅館" id="floatingTextarea" style="height: 200px; resize: none"></textarea>
+                        <textarea class="form-control" placeholder="請介紹您的旅館" id="floatingTextarea" name="HotelDescription" style="height: 200px; resize: none"></textarea>
                         <label for="floatingTextarea">請介紹您的飯店</label>
                     </div>
                 </div>
@@ -110,66 +110,101 @@
         let hotelTypeStr = "";
         let hotelEquimentStr = "";
 
-        $(document).ready(() => {
+        //儲存session
+        window.onbeforeunload = function () {
+            const selectedHotelTypeID = $('input[name="HotelTypeID"]:checked').val(); // 獲取選中的 HotelTypeID
 
-            //Hotel type
-            (async() => {
-               const res =  await fetch('https://localhost:7103/api/HotelType')
-               const data = await res.json();
-                data.forEach(item => {
-                    hotelTypeStr +=
-                            `
-                      <div class="col-md-6 mb-4">
-                        <div class="panel">
-                            <label>
-                                 <input type="radio" name="HotelTypeID" class="custom-radio" value="${item.hotelTypeId}" />
-                                      ${item.hotelTypeName}
-                            </label>
-                        </div>
-                     </div>                  
+            sessionStorage.setItem('tHotel', JSON.stringify({
+                HotelName: $('#iptHotelName').val(),
+                HotelAddress: null,
+                HotelPhone: $('#iptHotelPhone').val(),
+                HotelDescription: $('#floatingTextarea').val(),
+                CityID: null,
+                HotelTypeID: selectedHotelTypeID,
+                LevelStar: $('#iptLevelStar').val(),
+                Latitude: null,
+                Longitude: null,
+            }));
+        };
+
+        //Hotel type
+        (async () => {
+            const res = await fetch('https://localhost:7103/api/HotelType')
+            const data = await res.json();
+            data.forEach(item => {
+                hotelTypeStr +=
                     `
-                })
-                $('#hotelType').html(hotelTypeStr);
-            })();
-
-            //Hotel Equipment
-
-            (async () => {
-                const res = await fetch('https://localhost:7103/api/HotelEquipment')
-                const data = await res.json();
-                data.forEach(item => {
-                    hotelEquimentStr +=
-                        `
-                           <div class="col mb-2">
-                                <label for="equipBundle${item.hotelEquipmentId}">
-                                    <input type="checkbox" id="equipBundle${item.hotelEquipmentId}" value="${item.hotelEquipmentId}" />
-                                    ${item.hotelEquipmentName}
-                                </label>
-                            </div>
-                        `
-                })
-                $('#hotelEquipment').html(hotelEquimentStr);
-            })();
+                              <div class="col-md-6 mb-4">
+                                <div class="panel">
+                                    <label>
+                                              <input type="radio" class="custom-radio" value="${item.hotelTypeId}" name="HotelTypeID" id="iptHotelHotelTypeID${item.hotelTypeId}"  />
+                                              ${item.hotelTypeName}
+                                    </label>
+                                </div>
+                             </div>
+                            `
+            })
+            $('#hotelType').html(hotelTypeStr);
 
 
-            // 客房人數限制
-            $('#plus-btn').on('click', () => {
-                const input = $('#room-size-input');
-                const currentValue = parseInt(input.val());
-                if (currentValue < parseInt(input.attr('max'))) {
-                    input.val(currentValue + 1);
-                }
-            });
+            //顯示session 在畫面上
+            const tHotel = JSON.parse(sessionStorage.getItem('tHotel')) || {};
+            if (tHotel) {
+                $('#iptHotelName').val(tHotel.HotelName || '');
+                $('#iptHotelPhone').val(tHotel.HotelPhone || '');
+                $('#iptLevelStar').val(tHotel.LevelStar || '');
+                $('#floatingTextarea').val(tHotel.HotelDescription || '');
+                console.log(tHotel.HotelTypeID);
 
-            $('#minus-btn').on('click', () => {
-                const input = $('#room-size-input');
-                const currentValue = parseInt(input.val());
-                if (currentValue > parseInt(input.attr('min'))) {
-                    input.val(currentValue - 1);
-                }
-            });
-              
+                $(document).ready(() => {
+                    if (tHotel.HotelTypeID) {
+                        $(`input[name="HotelTypeID"][value="${tHotel.HotelTypeID}"]`).prop('checked', true);
+                    }
+
+                });
+            }
+
+        })();
+
+
+        //Hotel Equipment
+        (async () => {
+            const res = await fetch('https://localhost:7103/api/HotelEquipment')
+            const data = await res.json();
+            data.forEach(item => {
+                hotelEquimentStr +=
+                    `
+                                   <div class="col mb-2">
+                                        <label for="equipBundle${item.hotelEquipmentId}">
+                                            <input type="checkbox" id="equipBundle${item.hotelEquipmentId}" value="${item.hotelEquipmentId}" />
+                                            ${item.hotelEquipmentName}
+                                        </label>
+                                    </div>
+                                `
+            })
+            $('#hotelEquipment').html(hotelEquimentStr);
+        })();
+
+
+        // 客房人數限制
+        $('#plus-btn').on('click', () => {
+            const input = $('#room-size-input');
+            const currentValue = parseInt(input.val());
+            if (currentValue < parseInt(input.attr('max'))) {
+                input.val(currentValue + 1);
+            }
         });
+
+        $('#minus-btn').on('click', () => {
+            const input = $('#room-size-input');
+            const currentValue = parseInt(input.val());
+            if (currentValue > parseInt(input.attr('min'))) {
+                input.val(currentValue - 1);
+            }
+        });
+
+
+
 
     </script>
 }
