@@ -41,106 +41,106 @@
     </section>
     <section class="rightSection">
         <div class="content__container pt-5">
+            <form action="@Url.Action("UploadImage", "HotelCreate")" method="post">
+                @* 客房基本資料 *@
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="mb-4">
+                        <h4 class="fw-bold mt-5">設定客房資訊</h4>
+                        <div>設定至少一種房型的價格和客房詳情，以在FunNow刊登您的住宿。</div>
+                    </div>
+                    <div>
+                        <img class="equip_image w-75" src="~/image/ou/room_Icon.png" alt="..." />
+                    </div>
+                </div>
 
-            @* 客房基本資料 *@
-            <div class="d-flex align-items-center justify-content-between">
                 <div class="mb-4">
-                    <h4 class="fw-bold mt-5">設定客房資訊</h4>
-                    <div>設定至少一種房型的價格和客房詳情，以在FunNow刊登您的住宿。</div>
+                    <h4 class="fw-bold mt-5">客房詳情與定價</h4>
+                    <div>使用通路管理平台？完成房型對應後，我們將同步平台之間的價格。</div>
                 </div>
-                <div>
-                    <img class="equip_image w-75" src="~/image/ou/room_Icon.png" alt="..." />
-                </div>
-            </div>
 
-            <div class="mb-4">
-                <h4 class="fw-bold mt-5">客房詳情與定價</h4>
-                <div>使用通路管理平台？完成房型對應後，我們將同步平台之間的價格。</div>
-            </div>
-
-            @*  room card *@
-            <div id="panels-container">
-                <div class="panel__room mb-4">
-                    <div class="position-relative">
-                        <div class="fw-bold pb-3 mb-3 border-bottom panel__room__count">客房1</div>
-                        <div>
-                            <button type="button" class="btn_delete me-4" style="display: none;">刪除房型</button>
-                        </div>
-                        <div class="btn-toggle">
-                            <span class="me-2">收起</span>
-                            <i class="fa-solid fa-chevron-up"></i>
-                        </div>
-                    </div>
-                    <div class="panel__content" style="display: block;">
-                        <div class="fw-bold fs-5 mb-4">基本資訊</div>
-                        <div class="mb-3">
-                            <div class="mb-2 fw-bold">為住宿命名</div>
-                            <input type="text" class="form-control" placeholder="請輸入房間名稱" />
-                        </div>
-                        <div class="mb-4">
-                            <div class="mb-2 fw-bold">請選擇房型</div>
-                            <select class="form-select" aria-label="Default select example" id="roomType">
-                            </select>
-                        </div>
-                        <div class="mb-4">
-                            <div class="mb-2 fw-bold">Room size</div>
-                            <div class="d-flex">
-                                <div>
-                                    <input type="number" min="0" class="form-Room-size" />
-                                </div>
-                                <div class="form-Room-size-unit">平方公尺</div>
-                            </div>
-                        </div>
-
-                        <div class="mb-4">
-                            <div class="fw-bold mb-2">客房人數限制</div>
+                @*  room card *@
+                <div id="panels-container">
+                    <div class="panel__room mb-4">
+                        <div class="position-relative">
+                            <div class="fw-bold pb-3 mb-3 border-bottom panel__room__count">客房1</div>
                             <div>
-                                <button class="btn-icon" id="minus-btn"><i class="fa-solid fa-minus"></i></button>
-                                <input value="1" type="number" min="1" step="1" max="99" class="form-Room-size" id="room-size-input" />
-                                <button class="btn-icon" id="plus-btn"><i class="fa-solid fa-plus"></i></button>
+                                <button type="button" class="btn_delete me-4" style="display: none;">刪除房型</button>
+                            </div>
+                            <div class="btn-toggle">
+                                <span class="me-2">收起</span>
+                                <i class="fa-solid fa-chevron-up"></i>
                             </div>
                         </div>
-
-                        <div class="mb-4">
-                            <div class="fw-bold mb-2">房價設定</div>
-                            <div>該房型的最低房價，不包括促銷優惠、稅金或其他費用。</div>
-                            <div class="d-flex mt-2">
-                                <div>
-                                    <input type="number" min="0" step="1" class="form-Room-size" />
+                        <div class="panel__content" style="display: block;">
+                            <div class="fw-bold fs-5 mb-4">基本資訊</div>
+                            <div class="mb-3">
+                                <div class="mb-2 fw-bold">為住宿命名</div>
+                                <input type="text" class="form-control" placeholder="請輸入房間名稱" />
+                            </div>
+                            <div class="mb-4">
+                                <div class="mb-2 fw-bold">請選擇房型</div>
+                                <select class="form-select" aria-label="Default select example" id="roomType">
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <div class="mb-2 fw-bold">Room size</div>
+                                <div class="d-flex">
+                                    <div>
+                                        <input type="number" min="0" class="form-Room-size" />
+                                    </div>
+                                    <div class="form-Room-size-unit">平方公尺</div>
                                 </div>
-                                <div class="form-Room-size-unit">TWD</div>
                             </div>
-                        </div>
-                        @* 設備 *@
-                        <h5 class="fw-bold">房間設施</h5>
-                        <div class="sm_titlt mb-3">房間有提供的設備</div>
-                        <div class="panel">
-                            <div class="row row-cols-3" id="roomEquipment">
-       
+
+                            <div class="mb-4">
+                                <div class="fw-bold mb-2">客房人數限制</div>
+                                <div>
+                                    <button class="btn-icon" id="minus-btn"><i class="fa-solid fa-minus"></i></button>
+                                    <input value="1" type="number" min="1" step="1" max="99" class="form-Room-size" id="room-size-input" />
+                                    <button class="btn-icon" id="plus-btn"><i class="fa-solid fa-plus"></i></button>
+                                </div>
                             </div>
-                        </div>
-                        <h5 class="fw-bold mt-5">房間簡介</h5>
-                        <div class="panel">
-                            <div class="form-floating">
-                                <textarea class="form-control" placeholder="請介紹您的房間" style="height: 200px; resize: none"></textarea>
-                                <label>請介紹您的房間</label>
+
+                            <div class="mb-4">
+                                <div class="fw-bold mb-2">房價設定</div>
+                                <div>該房型的最低房價，不包括促銷優惠、稅金或其他費用。</div>
+                                <div class="d-flex mt-2">
+                                    <div>
+                                        <input type="number" min="0" step="1" class="form-Room-size" />
+                                    </div>
+                                    <div class="form-Room-size-unit">TWD</div>
+                                </div>
+                            </div>
+                            @* 設備 *@
+                            <h5 class="fw-bold">房間設施</h5>
+                            <div class="sm_titlt mb-3">房間有提供的設備</div>
+                            <div class="panel">
+                                <div class="row row-cols-3" id="roomEquipment">
+                                </div>
+                            </div>
+                            <h5 class="fw-bold mt-5">房間簡介</h5>
+                            <div class="panel">
+                                <div class="form-floating">
+                                    <textarea class="form-control" placeholder="請介紹您的房間" style="height: 200px; resize: none"></textarea>
+                                    <label>請介紹您的房間</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="mt-5">
-                <button type="button" class="btn_create">新增一間房</button>
-            </div>
+                <div class="mt-5">
+                    <button type="button" class="btn_create">新增一間房</button>
+                </div>
 
 
-            @*   button *@
-            <div class="d-flex justify-content-end my-5">
-                <button type="button" class="btn_previous">上一步</button>
-                <button type="button" class="btn_next">下一步</button>
-            </div>
-
+                @*   button *@
+                <div class="d-flex justify-content-end my-5">
+                 @*    <button type="button" class="btn_previous" >上一步</button> *@
+                    <a href="@Url.Action("Address", "HotelCreate")" class="btn_previous"> 上一步 </a>
+                    <button type="submit" class="btn_next">下一步</button>
+                </div>
+            </form>
         </div>
     </section>
 </main>

@@ -41,69 +41,64 @@
     </section>
     <section class="rightSection">
         <div class="content__container pt-5">
-            <div class="content__container__title mb-5">
-                <h4 class="fw-bold">為你的物業尋找速配的客人。</h4>
-                <div class="sm_titlt">所有資訊皆為必填，除非另外標示為選填</div>
-            </div>
-            <div class="content__container__name">
-                <h5 class="fw-bold">為住宿命名</h5>
-                <div class="sm_titlt mb-3">住宿名稱要有吸引力，讓人印象深刻！</div>
-                <div class="panel mb-5">
-                    <input type="text" class="form-control" placeholder="住宿名稱" />
+            <form action="@Url.Action("address", "HotelCreate")" method="post">
+                <div class="content__container__title mb-5">
+                    <h4 class="fw-bold">為你的物業尋找速配的客人。</h4>
+                    <div class="sm_titlt">所有資訊皆為必填，除非另外標示為選填</div>
                 </div>
-            </div>
-            <div>
+                <div class="content__container__name">
+                    <h5 class="fw-bold">為住宿命名</h5>
+                    <div class="sm_titlt mb-3">住宿名稱要有吸引力，讓人印象深刻！</div>
+                    <div class="panel mb-5">
+                        <input type="text" class="form-control" placeholder="住宿名稱" />
+                    </div>
+                </div>
                 <div>
-                    <h5 class="fw-bold">選擇您的房源類別</h5>
-                    <div class="sm_titlt mb-3">請從下方類別中選擇一項：</div>
-                </div>
-                <div class="panel">
-                    <div class="fw-bold">房源類別</div>
                     <div>
-                        <div class="w-50 row" id="hotelType">
+                        <h5 class="fw-bold">選擇您的房源類別</h5>
+                        <div class="sm_titlt mb-3">請從下方類別中選擇一項：</div>
+                    </div>
+                    <div class="panel">
+                        <div class="fw-bold">房源類別</div>
+                        <div>
+                            <div class="w-50 row" id="hotelType">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <h5 class="fw-bold mt-5">星級評等</h5>
-            <div class="sm_titlt mb-3">旅客對不同星等的住宿有不同的期待，為住宿提供一個適合的星級評等吧！</div>
-            <div class="panel">
-                <input type="number" min="1" max="5" class="form-control" />
-            </div>
-            <h5 class="fw-bold mt-5">旅館電話</h5>
-            <div class="panel mb-5">
-                <input type="tel" class="form-control" placeholder="請輸入電話" />
-            </div>
-            @* 設備 *@
-            <h5 class="fw-bold">旅館設施</h5>
-            <div class="sm_titlt mb-3">旅館有提供的設備</div>
-            <div class="panel">
-                <div class="row row-cols-3" id="hotelEquipment">
-
+                <h5 class="fw-bold mt-5">星級評等</h5>
+                <div class="sm_titlt mb-3">旅客對不同星等的住宿有不同的期待，為住宿提供一個適合的星級評等吧！</div>
+                <div class="panel">
+                    <input type="number" min="1" max="5" class="form-control" />
                 </div>
-            </div>
-
-            <h5 class="fw-bold mt-5">旅館簡介</h5>
-            <div class="panel">
-                <div class="form-floating">
-                    <textarea class="form-control" placeholder="請介紹您的旅館" id="floatingTextarea" style="height: 200px; resize: none"></textarea>
-                    <label for="floatingTextarea">請介紹您的飯店</label>
+                <h5 class="fw-bold mt-5">旅館電話</h5>
+                <div class="panel mb-5">
+                    <input type="tel" class="form-control" placeholder="請輸入電話" />
                 </div>
-            </div>
+                @* 設備 *@
+                <h5 class="fw-bold">旅館設施</h5>
+                <div class="sm_titlt mb-3">旅館有提供的設備</div>
+                <div class="panel">
+                    <div class="row row-cols-3" id="hotelEquipment">
+                    </div>
+                </div>
 
-            @*   button *@
-            <div class="d-flex justify-content-end my-5">
-                <button type="button" class="btn_previous">上一步</button>
-                <button type="button" class="btn_next">下一步</button>
-            </div>
+                <h5 class="fw-bold mt-5">旅館簡介</h5>
+                <div class="panel">
+                    <div class="form-floating">
+                        <textarea class="form-control" placeholder="請介紹您的旅館" id="floatingTextarea" style="height: 200px; resize: none"></textarea>
+                        <label for="floatingTextarea">請介紹您的飯店</label>
+                    </div>
+                </div>
 
-
+                @*   button *@
+                <div class="d-flex justify-content-end my-5">
+                    <button type="submit" class="btn_next">下一步</button>
+                </div>
+            </form>
         </div>
     </section>
 </main>
-
-
-
 
 
 @section Styles {
