@@ -60,39 +60,7 @@
                 <div class="panel">
                     <div class="fw-bold">房源類別</div>
                     <div>
-                        <div class="w-50 row">
-                            <div class="col-md-6 mb-4">
-                                <div class="panel">
-                                    <label>
-                                        <input type="radio" name="HotelTypeID" class="custom-radio" />
-                                        飯店
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="panel d-flex align-items-center">
-                                    <label>
-                                        <input type="radio" name="HotelTypeID" class="custom-radio" />
-                                        飯店
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="panel">
-                                    <label>
-                                        <input type="radio" name="HotelTypeID" class="custom-radio" />
-                                        飯店
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="panel">
-                                    <label>
-                                        <input type="radio" name="HotelTypeID" class="custom-radio" />
-                                        飯店
-                                    </label>
-                                </div>
-                            </div>
+                        <div class="w-50 row" id="hotelType">
                         </div>
                     </div>
                 </div>
@@ -110,37 +78,8 @@
             <h5 class="fw-bold">旅館設施</h5>
             <div class="sm_titlt mb-3">旅館有提供的設備</div>
             <div class="panel">
-                <div class="row row-cols-3">
-                    <div class="col mb-2">
-                        <label for="test">
-                            <input type="checkbox" id="test" />
-                            專人辦理入住/退房服務
-                        </label>
-                    </div>
-                    <div class="col">
-                        <label for="test2">
-                            <input type="checkbox" id="test2" />
-                            專人辦理入住/退房服務
-                        </label>
-                    </div>
-                    <div class="col">
-                        <label for="test3">
-                            <input type="checkbox" id="test3" />
-                            專人辦理入住/退房服務
-                        </label>
-                    </div>
-                    <div class="col">
-                        <label for="test4">
-                            <input type="checkbox" id="test4" />
-                            專人辦理入住/退房服務
-                        </label>
-                    </div>
-                    <div class="col">
-                        <label for="test5">
-                            <input type="checkbox" id="test5" />
-                            專人辦理入住/退房服務
-                        </label>
-                    </div>
+                <div class="row row-cols-3" id="hotelEquipment">
+
                 </div>
             </div>
 
@@ -173,8 +112,50 @@
 }
 @section Scripts {
     <script>
+        let hotelTypeStr = "";
+        let hotelEquimentStr = "";
 
         $(document).ready(() => {
+
+            //Hotel type
+            (async() => {
+               const res =  await fetch('https://localhost:7103/api/HotelType')
+               const data = await res.json();
+                data.forEach(item => {
+                    hotelTypeStr +=
+                            `
+                      <div class="col-md-6 mb-4">
+                        <div class="panel">
+                            <label>
+                                 <input type="radio" name="HotelTypeID" class="custom-radio" value="${item.hotelTypeId}" />
+                                      ${item.hotelTypeName}
+                            </label>
+                        </div>
+                     </div>                  
+                    `
+                })
+                $('#hotelType').html(hotelTypeStr);
+            })();
+
+            //Hotel Equipment
+
+            (async () => {
+                const res = await fetch('https://localhost:7103/api/HotelEquipment')
+                const data = await res.json();
+                data.forEach(item => {
+                    hotelEquimentStr +=
+                        `
+                           <div class="col mb-2">
+                                <label for="equipBundle${item.hotelEquipmentId}">
+                                    <input type="checkbox" id="equipBundle${item.hotelEquipmentId}" value="${item.hotelEquipmentId}" />
+                                    ${item.hotelEquipmentName}
+                                </label>
+                            </div>
+                        `
+                })
+                $('#hotelEquipment').html(hotelEquimentStr);
+            })();
+
 
             // 客房人數限制
             $('#plus-btn').on('click', () => {
@@ -192,9 +173,7 @@
                     input.val(currentValue - 1);
                 }
             });
-        
-        
-        
+              
         });
 
     </script>

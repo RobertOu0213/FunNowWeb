@@ -79,11 +79,7 @@
                         </div>
                         <div class="mb-4">
                             <div class="mb-2 fw-bold">請選擇房型</div>
-                            <select class="form-select" aria-label="Default select example">
-                                <option selected>請選擇房型</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                            <select class="form-select" aria-label="Default select example" id="roomType">
                             </select>
                         </div>
                         <div class="mb-4">
@@ -119,37 +115,8 @@
                         <h5 class="fw-bold">房間設施</h5>
                         <div class="sm_titlt mb-3">房間有提供的設備</div>
                         <div class="panel">
-                            <div class="row row-cols-3">
-                                <div class="col mb-2">
-                                    <label>
-                                        <input type="checkbox" />
-                                        專人辦理入住/退房服務
-                                    </label>
-                                </div>
-                                <div class="col">
-                                    <label>
-                                        <input type="checkbox" />
-                                        專人辦理入住/退房服務
-                                    </label>
-                                </div>
-                                <div class="col">
-                                    <label>
-                                        <input type="checkbox" />
-                                        專人辦理入住/退房服務
-                                    </label>
-                                </div>
-                                <div class="col">
-                                    <label>
-                                        <input type="checkbox" />
-                                        專人辦理入住/退房服務
-                                    </label>
-                                </div>
-                                <div class="col">
-                                    <label>
-                                        <input type="checkbox" />
-                                        專人辦理入住/退房服務
-                                    </label>
-                                </div>
+                            <div class="row row-cols-3" id="roomEquipment">
+       
                             </div>
                         </div>
                         <h5 class="fw-bold mt-5">房間簡介</h5>
@@ -186,9 +153,47 @@
     <script>
 
         $(document).ready(() => {
-
             let roomCount = 1;
+            let roomEquipStr = "";
+            let roomTypeStr = "";
 
+
+            //Room Type
+
+            (async () => {
+                const res = await fetch('https://localhost:7103/api/RoomType')
+                const data = await res.json();
+                roomTypeStr += `<option selected disabled> 請選擇房型 </option>`;
+                data.forEach(item => {
+                    roomTypeStr +=
+                        `
+                          <option value = "${item.roomTypeId}">${item.roomTypeName}</option>
+                        `
+                })
+                $('#roomType').html(roomTypeStr);
+            })();
+
+
+            //Room Equip
+            (async() => {
+                const res = await fetch('https://localhost:7103/api/RoomEquipment')
+                const data = await res.json();
+                
+                data.forEach(item => {
+                        roomEquipStr +=
+                        `
+                          <div class="col mb-2">
+                                  <label>
+                                       <input type="checkbox" value="${item.roomEquipmentId}" />
+                                        ${item.roomEquipmentName}
+                                  </label>
+                         </div>
+                        `
+                })
+                $('#roomEquipment').html(roomEquipStr);
+            })();
+
+   
             // 單一客房toggle 內容
             const togglePanel = (panel) => {
                 const panelContent = panel.find('.panel__content');

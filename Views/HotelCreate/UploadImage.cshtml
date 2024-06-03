@@ -110,13 +110,28 @@
 }
 @section Scripts {
     <script>
-
-        $(document).ready(() => {
+       
+        $(document).ready(async() => {
 
             const maxTotalSize = 5 * 1024 * 1024; // 5MB
             let totalSize = 0;
             let filenames = new Set();
             const uploadSection = $('.file__upload');
+            let imageCategoryStr = '';
+
+            //Image Category
+            const res = await fetch('https://localhost:7103/api/ImageCategory')
+            const data = await res.json();
+            console.log(data);
+            imageCategoryStr += `<option selected disabled> 請選擇標題 </option>`;
+            data.forEach(item => {
+                imageCategoryStr +=
+                    `
+                        <option value = "${item.imageCategoryId}">${item.imageCategoryName}</option>
+                    `
+            })
+
+
 
             $('#uploadButton').on('click', function () {
                 $('#fileInput').trigger('click');
@@ -158,11 +173,11 @@
                                     <div class="card">
                                                 <img src="${e.target.result}" class="card-img-top h-100" alt="..." data-file-name="${file.name}" data-file-size="${file.size}">
                                         <div class="card-body">
-                                            <select class="form-select" aria-label="Default select example">
-                                                <option selected>請選擇標題</option>
-                                                <option value="1">One</option>
-                                                <option value="2">Two</option>
-                                                <option value="3">Three</option>
+                                            <select class="form-select" aria-label="Default select example" id="selectImageCategory">
+
+
+                                                      ${imageCategoryStr}
+                                             
                                             </select>
                                         </div>
                                         <button class="btn btn-danger delete-button" style="display: none;">刪除照片</button>

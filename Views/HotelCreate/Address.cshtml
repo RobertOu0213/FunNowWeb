@@ -61,11 +61,13 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="fw-bold mb-2">國家</div>
-                        <input type="text" class="form-control" placeholder="台灣" />
+                        <select class="form-select" aria-label="Default select example" id="selectCountry">
+                        </select>
                     </div>
                     <div class="col-md-4">
                         <div class="fw-bold mb-2">城市</div>
-                        <input type="text" class="form-control" placeholder="城市" />
+                        <select class="form-select" aria-label="Default select example" id="selectCity">
+                        </select>
                     </div>
                     <div class="col-md-4">
                     </div>
@@ -94,6 +96,58 @@
 }
 @section Scripts {
     <script>
+        let selectCountryStr = ""
+       
+        $(document).ready(async function() {
+
+            //國家
+            try {
+                const res = await fetch('https://localhost:7103/api/Country/countriesAndCities');
+                if(!res.ok) {
+                    throw new Error(res.statusText);
+                }
+                const data = await res.json();
+                data.forEach(item => {
+                    selectCountryStr +=
+                    `
+                      <option value="${item.countryId}">${item.countryName}</option>
+                    `
+                })
+
+                $('#selectCountry').html(selectCountryStr);
+
+          
+                // 加載第一個國家的城市作為默認值
+                if (data.length > 0) {
+                    loadCities(data[0]);
+                }
+                //城市
+                $('#selectCountry').on('change', function () {
+                    const selectedCountry = data.find(country => country.countryId == $(this).val());
+                    loadCities(selectedCountry);
+                });
+                     
+            }
+            catch(err) {
+                console.log(err)
+            }
+
+            function loadCities(country) {
+
+                let selectCityStr = '';
+                if (country && country.cities.length > 0) {
+                    country.cities.forEach(city => {
+                        selectCityStr += `<option value="${city.cityId}">${city.cityName}</option>`;
+                    });
+                    $('#selectCity').prop('disabled', false);
+                } else {
+                    $('#selectCity').prop('disabled', true);
+                }
+                $('#selectCity').html(selectCityStr);
+            }
+
+
+        });
 
     </script>
 }
