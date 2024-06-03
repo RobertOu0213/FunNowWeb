@@ -93,7 +93,7 @@
 
                 @*   button *@
                 <div class="d-flex justify-content-end my-5">
-                    <button type="submit" class="btn_next">下一步</button>
+                    <button type="submit" class="btn_next" id="btnNext">下一步</button>
                 </div>
             </form>
         </div>
@@ -106,26 +106,9 @@
 
 }
 @section Scripts {
-    <script>
+    <script defer>
         let hotelTypeStr = "";
         let hotelEquimentStr = "";
-
-        //儲存session
-        window.onbeforeunload = function () {
-            const selectedHotelTypeID = $('input[name="HotelTypeID"]:checked').val(); // 獲取選中的 HotelTypeID
-
-            sessionStorage.setItem('tHotel', JSON.stringify({
-                HotelName: $('#iptHotelName').val(),
-                HotelAddress: null,
-                HotelPhone: $('#iptHotelPhone').val(),
-                HotelDescription: $('#floatingTextarea').val(),
-                CityID: null,
-                HotelTypeID: selectedHotelTypeID,
-                LevelStar: $('#iptLevelStar').val(),
-                Latitude: null,
-                Longitude: null,
-            }));
-        };
 
         //Hotel type
         (async () => {
@@ -153,15 +136,10 @@
                 $('#iptHotelName').val(tHotel.HotelName || '');
                 $('#iptHotelPhone').val(tHotel.HotelPhone || '');
                 $('#iptLevelStar').val(tHotel.LevelStar || '');
-                $('#floatingTextarea').val(tHotel.HotelDescription || '');
-                console.log(tHotel.HotelTypeID);
-
-                $(document).ready(() => {
-                    if (tHotel.HotelTypeID) {
-                        $(`input[name="HotelTypeID"][value="${tHotel.HotelTypeID}"]`).prop('checked', true);
-                    }
-
-                });
+                $('#floatingTextarea').val(tHotel.HotelDescription || '');               
+                if (tHotel.HotelTypeID) {
+                    $(`input[name="HotelTypeID"][value="${tHotel.HotelTypeID}"]`).prop('checked', true);
+                }           
             }
 
         })();
@@ -176,33 +154,54 @@
                     `
                                    <div class="col mb-2">
                                         <label for="equipBundle${item.hotelEquipmentId}">
-                                            <input type="checkbox" id="equipBundle${item.hotelEquipmentId}" value="${item.hotelEquipmentId}" />
+                                                    <input type="checkbox" id="equipBundle${item.hotelEquipmentId}" value="${item.hotelEquipmentId}" name="HotelEquipmentID" />
                                             ${item.hotelEquipmentName}
                                         </label>
                                     </div>
                                 `
             })
             $('#hotelEquipment').html(hotelEquimentStr);
+
+            //顯示session在畫面上
+            const storedEquipment = JSON.parse(sessionStorage.getItem('tHotelEquipment')) || { HotelEquipment: [] };
+            storedEquipment.HotelEquipment.forEach(id => {
+                $(`#equipBundle${id}`).prop('checked', true);
+            });
         })();
 
 
-        // 客房人數限制
-        $('#plus-btn').on('click', () => {
-            const input = $('#room-size-input');
-            const currentValue = parseInt(input.val());
-            if (currentValue < parseInt(input.attr('max'))) {
-                input.val(currentValue + 1);
-            }
-        });
+        //儲存session
 
-        $('#minus-btn').on('click', () => {
-            const input = $('#room-size-input');
-            const currentValue = parseInt(input.val());
-            if (currentValue > parseInt(input.attr('min'))) {
-                input.val(currentValue - 1);
-            }
-        });
+        $('#btnNext').on('click', function () {
+            const selectedHotelTypeID = $('input[name="HotelTypeID"]:checked').val(); // 獲取選中的 HotelTypeID
 
+            sessionStorage.setItem('tHotel', JSON.stringify({
+                HotelName: $('#iptHotelName').val(),
+                HotelAddress: null,
+                HotelPhone: $('#iptHotelPhone').val(),
+                HotelDescription: $('#floatingTextarea').val(),
+                CityID: null,
+                HotelTypeID: selectedHotelTypeID,
+                LevelStar: $('#iptLevelStar').val(),
+                Latitude: null,
+                Longitude: null,
+            }));
+
+
+
+            let selectedEquipments = [];
+
+            $('input[name="HotelEquipmentID"]:checked').each(function () {
+                selectedEquipments.push(parseInt($(this).val()));
+            });
+
+            sessionStorage.setItem('tHotelEquipment', JSON.stringify({
+                HotelEquipment: selectedEquipments
+            }));
+           
+           
+
+        })
 
 
 
