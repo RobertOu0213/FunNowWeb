@@ -17,7 +17,7 @@ $main-color: #FCFCFC;
 }
 
 %middle_title {
-    font-size:30px;
+    font-size: 30px;
     font-weight: bold;
 }
 
@@ -25,17 +25,6 @@ $main-color: #FCFCFC;
     font-size: 14px;
 }
 
-nav {
-    display: flex;
-    border-bottom: 1px solid $nav-border;
-    align-items: center;
-    height: 3.7em;
-
-    > div > img {
-        width: 5em;
-        margin-left: 1em;
-    }
-}
 
 main {
     background-color: $main-color;
@@ -131,9 +120,6 @@ main {
         width: 85%;
         margin: 0 auto;
         /*padding:20px;*/
-        height: 6000px;
-        border: 1px solid black;
-
 
         .panel {
             background-color: #fff;
@@ -142,49 +128,7 @@ main {
             width: 100%;
             padding: 15px 15px 30px 15px;
         }
-
-        .address {
-            width: 66%;
-        }
-
-        .custom-radio {
-            width: 20px;
-            height: 20px;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            border: 1px solid #ccc;
-            border-radius: 50%;
-            outline: none;
-            cursor: pointer;
-            position: relative;
-            margin-right: 10px;
-            box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
-            transition: box-shadow 0.2s ease-in-out;
-        }
-
-        .custom-radio:checked {
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
-        }
-
-        .custom-radio:checked::before {
-            content: '';
-            display: block;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: #007bff;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .googleMap {
-            width: 100%;
-            height: 350px;
-            border: 1px solid black;
-        }
+       
     }
 }
 
@@ -233,7 +177,6 @@ main {
     font-size: 14px;
     line-height: 1.42;
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-
 }
 
 .form-Room-size:focus {
@@ -251,13 +194,15 @@ main {
     border-bottom: 1px solid #bec2c9;
     width: 10%;
     background-color: #F7F7F7;
-    display: flex; 
+    display: flex;
     align-items: center;
-    justify-content:center;
+    justify-content: center;
 }
+
 .btn-icon {
     @extend .form-Room-size;
 }
+
 .btn-icon:hover {
     background-color: #E6E6E6;
 }
@@ -283,7 +228,7 @@ main {
     min-width: 10px;
     padding: 4px 10px;
     position: absolute;
-    top:1px;
+    top: 1px;
     right: 10%;
 }
 
@@ -305,90 +250,3 @@ main {
 }
 
 
-.content__container__image {
-    &__text {
-        width: 80%;
-    }
-
-    .reminder__background {
-        width: 95%;
-        background-color: #E3EDFF;
-        padding: 15px;
-        border-radius: 16px;
-        margin-top: 10px;
-
-        &__text {
-            color: rgb(2, 70, 207);
-            font-weight: 700;
-            padding-left: 30px;
-        }
-    }
-
-
-    @mixin uploadButtonStyles {
-        color: #fff;
-        background-color: #1174a6;
-        border: 1px solid #1174a6;
-        text-align: center;
-        cursor: pointer;
-        border-radius: 3px;
-        padding: 10px 15px;
-        font-size: 14px;
-        font-weight: 600;
-
-        &:hover {
-            background-color: #0C5478;
-        }
-    }
-
-
-    .file__upload {
-        width: 100%;
-        height: 480px;
-        border: 3px dashed #CCCCCC;
-        text-align: center;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #FFFFFF;
-        color: gray;
-
-
-        #uploadButton {
-            @include uploadButtonStyles;
-        }
-    }
-
-    .container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1rem;
-
-        .card {
-            position: relative;
-            width: 18rem;
-            margin-top: 10px;
-
-            .delete-button {
-                position: absolute;
-                top: 10px;
-                right: 10px;
-            }
-        }
-    }
-
-
-    .uploaded {
-        border: 3px dashed #CCCCCC;
-        text-align: center;
-        background-color: #FFFFFF;
-        color: gray;
-        width: 100%;
-        height: auto;
-    }
-
-    .uploadButton {
-        @include uploadButtonStyles;
-        margin-bottom: 10px;
-    }
-}

@@ -6,5 +6,25 @@
   {
     "outputFile": "wwwroot/ou/css/HostManage.css",
     "inputFile": "wwwroot/ou/css/HostManage.scss"
+  },
+  {
+    "outputFile": "wwwroot/ou/css/PublicHotelCreate.css",
+    "inputFile": "wwwroot/ou/css/PublicHotelCreate.scss"
+  },
+  {
+    "outputFile": "wwwroot/ou/css/HotelInfo.css",
+    "inputFile": "wwwroot/ou/css/HotelInfo.scss"
+  },
+  {
+    "outputFile": "wwwroot/ou/css/Address.css",
+    "inputFile": "wwwroot/ou/css/Address.scss"
+  },
+  {
+    "outputFile": "wwwroot/ou/css/RoomInfo.css",
+    "inputFile": "wwwroot/ou/css/RoomInfo.scss"
+  },
+  {
+    "outputFile": "wwwroot/ou/css/UploadImage.css",
+    "inputFile": "wwwroot/ou/css/UploadImage.scss"
   }
 ]

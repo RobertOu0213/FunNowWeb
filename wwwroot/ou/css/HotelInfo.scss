@@ -17,24 +17,12 @@ $main-color: #FCFCFC;
 }
 
 %middle_title {
-    font-size:30px;
+    font-size: 30px;
     font-weight: bold;
 }
 
 .sm_titlt {
     font-size: 14px;
-}
-
-nav {
-    display: flex;
-    border-bottom: 1px solid $nav-border;
-    align-items: center;
-    height: 3.7em;
-
-    > div > img {
-        width: 5em;
-        margin-left: 1em;
-    }
 }
 
 main {
@@ -131,10 +119,7 @@ main {
         width: 85%;
         margin: 0 auto;
         /*padding:20px;*/
-        height: 6000px;
-        border: 1px solid black;
-
-
+        
         .panel {
             background-color: #fff;
             border: 1px solid grey;
@@ -180,11 +165,6 @@ main {
             transform: translate(-50%, -50%);
         }
 
-        .googleMap {
-            width: 100%;
-            height: 350px;
-            border: 1px solid black;
-        }
     }
 }
 
@@ -224,171 +204,3 @@ main {
     background-color: #0C5478;
 }
 
-.form-Room-size {
-    background-color: #fff;
-    border: 1px solid #bec2c9;
-    border-radius: 0;
-    height: 42px;
-    padding: 10px 15px;
-    font-size: 14px;
-    line-height: 1.42;
-    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-
-}
-
-.form-Room-size:focus {
-    border-color: #66afe9;
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
-    outline: 0;
-}
-
-.form-Room-size-unit {
-    color: #555;
-    border-radius: 0;
-    font-weight: 400;
-    border-top: 1px solid #bec2c9;
-    border-right: 1px solid #bec2c9;
-    border-bottom: 1px solid #bec2c9;
-    width: 10%;
-    background-color: #F7F7F7;
-    display: flex; 
-    align-items: center;
-    justify-content:center;
-}
-.btn-icon {
-    @extend .form-Room-size;
-}
-.btn-icon:hover {
-    background-color: #E6E6E6;
-}
-
-.btn_create {
-    color: #1174a6;
-    background-color: #fff;
-    padding: 14px 12px;
-    min-width: 240px;
-    border: 1px solid #1174a6;
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 1.42857;
-    border-radius: 3px;
-}
-
-.btn_create:hover {
-    background-color: #E6E6E6;
-}
-
-.btn_delete {
-    @extend .btn_create;
-    min-width: 10px;
-    padding: 4px 10px;
-    position: absolute;
-    top:1px;
-    right: 10%;
-}
-
-.btn-toggle {
-    position: absolute;
-    top: 6px;
-    right: 15px;
-    cursor: pointer;
-    color: #727272;
-    font-size: 14px;
-}
-
-.panel__content {
-    display: none;
-}
-
-.panel__room {
-    @extend .panel;
-}
-
-
-.content__container__image {
-    &__text {
-        width: 80%;
-    }
-
-    .reminder__background {
-        width: 95%;
-        background-color: #E3EDFF;
-        padding: 15px;
-        border-radius: 16px;
-        margin-top: 10px;
-
-        &__text {
-            color: rgb(2, 70, 207);
-            font-weight: 700;
-            padding-left: 30px;
-        }
-    }
-
-
-    @mixin uploadButtonStyles {
-        color: #fff;
-        background-color: #1174a6;
-        border: 1px solid #1174a6;
-        text-align: center;
-        cursor: pointer;
-        border-radius: 3px;
-        padding: 10px 15px;
-        font-size: 14px;
-        font-weight: 600;
-
-        &:hover {
-            background-color: #0C5478;
-        }
-    }
-
-
-    .file__upload {
-        width: 100%;
-        height: 480px;
-        border: 3px dashed #CCCCCC;
-        text-align: center;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #FFFFFF;
-        color: gray;
-
-
-        #uploadButton {
-            @include uploadButtonStyles;
-        }
-    }
-
-    .container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1rem;
-
-        .card {
-            position: relative;
-            width: 18rem;
-            margin-top: 10px;
-
-            .delete-button {
-                position: absolute;
-                top: 10px;
-                right: 10px;
-            }
-        }
-    }
-
-
-    .uploaded {
-        border: 3px dashed #CCCCCC;
-        text-align: center;
-        background-color: #FFFFFF;
-        color: gray;
-        width: 100%;
-        height: auto;
-    }
-
-    .uploadButton {
-        @include uploadButtonStyles;
-        margin-bottom: 10px;
-    }
-}
