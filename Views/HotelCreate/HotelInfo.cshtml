@@ -164,7 +164,7 @@
 
             //顯示session在畫面上
             const storedEquipment = JSON.parse(sessionStorage.getItem('tHotelEquipment')) || { HotelEquipment: [] };
-            storedEquipment.HotelEquipment.forEach(id => {
+            storedEquipment.forEach(id => {
                 $(`#equipBundle${id}`).prop('checked', true);
             });
         })();
@@ -195,9 +195,9 @@
                 selectedEquipments.push(parseInt($(this).val()));
             });
 
-            sessionStorage.setItem('tHotelEquipment', JSON.stringify({
-                HotelEquipment: selectedEquipments
-            }));
+            sessionStorage.setItem('tHotelEquipment', JSON.stringify(
+               selectedEquipments
+            ));
            
            
 
