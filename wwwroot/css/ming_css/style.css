@@ -499,10 +499,10 @@ button:focus {
   z-index: 1;
 }
 
-.banner_area .bg-parallax {
-  background: url("../image/banner_bg.jpg") no-repeat scroll center 0/cover;
-  opacity: 0.50;
-}
+    .banner_area .bg-parallax { /*//­º­¶¹Ï¤ù*/
+        background: url("~/image/ming_img/feature-img2") no-repeat scroll center 0/cover;
+        opacity: 0.50;
+    }
 
 .banner_area .position {
   width: 100%;
