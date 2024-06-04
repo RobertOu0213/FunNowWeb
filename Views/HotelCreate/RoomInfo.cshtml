@@ -157,10 +157,26 @@
             let roomEquipStr = "";
             let roomTypeStr = "";
 
+            //Room Equip
+            (async () => {
+                const res = await fetch('https://localhost:7103/api/RoomEquipment')
+                const data = await res.json();
 
+                data.forEach(item => {
+                    roomEquipStr +=
+                        `
+                                  <div class="col mb-2">
+                                          <label>
+                                               <input type="checkbox" value="${item.roomEquipmentId}" />
+                                                ${item.roomEquipmentName}
+                                          </label>
+                                 </div>
+                                `
+                })
+                $('#roomEquipment').html(roomEquipStr);
+            })();
 
             //Room Type
-
             (async () => {
                 const res = await fetch('https://localhost:7103/api/RoomType')
                 const data = await res.json();
@@ -186,6 +202,12 @@
                             room.find('.roomPeople').val(roomData.MaximumOccupancy);
                             room.find('.roomPrice').val(roomData.RoomPrice);
                             room.find('textarea').val(roomData.Description);
+                            // 設置設備
+                            setTimeout(() => {
+                                roomData.RoomEquipments.forEach(equipId => {
+                                    room.find(`input[type="checkbox"][value="${equipId}"]`).prop('checked', true);
+                                });
+                            }, 0);
                         } else {
                             // 其他的客房需要創建新的面板
                             createPanel();
@@ -196,6 +218,11 @@
                             room.find('.roomPeople').val(roomData.MaximumOccupancy);
                             room.find('.roomPrice').val(roomData.RoomPrice);
                             room.find('textarea').val(roomData.Description);
+                            setTimeout(() => {
+                                roomData.RoomEquipments.forEach(equipId => {
+                                    room.find(`input[type="checkbox"][value="${equipId}"]`).prop('checked', true);
+                                });
+                            }, 1000);
                         }
                     });
                 }
@@ -204,24 +231,7 @@
             })();
 
 
-            //Room Equip
-            (async() => {
-                const res = await fetch('https://localhost:7103/api/RoomEquipment')
-                const data = await res.json();
-                
-                data.forEach(item => {
-                        roomEquipStr +=
-                        `
-                          <div class="col mb-2">
-                                  <label>
-                                       <input type="checkbox" value="${item.roomEquipmentId}" />
-                                        ${item.roomEquipmentName}
-                                  </label>
-                         </div>
-                        `
-                })
-                $('#roomEquipment').html(roomEquipStr);
-            })();
+
 
 
             const bindClickHandlers = (panel) => {
@@ -246,7 +256,7 @@
                 });
             };
 
-            // const roomEquipments = $(room).find('input[type="checkbox"]:checked').map((index, equip) => $(equip).val()).get();
+   
 
             //btn Next
             $('#btnNext').on('click', () => {
@@ -259,14 +269,18 @@
                     const MaximumOccupancy = $(room).find('.roomPeople').val();
                     const RoomPrice = $(room).find('.roomPrice').val();
                     const Description = $(room).find('textarea').val();
-
+                    const RoomEquipments = $(room).find('input[type="checkbox"]:checked').map((index, equip) => $(equip).val()).get();
+              
+                    console.log(RoomEquipments);
+                 
                     roomInfo.push({
                         RoomName,
                         RoomTypeID,
                         RoomSize,
                         MaximumOccupancy,
                         RoomPrice,
-                        Description                     
+                        Description,
+                        RoomEquipments
                     });
                 });
 
@@ -310,9 +324,7 @@
             $('.btn_delete').on('click', function () {
                 if (confirm('確定要刪除這個房型嗎？')) {
                     // 獲取被刪除的客房的索引
-                    console.log("test");
                     const roomIndex = $(this).closest('.panel__room').index();
-                    console.log(roomIndex);
 
                     // 從 sessionStorage 中讀取所有的客房資訊
                     const roomInfo = JSON.parse(sessionStorage.getItem('tRoom'));
@@ -322,7 +334,6 @@
 
                     // 將更新後的數組寫回 sessionStorage
                     sessionStorage.setItem('tRoom', JSON.stringify(roomInfo));
-
 
                     $(this).closest('.panel__room').remove();
                     updateDeleteButtonsAndRenumberRooms();
@@ -355,6 +366,28 @@
 
                 // 將新的客房加入
                 $('#panels-container').append(newPanel);
+
+                // 清空新的客房面板的設備選項
+                newPanel.find('#roomEquipment').empty();
+
+                //複製並更新其設備選項的值
+                (async () => {
+                    const res = await fetch('https://localhost:7103/api/RoomEquipment')
+                    const data = await res.json();
+
+                    data.forEach(item => {
+                        newPanel.find('#roomEquipment').append(
+                            `
+                        <div class="col mb-2">
+                            <label>
+                                <input type="checkbox" value="${item.roomEquipmentId}" />
+                                ${item.roomEquipmentName}
+                            </label>
+                        </div>
+                        `
+                        );
+                    });
+                })();
 
                 bindClickHandlers(newPanel);
 
