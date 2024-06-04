@@ -41,8 +41,8 @@
     </section>
     <section class="rightSection">
         <div class="content__container pt-5">
-           @*  action="@Url.Action("RoomInfo", "HotelCreate")" *@
-            <form method="post">
+        
+            <form method="post" action="@Url.Action("RoomInfo", "HotelCreate")">
                 @*  地址 *@
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="mb-4">
@@ -57,7 +57,7 @@
                 <div class="panel">
                     <div class="address mb-4">
                         <div class="fw-bold mb-2">街道地址</div>
-                        <input type="text" class="form-control" placeholder="請在此輸入..." />
+                        <input type="text" class="form-control" placeholder="請在此輸入..." id="iptAddress" name="HotelAddress" />
                     </div>
                     <div class="row">
                         <div class="col-md-4">
@@ -80,7 +80,7 @@
 
                 @* button *@
                 <div class="d-flex justify-content-end my-5">
-                    <a href="@Url.Action("HotelInfo", "HotelCreate")" class="btn_previous">上一步</a>
+                    <a href="@Url.Action("HotelInfo", "HotelCreate")" class="btn_previous" id="btnPrevious">上一步</a>
                     <button type="submit" class="btn_next" id="btnNext">下一步</button>
                 </div>
 
@@ -102,6 +102,13 @@
         let selectCountryStr = ""
        
         $(document).ready(async function() {
+            //顯示session 在畫面上
+            const tHotel = JSON.parse(sessionStorage.getItem('tHotel')) || {};
+            if (tHotel) {
+                $('#iptAddress').val(tHotel.HotelAddress || '');
+                // $('#CityId${city.cityId}').val(tHotel.CityId || '');
+            }
+
 
             //國家
             try {
@@ -120,10 +127,19 @@
                 $('#selectCountry').html(selectCountryStr);
 
           
-                // 加載第一個國家的城市作為默認值
-                if (data.length > 0) {
+       
+                // 找到包含 tHotel.CityId 的國家
+                const countryWithSelectedCity = data.find(country => country.cities.some(city => city.cityId == tHotel.CityId));
+
+                // 如果找到了國家，則為該國家加載城市並設置該國家為選中
+                if (countryWithSelectedCity) {
+                    $('#selectCountry').val(countryWithSelectedCity.countryId);
+                    loadCities(countryWithSelectedCity);
+                } else if (data.length > 0) {
+                    // 否則，加載第一個國家的城市作為默認值
                     loadCities(data[0]);
                 }
+
                 //城市
                 $('#selectCountry').on('change', function () {
                     const selectedCountry = data.find(country => country.countryId == $(this).val());
@@ -134,13 +150,12 @@
             catch(err) {
                 console.log(err)
             }
-
             function loadCities(country) {
 
                 let selectCityStr = '';
                 if (country && country.cities.length > 0) {
                     country.cities.forEach(city => {
-                        selectCityStr += `<option value="${city.cityId}">${city.cityName}</option>`;
+                        selectCityStr += `<option value="${city.cityId}" name="CityId" id="CityId${city.cityId}" ${tHotel.CityId == city.cityId ? 'selected' : ''}>${city.cityName}</option>`;
                     });
                     $('#selectCity').prop('disabled', false);
                 } else {
@@ -150,78 +165,63 @@
             }
 
 
-        
+            //下一步
+            $('#btnNext').on('click', async function () {
+                const selectedCityID = $('#selectCity').val();
+                const existingHotelData = JSON.parse(sessionStorage.getItem('tHotel')) || {};
+                const updatedHotelData = {
+                    ...existingHotelData,
+                    HotelAddress: $('#iptAddress').val(),
+                    CityId: selectedCityID
+                  
+                };           
+                sessionStorage.setItem('tHotel', JSON.stringify(updatedHotelData));
 
-            // $('#btnNext').on('click', async function () {
-            
-            //     try {
-            //         const hotelData = JSON.parse(sessionStorage.getItem('tHotel')) || {};
-            //         const hotelEquipmentData = JSON.parse(sessionStorage.getItem('tHotelEquipment')) || { HotelEquipment: [] };
-            //         const formData = new FormData();
-            //         formData.append('hotelData', JSON.stringify(hotelData));
-            //         formData.append('hotelEquipmentData', JSON.stringify(hotelEquipmentData.HotelEquipment));
-            //         console.log("test");
-            //         const url = "https://localhost:7103/api/HotelCreate";
-            //         const res = await fetch(url, {
-            //             method: "POST",
-            //             body: formData
-            //         });
-            //         if (res.ok) {
-            //             const data = await res.json();
-            //             console.log(data);
-            //             // 处理成功响应，导航到下一步
-            //             window.location.href = '@Url.Action("RoomInfo", "HotelCreate")';
-            //         } else {
-            //             console.error('Error:', res.statusText);
-            //         }
                 
-            //     }
-            //     catch (err) {
-            //         console.log(err)
-            //     }
-      
+            })
 
 
-            // })
-
-
-          
-
-
+            //上一步
+            $('#btnPrevious').on('click', async function () {
+                const selectedCityID = $('#selectCity').val();
+                const hotelAddress = $('#iptAddress').val();
+                const tHotel = JSON.parse(sessionStorage.getItem('tHotel')) || {};
+                tHotel.HotelAddress = hotelAddress;
+                tHotel.CityId = selectedCityID;
+                sessionStorage.setItem('tHotel', JSON.stringify(tHotel));
+            })
+            
         });
 
-        document.addEventListener('DOMContentLoaded', function () {
-            const btnNext = document.querySelector('#btnNext');
 
-            btnNext.addEventListener('click', async function (e) {
-                e.preventDefault();  // 阻止默认的表单提交行为
 
-                try {
-                    const hotelData = JSON.parse(sessionStorage.getItem('tHotel')) || {};
-                    const hotelEquipmentData = JSON.parse(sessionStorage.getItem('tHotelEquipment')) || [] ;
-                    const formData = new FormData();
-                    formData.append('hotelData', JSON.stringify(hotelData));
-                    formData.append('hotelEquipmentData', JSON.stringify(hotelEquipmentData));
+        //API
+        // try {
+        //     const hotelData = JSON.parse(sessionStorage.getItem('tHotel')) || {};
+        //     const hotelEquipmentData = JSON.parse(sessionStorage.getItem('tHotelEquipment')) || { HotelEquipment: [] };
+        //     const formData = new FormData();
+        //     formData.append('hotelData', JSON.stringify(hotelData));
+        //     formData.append('hotelEquipmentData', JSON.stringify(hotelEquipmentData.HotelEquipment));
+        //     console.log("test");
+        //     const url = "https://localhost:7103/api/HotelCreate";
+        //     const res = await fetch(url, {
+        //         method: "POST",
+        //         body: formData
+        //     });
+        //     if (res.ok) {
+        //         const data = await res.json();
+        //         console.log(data);
 
-                    const url = "https://localhost:7103/api/HotelCreate";
-                    const res = await fetch(url, {
-                        method: "POST",
-                        body: formData
-                    });
+        //     } else {
+        //         console.error('Error:', res.statusText);
+        //     }
 
-                    if (res.ok) {
-                        const data = await res.json();
-                        console.log(data);
-                        // 处理成功响应，导航到下一步
-                        window.location.href = '@Url.Action("RoomInfo", "HotelCreate")';
-                    } else {
-                        console.error('Error:', res.statusText);
-                    }
-                } catch (err) {
-                    console.error(err);
-                }
-            });
-        });
+        // }
+        // catch (err) {
+        //     console.log(err)
+        // }
+
+
 
     </script>
 }

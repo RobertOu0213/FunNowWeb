@@ -75,18 +75,18 @@
                             <div class="fw-bold fs-5 mb-4">基本資訊</div>
                             <div class="mb-3">
                                 <div class="mb-2 fw-bold">為住宿命名</div>
-                                <input type="text" class="form-control" placeholder="請輸入房間名稱" />
+                                <input type="text" class="form-control roomNames" placeholder="請輸入房間名稱" />
                             </div>
                             <div class="mb-4">
                                 <div class="mb-2 fw-bold">請選擇房型</div>
-                                <select class="form-select" aria-label="Default select example" id="roomType">
+                                <select class="form-select roomTypes" aria-label="Default select example" id="roomType">
                                 </select>
                             </div>
                             <div class="mb-4">
                                 <div class="mb-2 fw-bold">Room size</div>
                                 <div class="d-flex">
                                     <div>
-                                        <input type="number" min="0" class="form-Room-size" />
+                                        <input type="number" min="0" class="form-Room-size roomSizes" />
                                     </div>
                                     <div class="form-Room-size-unit">平方公尺</div>
                                 </div>
@@ -95,9 +95,9 @@
                             <div class="mb-4">
                                 <div class="fw-bold mb-2">客房人數限制</div>
                                 <div>
-                                    <button class="btn-icon" id="minus-btn"><i class="fa-solid fa-minus"></i></button>
-                                    <input value="1" type="number" min="1" step="1" max="99" class="form-Room-size" id="room-size-input" />
-                                    <button class="btn-icon" id="plus-btn"><i class="fa-solid fa-plus"></i></button>
+                                    <button class="btn-icon" id="minus-btn" type="button"><i class="fa-solid fa-minus"></i></button>
+                                    <input value="1" type="number" min="1" step="1" max="99" class="form-Room-size roomPeople" id="room-size-input" />
+                                    <button class="btn-icon" id="plus-btn" type="button"><i class="fa-solid fa-plus"></i></button>
                                 </div>
                             </div>
 
@@ -106,7 +106,7 @@
                                 <div>該房型的最低房價，不包括促銷優惠、稅金或其他費用。</div>
                                 <div class="d-flex mt-2">
                                     <div>
-                                        <input type="number" min="0" step="1" class="form-Room-size" />
+                                        <input type="number" min="0" step="1" class="form-Room-size roomPrice" />
                                     </div>
                                     <div class="form-Room-size-unit">TWD</div>
                                 </div>
@@ -138,7 +138,7 @@
                 <div class="d-flex justify-content-end my-5">
 
                     <a href="@Url.Action("Address", "HotelCreate")" class="btn_previous">上一步</a>
-                    <button type="submit" class="btn_next">下一步</button>
+                    <button type="submit" class="btn_next" id="btnNext">下一步</button>
                 </div>
             </form>
         </div>
@@ -158,6 +158,7 @@
             let roomTypeStr = "";
 
 
+
             //Room Type
 
             (async () => {
@@ -171,6 +172,35 @@
                         `
                 })
                 $('#roomType').html(roomTypeStr);
+
+                const roomInfo = JSON.parse(sessionStorage.getItem('tRoom'));
+
+                if (roomInfo) {
+                    roomInfo.forEach((roomData, index) => {
+                        if (index === 0) {
+                            // 第一個客房已經存在，只需要設置它的值
+                            const room = $('.panel__room:first');
+                            room.find('.roomNames').val(roomData.RoomName);
+                            room.find('.roomTypes').val(roomData.RoomTypeID);
+                            room.find('.roomSizes').val(roomData.RoomSize);
+                            room.find('.roomPeople').val(roomData.MaximumOccupancy);
+                            room.find('.roomPrice').val(roomData.RoomPrice);
+                            room.find('textarea').val(roomData.Description);
+                        } else {
+                            // 其他的客房需要創建新的面板
+                            createPanel();
+                            const room = $('.panel__room:last');
+                            room.find('.roomNames').val(roomData.RoomName);
+                            room.find('.roomTypes').val(roomData.RoomTypeID);
+                            room.find('.roomSizes').val(roomData.RoomSize);
+                            room.find('.roomPeople').val(roomData.MaximumOccupancy);
+                            room.find('.roomPrice').val(roomData.RoomPrice);
+                            room.find('textarea').val(roomData.Description);
+                        }
+                    });
+                }
+
+
             })();
 
 
@@ -192,6 +222,57 @@
                 })
                 $('#roomEquipment').html(roomEquipStr);
             })();
+
+
+            const bindClickHandlers = (panel) => {
+                const plusBtn = panel.find('#plus-btn');
+                const minusBtn = panel.find('#minus-btn');
+                const roomSizeInput = panel.find('#room-size-input');
+
+                plusBtn.on('click', (event) => {
+                    event.preventDefault();
+                    const currentValue = parseInt(roomSizeInput.val());
+                    if (currentValue < parseInt(roomSizeInput.attr('max'))) {
+                        roomSizeInput.val(currentValue + 1);
+                    }
+                });
+
+                minusBtn.on('click', (event) => {
+                    event.preventDefault();
+                    const currentValue = parseInt(roomSizeInput.val());
+                    if (currentValue > parseInt(roomSizeInput.attr('min'))) {
+                        roomSizeInput.val(currentValue - 1);
+                    }
+                });
+            };
+
+            // const roomEquipments = $(room).find('input[type="checkbox"]:checked').map((index, equip) => $(equip).val()).get();
+
+            //btn Next
+            $('#btnNext').on('click', () => {
+                const roomInfo = [];
+                const rooms = $('.panel__room');
+                rooms.each((index, room) => {
+                    const RoomName = $(room).find('.roomNames').val();
+                    const RoomTypeID = $(room).find('.roomTypes').val();
+                    const RoomSize = $(room).find('.roomSizes').val();
+                    const MaximumOccupancy = $(room).find('.roomPeople').val();
+                    const RoomPrice = $(room).find('.roomPrice').val();
+                    const Description = $(room).find('textarea').val();
+
+                    roomInfo.push({
+                        RoomName,
+                        RoomTypeID,
+                        RoomSize,
+                        MaximumOccupancy,
+                        RoomPrice,
+                        Description                     
+                    });
+                });
+
+                sessionStorage.setItem('tRoom', JSON.stringify(roomInfo));
+            });
+    
 
    
             // 單一客房toggle 內容
@@ -228,6 +309,21 @@
 
             $('.btn_delete').on('click', function () {
                 if (confirm('確定要刪除這個房型嗎？')) {
+                    // 獲取被刪除的客房的索引
+                    console.log("test");
+                    const roomIndex = $(this).closest('.panel__room').index();
+                    console.log(roomIndex);
+
+                    // 從 sessionStorage 中讀取所有的客房資訊
+                    const roomInfo = JSON.parse(sessionStorage.getItem('tRoom'));
+
+                    // 刪除對應的元素
+                    roomInfo.splice(roomIndex, 1);
+
+                    // 將更新後的數組寫回 sessionStorage
+                    sessionStorage.setItem('tRoom', JSON.stringify(roomInfo));
+
+
                     $(this).closest('.panel__room').remove();
                     updateDeleteButtonsAndRenumberRooms();
                 }
@@ -237,6 +333,9 @@
             const createPanel = () => {
                 roomCount++;
                 const newPanel = $('.panel__room:first').clone();
+                newPanel.find('.btn-icon-plus').attr('id', 'plus-btn-' + roomCount);
+                newPanel.find('.btn-icon-minus').attr('id', 'minus-btn-' + roomCount);
+                newPanel.find('.room-size-input').attr('id', 'room-size-input-' + roomCount);
 
                 newPanel.find('.panel__room__count').text(`客房${roomCount}`);
                 newPanel.find('input').val('');
@@ -246,6 +345,8 @@
                 newPanel.find('.btn-toggle span').text('展開');
                 newPanel.find('.btn-toggle i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
                 newPanel.find('.btn_delete').show();
+                newPanel.find('.roomPeople').val('1');
+                newPanel.find('textarea').val('');
 
                 // 收合現有的客房
                 $('#panels-container .panel__room .panel__content').slideUp();
@@ -254,6 +355,8 @@
 
                 // 將新的客房加入
                 $('#panels-container').append(newPanel);
+
+                bindClickHandlers(newPanel);
 
                 // 新的客房展開資料
                 newPanel.find('.panel__content').slideDown();
@@ -269,12 +372,28 @@
 
                 newPanel.find('.btn_delete').on('click', function () {
                     if (confirm('確定要刪除這個房型嗎？')) {
+                        // 獲取被刪除的客房的索引
+                        const roomIndex = $(this).closest('.panel__room').index();
+
+                        // 從 sessionStorage 中讀取所有的客房資訊
+                        const roomInfo = JSON.parse(sessionStorage.getItem('tRoom'));
+
+                        // 刪除對應的元素
+                        roomInfo.splice(roomIndex, 1);
+
+                        // 將更新後的數組寫回 sessionStorage
+                        sessionStorage.setItem('tRoom', JSON.stringify(roomInfo));
+
+
                         $(this).closest('.panel__room').remove();
                         updateDeleteButtonsAndRenumberRooms();
                     }
                 });
 
+
                 updateDeleteButtonsAndRenumberRooms();
+
+             
 
             };
 
@@ -283,25 +402,11 @@
                 createPanel();
             });
 
-
+            bindClickHandlers($('.panel__room:first'));
             updateDeleteButtonsAndRenumberRooms();
 
-            // 客房人數限制
-            $('#plus-btn').on('click', () => {
-                const input = $('#room-size-input');
-                const currentValue = parseInt(input.val());
-                if (currentValue < parseInt(input.attr('max'))) {
-                    input.val(currentValue + 1);
-                }
-            });
 
-            $('#minus-btn').on('click', () => {
-                const input = $('#room-size-input');
-                const currentValue = parseInt(input.val());
-                if (currentValue > parseInt(input.attr('min'))) {
-                    input.val(currentValue - 1);
-                }
-            });
+
         });
 
     </script>

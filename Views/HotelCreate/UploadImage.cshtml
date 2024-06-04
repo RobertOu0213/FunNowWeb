@@ -122,7 +122,7 @@
             //Image Category
             const res = await fetch('https://localhost:7103/api/ImageCategory')
             const data = await res.json();
-            console.log(data);
+      
             imageCategoryStr += `<option selected disabled> 請選擇標題 </option>`;
             data.forEach(item => {
                 imageCategoryStr +=
