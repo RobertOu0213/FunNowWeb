@@ -1,0 +1,218 @@
+﻿<meta charset="utf-8" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/9bbb5484f7.js" crossorigin="anonymous"></script>
+<title>登入</title>
+
+<body>
+    <!-- 導航欄 -->
+    <div class="container-fluid" style="padding: 0;">
+        <nav class="navbar navbar-expand-lg navbar-light" style="height: 60px;">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <a class="navbar-brand logo_h" href="index.html"><img src="image/FunNowlogo.jpg" alt=""></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
+                <ul class="nav navbar-nav menu_nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="index.html" style="color:red;">刊登家中空房</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">
+                            <img src="image/flag.jpg" />
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="accomodation.html">NT $</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="gallery.html">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item submenu dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa-solid fa-user"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="nav-item">
+                                <a class="nav-link" href="blog.html">會員資料</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="blog-single.html">評論</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="blog-single.html">我的最愛</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <!--表單欄-->
+    <div class="container">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-lg-5 " style="min-width: 350px; max-width: 500px;">
+                <div class="card border-0 shadow rounded-3 my-5 ">
+                    <div class="card-body p-4 p-sm-5 " style="white-space: nowrap;">
+                        <h3 class="sc-fzqyvX kJWwZs kite-js-Typography ">FunNow咖登入</h3>
+                        <p>為了保障你的個資安全，請先登入才能查看個人資訊</p>
+                        <hr style="border-top: 3px solid #0D6EFD; ">
+                        <form>
+                            <div class="mb-3">
+                                <label for="EmailInput" class="form-label" style="font-size:15px">電子信箱</label>
+                                <input type="email" class="form-control" id="EmailInput" placeholder="電子信箱">
+                            </div>
+                            <p></p>
+                            <div class="mb-3">
+                                <label for="PasswordInput" class="form-label" style="font-size:15px">密碼</label>
+                                <input type="password" class="form-control" id="PasswordInput" placeholder="密碼">
+                            </div>
+                            <div class="mb-3">
+                                <div class="row">
+                                    <label for="VerifyInput" class="form-label" style="font-size:15px">驗證碼</label>
+
+                                    <input type="text" class="form-control w-50 h-25 col ms-2 mt-2 align-middle" id="VerifyInput" placeholder="驗證碼">
+                                    <div class="col">
+                                        <img src="C:\Users\User\Desktop\Ruby\期末專題\期末專題0519\funnow\funnow\image\verify.png" style="width:100px" />
+                                        <button class="btn" type="submit">重新產生</button>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+
+                            <div class="d-grid">
+                                <button class="btn btn-primary btn-login text-uppercase fw-bold" type="submit">登入</button>
+                            </div>
+                            <p></p>
+                            <div class="row">
+                                <div>
+                                    <a class="col ff1">我是新朋友</a>
+
+                                    <a class="col" style="font-size:14px"><i class="fa-solid fa-lock" style="color: #0d6efd;"></i> 忘記密碼？別慌，點此找幫手！</a>
+                                </div>
+                            </div>
+                            <p style="margin:40px"></p>
+
+                            <span class="line"></span>
+                            <span>或使用以下方式登入</span>
+                            <span class="line"></span>
+                            <p></p>
+                            <div class="d-grid mb-2">
+                                <button class="btn btn-outline-danger fw-bold py-2 btn-zoom" type="submit">
+                                    <i class="fab fa-google me-2"></i> Google
+                                </button>
+                            </div>
+                            <div class="row">
+                                <div class="col d-grid">
+                                    <button class="btn btn-outline-primary fw-bold py-2 btn-zoom" type="submit">
+                                        <i class="fab fa-facebook-f me-2"></i> Facebook
+                                    </button>
+                                </div>
+                                <div class="col d-grid">
+                                    <button class=" btn btn-outline-success fw-bold py-2 btn-zoom" type="submit">
+                                        <i class="fa-brands fa-line"></i> Line
+                                    </button>
+                                </div>
+                            </div>
+
+                            <p style="margin:30px"></p>
+                            <p style="text-align: center; font-size:13px;">點擊登錄即代表我同意FunNow的<a class="col">服務條款</a>和<a class="col">隱私權政策</a>。</p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+
+@section Styles
+{
+    <style>
+        body {
+            background: #F9F9F9;
+            /*background: linear-gradient(to right, #0062E6, #33AEFF);*/
+        }
+
+        .btn-login {
+            font-size: 0.9rem;
+            letter-spacing: 0.05rem;
+            padding: 0.75rem 1rem;
+            background-color: #5392F9;
+            border: none;
+        }
+
+            .btn-login:hover {
+                background-color: #87b3fb;
+            }
+
+        a {
+            text-decoration: none;
+        }
+
+            a:hover {
+                color: #87b3fb;
+                text-decoration: underline;
+            }
+
+        .btn-google {
+            color: white !important;
+            background-color: #ea4335;
+        }
+
+        .btn-facebook {
+            color: white !important;
+            background-color: #3b5998;
+        }
+
+        .btn-zoom {
+            transition: transform 0.3s ease; /* 添加过渡效果 */
+        }
+
+            .btn-zoom:hover {
+                transform: scale(1.02); /* 鼠标悬停时放大 1.1 倍 */
+            }
+
+        h3 {
+            font-weight: 800;
+        }
+
+        .ff1 {
+            font-size: 14px;
+            margin: 0 120px 0 0;
+        }
+
+        .line {
+            display: inline-block;
+            width: 120px;
+            border-top: 1px solid #cccccc;
+            vertical-align: 5px;
+        }
+
+
+    </style>
+}
+
+
+@section Scripts
+{
+
+
+    <script>
+
+
+
+    </script>
+}

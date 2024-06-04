@@ -4,7 +4,23 @@ namespace PrjFunNowWeb.Controllers
 {
     public class MemberController : Controller
     {
-        public IActionResult Index() //測試是否上傳~
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        public IActionResult MemberInformation()
+        {
+            return View();
+        }
+
+        public IActionResult HostInformation()
         {
             return View();
         }

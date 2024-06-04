@@ -1,0 +1,300 @@
+﻿<meta charset="utf-8" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/9bbb5484f7.js" crossorigin="anonymous"></script>
+<title>註冊</title>
+
+<body>
+    <!-- 導航欄 -->
+    <div class="container-fluid" style="padding: 0;">
+        <nav class="navbar navbar-expand-lg navbar-light" style="height: 60px;">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <a class="navbar-brand logo_h" href="index.html"><img src="image/FunNowlogo.jpg" alt=""></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
+                <ul class="nav navbar-nav menu_nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="index.html" style="color:red;">刊登家中空房</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">
+                            <img src="image/flag.jpg" />
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="accomodation.html">NT $</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="gallery.html">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item submenu dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa-solid fa-user"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="nav-item">
+                                <a class="nav-link" href="blog.html">會員資料</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="blog-single.html">評論</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="blog-single.html">我的最愛</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <!--表單欄-->
+    <div class="container">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-lg-5 " style="min-width: 350px; max-width: 500px;">
+                <div class="card border-0 shadow rounded-3 my-5 ">
+                    <div class="card-body p-4 p-sm-5 " style="white-space: nowrap;">
+                        <h3 class="sc-fzqyvX kJWwZs kite-js-Typography ">免費入會</h3>
+                        <p style="height:8px"></p>
+                        <form>
+                            <div class="mb-3">
+                                <label for="FirstNameInput" class="form-label" style="font-size:15px">護照英文名</label>
+                                <input type="text" class="form-control" id="FirstNameInput" placeholder="護照英文名">
+                                <p id="firstNameError" class="form-text text-danger" style="display: none;">請輸入有效的名字(限英文)。</p>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="LastNameInput" class="form-label" style="font-size:15px">護照英文姓</label>
+                                <input type="text" class="form-control" id="LastNameInput" placeholder="護照英文姓">
+                                <p id="lastNameError" class="form-text text-danger" style="display: none;">請輸入有效的姓氏(限英文)。</p>
+                            </div>
+                            <div class="mb-3">
+                                <label for="EmailInput" class="form-label" style="font-size:15px">電子信箱</label>
+                                <input type="email" class="form-control" id="EmailInput" placeholder="電子信箱">
+                                <p id="emailError" class="form-text text-danger" style="display: none;">請輸入有效的電子信箱。</p>
+                            </div>
+
+                            <div class="mb-3 ">
+                                <label for="PasswordInput" class="form-label" style="font-size:15px">密碼</label>
+                                <input type="password" class="form-control" id="PasswordInput" placeholder="密碼">
+                                <p id="passwordError" class="form-text text-danger" style="display: none;">請輸入有效的密碼。</p>
+                            </div>
+
+                            <div class="mb-3 ">
+                                <label for="RecheckPasswordInput" class="form-label" style="font-size:15px">確認密碼</label>
+                                <input type="password" class="form-control" id="RecheckPasswordInput" placeholder="確認密碼">
+                                <p id="recheckpasswordError" class="form-text text-danger" style="display: none;">請輸入有效的密碼。</p>
+                            </div>
+                            <p></p>
+
+                            <div class="row ">
+                                <div class="col-md-auto align-content-center ">
+                                    <input for="link" class="form-check-input" type="checkbox" value="agree" id="agree" name="agree">
+                                </div>
+                                <div class="col-lg">
+                                    <a class=" ff1">我同意透過各種管道接收有關FunNow及其行銷夥伴或業務合作夥伴的最新動態和促銷資訊。可隨時選擇退出。詳情請參閱隱私權政策。</a>
+                                </div>
+                            </div>
+
+
+                            <p></p>
+
+                            <div class="d-grid">
+                                <button class="btn btn-secondary btn-login text-uppercase fw-bold" disabled>加入會員</button>
+                            </div>
+                            <p></p>
+                            <p style="margin:40px"></p>
+
+                            <span class="line"></span>
+                            <span>或用以下帳號登入</span>
+                            <span class="line"></span>
+                            <p></p>
+                            <div class="d-grid mb-2">
+                                <button class="btn btn-outline-danger fw-bold py-2 btn-zoom" type="submit">
+                                    <i class="fab fa-google me-2"></i> Google
+                                </button>
+                            </div>
+                            <div class="row">
+                                <div class="col d-grid">
+                                    <button class="btn btn-outline-primary fw-bold py-2 btn-zoom" type="submit">
+                                        <i class="fab fa-facebook-f me-2"></i> Facebook
+                                    </button>
+                                </div>
+                                <div class="col d-grid">
+                                    <button class=" btn btn-outline-success fw-bold py-2 btn-zoom" type="submit">
+                                        <i class="fa-brands fa-line"></i> Line
+                                    </button>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="d-grid mb-2">
+                                <button class="btn btn-outline-primary fw-bold py-2 " type="submit">已經是會員?登入</button>
+                            </div>
+                            <p style="margin:30px"></p>
+                            <p style="text-align: center; font-size:13px;">點擊登錄即代表我同意FunNow的<a class="col">服務條款</a>和<a class="col">隱私權政策</a>。</p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+
+@section Styles
+{
+    <style>
+        body {
+            background: #F9F9F9;
+            /*background: linear-gradient(to right, #0062E6, #33AEFF);*/
+        }
+
+        .btn-login {
+            font-size: 0.9rem;
+            letter-spacing: 0.05rem;
+            padding: 0.75rem 1rem;
+            background-color: #5392F9;
+            border: none;
+        }
+
+            .btn-login:hover {
+                background-color: #87b3fb;
+            }
+
+        a:hover {
+            color: #87b3fb;
+        }
+
+        .btn-google {
+            color: white !important;
+            background-color: #ea4335;
+        }
+
+        .btn-facebook {
+            color: white !important;
+            background-color: #3b5998;
+        }
+
+        .btn-zoom {
+            transition: transform 0.3s ease; /* 添加过渡效果 */
+        }
+
+            .btn-zoom:hover {
+                transform: scale(1.02); /* 鼠标悬停时放大 1.1 倍 */
+            }
+
+        h3 {
+            font-weight: 800;
+        }
+
+        .ff1 {
+            font-size: 14px;
+            white-space: normal;
+            color: black;
+            text-decoration: none;
+        }
+
+            .ff1:hover {
+                text-decoration: none;
+            }
+
+        .line {
+            display: inline-block;
+            width: 120px;
+            border-top: 1px solid #cccccc;
+            vertical-align: 5px;
+        }
+
+
+        a {
+            text-decoration: none;
+        }
+
+            a:hover {
+                color: #87b3fb;
+                text-decoration: underline;
+            }
+
+    </style>
+}
+
+
+@section Scripts
+{
+
+
+    <script>
+        document.getElementById("FirstNameInput").addEventListener("blur", function () {
+            var input = this.value.trim(); // 获取输入框中的值，并删除首尾的空格
+            var error = document.getElementById("firstNameError");
+            if (input === "") { // 如果输入框中的值为空
+                error.style.display = "block"; // 显示错误提示文字
+                this.classList.add("border", "border-danger"); // 添加红色边框
+            } else {
+                error.style.display = "none"; // 隐藏错误提示文字
+                this.classList.remove("border", "border-danger"); // 移除红色边框
+            }
+        });
+
+        document.getElementById("LastNameInput").addEventListener("blur", function () {
+            var input = this.value.trim();
+            var error = document.getElementById("lastNameError");
+            if (input === "") {
+                error.style.display = "block";
+                this.classList.add("border", "border-danger");
+            } else {
+                error.style.display = "none";
+                this.classList.remove("border", "border-danger");
+            }
+        });
+
+        document.getElementById("EmailInput").addEventListener("blur", function () {
+            var input = this.value.trim();
+            var error = document.getElementById("emailError");
+            if (input === "") {
+                error.style.display = "block";
+                this.classList.add("border", "border-danger");
+            } else {
+                error.style.display = "none";
+                this.classList.remove("border", "border-danger");
+            }
+        });
+
+        document.getElementById("PasswordInput").addEventListener("blur", function () {
+            var input = this.value.trim();
+            var error = document.getElementById("passwordError");
+            if (input === "") {
+                error.style.display = "block";
+                this.classList.add("border", "border-danger");
+            } else {
+                error.style.display = "none";
+                this.classList.remove("border", "border-danger");
+            }
+        });
+
+        document.getElementById("RecheckPasswordInput").addEventListener("blur", function () {
+            var input = this.value.trim();
+            var error = document.getElementById("recheckpasswordError");
+            if (input === "") {
+                error.style.display = "block";
+                this.classList.add("border", "border-danger");
+            } else {
+                error.style.display = "none";
+                this.classList.remove("border", "border-danger");
+            }
+        });
+
+
+    </script>
+}
