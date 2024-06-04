@@ -33,22 +33,26 @@ namespace PrjFunNowWeb.Controllers
         }
         public IActionResult OwnerHotelsOdersList()
         {
-            //var orders = from order in _context.Orders
-            //             join detail in _context.OrderDetails on order.OrderID equals detail.OrderID
-            //             join room in _context.Rooms on detail.RoomID equals room.RoomID
-            //             join hotel in _context.Hotels on room.HotelID equals hotel.HotelID
-            //             where room.MemberID == YOUR_MEMBER_ID // 假設房東的 MemberID 已知
-            //             select new OrderViewModel
-            //             {
-            //                 GuestInfo = order.GuestFirstName + " " + order.GuestLastName,
-            //                 HotelName = hotel.HotelName,
-            //                 CheckInDate = detail.CheckInDate,
-            //                 CheckOutDate = detail.CheckOutDate,
-            //                 Price = order.TotalPrice,
-            //                 Status = (order.OrderStatusID == SOME_STATUS_ID) ? "已確認" : "未確認" // 假設狀態ID代表特定狀態
-            //             };
+            //int memberId = HttpContext.Session.GetInt32("MemberID") ?? 0; // 使用默认值0作为备选
+            int memberId = 2; // 假设房东的 MemberID 是 2
+            var orders = from order in _context.Orders
+                         join detail in _context.OrderDetails on order.OrderId equals detail.OrderId
+                         join room in _context.Rooms on detail.RoomId equals room.RoomId
+                         join hotel in _context.Hotels on room.HotelId equals hotel.HotelId
+                         join orderstatus in _context.OrderStatuses on order.OrderStatusId equals orderstatus.OrderStatusId
+                         where room.MemberId == memberId // 假設房東的 MemberID 已知
+                         select new OrderViewModel
+                         {
+                             OrderNumber = order.OrderId,
+                             GuestName = order.GuestFirstName + " " + order.GuestLastName,                           
+                             HotelName = hotel.HotelName,
+                             CheckInDate = detail.CheckInDate,
+                             CheckOutDate = detail.CheckOutDate,
+                             Price = order.TotalPrice,
+                             Status = orderstatus.OrderStatusName,
+                         };
 
-            return View(/*orders.ToList()*/);
+            return View(orders.ToList());
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

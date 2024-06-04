@@ -1,10 +1,88 @@
-﻿@{
+﻿@model IEnumerable< PrjFunNowWeb.ViewModels.OrderViewModel>
+@{
     ViewData["Title"] = "OwnerHotelsOders Page";
 }
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 @section Styles {
+    <style>
+        .table-responsive {
+            max-height: 400px; /* 根據需求調整 */
+            overflow-y: auto;
+        }
 
+        .table-container {
+            position: relative; /* 用於絕對定位關閉按鈕 */
+            width: 80%;
+        }
+
+        .btn-close {
+            z-index: 1050; /* 確保其位於其他元素之上 */
+            margin: 0.5rem; /* 按鈕周圍的間距 */
+        }
+
+        .table-responsive {
+            margin-left: 40px; /* 根據按鈕大小進行調整 */
+        }
+
+
+        .container {
+            bottom: 0; /*網頁底部顯示*/
+            position: fixed; /*網頁底部顯示*/
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .collapsible {
+            background-color: #f2f2f2;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .bottom {
+            display: flex;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .left {
+            flex: 1.0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            width: 100%;
+        }
+
+        .right {
+            flex-basis: 130px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            width: 100%;
+        }
+
+        img {
+            width: 100px;
+            height: auto;
+        }
+
+        .table img {
+            width: 150px; /* 固定圖片寬度 */
+            height: 100px; /* 固定圖片高度 */
+            object-fit: cover; /* 覆蓋模式，保持圖片的比例，超出的部分會被裁切 */
+        }
+
+        /* 星星图标颜色 */
+        .fa-star {
+            color: orange; /* 设置为金色，您也可以使用任何您喜欢的颜色 */
+        }
+    </style>
 }
-
+<body>
 @section Scripts {
 
     <script>
@@ -12,7 +90,8 @@
 
 
 
-
     </script>
 
+
 }
+    </body>
