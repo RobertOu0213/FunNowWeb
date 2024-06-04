@@ -1,29 +1,194 @@
-創建檢視表
-CREATE VIEW HotelSearchBox AS
+修改檢視表
+ALTER VIEW HotelSearchBox
+AS
 SELECT 
-   H.[HotelID],[HotelName],[HotelAddress],[HotelPhone],[HotelDescription],[LevelStar],[Latitude],[Longitude],[isActive],H.[MemberID],
-   [CommentTitle],[CommentText],[CountryName],[HotelEquipmentName],[HotelImage],[HotelTypeName],[ImageCategoryName],AVG(R.RoomPrice) AS HotelPrice,
-   SUM(R.RoomSize) AS HotelSize
-    
+    H.[HotelID],
+    H.[HotelName],
+    H.[HotelAddress],
+    H.[HotelPhone],
+    H.[HotelDescription],
+    H.[LevelStar],
+    H.[Latitude],
+    H.[Longitude],
+    H.[isActive],
+    H.[MemberID],
+    CM.[CommentTitle],
+    CM.[CommentText],
+    CT.[CountryName],
+    HE.[HotelEquipmentName],
+    HIMG.[HotelImage],
+    HT.[HotelTypeName],
+    IC.[ImageCategoryName],
+    AVG(CAST(R.RoomPrice AS DECIMAL(10, 2))) AS HotelPrice,
+    SUM(CAST(R.MaximumOccupancy AS INT)) AS HotelMaximumOccupancy,
+    -- 新增的欄位
+    0 AS NewColumn  -- 這裡示範新增一個名為 NewColumn 的欄位，資料類型為整數且預設值為 0
 FROM 
     [dbo].[Hotel] H
 JOIN 
-    [dbo].[City]C ON H.[CityID] = C.CityID 
+    [dbo].[City] C ON H.[CityID] = C.CityID 
 JOIN
-    [dbo].[Comments]CM ON CM.HotelID = H.HotelID  
+    [dbo].[Comments] CM ON CM.HotelID = H.HotelID  
 JOIN
-    [dbo].[Country]CT ON CT.CountryID = C.CountryID 
+    [dbo].[Country] CT ON CT.CountryID = C.CountryID 
 JOIN
-    [dbo].[Hotel_Equipment_Reference]HER ON HER.HotelID = H.HotelID 
+    [dbo].[Hotel_Equipment_Reference] HER ON HER.HotelID = H.HotelID 
 JOIN
-    [dbo].[HotelEquipment]HE ON HE.HotelEquipmentID = HER.HotelEquipmentID 
+    [dbo].[HotelEquipment] HE ON HE.HotelEquipmentID = HER.HotelEquipmentID 
 JOIN
-    [dbo].[HotelImage]HIMG ON HIMG.HotelID = H.HotelID 
+    [dbo].[HotelImage] HIMG ON HIMG.HotelID = H.HotelID 
 JOIN
-    [dbo].[HotelType]HT ON HT.HotelTypeID = H.HotelTypeID 
+    [dbo].[HotelType] HT ON HT.HotelTypeID = H.HotelTypeID 
 JOIN
-    [dbo].[ImageCategory_Reference]ICR ON ICR.HotelImageID = HIMG.HotelImageID 
+    [dbo].[ImageCategory_Reference] ICR ON ICR.HotelImageID = HIMG.HotelImageID 
 JOIN
-    [dbo].[ImageCategory]IC ON IC.ImageCategoryID = ICR.ImageCategoryID 
+    [dbo].[ImageCategory] IC ON IC.ImageCategoryID = ICR.ImageCategoryID 
 JOIN
-    [dbo].[Room]R ON R.HotelID = H.HotelID 
+    [dbo].[Room] R ON R.HotelID = H.HotelID 
+GROUP BY 
+    H.[HotelID],
+    H.[HotelName],
+    H.[HotelAddress],
+    H.[HotelPhone],
+    H.[HotelDescription],
+    H.[LevelStar],
+    H.[Latitude],
+    H.[Longitude],
+    H.[isActive],
+    H.[MemberID],
+    CM.[CommentTitle],
+    CM.[CommentText],
+    CT.[CountryName],
+    HE.[HotelEquipmentName],
+    HIMG.[HotelImage],
+    HT.[HotelTypeName],
+    IC.[ImageCategoryName];
+
+
+正確做法
+CREATE VIEW HotelSearchBox AS
+SELECT 
+    H.[HotelID],
+    H.[HotelName],
+    H.[HotelAddress],
+    H.[HotelPhone],
+    H.[HotelDescription],
+    H.[LevelStar],
+    H.[Latitude],
+    H.[Longitude],
+    H.[isActive],
+    H.[MemberID],
+    CM.[CommentTitle],
+    CM.[CommentText],
+    CT.[CountryName],
+    HE.[HotelEquipmentName],
+    HIMG.[HotelImage],
+    HT.[HotelTypeName],
+    IC.[ImageCategoryName],
+    AVG(R.RoomPrice) AS HotelPrice,
+    SUM(R.RoomSize) AS HotelSize
+FROM 
+    [dbo].[Hotel] H
+JOIN 
+    [dbo].[City] C ON H.[CityID] = C.CityID 
+JOIN
+    [dbo].[Comments] CM ON CM.HotelID = H.HotelID  
+JOIN
+    [dbo].[Country] CT ON CT.CountryID = C.CountryID 
+JOIN
+    [dbo].[Hotel_Equipment_Reference] HER ON HER.HotelID = H.HotelID 
+JOIN
+    [dbo].[HotelEquipment] HE ON HE.HotelEquipmentID = HER.HotelEquipmentID 
+JOIN
+    [dbo].[HotelImage] HIMG ON HIMG.HotelID = H.HotelID 
+JOIN
+    [dbo].[HotelType] HT ON HT.HotelTypeID = H.HotelTypeID 
+JOIN
+    [dbo].[ImageCategory_Reference] ICR ON ICR.HotelImageID = HIMG.HotelImageID 
+JOIN
+    [dbo].[ImageCategory] IC ON IC.ImageCategoryID = ICR.ImageCategoryID 
+JOIN
+    [dbo].[Room] R ON R.HotelID = H.HotelID 
+GROUP BY 
+    H.[HotelID],
+    H.[HotelName],
+    H.[HotelAddress],
+    H.[HotelPhone],
+    H.[HotelDescription],
+    H.[LevelStar],
+    H.[Latitude],
+    H.[Longitude],
+    H.[isActive],
+    H.[MemberID],
+    CM.[CommentTitle],
+    CM.[CommentText],
+    CT.[CountryName],
+    HE.[HotelEquipmentName],
+    HIMG.[HotelImage],
+    HT.[HotelTypeName],
+    IC.[ImageCategoryName];
+
+正確做法2
+CREATE VIEW HotelSearchBox AS
+SELECT 
+    H.[HotelID],
+    H.[HotelName],
+    H.[HotelAddress],
+    H.[HotelPhone],
+    H.[HotelDescription],
+    H.[LevelStar],
+    H.[Latitude],
+    H.[Longitude],
+    H.[isActive],
+    H.[MemberID],
+    CM.[CommentTitle],
+    CM.[CommentText],
+    CT.[CountryName],
+    HE.[HotelEquipmentName],
+    HIMG.[HotelImage],
+    HT.[HotelTypeName],
+    IC.[ImageCategoryName],
+	AVG(CAST(R.RoomPrice AS DECIMAL(10, 2))) AS HotelPrice,
+    SUM(CAST(R.MaximumOccupancy AS INT)) AS HotelMaximumOccupancy
+FROM 
+    [dbo].[Hotel] H
+JOIN 
+    [dbo].[City] C ON H.[CityID] = C.CityID 
+JOIN
+    [dbo].[Comments] CM ON CM.HotelID = H.HotelID  
+JOIN
+    [dbo].[Country] CT ON CT.CountryID = C.CountryID 
+JOIN
+    [dbo].[Hotel_Equipment_Reference] HER ON HER.HotelID = H.HotelID 
+JOIN
+    [dbo].[HotelEquipment] HE ON HE.HotelEquipmentID = HER.HotelEquipmentID 
+JOIN
+    [dbo].[HotelImage] HIMG ON HIMG.HotelID = H.HotelID 
+JOIN
+    [dbo].[HotelType] HT ON HT.HotelTypeID = H.HotelTypeID 
+JOIN
+    [dbo].[ImageCategory_Reference] ICR ON ICR.HotelImageID = HIMG.HotelImageID 
+JOIN
+    [dbo].[ImageCategory] IC ON IC.ImageCategoryID = ICR.ImageCategoryID 
+JOIN
+    [dbo].[Room] R ON R.HotelID = H.HotelID 
+GROUP BY 
+    H.[HotelID],
+    H.[HotelName],
+    H.[HotelAddress],
+    H.[HotelPhone],
+    H.[HotelDescription],
+    H.[LevelStar],
+    H.[Latitude],
+    H.[Longitude],
+    H.[isActive],
+    H.[MemberID],
+    CM.[CommentTitle],
+    CM.[CommentText],
+    CT.[CountryName],
+    HE.[HotelEquipmentName],
+    HIMG.[HotelImage],
+    HT.[HotelTypeName],
+    IC.[ImageCategoryName];
+
+
