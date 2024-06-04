@@ -15,3 +15,20 @@
     }
 </ul>
 
+@section Styles {
+    <style>
+
+    </style>
+
+}
+@section Scripts {
+    <script>
+
+        (async () => {
+            const res = await fetch('https://localhost:7103/api/test')
+            const data = await res.json();
+            console.log(data);
+        })();
+
+    </script>
+}

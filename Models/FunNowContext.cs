@@ -39,6 +39,8 @@ public partial class FunNowContext : DbContext
 
     public virtual DbSet<HotelLike> HotelLikes { get; set; }
 
+    public virtual DbSet<HotelSearchBox> HotelSearchBoxes { get; set; }
+
     public virtual DbSet<HotelType> HotelTypes { get; set; }
 
     public virtual DbSet<ImageCategory> ImageCategories { get; set; }
@@ -169,10 +171,11 @@ public partial class FunNowContext : DbContext
             entity.ToTable("Dialog");
 
             entity.Property(e => e.DialogId).HasColumnName("DialogID");
+            entity.Property(e => e.CalltoMemberId).HasColumnName("CalltoMemberID");
             entity.Property(e => e.CreateAt).HasColumnType("datetime");
             entity.Property(e => e.Detail)
                 .IsRequired()
-                .HasColumnType("text");
+                .IsUnicode(false);
             entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
             entity.HasOne(d => d.Member).WithMany(p => p.Dialogs)
@@ -190,9 +193,7 @@ public partial class FunNowContext : DbContext
             entity.Property(e => e.HotelAddress)
                 .IsRequired()
                 .HasMaxLength(150);
-            entity.Property(e => e.HotelDescription)
-                .IsRequired()
-                .HasColumnType("text");
+            entity.Property(e => e.HotelDescription).IsRequired();
             entity.Property(e => e.HotelName)
                 .IsRequired()
                 .HasMaxLength(100);
@@ -200,6 +201,10 @@ public partial class FunNowContext : DbContext
                 .IsRequired()
                 .HasMaxLength(50);
             entity.Property(e => e.HotelTypeId).HasColumnName("HotelTypeID");
+            entity.Property(e => e.IsActive)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("isActive");
+            entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
             entity.HasOne(d => d.City).WithMany(p => p.Hotels)
                 .HasForeignKey(d => d.CityId)
@@ -210,6 +215,11 @@ public partial class FunNowContext : DbContext
                 .HasForeignKey(d => d.HotelTypeId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Hotel_HotelType");
+
+            entity.HasOne(d => d.Member).WithMany(p => p.Hotels)
+                .HasForeignKey(d => d.MemberId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Hotel_Member");
         });
 
         modelBuilder.Entity<HotelEquipment>(entity =>
@@ -247,10 +257,11 @@ public partial class FunNowContext : DbContext
 
         modelBuilder.Entity<HotelImage>(entity =>
         {
+            entity.HasKey(e => e.HotelImageId).HasName("PK_HotelImages");
+
+            entity.ToTable("HotelImage");
+
             entity.Property(e => e.HotelImageId).HasColumnName("HotelImageID");
-            entity.Property(e => e.HimageDescription)
-                .HasColumnType("text")
-                .HasColumnName("HImageDescription");
             entity.Property(e => e.HotelId).HasColumnName("HotelID");
             entity.Property(e => e.HotelImage1)
                 .IsRequired()
@@ -259,7 +270,7 @@ public partial class FunNowContext : DbContext
             entity.HasOne(d => d.Hotel).WithMany(p => p.HotelImages)
                 .HasForeignKey(d => d.HotelId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_HotelImages_Hotel");
+                .HasConstraintName("FK_HotelImage_Hotel");
         });
 
         modelBuilder.Entity<HotelLike>(entity =>
@@ -277,6 +288,38 @@ public partial class FunNowContext : DbContext
                 .HasForeignKey(d => d.MemberId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_HotelLikes_Member");
+        });
+
+        modelBuilder.Entity<HotelSearchBox>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("HotelSearchBox");
+
+            entity.Property(e => e.CityName)
+                .IsRequired()
+                .HasMaxLength(50);
+            entity.Property(e => e.CommentText).IsRequired();
+            entity.Property(e => e.CommentTitle).IsRequired();
+            entity.Property(e => e.CountryName).IsRequired();
+            entity.Property(e => e.HotelAddress)
+                .IsRequired()
+                .HasMaxLength(150);
+            entity.Property(e => e.HotelDescription).IsRequired();
+            entity.Property(e => e.HotelEquipmentName)
+                .IsRequired()
+                .HasMaxLength(50);
+            entity.Property(e => e.HotelId).HasColumnName("HotelID");
+            entity.Property(e => e.HotelName)
+                .IsRequired()
+                .HasMaxLength(100);
+            entity.Property(e => e.HotelPhone)
+                .IsRequired()
+                .HasMaxLength(50);
+            entity.Property(e => e.HotelPrice).HasColumnType("decimal(38, 6)");
+            entity.Property(e => e.HotelTypeName).IsRequired();
+            entity.Property(e => e.IsActive).HasColumnName("isActive");
+            entity.Property(e => e.MemberId).HasColumnName("MemberID");
         });
 
         modelBuilder.Entity<HotelType>(entity =>
@@ -307,7 +350,7 @@ public partial class FunNowContext : DbContext
             entity.HasOne(d => d.HotelImage).WithMany(p => p.ImageCategoryReferences)
                 .HasForeignKey(d => d.HotelImageId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ImageCategory_Reference_HotelImages");
+                .HasConstraintName("FK_ImageCategory_Reference_HotelImage");
 
             entity.HasOne(d => d.ImageCategory).WithMany(p => p.ImageCategoryReferences)
                 .HasForeignKey(d => d.ImageCategoryId)
@@ -525,6 +568,7 @@ public partial class FunNowContext : DbContext
             entity.Property(e => e.RoomId).HasColumnName("RoomID");
             entity.Property(e => e.HotelId).HasColumnName("HotelID");
             entity.Property(e => e.MaximumOccupancy).HasDefaultValueSql("((2))");
+            entity.Property(e => e.MemberId).HasColumnName("MemberID");
             entity.Property(e => e.RoomName).IsRequired();
             entity.Property(e => e.RoomPrice).HasColumnType("decimal(10, 2)");
             entity.Property(e => e.RoomSize).HasColumnType("decimal(18, 0)");
@@ -535,6 +579,11 @@ public partial class FunNowContext : DbContext
                 .HasForeignKey(d => d.HotelId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Room_Hotel");
+
+            entity.HasOne(d => d.Member).WithMany(p => p.Rooms)
+                .HasForeignKey(d => d.MemberId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Room_Member");
 
             entity.HasOne(d => d.RoomType).WithMany(p => p.Rooms)
                 .HasForeignKey(d => d.RoomTypeId)

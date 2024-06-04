@@ -1,0 +1,29 @@
+創建檢視表
+CREATE VIEW HotelSearchBox AS
+SELECT 
+   H.[HotelID],[HotelName],[HotelAddress],[HotelPhone],[HotelDescription],[LevelStar],[Latitude],[Longitude],[isActive],H.[MemberID],
+   [CommentTitle],[CommentText],[CountryName],[HotelEquipmentName],[HotelImage],[HotelTypeName],[ImageCategoryName],AVG(R.RoomPrice) AS HotelPrice,
+   SUM(R.RoomSize) AS HotelSize
+    
+FROM 
+    [dbo].[Hotel] H
+JOIN 
+    [dbo].[City]C ON H.[CityID] = C.CityID 
+JOIN
+    [dbo].[Comments]CM ON CM.HotelID = H.HotelID  
+JOIN
+    [dbo].[Country]CT ON CT.CountryID = C.CountryID 
+JOIN
+    [dbo].[Hotel_Equipment_Reference]HER ON HER.HotelID = H.HotelID 
+JOIN
+    [dbo].[HotelEquipment]HE ON HE.HotelEquipmentID = HER.HotelEquipmentID 
+JOIN
+    [dbo].[HotelImage]HIMG ON HIMG.HotelID = H.HotelID 
+JOIN
+    [dbo].[HotelType]HT ON HT.HotelTypeID = H.HotelTypeID 
+JOIN
+    [dbo].[ImageCategory_Reference]ICR ON ICR.HotelImageID = HIMG.HotelImageID 
+JOIN
+    [dbo].[ImageCategory]IC ON IC.ImageCategoryID = ICR.ImageCategoryID 
+JOIN
+    [dbo].[Room]R ON R.HotelID = H.HotelID 

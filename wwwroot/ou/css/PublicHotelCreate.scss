@@ -1,0 +1,22 @@
+﻿* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+$nav-border: #e5e5e5;
+$primary-color: #FFFFFF;
+$main-color: #FCFCFC;
+
+
+nav {
+    display: flex;
+    border-bottom: 1px solid $nav-border;
+    align-items: center;
+    height: 3.7em;
+
+    > div > img {
+        width: 5em;
+        margin-left: 1em;
+    }
+}
