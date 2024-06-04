@@ -1,0 +1,156 @@
+﻿@{
+    ViewData["Title"] = "Address";
+    Layout = "_Layout_HotelCreate";
+}
+
+<main>
+    <section class="leftSection">
+        <div class="stepper">
+            <div class="content">
+                <div id="step-control" class="stepper-panel">
+                    <div class="stepper-container container">
+                        <div class="step active">
+                            <div class="circle-container"></div>
+                            <span class="connect-line"></span>
+                            <div class="label-container">住宿基本資料</div>
+                        </div>
+                        <div class="step">
+                            <div class="circle-container"></div>
+                            <span class="connect-line"></span>
+                            <div class="label-container">住宿位置</div>
+                        </div>
+                        <div class="step">
+                            <div class="circle-container"></div>
+                            <span class="connect-line"></span>
+                            <div class="label-container">客房基本資料</div>
+                        </div>
+                        <div class="step">
+                            <div class="circle-container"></div>
+                            <span class="connect-line"></span>
+                            <div class="label-container">照片</div>
+                        </div>
+                        <div class="step">
+                            <div class="circle-container"></div>
+                            <span class=""></span>
+                            <div class="label-container">上線開賣</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="rightSection">
+        <div class="content__container pt-5">
+            <form action="@Url.Action("RoomInfo", "HotelCreate")" method="post">
+                @*  地址 *@
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="mb-4">
+                        <h4 class="fw-bold mt-5">用地圖標示出住宿的所在</h4>
+                        <div>才能讓旅人看得一目了然</div>
+                    </div>
+                    <div>
+                        <img class="equip_image w-75" src="~/image/ou/earth_img.png" alt="..." />
+                    </div>
+                </div>
+                <h5 class="fw-bold">住宿位置</h5>
+                <div class="panel">
+                    <div class="address mb-4">
+                        <div class="fw-bold mb-2">街道地址</div>
+                        <input type="text" class="form-control" placeholder="請在此輸入..." />
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="fw-bold mb-2">國家</div>
+                            <select class="form-select" aria-label="Default select example" id="selectCountry">
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="fw-bold mb-2">城市</div>
+                            <select class="form-select" aria-label="Default select example" id="selectCity">
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                        </div>
+                    </div>
+                    <h6 class="fw-bold mt-4">地圖位置</h6>
+                    <div class="mb-3">住客只有在訂單確認後才會收到你的確切地址。</div>
+                    <div class="googleMap"></div>
+                </div>
+
+                @* button *@
+                <div class="d-flex justify-content-end my-5">
+                    <button type="button" class="btn_previous">上一步</button>
+                    <button type="submit" class="btn_next">下一步</button>
+                </div>
+
+            </form>
+        </div>
+
+    </section>
+</main>
+
+
+
+
+@section Styles {
+
+    <link href="~/ou/css/Address.css" rel="stylesheet" />
+}
+@section Scripts {
+    <script>
+        let selectCountryStr = ""
+       
+        $(document).ready(async function() {
+
+            //國家
+            try {
+                const res = await fetch('https://localhost:7103/api/Country/countriesAndCities');
+                if(!res.ok) {
+                    throw new Error(res.statusText);
+                }
+                const data = await res.json();
+                data.forEach(item => {
+                    selectCountryStr +=
+                    `
+                      <option value="${item.countryId}">${item.countryName}</option>
+                    `
+                })
+
+                $('#selectCountry').html(selectCountryStr);
+
+          
+                // 加載第一個國家的城市作為默認值
+                if (data.length > 0) {
+                    loadCities(data[0]);
+                }
+                //城市
+                $('#selectCountry').on('change', function () {
+                    const selectedCountry = data.find(country => country.countryId == $(this).val());
+                    loadCities(selectedCountry);
+                });
+                     
+            }
+            catch(err) {
+                console.log(err)
+            }
+
+            function loadCities(country) {
+
+                let selectCityStr = '';
+                if (country && country.cities.length > 0) {
+                    country.cities.forEach(city => {
+                        selectCityStr += `<option value="${city.cityId}">${city.cityName}</option>`;
+                    });
+                    $('#selectCity').prop('disabled', false);
+                } else {
+                    $('#selectCity').prop('disabled', true);
+                }
+                $('#selectCity').html(selectCityStr);
+            }
+
+
+        });
+
+    </script>
+}
+
