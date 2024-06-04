@@ -23,12 +23,12 @@
                         <form>
                             <div class="mb-3">
                                 <label for="EmailInput" class="form-label" style="font-size:15px">電子信箱</label>
-                                <input type="email" class="form-control" id="EmailInput" placeholder="電子信箱">
+                                <input type="email" class="form-control" id="EmailInput1" name="EmailInput" placeholder="電子信箱">
                             </div>
                             <p></p>
                             <div class="mb-3">
                                 <label for="PasswordInput" class="form-label" style="font-size:15px">密碼</label>
-                                <input type="password" class="form-control" id="PasswordInput" placeholder="密碼">
+                                <input type="password" class="form-control" id="PasswordInput1" name="PasswordInput" placeholder="密碼">
                             </div>
                             <div class="mb-3">
                                 <div class="row">
@@ -46,7 +46,7 @@
                             </div>
 
                             <div class="d-grid">
-                                <button class="btn btn-primary btn-login text-uppercase fw-bold" type="submit">登入</button>
+                                <button class="btn btn-primary btn-login text-uppercase fw-bold" type="submit" id="loginBtn">登入</button>
                             </div>
                             <p></p>
                             <div class="row">
@@ -168,9 +168,30 @@
 {
 
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        $(document).ready(function () {
+            $('#loginBtn').click(function (event) {
+                event.preventDefault();
+                var email = $('#EmailInput1').val();
+                var password = $('#PasswordInput1').val();
 
-
-
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Login", "Member")',
+                    data: { EmailInput: email, PasswordInput: password },
+                    success: function (response) {
+                        if (response.success) {
+                            window.location.href = response.redirectUrl;
+                        } else {
+                            alert('登入失敗，請檢查您的電子信箱和密碼。');
+                        }
+                    },
+                    error: function () {
+                        alert('發生錯誤，請稍後再試。');
+                    }
+                });
+            });
+        });
     </script>
 }
