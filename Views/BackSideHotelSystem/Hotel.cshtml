@@ -1,0 +1,253 @@
+﻿
+@{
+    ViewData["Title"] = "Hotel";
+}
+
+@* html
+ *@
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark gradient-custom">
+    <!-- Container wrapper -->
+    <div class="container-fluid">
+        <!-- Navbar brand -->
+        <a class="navbar-brand" href="#">FunNow</a>
+
+        <!-- Toggle button -->
+        <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
+                data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <i class="fas fa-bars text-light"></i>
+        </button>
+
+        <!-- Collapsible wrapper -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <!-- Left links -->
+            <ul class="navbar-nav me-auto d-flex flex-row mt-3 mt-lg-0">
+                <li class="nav-item text-center mx-2 mx-lg-1">
+                    <a class="nav-link" href="#!">
+                        <div>
+                            <i class="fa-solid fa-user mb-1"></i>
+                            <span class="badge rounded-pill badge-notification bg-dark"></span>
+                        </div>
+                        會員
+                    </a>
+                </li>
+                <li class="nav-item text-center mx-2 mx-lg-1">
+                    <a class="nav-link" href="#!">
+                        <div>
+                            <i class="fa-solid fa-house mb-1"></i>
+                            <span class="badge rounded-pill badge-notification bg-dark">2</span>
+                        </div>
+                        房東
+                    </a>
+                </li>
+                <li class="nav-item text-center mx-2 mx-lg-1">
+                    <a class="nav-link" href="#!">
+                        <div>
+                            <i class="fa-solid fa-face-smile mb-1"></i>
+                            <span class="badge rounded-pill badge-notification bg-dark">11</span>
+                        </div>
+                        評論
+                    </a>
+                </li>
+                <li class="nav-item text-center mx-2 mx-lg-1">
+                    <a class="nav-link" href="#!">
+                        <div>
+                            <i class="fa-solid fa-comment mb-1"></i>
+                            <span class="badge rounded-pill badge-notification bg-dark">1</span>
+                        </div>
+                        訊息
+                    </a>
+                </li>
+                <li class="nav-item text-center mx-2 mx-lg-1">
+                    <a class="nav-link" href="#!">
+                        <div>
+                            <i class="fa-solid fa-chart-line mb-1"></i>
+                            <span class="badge rounded-pill badge-notification bg-dark"></span>
+                        </div>
+                        數據分析
+                    </a>
+                </li>
+            </ul>
+            <!-- Left links -->
+        </div>
+        <!-- Collapsible wrapper -->
+    </div>
+    <!-- Container wrapper -->
+</nav>
+<!-- Navbar -->
+<div class="container">
+    <h3 class="m-3">房間審核管理</h3>
+</div>
+
+<div class="container mt-3 d-flex flex-row ">
+    <div class="input-group width px-3">
+        <select class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
+            <option selected>飯店名稱</option>
+            <option value="1">套資料吧</option>
+            <option value="2">一樣是套資料</option>
+        </select>
+    </div>
+    <div class="input-group width px-4">
+        <select class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
+            <option selected>房型</option>
+            <option value="1">單人房</option>
+            <option value="2">雙人房</option>
+            <option value="3">四人房</option>
+            <option value="4">六人房</option>
+            <option value="5">八人房</option>
+        </select>
+    </div>
+    <div class="input-group width px-1">
+        <!--px-1(數字好像可以填1到9越小越寬) -->
+        <select class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
+            <option selected>房型審核狀態</option>
+            <option value="1">未審核</option>
+            <option value="2">已審核</option>
+            <option value="3">審核中</option>
+        </select>
+    </div>
+
+    <div class="ms-5">
+        <span>
+            <input type="text" class="form-control dispaly" id="searchBar" aria-label="" placeholder="輸入文字">
+        </span>
+    </div>
+    <div>
+        <input type="button" class="btn btn-outline-primary dispaly" id="searchBtn" value="搜尋">
+    </div>
+</div>
+
+
+
+<div>
+    <table class="container table table-hover">
+        <thead>
+            <tr>
+                <td>編號</td>
+                <td>飯店名稱</td>
+                <td>房型</td>
+                <td>地址</td>
+                <td>電話</td>
+                <td>審核日期</td>
+                <td>審核狀態</td>
+            </tr>
+        </thead>
+        <tr>
+            <td>1</td>
+            <td>飯店名稱</td>
+            <td>房型</td>
+            <td>地址</td>
+            <td>電話</td>
+            <td>審核日期</td>
+            <td>
+                <select>
+                    <option>未審核</option>
+                    <option>已審核</option>
+                    <option>審核中</option>
+                </select>
+            </td>
+            <td><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">詳細內容</button></td>
+        </tr>
+
+    </table>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <style>
+            /* 修改 modal-dialog 的 max-width 以增加寬度 */
+            #exampleModal .modal-dialog {
+                max-width: 80%; /* 例如將寬度設置為 80%，可以根據需要調整 */
+            }
+        </style>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">房間內容</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <td colspan="3"><img src="Imageroom/room1.jpg" width="300" height="200"></td>
+                                    <td style="width: 8%;">飯店編號</td>
+                                    <td style="width: 14%;">飯店名稱</td>
+                                    <td style="width: 8%;">房間編號</td>
+                                    <td style="width: 10%;">房型</td>
+                                    <td style="width: 10%;">房間價格</td>
+                                    <td style="width: 10%;">房間大小</td>
+                                    <td style="width: 40%;">房間描述</td>
+                                    <td></td>
+                                </tr>
+                            </thead>
+                            <tr>
+                                <td><img src="Imageroom/room1.jpg" width="100" height="200"></td>
+                                <td><img src="Imageroom/room1.jpg" width="100" height="200"></td>
+                                <td><img src="Imageroom/room1.jpg" width="100" height="200"></td>
+                                <td>1</td>
+                                <td>三景花園飯店</td>
+                                <td>1</td>
+                                <td>雙人房</td>
+                                <td>3000</td>
+                                <td>21 平方公尺</td>
+                                <td>這間雙人房提供空調、茶／咖啡沖泡設備和露臺，可欣賞市景，私人衛浴內附淋浴間。此住宿空間配有 1 張床。</td>
+                                <td></td>
+                            </tr>
+
+                        </table>
+                    </div>
+                </div>
+
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
+                    <button type="button" class="btn btn-primary">加入購物車</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+@section Styles {
+    <style>
+        /*navbar*/
+        .btn {
+            padding: .45rem 1.5rem .35rem;
+        }
+
+        .gradient-custom {
+            /* fallback for old browsers*/
+            background: #004B97;
+        }
+        /*navbar*/
+
+        .container {
+            width: 70%;
+        }
+
+        .filterborder {
+            border: 1px solid #0072E3;
+            border-radius: 20px;
+            margin-right: 20px;
+        }
+
+        .width {
+            width: 15%;
+        }
+
+    </style>
+}
+
+@section Scripts {
+    <script>
+
+
+    </script>
+}
