@@ -2,6 +2,7 @@
 {
     public class OrderViewModel
     {
+        public int MemberId { get; set; }
         public string GuestName { get; set; }
         public int OrderNumber { get; set; }
         public string HotelName { get; set; }

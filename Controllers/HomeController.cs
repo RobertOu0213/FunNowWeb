@@ -43,6 +43,7 @@ namespace PrjFunNowWeb.Controllers
                          where room.MemberId == memberId // 假設房東的 MemberID 已知
                          select new OrderViewModel
                          {
+                             MemberId = memberId,
                              OrderNumber = order.OrderId,
                              GuestName = order.GuestFirstName + " " + order.GuestLastName,    
                              Nights=(detail.CheckOutDate-detail.CheckInDate).Days,
