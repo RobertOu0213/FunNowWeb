@@ -24,24 +24,24 @@
                         <form method="post" action="~/api/register" id="userForm">
                             <div class="mb-3">
                                 <label for="FirstNameInput" class="form-label" style="font-size:15px">護照英文名</label>
-                                <input type="text" class="form-control" id="FirstNameInput" placeholder="護照英文名">
+                                <input type="text" class="form-control" id="FirstNameInput" name="FirstName" placeholder="護照英文名">
                                 <p id="firstNameError" class="form-text text-danger" style="display: none;">請輸入有效的名字(限英文)。</p>
                             </div>
 
                             <div class="mb-3">
                                 <label for="LastNameInput" class="form-label" style="font-size:15px">護照英文姓</label>
-                                <input type="text" class="form-control" id="LastNameInput" placeholder="護照英文姓">
+                                <input type="text" class="form-control" id="LastNameInput" name="LastName" placeholder="護照英文姓">
                                 <p id="lastNameError" class="form-text text-danger" style="display: none;">請輸入有效的姓氏(限英文)。</p>
                             </div>
                             <div class="mb-3">
                                 <label for="EmailInput" class="form-label" style="font-size:15px">電子信箱</label>
-                                <input type="email" class="form-control" id="EmailInput" placeholder="電子信箱">
+                                <input type="email" class="form-control" id="EmailInput" name="Email" placeholder="電子信箱">
                                 <p id="emailError" class="form-text text-danger" style="display: none;">請輸入有效的電子信箱。</p>
                             </div>
 
                             <div class="mb-3 ">
                                 <label for="PasswordInput" class="form-label" style="font-size:15px">密碼</label>
-                                <input type="password" class="form-control" id="PasswordInput" placeholder="密碼">
+                                <input type="password" class="form-control" id="PasswordInput" name="Password" placeholder="密碼">
                                 <p id="passwordError" class="form-text text-danger" style="display: none;">請輸入有效的密碼。</p>
                             </div>
 
@@ -65,9 +65,10 @@
                             <p></p>
 
                             <div class="d-grid">
-                                <button class="btn btn-secondary btn-login text-uppercase fw-bold"  id="buttonSubmit>加入會員</button>
+                                <button class="btn btn-secondary btn-login text-uppercase fw-bold"  id="buttonSubmit">加入會員</button>
                             </div>
-                            <p></p>
+                            
+                           <p></p>
                             <p style="margin:40px"></p>
 
                             <span class="line"></span>
@@ -188,9 +189,9 @@
 
 @section Scripts
 {
-
-
     <script>
+        
+        //欄位驗證
         document.getElementById("FirstNameInput").addEventListener("blur", function () {
             var input = this.value.trim(); // 获取输入框中的值，并删除首尾的空格
             var error = document.getElementById("firstNameError");
@@ -251,33 +252,47 @@
             }
         });
 
-        const divResult = document.querySelector('#div1');
-        const btnSubmit = document.querySelector('#buttonSubmit');
-        const inpFirstName = document.querySelector('#FirstNameInput');
-        const inpLastName = document.querySelector('#LastNameInput');
-        const inpEmail = document.querySelector('#EmailInput');
-        const inpPwd = document.querySelector('#PasswordInput');
 
+        //點選加入會員，註冊按鈕事件
+        const btnSubmit = document.querySelector('#buttonSubmit');
+
+        const inpFirstName = document.querySelector('#FirstNameInput').value;
+        const inpLastName = document.querySelector('#LastNameInput').value;
+        const inpEmail = document.querySelector('#EmailInput').value;
+        const inpPwd = document.querySelector('#PasswordInput').value;
+        
+        const memberData =
+        {
+            "firstName": inpFirstName,
+            "lastName": inpLastName,
+            "email": inpEmail,
+            "password": inpPwd,
+        };
+        
         btnSubmit.addEventListener('click', async (evt) => {
             evt.preventDefault(); //防止預設行為的發生
 
-            //將資料放進FormData
-            const myForm = document.querySelector('#userForm');
-            const formData = new FormData(myForm);
-            //透過formData傳整包，即使要上傳檔案就不需要特別在<form>設定<encrytype>
-
-
-            const register = async () => {
-                const url = 'https://localhost:7103/api/Register';
-
+           
+            try {
+                const url = 'https://localhost:7103/api/Members';
                 const response = await fetch(url, {
-                    method: 'POST',
-                    body: JSON.stringify(searchData),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-                const data = await response.json();
+                method: 'POST',
+                body: JSON.stringify(memberData),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                console.log('註冊成功');
+            }
+            else {
+                console.log('註冊失敗');
+            }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
 
     </script>
 }

@@ -2,6 +2,7 @@
 using PrjFunNowWeb.Models.ViewModel;
 using PrjFunNowWeb.Models;
 using System.Text.Json;
+using System.Net.Http.Headers;
 
 namespace PrjFunNowWeb.Controllers
 {
@@ -38,11 +39,12 @@ namespace PrjFunNowWeb.Controllers
         }
 
 
-            public IActionResult Register()
+        public IActionResult Register()
         {
             return View();
         }
 
+        
         public IActionResult MemberInformation()
         {
             return View();
@@ -53,12 +55,7 @@ namespace PrjFunNowWeb.Controllers
             return View();
         }
 
-        public IActionResult Index()
-        {
-                if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGIN_MEMBER))
-                    return View();
-                return RedirectToAction("Login");
-        }
+
 
 
     }
