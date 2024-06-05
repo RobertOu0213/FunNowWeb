@@ -3,11 +3,45 @@
     ViewBag.Title = "Index";
     Layout = "_Layout";
 }
-@section Styles{    
-
+@section Styles{
+    <style>
+        
+    </style>
 }
 
 @section Scripts{    
+    <script src="https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.min.js"></script>
+    <script>
+        const cn1 = {
+            days: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+            daysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+            daysMin: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+            months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            today: '今天',
+            clear: '清除',
+            dateFormat: 'yyyy/MM/dd',
+            timeFormat: 'hh:mm aa',
+            firstDay: 0
+        }
+
+        const datepicker = new AirDatepicker('#myDatepicker', {
+            locale: cn1,
+            range: true,
+            multipleDatesSeparator: ' - ',
+            onSelect({ formattedDate, date }) {
+                document.getElementById('myDatepicker').value = "選擇日期範圍";
+                if (date.length === 2) {
+                    document.getElementById('myDatepickerstart').value = `開始日期: ${formattedDate[0]}`;
+                    document.getElementById('myDatepickerend').value = `結束日期: ${formattedDate[1]}`;
+                } else {
+                    document.getElementById('myDatepickerstart').value = '';
+                    document.getElementById('myDatepickerend').value = '';
+                }
+            }
+        });
+    </script>
+
 
 
 }
@@ -43,19 +77,24 @@
                             <div class="col-md-4">
                                 <div class="book_tabel_item">
                                     <div class="form-group">
-                                        <div class='input-group date' id='datetimepicker11'>
-                                            <input type='text' class="form-control" placeholder="Arrival Date" />
-                                            <span class="input-group-addon">
-                                                <i class="fa fa-calendar" aria-hidden="true"></i>
-                                            </span>
+                                        <div class='input-group '>
+                                            <!-- Air datepicker Html element -->
+                                            <input type="text" id="myDatepicker" placeholder="選擇日期範圍">
+                                            <!-- Air datepicker JavaScript-->
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <div class='input-group date' id='datetimepicker1'>
-                                            <input type='text' class="form-control" placeholder="Departure Date" />
-                                            <span class="input-group-addon">
-                                                <i class="fa fa-calendar" aria-hidden="true"></i>
-                                            </span>
+                                        <div class='input-group ' >
+                                            <!-- Air datepicker Html element -->
+                                            <input id="myDatepickerstart" placeholder="開始日期">
+                                            <!-- Air datepicker JavaScript-->
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class='input-group ' >
+                                            <!-- Air datepicker Html element -->
+                                            <input id="myDatepickerend" placeholder="結束日期">
+                                            <!-- Air datepicker JavaScript-->
                                         </div>
                                     </div>
                                 </div>
