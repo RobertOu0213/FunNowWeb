@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+   ViewBag.Title = "Index";
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -44,6 +48,7 @@
                 <a class="navbar-brand logo_h" href="index.html" style="padding:5px;">
                     <img src="~/image/ming_img/FunNowlogo.png" style="height: 60px; border-radius: 12px;">
                 </a>
+                <h6>@ViewData["SessionKey"]</h6>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
