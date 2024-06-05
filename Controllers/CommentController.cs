@@ -18,5 +18,16 @@ namespace PrjFunNowWeb.Controllers
         {
             return View();
         }
+
+
+        public IActionResult Angular_comment_page()
+        {
+            return View();
+        }
+
+        public IActionResult Angular()
+        {
+            return View();
+        }
     }
 }
