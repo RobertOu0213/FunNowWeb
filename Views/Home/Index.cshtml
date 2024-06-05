@@ -30,7 +30,7 @@
             range: true,
             multipleDatesSeparator: ' - ',
             onSelect({ formattedDate, date }) {
-                document.getElementById('myDatepicker').value = "選擇日期範圍";
+                document.getElementById('myDatepicker').value = "請確認訂房日期";
                 if (date.length === 2) {
                     document.getElementById('myDatepickerstart').value = `開始日期: ${formattedDate[0]}`;
                     document.getElementById('myDatepickerend').value = `結束日期: ${formattedDate[1]}`;
