@@ -20,7 +20,7 @@ namespace PrjFunNowWeb.Controllers
         }
 
          [HttpPost]
-         public JsonResult Login(CLoginViewModel vm) //用於處理登入請求並返回 JSON 格式的結果。接受 CLoginViewModel 類型的參數。
+         public JsonResult Login(CLoginViewModel vm) //用於處理登入請求並返回 JSON 格式的結果。接受 CLoginViewModel 類型的參數vm。
         {
                 if (ModelState.IsValid) //檢查模型是否有效
                 {
@@ -28,9 +28,9 @@ namespace PrjFunNowWeb.Controllers
 
                     if (member != null) //如果有找到符合資料的會員
                     {
-                        string json = JsonSerializer.Serialize(member); //將會員資料序列化為 JSON。
-                        HttpContext.Session.SetString(CDictionary.SK_LOGIN_MEMBER, json); //將 JSON 資料存入 Session。
-                        return Json(new { success = true, redirectUrl = Url.Action("Index", "Member") }); //返回成功結果轉到首頁。
+                        string json = JsonSerializer.Serialize(member); //將會員資料序列化為 JSON
+                        HttpContext.Session.SetString(CDictionary.SK_LOGIN_MEMBER, json); //將 JSON 資料存入 Session
+                        return Json(new { success = true, redirectUrl = Url.Action("Index", "Home") }); //返回成功結果轉到首頁
                     }
                 }
 
@@ -58,7 +58,7 @@ namespace PrjFunNowWeb.Controllers
                 if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGIN_MEMBER))
                     return View();
                 return RedirectToAction("Login");
-            }
+        }
 
 
     }
