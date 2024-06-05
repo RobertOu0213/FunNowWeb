@@ -9,6 +9,7 @@
         public DateTime CheckOutDate { get; set; }
         public decimal Price { get; set; }
         public string Status { get; set; }
+        public int Nights { get; set; }  // 添加住宿天数属性
 
-        }
+    }
 }
