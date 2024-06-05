@@ -50,7 +50,7 @@
                     <h5 class="fw-bold">為住宿命名</h5>
                     <div class="sm_titlt mb-3">住宿名稱要有吸引力，讓人印象深刻！</div>
                     <div class="panel mb-5">
-                        <input type="text" class="form-control" placeholder="住宿名稱" name="HotelName" id="iptHotelName" />
+                        <input type="text" class="form-control" placeholder="住宿名稱" name="HotelName" id="iptHotelName"  />
                     </div>
                 </div>
                 <div>
@@ -133,10 +133,10 @@
             //顯示session 在畫面上
             const tHotel = JSON.parse(sessionStorage.getItem('tHotel')) || {};
             if (tHotel) {
-                $('#iptHotelName').val(tHotel.HotelName || '');
-                $('#iptHotelPhone').val(tHotel.HotelPhone || '');
-                $('#iptLevelStar').val(tHotel.LevelStar || '');
-                $('#floatingTextarea').val(tHotel.HotelDescription || '');
+                $('#iptHotelName').val(tHotel.HotelName || 'testHotelName');
+                $('#iptHotelPhone').val(tHotel.HotelPhone || 'testHotelPhone');
+                $('#iptLevelStar').val(tHotel.LevelStar || '1');
+                $('#floatingTextarea').val(tHotel.HotelDescription || 'test');
                 if (tHotel.TypeID) {
                     $(`input[name="TypeID"][value="${tHotel.TypeID}"]`).prop('checked', true);
                 }           
@@ -163,10 +163,13 @@
             $('#hotelEquipment').html(hotelEquimentStr);
 
             //顯示session在畫面上
-            const storedEquipment = JSON.parse(sessionStorage.getItem('tHotelEquipment')) || { HotelEquipment: [] };
-            storedEquipment.forEach(id => {
+            const tHotel = JSON.parse(sessionStorage.getItem('tHotel')) || {};
+            const selectedEquipments = tHotel.HotelEquipmentID || [];
+            selectedEquipments.forEach(id => {
                 $(`#equipBundle${id}`).prop('checked', true);
             });
+
+
         })();
 
 
@@ -174,30 +177,26 @@
         $('#btnNext').on('click', function () {
             const selectedHotelTypeID = $('input[name="TypeID"]:checked').val(); // 獲取選中的 HotelTypeID
 
-            const tHotel = {
-                HotelName: $('#iptHotelName').val(),
-                HotelPhone: $('#iptHotelPhone').val(),
-                HotelDescription: $('#floatingTextarea').val(),
-                TypeID: selectedHotelTypeID,
-                LevelStar: $('#iptLevelStar').val()
-            };
-
-            const existingHotel = JSON.parse(sessionStorage.getItem('tHotel')) || {};
-            const updatedHotel = { ...existingHotel, ...tHotel };
-            sessionStorage.setItem('tHotel', JSON.stringify(updatedHotel));
-
-
             let selectedEquipments = [];
 
             $('input[name="HotelEquipmentID"]:checked').each(function () {
                 selectedEquipments.push(parseInt($(this).val()));
             });
 
-            sessionStorage.setItem('tHotelEquipment', JSON.stringify(
-               selectedEquipments
-            ));
-           
-           
+            const tHotel = {
+                HotelName: $('#iptHotelName').val(),
+                HotelPhone: $('#iptHotelPhone').val(),
+                HotelDescription: $('#floatingTextarea').val(),
+                TypeID: selectedHotelTypeID,
+                LevelStar: $('#iptLevelStar').val(),
+                HotelEquipmentID: selectedEquipments
+            };
+
+            const existingHotel = JSON.parse(sessionStorage.getItem('tHotel')) || {};
+            const updatedHotel = { ...existingHotel, ...tHotel };
+            sessionStorage.setItem('tHotel', JSON.stringify(updatedHotel));
+
+       
 
         })
 

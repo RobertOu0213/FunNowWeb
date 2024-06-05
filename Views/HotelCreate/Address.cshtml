@@ -105,7 +105,7 @@
             //顯示session 在畫面上
             const tHotel = JSON.parse(sessionStorage.getItem('tHotel')) || {};
             if (tHotel) {
-                $('#iptAddress').val(tHotel.HotelAddress || '');
+                $('#iptAddress').val(tHotel.HotelAddress || 'testHotelAddress');
             }
 
 
@@ -191,35 +191,6 @@
             })
             
         });
-
-
-
-        //API
-        // try {
-        //     const hotelData = JSON.parse(sessionStorage.getItem('tHotel')) || {};
-        //     const hotelEquipmentData = JSON.parse(sessionStorage.getItem('tHotelEquipment')) || { HotelEquipment: [] };
-        //     const formData = new FormData();
-        //     formData.append('hotelData', JSON.stringify(hotelData));
-        //     formData.append('hotelEquipmentData', JSON.stringify(hotelEquipmentData.HotelEquipment));
-        //     console.log("test");
-        //     const url = "https://localhost:7103/api/HotelCreate";
-        //     const res = await fetch(url, {
-        //         method: "POST",
-        //         body: formData
-        //     });
-        //     if (res.ok) {
-        //         const data = await res.json();
-        //         console.log(data);
-
-        //     } else {
-        //         console.error('Error:', res.statusText);
-        //     }
-
-        // }
-        // catch (err) {
-        //     console.log(err)
-        // }
-
 
 
     </script>

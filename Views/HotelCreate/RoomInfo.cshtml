@@ -204,7 +204,7 @@
                             room.find('textarea').val(roomData.Description);
                             // 設置設備
                             setTimeout(() => {
-                                roomData.RoomEquipments.forEach(equipId => {
+                                roomData.RoomEquipmentID.forEach(equipId => {
                                     room.find(`input[type="checkbox"][value="${equipId}"]`).prop('checked', true);
                                 });
                             }, 0);
@@ -219,7 +219,7 @@
                             room.find('.roomPrice').val(roomData.RoomPrice);
                             room.find('textarea').val(roomData.Description);
                             setTimeout(() => {
-                                roomData.RoomEquipments.forEach(equipId => {
+                                roomData.RoomEquipmentID.forEach(equipId => {
                                     room.find(`input[type="checkbox"][value="${equipId}"]`).prop('checked', true);
                                 });
                             }, 1000);
@@ -269,9 +269,9 @@
                     const MaximumOccupancy = $(room).find('.roomPeople').val();
                     const RoomPrice = $(room).find('.roomPrice').val();
                     const Description = $(room).find('textarea').val();
-                    const RoomEquipments = $(room).find('input[type="checkbox"]:checked').map((index, equip) => $(equip).val()).get();
+                    const RoomEquipmentID = $(room).find('input[type="checkbox"]:checked').map((index, equip) => parseInt($(equip).val())).get();
               
-                    console.log(RoomEquipments);
+                  
                  
                     roomInfo.push({
                         RoomName,
@@ -280,7 +280,7 @@
                         MaximumOccupancy,
                         RoomPrice,
                         Description,
-                        RoomEquipments
+                        RoomEquipmentID
                     });
                 });
 
