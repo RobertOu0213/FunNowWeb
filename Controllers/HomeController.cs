@@ -23,15 +23,18 @@ namespace PrjFunNowWeb.Controllers
 
         public IActionResult Index()
         {
-            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGIN_MEMBER)) //如果有拿到session key
+            //if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGIN_MEMBER)) //如果有拿到session key
             return View();
 
-            return RedirectToAction("Login"); //如果沒拿到session key就回到登入頁面
+            //return RedirectToAction("Login"); //如果沒拿到session key就回到登入頁面
             
         }
         public IActionResult Index2()
         {
-            return View();
+            //if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGIN_MEMBER)) //如果有拿到session key
+                return View();
+
+            //return RedirectToAction("Login"); //如果沒拿到session key就回到登入頁面
         }
 
         public IActionResult Privacy()
