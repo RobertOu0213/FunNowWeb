@@ -1,0 +1,283 @@
+﻿@{
+    ViewData["Title"] = "註冊";
+    Layout = "_Layout_login";
+}
+
+<meta charset="utf-8" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/9bbb5484f7.js" crossorigin="anonymous"></script>
+<title>註冊</title>
+
+<body>
+   
+
+    <!--表單欄-->
+    <div class="container" style="margin-top:50px;>
+        <div id="dd"></div>
+        <div class="row justify-content-center align-items-center">
+            <div class="col-lg-5 " style="min-width: 350px; max-width: 500px;">
+                <div class="card border-0 shadow rounded-3 my-5 ">
+                    <div class="card-body p-4 p-sm-5 " style="white-space: nowrap;">
+                        <h3 class="sc-fzqyvX kJWwZs kite-js-Typography ">免費入會</h3>
+                        <p style="height:8px"></p>
+                        <form method="post" action="~/api/register" id="userForm">
+                            <div class="mb-3">
+                                <label for="FirstNameInput" class="form-label" style="font-size:15px">護照英文名</label>
+                                <input type="text" class="form-control" id="FirstNameInput" placeholder="護照英文名">
+                                <p id="firstNameError" class="form-text text-danger" style="display: none;">請輸入有效的名字(限英文)。</p>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="LastNameInput" class="form-label" style="font-size:15px">護照英文姓</label>
+                                <input type="text" class="form-control" id="LastNameInput" placeholder="護照英文姓">
+                                <p id="lastNameError" class="form-text text-danger" style="display: none;">請輸入有效的姓氏(限英文)。</p>
+                            </div>
+                            <div class="mb-3">
+                                <label for="EmailInput" class="form-label" style="font-size:15px">電子信箱</label>
+                                <input type="email" class="form-control" id="EmailInput" placeholder="電子信箱">
+                                <p id="emailError" class="form-text text-danger" style="display: none;">請輸入有效的電子信箱。</p>
+                            </div>
+
+                            <div class="mb-3 ">
+                                <label for="PasswordInput" class="form-label" style="font-size:15px">密碼</label>
+                                <input type="password" class="form-control" id="PasswordInput" placeholder="密碼">
+                                <p id="passwordError" class="form-text text-danger" style="display: none;">請輸入有效的密碼。</p>
+                            </div>
+
+                            <div class="mb-3 ">
+                                <label for="RecheckPasswordInput" class="form-label" style="font-size:15px">確認密碼</label>
+                                <input type="password" class="form-control" id="RecheckPasswordInput" placeholder="確認密碼">
+                                <p id="recheckpasswordError" class="form-text text-danger" style="display: none;">請輸入有效的密碼。</p>
+                            </div>
+                            <p></p>
+
+                            <div class="row ">
+                                <div class="col-md-auto align-content-center ">
+                                    <input for="link" class="form-check-input" type="checkbox" value="agree" id="agree" name="agree">
+                                </div>
+                                <div class="col-lg">
+                                    <a class=" ff1">我同意透過各種管道接收有關FunNow及其行銷夥伴或業務合作夥伴的最新動態和促銷資訊。可隨時選擇退出。詳情請參閱隱私權政策。</a>
+                                </div>
+                            </div>
+
+
+                            <p></p>
+
+                            <div class="d-grid">
+                                <button class="btn btn-secondary btn-login text-uppercase fw-bold"  id="buttonSubmit>加入會員</button>
+                            </div>
+                            <p></p>
+                            <p style="margin:40px"></p>
+
+                            <span class="line"></span>
+                            <span>或用以下帳號登入</span>
+                            <span class="line"></span>
+                            <p></p>
+                            <div class="d-grid mb-2">
+                                <button class="btn btn-outline-danger fw-bold py-2 btn-zoom" type="submit">
+                                    <i class="fab fa-google me-2"></i> Google
+                                </button>
+                            </div>
+                            <div class="row">
+                                <div class="col d-grid">
+                                    <button class="btn btn-outline-primary fw-bold py-2 btn-zoom" type="submit">
+                                        <i class="fab fa-facebook-f me-2"></i> Facebook
+                                    </button>
+                                </div>
+                                <div class="col d-grid">
+                                    <button class=" btn btn-outline-success fw-bold py-2 btn-zoom" type="submit">
+                                        <i class="fa-brands fa-line"></i> Line
+                                    </button>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="d-grid mb-2">
+                                <button class="btn btn-outline-primary fw-bold py-2 " type="submit">已經是會員?登入</button>
+                            </div>
+                            <p style="margin:30px"></p>
+                            <p style="text-align: center; font-size:13px;">點擊登錄即代表我同意FunNow的<a class="col">服務條款</a>和<a class="col">隱私權政策</a>。</p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+
+@section Styles
+{
+    <style>
+        body {
+            background: #F9F9F9;
+            /*background: linear-gradient(to right, #0062E6, #33AEFF);*/
+        }
+
+        .btn-login {
+            font-size: 0.9rem;
+            letter-spacing: 0.05rem;
+            padding: 0.75rem 1rem;
+            background-color: #5392F9;
+            border: none;
+        }
+
+            .btn-login:hover {
+                background-color: #87b3fb;
+            }
+
+        a:hover {
+            color: #87b3fb;
+        }
+
+        .btn-google {
+            color: white !important;
+            background-color: #ea4335;
+        }
+
+        .btn-facebook {
+            color: white !important;
+            background-color: #3b5998;
+        }
+
+        .btn-zoom {
+            transition: transform 0.3s ease; /* 添加过渡效果 */
+        }
+
+            .btn-zoom:hover {
+                transform: scale(1.02); /* 鼠标悬停时放大 1.1 倍 */
+            }
+
+        h3 {
+            font-weight: 800;
+        }
+
+        .ff1 {
+            font-size: 14px;
+            white-space: normal;
+            color: black;
+            text-decoration: none;
+        }
+
+            .ff1:hover {
+                text-decoration: none;
+            }
+
+        .line {
+            display: inline-block;
+            width: 120px;
+            border-top: 1px solid #cccccc;
+            vertical-align: 5px;
+        }
+
+
+        a {
+            text-decoration: none;
+        }
+
+            a:hover {
+                color: #87b3fb;
+                text-decoration: underline;
+            }
+
+    </style>
+}
+
+
+@section Scripts
+{
+
+
+    <script>
+        document.getElementById("FirstNameInput").addEventListener("blur", function () {
+            var input = this.value.trim(); // 获取输入框中的值，并删除首尾的空格
+            var error = document.getElementById("firstNameError");
+            if (input === "") { // 如果输入框中的值为空
+                error.style.display = "block"; // 显示错误提示文字
+                this.classList.add("border", "border-danger"); // 添加红色边框
+            } else {
+                error.style.display = "none"; // 隐藏错误提示文字
+                this.classList.remove("border", "border-danger"); // 移除红色边框
+            }
+        });
+
+        document.getElementById("LastNameInput").addEventListener("blur", function () {
+            var input = this.value.trim();
+            var error = document.getElementById("lastNameError");
+            if (input === "") {
+                error.style.display = "block";
+                this.classList.add("border", "border-danger");
+            } else {
+                error.style.display = "none";
+                this.classList.remove("border", "border-danger");
+            }
+        });
+
+        document.getElementById("EmailInput").addEventListener("blur", function () {
+            var input = this.value.trim();
+            var error = document.getElementById("emailError");
+            if (input === "") {
+                error.style.display = "block";
+                this.classList.add("border", "border-danger");
+            } else {
+                error.style.display = "none";
+                this.classList.remove("border", "border-danger");
+            }
+        });
+
+        document.getElementById("PasswordInput").addEventListener("blur", function () {
+            var input = this.value.trim();
+            var error = document.getElementById("passwordError");
+            if (input === "") {
+                error.style.display = "block";
+                this.classList.add("border", "border-danger");
+            } else {
+                error.style.display = "none";
+                this.classList.remove("border", "border-danger");
+            }
+        });
+
+        document.getElementById("RecheckPasswordInput").addEventListener("blur", function () {
+            var input = this.value.trim();
+            var error = document.getElementById("recheckpasswordError");
+            if (input === "") {
+                error.style.display = "block";
+                this.classList.add("border", "border-danger");
+            } else {
+                error.style.display = "none";
+                this.classList.remove("border", "border-danger");
+            }
+        });
+
+        const divResult = document.querySelector('#div1');
+        const btnSubmit = document.querySelector('#buttonSubmit');
+        const inpFirstName = document.querySelector('#FirstNameInput');
+        const inpLastName = document.querySelector('#LastNameInput');
+        const inpEmail = document.querySelector('#EmailInput');
+        const inpPwd = document.querySelector('#PasswordInput');
+
+        btnSubmit.addEventListener('click', async (evt) => {
+            evt.preventDefault(); //防止預設行為的發生
+
+            //將資料放進FormData
+            const myForm = document.querySelector('#userForm');
+            const formData = new FormData(myForm);
+            //透過formData傳整包，即使要上傳檔案就不需要特別在<form>設定<encrytype>
+
+
+            const register = async () => {
+                const url = 'https://localhost:7103/api/Register';
+
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: JSON.stringify(searchData),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+
+    </script>
+}

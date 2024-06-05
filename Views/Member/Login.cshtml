@@ -1,0 +1,197 @@
+﻿@{
+    ViewData["Title"] = "登入";
+    Layout = "_Layout_login";
+}
+
+<meta charset="utf-8" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/9bbb5484f7.js" crossorigin="anonymous"></script>
+
+<body>
+   
+
+    <!--表單欄-->
+    <div class="container" style="margin-top:50px">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-lg-5 " style="min-width: 350px; max-width: 500px;">
+                <div class="card border-0 shadow rounded-3 my-5 ">
+                    <div class="card-body p-4 p-sm-5 " style="white-space: nowrap;">
+                        <h3 class="sc-fzqyvX kJWwZs kite-js-Typography ">FunNow咖登入</h3>
+                        <p>為了保障你的個資安全，請先登入才能查看個人資訊</p>
+                        <hr style="border-top: 3px solid #0D6EFD; ">
+                        <form>
+                            <div class="mb-3">
+                                <label for="EmailInput" class="form-label" style="font-size:15px">電子信箱</label>
+                                <input type="email" class="form-control" id="EmailInput1" name="EmailInput" placeholder="電子信箱">
+                            </div>
+                            <p></p>
+                            <div class="mb-3">
+                                <label for="PasswordInput" class="form-label" style="font-size:15px">密碼</label>
+                                <input type="password" class="form-control" id="PasswordInput1" name="PasswordInput" placeholder="密碼">
+                            </div>
+                            <div class="mb-3">
+                                <div class="row">
+                                    <label for="VerifyInput" class="form-label" style="font-size:15px">驗證碼</label>
+
+                                    <input type="text" class="form-control w-50 h-25 col ms-2 mt-2 align-middle" id="VerifyInput" placeholder="驗證碼">
+                                    <div class="col">
+                                        <img src="C:\Users\User\Desktop\Ruby\期末專題\期末專題0519\funnow\funnow\image\verify.png" style="width:100px" />
+                                        <button class="btn" type="submit">重新產生</button>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+
+                            <div class="d-grid">
+                                <button class="btn btn-primary btn-login text-uppercase fw-bold" type="submit" id="loginBtn">登入</button>
+                            </div>
+                            <p></p>
+                            <div class="row">
+                                <div>
+                                    <a class="col ff1">我是新朋友</a>
+                                    <a class="col" style="font-size:14px"><i class="fa-solid fa-lock" style="color: #0d6efd;"></i> 忘記密碼？別慌，點此找幫手！</a>
+                                </div>
+                            </div>
+                            <p style="margin:40px"></p>
+
+                            <span class="line"></span>
+                            <span>或使用以下方式登入</span>
+                            <span class="line"></span>
+                            <p></p>
+                            <div class="d-grid mb-2">
+                                <button class="btn btn-outline-danger fw-bold py-2 btn-zoom" type="submit">
+                                    <i class="fab fa-google me-2"></i> Google
+                                </button>
+                            </div>
+                            <div class="row">
+                                <div class="col d-grid">
+                                    <button class="btn btn-outline-primary fw-bold py-2 btn-zoom" type="submit">
+                                        <i class="fab fa-facebook-f me-2"></i> Facebook
+                                    </button>
+                                </div>
+                                <div class="col d-grid">
+                                    <button class=" btn btn-outline-success fw-bold py-2 btn-zoom" type="submit">
+                                        <i class="fa-brands fa-line"></i> Line
+                                    </button>
+                                </div>
+                            </div>
+
+                            <p style="margin:30px"></p>
+                            <p style="text-align: center; font-size:13px;">點擊登錄即代表我同意FunNow的<a class="col bb">服務條款</a>和<a class="col bb">隱私權政策</a>。</p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+
+@section Styles
+{
+    <style>
+        body {
+            background: #F9F9F9;
+            /*background: linear-gradient(to right, #0062E6, #33AEFF);*/
+        }
+
+        .btn-login {
+            font-size: 0.9rem;
+            letter-spacing: 0.05rem;
+            padding: 0.75rem 1rem;
+            background-color: #5392F9;
+            border: none;
+        }
+
+            .btn-login:hover {
+                background-color: #87b3fb;
+            }
+
+        a {
+            text-decoration: none;
+        }
+
+            a:hover {
+                color: #87b3fb;
+                text-decoration: underline;
+            }
+
+        .btn-google {
+            color: white !important;
+            background-color: #ea4335;
+        }
+
+        .btn-facebook {
+            color: white !important;
+            background-color: #3b5998;
+        }
+
+        .btn-zoom {
+            transition: transform 0.3s ease; /* 添加过渡效果 */
+        }
+
+            .btn-zoom:hover {
+                transform: scale(1.02); /* 鼠标悬停时放大 1.1 倍 */
+            }
+
+        h3 {
+            font-weight: 800;
+        }
+
+        .ff1 {
+            font-size: 14px;
+            margin: 0 70px 0 0;
+            padding-left:0;
+        }
+
+        .line {
+            display: inline-block;
+            width: 120px;
+            border-top: 1px solid #cccccc;
+            vertical-align: 5px;
+        }
+        .bb
+        {
+           padding:0px;
+        }
+
+
+    </style>
+}
+
+
+@section Scripts
+{
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#loginBtn').click(function (event) {
+                event.preventDefault();
+                var email = $('#EmailInput1').val();
+                var password = $('#PasswordInput1').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Login", "Member")',
+                    data: { EmailInput: email, PasswordInput: password },
+                    success: function (response) {
+                        if (response.success) {
+                            window.location.href = response.redirectUrl;
+                        } else {
+                            alert('登入失敗，請檢查您的電子信箱和密碼。');
+                        }
+                    },
+                    error: function () {
+                        alert('發生錯誤，請稍後再試。');
+                    }
+                });
+            });
+        });
+    </script>
+}

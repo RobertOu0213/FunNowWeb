@@ -1,0 +1,471 @@
+﻿@{
+    ViewData["Title"] = "房東個人資料";
+    Layout = "_Layout_login";
+}
+
+<meta charset="utf-8" />
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/091893cea4.js" crossorigin="anonymous"></script>
+
+
+
+<body>
+   
+
+    <!--============================主要內容=========================================-->
+    <div class="container justify-content-center align-items-center" style="margin-top:50px;>
+        <div class="content-wrapper">
+            <!--============================側邊導航欄=========================================-->
+            <!--<div class="sidebar">
+
+            </div>-->
+            <!--============================表單內容=========================================-->
+            <div class="content">
+                <div class="content-header">
+                    <h4 style="font-weight:800;">房東個人資料管理</h4>
+                </div>
+                <p class="subtitle">為遵守消費者保護法，我們必須向住宿合作夥伴蒐集以下資訊。</p>
+
+                <div class="content-header">
+                    <h5>新增/變更個人照片 （非必填）</h5>
+                </div>
+                <p class="subtitle">新增相片可以加強房客印象。我們會將照片放到你的個人檔案，不論是房東或房客都可以看到。</p>
+
+                <div class="main-content">
+                    <div class="card mb-3 ms-3 ">
+                        <div class="card-body d-flex" style="padding-bottom: 0px; display: flex; align-items: center;  ">
+                            <img class="profileImg" src="https://cdn2.ettoday.net/images/1457/d1457772.jpg" style="margin-right: 20px;" />
+                            <p class="card-textt col-md-8">房東的照片非常重要，因為這是你給客人的第一印象，選一張清楚且看起來友善的照片，吸引客人下訂</p>
+                            <button class="col-md-2 btnChange">新增/變更個人照片</button>
+                        </div>
+                    </div>
+
+                    <div class="content-header">
+                        <h5>姓名</h5>
+                    </div>
+
+                    <div class="main-content">
+                        <div class="card mb-3 ms-3 ">
+                            <div class="card-body " style="padding:20px 30px 40px 30px; display: flex; align-items: center;  ">
+                                <form class="row g-3">
+                                    <div class="col-md-4">
+                                        <label for="inputFirstName" class="form-label">護照英文名</label>
+                                        <input type="text" class="form-control" id="inputFirstName" placeholder="ruby">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="inputLastName" class="form-label">護照英文姓</label>
+                                        <input type="text" class="form-control" id="inputLastName" placeholder="hsuuu">
+                                    </div>
+                                    <div class="col-md-4">
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <label for="inputDisplayName" class="form-label ">顯示名稱 （非必填）</label>
+                                        <p class="subtitle" style="padding-left:0px">這個名稱將會顯示於Agoda的網站和App。</p>
+                                        <input type="text" class="form-control" id="inputDisplayName" placeholder="ruby hsuuu">
+                                    </div>
+
+                                    <label for="inputBirthMonth" class="form-label mt-4 mb-1">出生年月日</label>
+                                    <div class="col-md-4">
+                                        <select id="inputBirthMonth" class="form-select">
+                                            <option selected>月</option>
+                                            <option>...</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select id="inputBirthDate" class="form-select">
+                                            <option selected>日</option>
+                                            <option>...</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select id="inputBirthYear" class="form-select">
+                                            <option selected>年</option>
+                                            <option>...</option>
+                                        </select>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="content-header">
+                        <h5>聯絡資訊</h5>
+                    </div>
+
+                    <div class="main-content">
+                        <div class="card mb-3 ms-3 ">
+                            <div class="card-body " style="padding: 20px 30px 40px 30px; display: flex; align-items: center; ">
+                                <form class="row g-3">
+                                    <label for="inputBirthMonth" class="form-label mt-4 mb-1">手機號碼（選填）</label>
+                                    <div class="col-md-4">
+                                        <select id="inputAreaCode" class="form-select">
+                                            <option selected>Taiwan(+886)</option>
+                                            <option>...</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control" id="inputPhone" placeholder="988123456">
+                                    </div>
+                                    <div class="col-md-4">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="inputLanguage" class="form-label">偏好語言</label>
+                                        <p class="subtitle" style="padding-left:3px">FunNow will contact you in this language</p>
+                                        <select id="inputLanguage_Country" class="form-select">
+                                            <option selected>繁體中文(台灣)</option>
+                                            <option>...</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                    </div>
+
+                                    <div>
+                                        <label for="inputEmail" class="form-label">電子信箱</label>
+                                        <p class="subtitle" style="padding-left:0px">我們將傳給你驗證信</p>
+                                        <div>
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <input type="email" class="form-control" id="colFormLabel" placeholder="rubyccww@gmail.com" disabled>
+                                                </div>
+                                                <div class="col-4">
+                                                    <button class="btnChange col-auto">驗證您的電子信箱</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="content-header">
+                        <h5>地點資訊</h5>
+                    </div>
+
+                    <div class="main-content">
+                        <div class="card mb-3 ms-3 ">
+                            <div class="card-body " style="padding: 20px 30px 40px 30px; display: flex; align-items: center; ">
+                                <form class="row g-3">
+
+                                    <label for="inputLocation" class="form-label mt-4 mb-1">居住地點</label>
+                                    <div class="col-md-4">
+                                        <select id="inputCountry" class="form-select">
+                                            <option selected>Taiwan</option>
+                                            <option>...</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select id="inputCity" class="form-select">
+                                            <option selected>台北市</option>
+                                            <option>...</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select id="inputArea" class="form-select">
+                                            <option selected>中山區</option>
+                                            <option>...</option>
+                                        </select>
+                                    </div>
+
+
+                                    <div class="col-md-8">
+                                        <label for="inputAddress" class="form-label">主要地址（1年至少居住8個月以上）</label>
+                                        <input type="text" class="form-control" id="inputAddress" placeholder="復興南路一段396號2樓">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="inputZipCode" class="form-label">郵遞區號</label>
+                                        <input type="text" class="form-control" id="inputZipCode" placeholder="104">
+                                    </div>
+
+                                    <label for="inputNation" class="form-label mt-4 mb-1">國籍</label>
+                                    <div class="col-md-4">
+                                        <select id="inputNation" class="form-select">
+                                            <option selected>Taiwan</option>
+                                            <option>...</option>
+                                        </select>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="content-header">
+                        <h5>介紹一下自己</h5>
+                    </div>
+
+                    <div class="main-content">
+                        <div class="card mb-3 ms-3 ">
+                            <div class="card-body " style="padding: 40px 30px 40px 30px; display: flex; align-items: center; ">
+                                <textarea class="form-control" maxlength="1500" id="exampleFormControlTextarea1" rows="3">Hi~我是ruby</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row d-flex">
+                    <div class="col-7">
+                    </div>
+                    <div class="col-2" style=" width:200px; padding-left:40px">
+                        <button class="btnLast">取消</button>
+                    </div>
+                    <div class="col-2">
+                        <button class="btnSave ">儲存</button>
+                    </div>
+                </div>
+
+
+            </div> <!--表單內容的結尾-->
+
+
+        </div> <!--container的結尾-->
+
+
+    </div>
+    <!--============================頁尾=========================================-->
+
+    
+
+
+
+
+</body>
+
+
+
+@section Styles
+{
+    <style>
+        #FOOTER {
+            clear: both; /* 當上方的內容使用 float 時，下方的 <div> 會產生重疊上去的問題 */
+            /* 寫 clear:both; 解除浮動就可以解決這個問題 */
+
+            margin: 0;
+            height: 121px;
+            background-color: #2A2A2E;
+        }
+
+        .profileImg {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 15px 10px 15px 10px;
+        }
+
+
+        /* 設定整個網頁的字體、間距和背景顏色 */
+        body {
+            font-family: Arial, sans-serif; /* 使用Arial字體 */
+            margin: 0; /* 移除預設的外邊距 */
+            padding: 0; /* 移除預設的內邊距 */
+            background-color: #fcfcfc; /* 設定網頁背景顏色 */
+        }
+
+        /* 設定頁面頂部的導航欄樣式 */
+        .header {
+            background-color: #1174a6; /* 設定背景為白色 */
+            padding: 10px 20px; /* 設定上下內邊距為10px，左右內邊距為20px */
+            display: flex; /* 使用彈性盒子布局 */
+            justify-content: space-between; /* 讓子元素在主軸方向上兩端對齊 */
+            align-items: center; /* 垂直居中對齊子元素 */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* 添加陰影效果 */
+        }
+
+            /* 設定標誌區域的樣式 */
+            .header .logo {
+                display: flex; /* 使用彈性盒子布局 */
+                align-items: center; /* 垂直居中對齊子元素 */
+            }
+
+                /* 設定標誌圖像的樣式 */
+                .header .logo img {
+                    height: 40px; /* 設定圖片高度為40px */
+                    margin-right: 10px; /* 設定右側外邊距為10px */
+                }
+
+            /* 設定導航鏈接區域的樣式 */
+            .header .nav-links {
+                display: flex; /* 使用彈性盒子布局 */
+                align-items: center; /* 垂直居中對齊子元素 */
+            }
+
+                /* 設定導航鏈接的樣式 */
+                .header .nav-links a {
+                    margin-left: 20px; /* 設定左側外邊距為20px */
+                    text-decoration: none; /* 移除鏈接的下劃線 */
+                    color: #333; /* 設定文本顏色為深灰色 */
+                }
+
+                    /* 設定導航鏈接在懸停時的樣式 */
+                    .header .nav-links a:hover {
+                        color: #007bff; /* 設定文本顏色為藍色 */
+                    }
+
+        /* 設定頁面內容區域的樣式 */
+        .container {
+            /*display: flex;*/ /* 使用彈性盒子布局 */
+            justify-content: center; /* 在主軸方向上居中對齊子元素 */
+            padding: 20px 100px 20px 150px; /* 設定內邊距為20px */
+        }
+
+        /* 設定內容包裹區域的樣式 */
+        .content-wrapper {
+            /*width: 1500px;*/ /* 設定寬度為1200px */
+            display: flex; /* 使用彈性盒子布局 */
+            flex-wrap: wrap;
+        }
+
+
+
+        /* 設定主內容區域的樣式 */
+        .content {
+            background-color: #fcfcfc; /* 設定背景為白色 */
+            flex: 1; /* 允許內容區域自動調整大小 */
+            /*width: 1700px;*/
+        }
+
+        /* 設定主內容區域標題的樣式: 用戶詳細資料 */
+        .content-header {
+            display: flex; /* 使用彈性盒子布局 */
+            justify-content: space-between; /* 在主軸方向上兩端對齊子元素 */
+            align-items: center; /* 垂直居中對齊子元素 */
+            margin: 30px 10px 10px 10px;
+        }
+            /* 設定操作區域的樣式 */
+            .content-header .actions {
+                display: flex; /* 使用彈性盒子布局 */
+                align-items: center; /* 垂直居中對齊子元素 */
+            }
+
+        h5 {
+            font-weight: 700;
+            padding: 0 0 0 6px;
+        }
+
+        .subtitle {
+            padding: 0 0 0 17px;
+            font-size: 14px;
+        }
+
+        .card {
+            border: 1px solid #dddfe2;
+            border-radius: 4px;
+            /*width: 1100px;*/
+            width: 95%;
+        }
+
+        .card-textt {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .form-label {
+            display: flex;
+            align-items: center;
+            font-size: 15px;
+            font-weight: 800;
+            margin: 10px 3px 10px 3px;
+        }
+
+        .btnChange {
+            padding: 8px 7px 8px 7px;
+            border: 1px solid #1174a6;
+            border-radius: 4px;
+            color: #1174a6;
+            width: 150px;
+            background-color: white;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-left: 50px;
+        }
+
+            .btnChange:hover {
+                background-color: #1174a6;
+                color: white;
+            }
+
+        input[type="radio"] {
+            margin-right: 8px;
+        }
+
+        .delete {
+            margin-top: 18px;
+            color: dodgerblue;
+            font-size: 16px;
+            font-weight: 300;
+        }
+
+            .delete:hover {
+                text-decoration: underline;
+            }
+
+        .btnLast {
+            padding: 8px 7px 8px 7px;
+            margin: 20px 0px 20px 0px;
+            border: 1px solid #1174a6;
+            border-radius: 4px;
+            color: #1174a6;
+            width: 150px;
+            background-color: white;
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+            .btnLast:hover {
+                background-color: #e6e6e6;
+            }
+
+        .btnSave {
+            padding: 8px 7px 8px 7px;
+            margin: 20px 0px 20px 0px;
+            border: 1px solid #1174a6;
+            border-radius: 4px;
+            width: 150px;
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-left: 0px;
+            background-color: #1174a6;
+            color: white
+        }
+
+            .btnSave:hover {
+                background-color: #0c5478;
+            }
+
+
+        /* 為文本添加樣式 */
+        a span {
+            margin-left: 10px; /* 為了與圖示之間添加一些間距 */
+            font-family: 'Microsoft JhengHei', sans-serif;
+            font-size: 16px; /* 修改为您希望的字体大小 */
+        }
+    </style>
+}
+
+
+@section Scripts
+{
+
+
+    <script>
+
+
+
+    </script>
+}
