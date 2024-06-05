@@ -343,7 +343,7 @@
             console.log(data);
 
             const hotels = data.hotelsResult.map(hotel => {
-                const { hotelName, hotelAddress, hotelPhone, hotelDescription, countryName, hotelEquipmentName, hotelImage, levelStar, hotelMaximumOccupancy } = hotel;
+                const { hotelName, hotelAddress, hotelPhone, hotelDescription, countryName, hotelEquipmentName, hotelImage, levelStar, hotelMaximumOccupancy, hotelPrice } = hotel;
                 return (`
                          <div class="col-lg-4 col-sm-8" style="padding:0px"> @* //圖片位置 *@
                             <table>
@@ -373,7 +373,15 @@
                           </div>
 
                           <div class="col-lg-3 col-sm-12" style="border:1px solid red;text-align: right">
-                             <h5>我是價格</h3>
+                             <h5>很出色</h5>
+                             <h6 style="color:gray"> 個評分</h6>
+                             </br>
+                             <h6 style="border: 1px solid red;display:inline-block;background-color: red;color:white">優惠只剩1間</h6>
+                             <h6 style="color:gray">每晚價格(不連稅及其他費用)</h6>
+                             </br>
+                             </br>
+                             <h3>NT$${hotelPrice}</h3>
+
                           </div>  `)
             });
 
