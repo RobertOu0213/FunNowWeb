@@ -2,175 +2,18 @@
     ViewData["Title"] = "Home Page2";
     Layout = "_Layout_index2";
 }
-@section Scripts {
-    <script>
-
-
-        // const searchHotel = {
-        //     "HotelId": 2,
-        //     "keyword": "test"
-        // }
-        // const loadSpots = async () => {
-        //     const url = 'https://localhost:7103/api/HotelSearch'; //後端伺服器的 API 端點網址
-        //     const response = await fetch(url, {
-        //         method: 'POST',
-        //         body: JSON.stringify(searchHotel),//將要傳送給後端伺服器的資料 searchData 轉換為 JSON 字串格式
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         }
-        //     });
-        //     const data = await response.json();
-        //     console.log(data);
-
-
-
-
-
-
-        document.addEventListener('DOMContentLoaded', function () {
-            const rangeSlider = document.getElementById('rangeSlider');
-            const lowerHandle = document.getElementById('lowerHandle');
-            const upperHandle = document.getElementById('upperHandle');
-            const lowerLabel = document.getElementById('lowerLabel');
-            const upperLabel = document.getElementById('upperLabel');
-            const lowerInput = document.getElementById('lowerInput');
-            const upperInput = document.getElementById('upperInput');
-
-            let isLowerDragging = false;
-            let isUpperDragging = false;
-
-            lowerHandle.addEventListener('mousedown', () => {
-                isLowerDragging = true;
-            });
-
-            upperHandle.addEventListener('mousedown', () => {
-                isUpperDragging = true;
-            });
-
-            document.addEventListener('mouseup', () => {
-                isLowerDragging = false;
-                isUpperDragging = false;
-            });
-
-            document.addEventListener('mousemove', (event) => {
-                if (isLowerDragging) {
-                    handleDrag(event, lowerHandle, lowerLabel, upperLabel, lowerInput, upperInput);
-                } else if (isUpperDragging) {
-                    handleDrag(event, upperHandle, upperLabel, lowerLabel, lowerInput, upperInput);
-                }
-            });
-
-            function handleDrag(event, handle, label, oppositeLabel, lowerInput, upperInput) {
-                const sliderRect = rangeSlider.getBoundingClientRect();
-                const sliderWidth = sliderRect.width;
-                const min = parseFloat(rangeSlider.getAttribute('min'));
-                const max = parseFloat(rangeSlider.getAttribute('max'));
-                const range = max - min;
-
-                let position = (event.clientX - sliderRect.left) / sliderWidth;
-                position = Math.min(1, Math.max(0, position)); // Clamp position between 0 and 1
-                const value = Math.round(min + position * range);
-
-                if (handle === lowerHandle) {
-                    if (value >= parseFloat(upperLabel.textContent.split('：')[1])) {
-                        return; // Lower handle cannot exceed upper handle
-                    }
-                    handle.style.left = `${position * 100}%`;
-                    label.textContent = `下限：${value}`;
-                    lowerInput.value = value;
-                } else {
-                    if (value <= parseFloat(lowerLabel.textContent.split('：')[1])) {
-                        return; // Upper handle cannot be less than lower handle
-                    }
-                    handle.style.left = `${position * 100}%`;
-                    label.textContent = `上限：${value}`;
-                    upperInput.value = value;
-                }
-            }
-
-            lowerInput.addEventListener('input', () => {
-                const value = parseFloat(lowerInput.value);
-                if (value >= parseFloat(upperLabel.textContent.split('：')[1])) {
-                    return; // Lower input cannot exceed upper handle
-                }
-                const position = (value - parseFloat(rangeSlider.getAttribute('min'))) / (parseFloat(rangeSlider.getAttribute('max')) - parseFloat(rangeSlider.getAttribute('min')));
-                lowerHandle.style.left = `${position * 100}%`;
-                lowerLabel.textContent = `下限：${value}`;
-            });
-
-            upperInput.addEventListener('input', () => {
-                const value = parseFloat(upperInput.value);
-                if (value <= parseFloat(lowerLabel.textContent.split('：')[1])) {
-                    return; // Upper input cannot be less than lower handle
-                }
-                const position = (value - parseFloat(rangeSlider.getAttribute('min'))) / (parseFloat(rangeSlider.getAttribute('max')) - parseFloat(rangeSlider.getAttribute('min')));
-                upperHandle.style.left = `${position * 100}%`;
-                upperLabel.textContent = `上限：${value}`;
-            });
-        });
-    </script>
-}
-
-@section Styles {
-    <style>
-        .slider-container {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .range-slider {
-            position: absolute;
-            width: 83%;
-            height: 6px;
-            background: #ddd;
-            border-radius: 3px;
-        }
-
-        .slider-handle {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: #007bff;
-            border-radius: 50%;
-            cursor: pointer;
-            top: -7px;
-            z-index: 10;
-        }
-
-        .label-container {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 15px;
-        }
-
-        .input-container {
-            display: flex;
-            justify-content: space-between;
-        }
-
-            .input-container input {
-                width: 45%;
-                z-index: 1;
-            }
-
-    </style>
-}
-
 
 <br />
 <!--================ 台灣熱門城市 Area  =================-->
 <section class="accomodation_area section_gap">
 
-    <br />
-    <br />
-    <br />
-    <br />
+    <br /><br /><br /><br />
 
 
     <div class="container">
         <div class="row mb_30">
             <div class="col-lg-3 col-sm-6" ">
-
+            @* //畫面靠左 3/12 位置 *@
                 <div class="hotel_img">
                     <img src="image/ming_img/map.png" alt="">
                     <a href="#" class="btn theme_btn button_hover"></a>
@@ -465,33 +308,11 @@
 
             </div>
 
-
-
-
             <div class="col-lg-9 col-sm-12">
+            @* //畫面靠右 9/12 位置 *@
                 <div class="col-lg-12" style="border:1px solid red">
-                    <div class="row">
-                        <div class="col-lg-4 col-sm-8" style="padding:0px">
-                            <table>
-                                <tr>
-                                    <td colspan="3"><img src="image/ming_img/room2.jpg" class="img-fluid" /></td>
-                                </tr>
-                                <tr>
-                                    <td><img src="image/ming_img/room1.jpg" class="img-fluid" /></td>
-                                    <td><img src="image/ming_img/room3.jpg" class="img-fluid" /></td>
-                                    <td><img src="image/ming_img/room4.jpg" class="img-fluid" /></td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="col-lg-5 col-sm-10" style="border:1px solid red">
-                            <h3>WORK INN at Taipei 101 (WORK INN at Taipei 101 )</h3>
-
-
-                        </div>
-                        <div class="col-lg-3 col-sm-12" style="border:1px solid red">
-                            <h3>我是價格</h3>
-
-                        </div>
+                    <div class="row" id="showhotels">
+                     
                     </div>
                 </div>
             </div>
@@ -499,3 +320,196 @@
     </div>
 </section>
 <!--================ 台灣熱門城市 Area  =================-->
+@section Scripts {
+    <script>
+
+        const divHotels = document.querySelector('#showhotels')
+        const searchHotel = {
+            "memberId": 1,
+            "hotelId": 0,
+            "keyword": "test"
+        };
+
+        (async () => {
+            const url = 'https://localhost:7103/api/HotelSearch'; //後端伺服器的 API 端點網址
+            const response = await fetch(url, {
+                method: 'POST',
+                body: JSON.stringify(searchHotel),//將要傳送給後端伺服器的資料 searchData 轉換為 JSON 字串格式
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = await response.json();
+            console.log(data);
+
+            const hotels = data.hotelsResult.map(hotel => {
+                const { hotelName, hotelAddress, hotelPhone, hotelDescription, countryName, hotelEquipmentName, hotelImage, levelStar, hotelMaximumOccupancy } = hotel;
+                return (`
+                         <div class="col-lg-4 col-sm-8" style="padding:0px"> @* //圖片位置 *@
+                            <table>
+                               <tr>
+                                  <td colspan="3"><img src="${hotelImage}" class="img-fluid" style="width:100%" /></td>
+                               </tr>
+                               <tr>
+                                  <td><img src="image/ming_img/room1.jpg" class="img-fluid" /></td>
+                                  <td><img src="image/ming_img/room3.jpg" class="img-fluid" /></td>
+                                  <td><img src="image/ming_img/room4.jpg" class="img-fluid" /></td>
+                               </tr>
+                            </table>
+                          </div>
+
+                          <div class="col-lg-5 col-sm-10" style="border:1px solid red">
+                                     <h3>${hotelName}</h3>
+                                     <span>${levelStar}星級飯店 </span><span style="color:blue">${hotelAddress}</span>
+                                     <h6>此住宿提供:</h6>
+                                     <h5 style="border: 1px solid black;display: inline-block;">${hotelEquipmentName}</h5>
+                                     </br>
+                                     <h5 style="border: 1px solid black;display: inline-block;">設施2</h5>
+                                     </br>
+                                     <h5 style="border: 1px solid black;display: inline-block;">設施3</h5>
+                                     </br>
+                                     <h6 style="color:green">${levelStar}星級飯店最優價</h6>
+                                     <h6 style="color:red">昨天起已收到${levelStar}張訂單</h6>
+                          </div>
+
+                          <div class="col-lg-3 col-sm-12" style="border:1px solid red;text-align: right">
+                             <h5>我是價格</h3>
+                          </div>  `)
+            });
+
+            divHotels.innerHTML = hotels.join("");
+
+        })();
+
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const rangeSlider = document.getElementById('rangeSlider');
+            const lowerHandle = document.getElementById('lowerHandle');
+            const upperHandle = document.getElementById('upperHandle');
+            const lowerLabel = document.getElementById('lowerLabel');
+            const upperLabel = document.getElementById('upperLabel');
+            const lowerInput = document.getElementById('lowerInput');
+            const upperInput = document.getElementById('upperInput');
+
+            let isLowerDragging = false;
+            let isUpperDragging = false;
+
+            lowerHandle.addEventListener('mousedown', () => {
+                isLowerDragging = true;
+            });
+
+            upperHandle.addEventListener('mousedown', () => {
+                isUpperDragging = true;
+            });
+
+            document.addEventListener('mouseup', () => {
+                isLowerDragging = false;
+                isUpperDragging = false;
+            });
+
+            document.addEventListener('mousemove', (event) => {
+                if (isLowerDragging) {
+                    handleDrag(event, lowerHandle, lowerLabel, upperLabel, lowerInput, upperInput);
+                } else if (isUpperDragging) {
+                    handleDrag(event, upperHandle, upperLabel, lowerLabel, lowerInput, upperInput);
+                }
+            });
+
+            function handleDrag(event, handle, label, oppositeLabel, lowerInput, upperInput) {
+                const sliderRect = rangeSlider.getBoundingClientRect();
+                const sliderWidth = sliderRect.width;
+                const min = parseFloat(rangeSlider.getAttribute('min'));
+                const max = parseFloat(rangeSlider.getAttribute('max'));
+                const range = max - min;
+
+                let position = (event.clientX - sliderRect.left) / sliderWidth;
+                position = Math.min(1, Math.max(0, position)); // Clamp position between 0 and 1
+                const value = Math.round(min + position * range);
+
+                if (handle === lowerHandle) {
+                    if (value >= parseFloat(upperLabel.textContent.split('：')[1])) {
+                        return; // Lower handle cannot exceed upper handle
+                    }
+                    handle.style.left = `${position * 100}%`;
+                    label.textContent = `下限：${value}`;
+                    lowerInput.value = value;
+                } else {
+                    if (value <= parseFloat(lowerLabel.textContent.split('：')[1])) {
+                        return; // Upper handle cannot be less than lower handle
+                    }
+                    handle.style.left = `${position * 100}%`;
+                    label.textContent = `上限：${value}`;
+                    upperInput.value = value;
+                }
+            }
+
+            lowerInput.addEventListener('input', () => {
+                const value = parseFloat(lowerInput.value);
+                if (value >= parseFloat(upperLabel.textContent.split('：')[1])) {
+                    return; // Lower input cannot exceed upper handle
+                }
+                const position = (value - parseFloat(rangeSlider.getAttribute('min'))) / (parseFloat(rangeSlider.getAttribute('max')) - parseFloat(rangeSlider.getAttribute('min')));
+                lowerHandle.style.left = `${position * 100}%`;
+                lowerLabel.textContent = `下限：${value}`;
+            });
+
+            upperInput.addEventListener('input', () => {
+                const value = parseFloat(upperInput.value);
+                if (value <= parseFloat(lowerLabel.textContent.split('：')[1])) {
+                    return; // Upper input cannot be less than lower handle
+                }
+                const position = (value - parseFloat(rangeSlider.getAttribute('min'))) / (parseFloat(rangeSlider.getAttribute('max')) - parseFloat(rangeSlider.getAttribute('min')));
+                upperHandle.style.left = `${position * 100}%`;
+                upperLabel.textContent = `上限：${value}`;
+            });
+        });
+    </script>
+}
+
+@section Styles {
+    <style>
+        .slider-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .range-slider {
+            position: absolute;
+            width: 83%;
+            height: 6px;
+            background: #ddd;
+            border-radius: 3px;
+        }
+
+        .slider-handle {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #007bff;
+            border-radius: 50%;
+            cursor: pointer;
+            top: -7px;
+            z-index: 10;
+        }
+
+        .label-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .input-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+            .input-container input {
+                width: 45%;
+                z-index: 1;
+            }
+
+    </style>
+}
+
+
