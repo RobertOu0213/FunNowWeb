@@ -1,0 +1,224 @@
+﻿@model IEnumerable<PrjFunNowWeb.ViewModels.OrderViewModel>
+
+    @section Styles {
+        <style>
+            .table-responsive {
+                max-height: 400px; /* 根據需求調整 */
+                overflow-y: auto;
+            }
+
+            .table-container {
+                position: relative; /* 用於絕對定位關閉按鈕 */
+                width: 80%;
+            }
+
+            .btn-close {
+                z-index: 1050; /* 確保其位於其他元素之上 */
+                margin: 0.5rem; /* 按鈕周圍的間距 */
+            }
+
+            .table-responsive {
+                margin-left: 40px; /* 根據按鈕大小進行調整 */
+            }
+
+
+            .container {
+                bottom: 0; /*網頁底部顯示*/
+                position: fixed; /*網頁底部顯示*/
+                width: 50%;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .collapsible {
+                background-color: #f2f2f2;
+                padding: 10px;
+                border: 1px solid #ddd;
+            }
+
+            .bottom {
+                display: flex;
+                margin-top: 10px;
+                width: 100%;
+            }
+
+            .left {
+                flex: 1.0;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                padding: 10px;
+                border: 1px solid #ddd;
+                width: 100%;
+            }
+
+            .right {
+                flex-basis: 130px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 10px;
+                border: 1px solid #ddd;
+                width: 100%;
+            }
+
+            img {
+                width: 100px;
+                height: auto;
+            }
+
+            .table img {
+                width: 150px; /* 固定圖片寬度 */
+                height: 100px; /* 固定圖片高度 */
+                object-fit: cover; /* 覆蓋模式，保持圖片的比例，超出的部分會被裁切 */
+            }
+
+            /* 星星图标颜色 */
+            .fa-star {
+                color: orange; /* 设置为金色，您也可以使用任何您喜欢的颜色 */
+            }
+        </style>
+    }
+
+
+
+
+    <div class="container">
+        <div class="accordion" id="accordionExample">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" >
+                        已選擇住宿 (n/5)
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse"  data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <div class="bottom">
+                            <div class="left">
+                            <img src="~/image/julia/haiou.png" alt="圖片1">
+                            <img src="~/image/julia/hidden.png" alt="圖片2">
+                            <img src="~/image/julia/rabe.png" alt="圖片3">
+                            <img src="~/image/julia/台北文華東方飯店-4.jpg" alt="圖片4">
+                            <img src="~/image/julia/高雄海嗨嗨渡假村.jpg" alt="圖片5">
+                            </div>
+                            <div class="right ">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
+                                    比較住宿
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container position-relative">
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title rounded-pill" id="exampleModalLabel">比較飯店</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>組1</th>
+                                        <th>組2</th>
+                                        <th>組3</th>
+                                        <th>組4</th>
+                                        <th>組5</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Row 1 to Row 10 for each column -->
+                                    <tr>
+                                    <td><img src="~/image/julia/haiou.png" class="card-img-top" alt="房間圖片"></td>
+                                        <td><img src="~/image/julia/hidden.png" class="card-img-top" alt="房間圖片"></td>
+                                    <td><img src="~/image/julia/rabe.png" class="card-img-top" alt="房間圖片"></td>
+                                    <td><img src="~/image/julia/台北文華東方飯店-4.jpg" class="card-img-top" alt="房間圖片"></td>
+                                    <td><img src="~/image/julia/高雄海嗨嗨渡假村.jpg" class="card-img-top" alt="房間圖片"></td>
+                                    </tr>
+                                    <!-- 其他行數據 -->
+                                    <tr><td>蛙滴家</td><td>九份九重町民宿</td><td>九份山旅</td><td>窄巷子公寓</td><td>九份百萬夜景</td></tr>
+                                    <!-- 根據需要添加更多行 -->
+                                    <tr><td>九份</td><td>城市</td><td>城市</td><td>城市</td><td>城市</td></tr>
+                                    <tr>
+                                        <td>
+                                            <p>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <p>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <p>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <p>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <p>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                            </p>
+                                        </td>
+                                    </tr>
+                                    <tr><td>評價/幾則評論</td><td>評價/幾則評論</td><td>評價/幾則評論</td><td>評價/幾則評論</td><td>評價/幾則評論</td></tr>
+                                    <tr><td>價錢</td><td>價錢</td><td>價錢</td><td>價錢</td><td>價錢</td></tr>
+                                    <tr>
+                                        <td><button type="button" class="btn btn-primary">查看飯店</button></td>
+                                        <td><button type="button" class="btn btn-primary">查看飯店</button></td>
+                                        <td><button type="button" class="btn btn-primary">查看飯店</button></td>
+                                        <td><button type="button" class="btn btn-primary">查看飯店</button></td>
+                                        <td><button type="button" class="btn btn-primary">查看飯店</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><button type="button" class="btn btn-secondary">移除</button></td>
+                                        <td><button type="button" class="btn btn-secondary">移除</button></td>
+                                        <td><button type="button" class="btn btn-secondary">移除</button></td>
+                                        <td><button type="button" class="btn btn-secondary">移除</button></td>
+                                        <td><button type="button" class="btn btn-secondary">移除</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+
+    @*     //等教官的搜尋頁面出來,去抓JSON檔案,用JavaScript 做畫面呈現 *@
+    @* //comboBox如果勾選1個,會跳出提醒!請至少再選 1 間進行比較
+    //要勾選2個以上,比較住宿的按鈕才可以按
+    //展開收合的五張圖片,移除照片(飯店)尚未做
+    //當照片小於1張時候,整個展開收合的框框要不見 *@
+    
+    }
+

@@ -1,0 +1,213 @@
+﻿@model IEnumerable<PrjFunNowWeb.ViewModels.OrderViewModel>
+
+
+@section Styles {
+    <style>
+
+        /* 爱心按钮样式 */
+        .love-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+            color: red; /* 默认颜色 */
+            cursor: pointer;
+            z-index: 10; /* 确保在卡片顶部 */
+        }
+
+
+
+        .container {
+            width: 80%;
+            margin-top: 50px;
+        }
+
+
+
+        /* 调整卡片和图片的统一大小 */
+        .card {
+            height: auto; /* 根据内容自动调整卡片高度 */
+            overflow: hidden; /* 防止内容溢出 */
+            margin-top: 25px;
+            position: relative; /* 为爱心按钮定位 */
+            display: flex; /* 设置卡片为 Flexbox 容器 */
+            flex-direction: column; /* 垂直排列卡片内容 */
+        }
+
+        /* 文字置中 */
+        /*.card-body {
+                    text-align: left;*/ /* 將內部文字置中 */
+        /*font-size: 0.9rem;*/ /* 缩小字体大小，您可以根据需要调整这个值 */
+        /*padding: 10px;*/ /* 添加内边距以确保美观 */
+        /*}*/
+
+        /* 文字左对齐，设置统一高度 */
+        .card-body {
+            text-align: left; /* 将内部文字左对齐 */
+            flex: 1; /* Flexbox 使内容填充剩余空间 */
+            display: flex; /* 将 .card-body 设置为 Flexbox 容器 */
+            flex-direction: column; /* 垂直排列内容 */
+            justify-content: space-between; /* 在各元素间分配空间 */
+        }
+
+        /* 特别为评分和价格的文本设定大小 */
+        .card-text, .price {
+            font-size: 0.85rem; /* 可以适当调整以满足页面设计 */
+        }
+
+        .card img {
+            height: 180px; /* 統一圖片高度 */
+            width: 100%; /* 圖片寬度全滿 */
+            object-fit: cover; /* 圖片覆蓋整個區域，避免失真 */
+        }
+
+
+
+        /* 滑鼠懸停時添加陰影效果 */
+        .card:hover {
+            box-shadow: 0 7px 7px rgba(0, 0, 0, 0.4); /* 添加更大的陰影 */
+            /*transform: translateY(1px);*/ /* 輕微提升卡片 */
+            transition: 0.3s; /* 平滑過渡效果 */
+        }
+
+        /* 定價顯示在右側 */
+        .price {
+            text-align: right; /* 文字靠右 */
+            font-size: 1.0rem; /* 設定字體大小 */
+            font-weight: bold; /* 粗體字 */
+            margin-top: 8px; /* 上邊距 */
+            color: red;
+        }
+
+        /* 星星图标颜色 */
+        .fa-star {
+            color: orange; /* 设置为金色，您也可以使用任何您喜欢的颜色 */
+        }
+
+    </style>
+}
+
+
+<div class="container">
+    <div class="container">
+        <a href="https://www.agoda.com/zh-tw/the-moment-hotel-hualien-by-lakeshore/hotel/hualien-tw.html?checkIn=2024-05-30&los=1&adults=2&rooms=1&travellerType=1">
+            <span>口袋清單</span>
+        </a>
+
+        <span>/</span>
+        <span>花蓮縣,台灣</span>
+        <h3>花蓮縣,台灣</h3>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+
+        <!-- Card 1 -->
+        <div class="col-md-3">
+            <div class="card">
+                <i class="fa-solid fa-heart love-button"></i> <!-- 爱心按钮 -->
+                <img src="~/image/julia/高雄海嗨嗨渡假村.jpg" class="card-img-top" alt="Room Image">
+                <div class="card-body">
+                    <h5 class="card-title">蛙滴家</h5>
+                    <p class="card-text">九份xxx,台北</p>
+                    <p>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </p>
+                    <p class="card-text"> 8.5很讚  4,880篇評鑑 </p>
+                    <p class="price">$1,200 / 晚</p>
+
+                </div>
+            </div>
+        </div>
+        <!-- Card 2 -->
+        <div class="col-md-3">
+            <div class="card">
+                <i class="fa-solid fa-heart love-button"></i> <!-- 爱心按钮 -->
+                <img src="~/image/julia/高雄海嗨嗨渡假村.jpg" class="card-img-top" alt="Room Image">
+                <div class="card-body">
+                    <h5 class="card-title">九份九重町民宿 </h5>
+                    <p class="card-text">九份,台北市</p>
+                    <p>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </p>
+                    <p class="card-text"> 8.5很讚  4,880篇評鑑 </p>
+                    <p class="price">$1,200 / 晚</p>
+
+                </div>
+            </div>
+        </div>
+        <!-- Card 3 -->
+        <div class="col-md-3">
+            <div class="card">
+                <i class="fa-solid fa-heart love-button"></i> <!-- 爱心按钮 -->
+                <img src="~/image/julia/高雄海嗨嗨渡假村.jpg" class="card-img-top" alt="Room Image">
+                <div class="card-body">
+                    <h5 class="card-title">九份山旅</h5>
+                    <p class="card-text">九份,台北市</p>
+                    <p>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </p>
+                    <p class="card-text"> 8.5很讚  4,880篇評鑑 </p>
+                    <p class="price">$1,200 / 晚</p>
+
+                </div>
+            </div>
+        </div>
+        <!-- Card 4 -->
+        <div class="col-md-3">
+            <div class="card">
+                <i class="fa-solid fa-heart love-button"></i> <!-- 爱心按钮 -->
+                <img src="~/image/julia/高雄海嗨嗨渡假村.jpg" class="card-img-top" alt="Room Image">
+                <div class="card-body">
+                    <h5 class="card-title">窄巷子公寓</h5>
+                    <p class="card-text">九份,九份</p>
+                    <p>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </p>
+                    <p class="card-text"> 8.2很讚  706篇評鑑 </p>
+                    <p class="price">$1,200 / 晚</p>
+
+                </div>
+            </div>
+        </div>
+        <!-- Card 5 -->
+        <div class="col-md-3">
+            <div class="card">
+                <i class="fa-solid fa-heart love-button"></i> <!-- 爱心按钮 -->
+                <img src="~/image/julia/高雄海嗨嗨渡假村.jpg" class="card-img-top" alt="Room Image">
+                <div class="card-body">
+                    <h5 class="card-title">窄巷子公寓</h5>
+                    <p class="card-text">九份,九份</p>
+                    <p>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </p>
+                    <p class="card-text"> 8.2很讚  706篇評鑑 </p>
+                    <p class="price">$1,200 / 晚</p>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+
+
+}
+
+
+
+
+
