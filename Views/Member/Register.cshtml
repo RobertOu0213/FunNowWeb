@@ -256,23 +256,22 @@
         //點選加入會員，註冊按鈕事件
         const btnSubmit = document.querySelector('#buttonSubmit');
 
-        const inpFirstName = document.querySelector('#FirstNameInput').value;
-        const inpLastName = document.querySelector('#LastNameInput').value;
-        const inpEmail = document.querySelector('#EmailInput').value;
-        const inpPwd = document.querySelector('#PasswordInput').value;
-        
-        const memberData =
-        {
-            "firstName": inpFirstName,
-            "lastName": inpLastName,
-            "email": inpEmail,
-            "password": inpPwd,
-        };
-        
         btnSubmit.addEventListener('click', async (evt) => {
             evt.preventDefault(); //防止預設行為的發生
 
-           
+            const inpFirstName = document.querySelector('#FirstNameInput').value;
+            const inpLastName = document.querySelector('#LastNameInput').value;
+            const inpEmail = document.querySelector('#EmailInput').value;
+            const inpPwd = document.querySelector('#PasswordInput').value;
+
+            const memberData =
+            {
+                "firstName": inpFirstName,
+                "lastName": inpLastName,
+                "email": inpEmail,
+                "password": inpPwd,
+            };
+
             try {
                 const url = 'https://localhost:7103/api/Members';
                 const response = await fetch(url, {
@@ -283,8 +282,10 @@
                 }
             });
 
-            if (response.ok) {
+            if (response.ok) 
+            {
                 console.log('註冊成功');
+                window.location.href = '/Member/Login';
             }
             else {
                 console.log('註冊失敗');
