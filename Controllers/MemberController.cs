@@ -26,12 +26,14 @@ namespace PrjFunNowWeb.Controllers
         }
 
         //第三方登入的頁面
-        public async Task LoginByGoogle()
+        //*參考影片:https://reurl.cc/VzqpKR */
+        public async Task LoginByGoogle() //返回類型為Task
         {
+            // 向HttpContext發起挑戰，以Google作為驗證提供者，指定Google作為驗證方案
             await HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme,
                 new AuthenticationProperties
                 {
-                    //重新導向MemberController的GoogleResponse Action方法
+                    //設定挑戰成功後的重定向URI，將使用者導向MemberController的GoogleResponse方法
                     RedirectUri = Url.Action("GoogleResponse","Member")  
                 });
         }
@@ -39,6 +41,7 @@ namespace PrjFunNowWeb.Controllers
         //處理Google登入時驗證成功或失敗時的跳轉頁面
         public async Task<IActionResult> GoogleResponse()
         {
+            // 嘗試進行驗證，使用Cookie作為驗證方案
             var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             if (result.Succeeded) //如果驗證成功，就跳轉到HomeController的Index首頁
@@ -46,11 +49,10 @@ namespace PrjFunNowWeb.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            // 如果Google驗證失敗，回到MemberController的Login登入，並使用TempData傳遞錯誤訊息
+            // 如果Google驗證失敗，回到MemberController的Login登入頁面，並使用TempData傳遞錯誤訊息
             TempData["ErrorMessage"] = "Google驗證失敗，請再試一次。";
             return RedirectToAction("Login", "Member"); 
         }
-
 
 
         [HttpPost]

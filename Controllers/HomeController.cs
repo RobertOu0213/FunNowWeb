@@ -32,7 +32,8 @@ namespace PrjFunNowWeb.Controllers
 
             //    ViewData["SessionKey"] = "歡迎會員編號為" + x.MemberId + "的" + x.FirstName + x.LastName + "登入~~~";  //包在ViewData裡面，給其他頁面使用
 
-                return View();
+            ViewData["SessionKey"] = 1;
+            return View();
             //}
             //return RedirectToAction("Login"); //如果沒拿到session key就回到登入頁面
 

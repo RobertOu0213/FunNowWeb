@@ -1,6 +1,6 @@
-﻿@{
+﻿ @{
    ViewBag.Title = "Index";
-}
+} 
 
 <!DOCTYPE html>
 <html lang="en">
@@ -36,12 +36,23 @@
 
     @await RenderSectionAsync("Styles", required: false)
 
+
 </head>
 <body>
     <!--================標題列 Header Area =================-->
     <header class="header_area">
         <!-- 導航欄 -->
         <div class="container-fluid" style="padding: 0;">
+          @*   @if (@ViewData["SessionKey"].ToString()!=null)
+            {
+                @Html.Partial("_LogINPartial")
+            }
+            else
+            {
+                @Html.Partial("_LogOutPartial")
+            } *@
+
+
 
             <nav class="navbar navbar-expand-lg navbar-light" style="height: 60px;">
                 <!-- Brand and toggle get grouped for better mobile display -->
@@ -49,6 +60,7 @@
                     <img src="~/image/ming_img/FunNowlogo.png" style="height: 60px; border-radius: 12px;">
                 </a>
                 <h6>@ViewData["SessionKey"]</h6>
+                <label>現在是登入狀態</label>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -58,7 +70,7 @@
                 <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                     <ul class="nav navbar-nav menu_nav ml-auto">
                         <li class="nav-item active">
-                            <a class="nav-link" href="index.html" style="color:red;">刊登家中空房</a>
+                            <button class="navBtn">刊登家中空房</button>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="about.html">
@@ -93,7 +105,7 @@
                         <li></li>
                     </ul>
                 </div>
-            </nav>
+            </nav> 
         </div>
         <!-- Date picker and booking button 浮動訂房欄 -->
         <div class="container-fluid booking-area" style="background-color: #20274d; padding: 20px;">
