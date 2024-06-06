@@ -11,7 +11,8 @@ builder.Services.AddDbContext<FunNowContext>(
         builder.Configuration.GetConnectionString("FunNowConnection")
 ));
 
-
+// Add SignalR client services if needed for SignalR client side (optional)
+builder.Services.AddSignalR();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
