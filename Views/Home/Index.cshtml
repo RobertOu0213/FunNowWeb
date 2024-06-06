@@ -125,6 +125,44 @@
 
 @section Scripts{    
     <script src="https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.min.js"></script>
+
+    <script>
+        const btnSubmit = document.querySelector('#buttonSubmit');
+
+        btnSubmit.addEventListener('click', async () => {
+            const inputkeyword = document.querySelector('#search-input').value;
+            const inputDatestart = document.querySelector('#myDatepickerstart').value;
+            const inputDateend = document.querySelector('#myDatepickerend').value;
+            const inputadults = parseInt(document.querySelector('#adults').textContent);
+            const inputchildren = parseInt(document.querySelector('#children').textContent);
+
+            const searchHotel = {
+                "keyword": inputkeyword,
+                "checkInDate": inputDatestart,
+                "checkOutDate": inputDateend,
+                "adults": inputadults,
+                "children": inputchildren
+            };
+            console.log(searchHotel);
+
+
+            const url = 'https://localhost:7103/api/HotelSearch/indexsearch';
+            const response = await fetch(url, {
+                method: 'POST',
+                body: JSON.stringify(searchHotel),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }); // 此處添加了右括號
+            const data = await response.json();
+            console.log(data);
+
+        });
+    </script>
+
+
+
+
     <script>
         const cn1 = {
             days: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
@@ -134,7 +172,7 @@
             monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             today: '今天',
             clear: '清除',
-            dateFormat: 'yyyy/MM/dd',
+            dateFormat: 'yyyy-MM-dd',
             timeFormat: 'hh:mm aa',
             firstDay: 0
         }
@@ -146,8 +184,8 @@
             onSelect({ formattedDate, date }) {
                 document.getElementById('myDatepicker').value = "請確認訂房日期";
                 if (date.length === 2) {
-                    document.getElementById('myDatepickerstart').value = `開始日期: ${formattedDate[0]}`;
-                    document.getElementById('myDatepickerend').value = `結束日期: ${formattedDate[1]}`;
+                    document.getElementById('myDatepickerstart').value = `${formattedDate[0]}`;
+                    document.getElementById('myDatepickerend').value = `${formattedDate[1]}`;
                 } else {
                     document.getElementById('myDatepickerstart').value = '';
                     document.getElementById('myDatepickerend').value = '';
@@ -190,11 +228,12 @@
             var dropdownContainer = document.querySelector('.dropdown-container');
             var dropdownMenu = document.getElementById('dropdownMenu');
 
-            if (!dropdownContainer.contains(event.target)) {
+            if (dropdownContainer && !dropdownContainer.contains(event.target)) {
                 dropdownMenu.style.display = 'none';
                 document.removeEventListener('click', handleOutsideClick);
             }
         }
+
     </script>
 
 
@@ -305,7 +344,7 @@
                         <div>
                             <div class='col-md-6 offset-md-1 text-center'>
                                 <div>
-                                    <a class="book_now_btn button_hover" href="#" style="border-radius:20px;">Book Now</a>
+                                    <a class="book_now_btn button_hover" href="#" style="border-radius:20px;" id="buttonSubmit">Book Now</a>
                                 </div>
                             </div>
                         </div>

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PrjFunNowWeb.Models;
+using PrjFunNowWeb.Models.DTO;
 using System.Diagnostics;
+using System.Text.Json;
 
 namespace PrjFunNowWeb.Controllers
 {
@@ -23,6 +25,7 @@ namespace PrjFunNowWeb.Controllers
 
         public IActionResult Index()
         {
+
             //if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGIN_MEMBER)) //如果有拿到session key
             return View();
 
@@ -31,10 +34,7 @@ namespace PrjFunNowWeb.Controllers
         }
         public IActionResult Index2()
         {
-            //if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGIN_MEMBER)) //如果有拿到session key
-                return View();
-
-            //return RedirectToAction("Login"); //如果沒拿到session key就回到登入頁面
+            return View();
         }
 
         public IActionResult Privacy()
