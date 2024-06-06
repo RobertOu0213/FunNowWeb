@@ -126,7 +126,7 @@
 @section Scripts{    
     <script src="https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.min.js"></script>
 
-    <script>
+@*     <script>
         const btnSubmit = document.querySelector('#buttonSubmit');
 
         btnSubmit.addEventListener('click', async () => {
@@ -157,10 +157,34 @@
             const data = await response.json();
             console.log(data);
 
+
+
         });
     </script>
+ *@
+    <script>
+        const btnSubmit = document.querySelector('#buttonSubmit');
 
+        btnSubmit.addEventListener('click', async (event) => {
+            const inputkeyword = document.querySelector('#search-input').value;
+            const inputDatestart = document.querySelector('#myDatepickerstart').value;
+            const inputDateend = document.querySelector('#myDatepickerend').value;
+            const inputadults = parseInt(document.querySelector('#adults').textContent);
+            const inputchildren = parseInt(document.querySelector('#children').textContent);
 
+            const searchHotel = {
+                "keyword": inputkeyword,
+                "checkInDate": inputDatestart,
+                "checkOutDate": inputDateend,
+                "adults": inputadults,
+                "children": inputchildren
+            };
+            // console.log(searchHotel);
+            // 将 searchHotel 对象存储在 sessionStorage 中
+            sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel));
+
+        });
+    </script>
 
 
     <script>
@@ -344,7 +368,7 @@
                         <div>
                             <div class='col-md-6 offset-md-1 text-center'>
                                 <div>
-                                    <a class="book_now_btn button_hover" href="#" style="border-radius:20px;" id="buttonSubmit">Book Now</a>
+                                    <a class="book_now_btn button_hover" href="home/index2" style="border-radius:20px;" id="buttonSubmit">Book Now</a>
                                 </div>
                             </div>
                         </div>
