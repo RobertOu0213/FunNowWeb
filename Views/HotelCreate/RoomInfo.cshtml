@@ -76,20 +76,24 @@
                             <div class="mb-3">
                                 <div class="mb-2 fw-bold">為住宿命名</div>
                                 <input type="text" class="form-control roomNames" placeholder="請輸入房間名稱" />
+                                <span class="alert-message"></span>
                             </div>
                             <div class="mb-4">
                                 <div class="mb-2 fw-bold">請選擇房型</div>
+                                
                                 <select class="form-select roomTypes" aria-label="Default select example" id="roomType">
                                 </select>
+                                <span class="alert-message"></span>
                             </div>
-                            <div class="mb-4">
-                                <div class="mb-2 fw-bold">Room size</div>
+                            <div class="mb-4 roomSizeBox">
+                                <div class="mb-2 fw-bold">Room size</div>             
                                 <div class="d-flex">
                                     <div>
                                         <input type="number" min="0" class="form-Room-size roomSizes" />
                                     </div>
                                     <div class="form-Room-size-unit">平方公尺</div>
                                 </div>
+                                <span class="alert-message"></span>
                             </div>
 
                             <div class="mb-4">
@@ -99,9 +103,10 @@
                                     <input value="1" type="number" min="1" step="1" max="99" class="form-Room-size roomPeople" id="room-size-input" />
                                     <button class="btn-icon" id="plus-btn" type="button"><i class="fa-solid fa-plus"></i></button>
                                 </div>
+                                <span class="alert-message"></span>
                             </div>
 
-                            <div class="mb-4">
+                            <div class="mb-4 roomPriceBox">
                                 <div class="fw-bold mb-2">房價設定</div>
                                 <div>該房型的最低房價，不包括促銷優惠、稅金或其他費用。</div>
                                 <div class="d-flex mt-2">
@@ -110,20 +115,25 @@
                                     </div>
                                     <div class="form-Room-size-unit">TWD</div>
                                 </div>
+                                <span class="alert-message"></span>
                             </div>
                             @* 設備 *@
                             <h5 class="fw-bold">房間設施</h5>
                             <div class="sm_titlt mb-3">房間有提供的設備</div>
-                            <div class="panel">
-                                <div class="row row-cols-3" id="roomEquipment">
+                            <div class="roomEquipmentBox">
+                                <div class="panel">
+                                    <div class="row row-cols-3" id="roomEquipment">
+                                    </div>
                                 </div>
-                            </div>
+                                <span class="alert-message"></span>
+                            </div>               
                             <h5 class="fw-bold mt-5">房間簡介</h5>
-                            <div class="panel">
+                            <div class="panel descBox">
                                 <div class="form-floating">
                                     <textarea class="form-control" placeholder="請介紹您的房間" style="height: 200px; resize: none"></textarea>
                                     <label>請介紹您的房間</label>
                                 </div>
+                                <span class="alert-message"></span>
                             </div>
                         </div>
                     </div>
@@ -260,6 +270,70 @@
 
             //btn Next
             $('#btnNext').on('click', () => {
+
+                let isFormValid = true;
+
+                $('.panel__room').each(function () {
+                    var roomName = $(this).find('.roomNames').val().trim();
+                    var roomType = $(this).find('.roomTypes').val();
+                    var roomSize = $(this).find('.roomSizes').val();                  
+                    var roomPrice = $(this).find('.roomPrice').val();
+                    var description = $(this).find('textarea').val().trim();
+                    var checkedEquipments = $(this).find('#roomEquipment input[type="checkbox"]:checked');
+
+                    if (roomName === '') {
+                        $(this).find('.roomNames').next('.alert-message').html('請輸入房間名稱');
+                        isFormValid = false;
+                    } else {
+                        $(this).find('.roomNames').next('.alert-message').html('');
+                    }
+
+                    if (roomType === null) {
+                        $(this).find('.roomTypes').next('.alert-message').html('請選擇房型');
+                        isFormValid = false;
+                    } else {
+                        $(this).find('.roomTypes').next('.alert-message').html('');
+
+                    }
+
+                    if (roomSize === '') {
+                        $(this).find('.roomSizes').closest('.roomSizeBox').find('.alert-message').html('請輸入房間大小');
+                        isFormValid = false;
+                    } else {
+                        $(this).find('.roomSizes').closest('.roomSizeBox').find('.alert-message').html('');
+                    }
+
+                    if (roomPrice === '') {
+                        $(this).find('.roomPrice').closest('.roomPriceBox').find('.alert-message').html('請輸入房價');
+                        isFormValid = false;
+                    } else {
+                        $(this).find('.roomPrice').closest('.roomPriceBox').find('.alert-message').html('');
+
+                    }
+
+                    if (description === '') {
+                        $(this).find('textarea').closest('.descBox').find('.alert-message').html('輸入房間描述');
+                        isFormValid = false;
+                    } else {
+                        $(this).find('textarea').closest('.descBox').find('.alert-message').html('');
+                    }
+
+                   
+                    if (checkedEquipments.length === 0) {
+                        $(this).find('#roomEquipment').closest('.roomEquipmentBox').find('.alert-message').html('請選擇至少一種設備');
+                        isFormValid = false;
+                    } else {
+                        $(this).find('#roomEquipment').closest('.roomEquipmentBox').find('.alert-message').html('');
+                    }
+
+               
+                    
+                });
+
+                if (!isFormValid) {
+                    event.preventDefault();
+                }
+
                 const roomInfo = [];
                 const rooms = $('.panel__room');
                 rooms.each((index, room) => {
@@ -427,7 +501,6 @@
                 updateDeleteButtonsAndRenumberRooms();
 
              
-
             };
 
             // Add new panel on button click

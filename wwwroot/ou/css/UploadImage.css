@@ -115,6 +115,10 @@ main {
   width: 100%;
   padding: 15px 15px 30px 15px;
 }
+.rightSection .content__container .alert-message {
+  color: red;
+  font-size: 12px;
+}
 
 .btn_previous {
   min-width: 180px;
@@ -147,10 +151,13 @@ main {
   border-radius: 3px;
   padding: 10px 15px;
   margin-left: 5px;
+  text-align: center;
+  text-decoration: none;
 }
 
 .btn_next:hover {
   background-color: #0C5478;
+  color: #fff;
 }
 
 .content__container__image__text {

@@ -123,6 +123,10 @@ main {
   height: 350px;
   border: 1px solid black;
 }
+.rightSection .content__container .alertMessage {
+  color: red;
+  font-size: 12px;
+}
 
 .btn_previous {
   min-width: 180px;

@@ -115,6 +115,10 @@ main {
   width: 100%;
   padding: 15px 15px 30px 15px;
 }
+.rightSection .content__container .alert-message {
+  color: red;
+  font-size: 12px;
+}
 
 .btn_previous {
   min-width: 180px;

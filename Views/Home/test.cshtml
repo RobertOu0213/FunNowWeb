@@ -5,6 +5,7 @@
 @model IEnumerable<PrjFunNowWeb.Models.Country>
 
 <h1 class="ms-4 text-2xl">test</h1>
+<img src="https://localhost:7284/image/5ec0ba95-0320-4a8f-88af-f6006e7bf46b.jpeg" />
 <ul>
 
     @foreach (var item in Model)
@@ -12,6 +13,8 @@
         <li>@item.CountryName</li>
     }
 </ul>
+
+
 
 @section Styles {
     <style>

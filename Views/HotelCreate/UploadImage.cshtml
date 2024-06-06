@@ -41,49 +41,50 @@
     </section>
     <section class="rightSection">
         <div class="content__container pt-5">
-     
-            @* 圖片 *@
-            <div class="content__container__image">
-                <div class="d-flex align-items-center">
-                    <div class="mb-4">
-                        <h4 class="fw-bold mt-5">向房客們展示物業的特色</h4>
-                        <div class="content__container__image__text">對於旅客來說，現場實景照片往往成為影響是否訂房的重要參考。因此，建議你上傳完整的高畫質實景照片，吸引旅客下訂，當然也可以晚點再增加照片囉。想獲得更多小撇步嗎？</div>
-                    </div>
-                    <div class="mt-2 me-5">
-                        <img class="equip_image w-100" src="~/image/ou/create_hotel_image.png" alt="..." />
-                    </div>
-                </div>
-
-                <div class="reminder__background">
-                    <div class="reminder__background__text">小提醒：房源上架後仍可管理照片。您可以先從最簡單的開始，並隨時更改或新增內容。</div>
-                </div>
-
-                <div class="mb-5">
-                    <h4 class="fw-bold mt-5">飯店照片</h4>
-                    <p>建築外觀、停車位、入口，以及任何其他開放使用的設施</p>
-                    <div class="file__upload">
-                        <div id="uploadSection">
-                            <img src="~/image/ou/upload.png" alt="..." />
-                            <div class="fw-bold">請將照片拖放至此</div>
-                            <p>僅限JPG和PNG格式（上限5 MB）</p>
-                            <input type="file" id="fileInput" accept=".jpg,.png" multiple style="display: none;" />
-                            <button id="uploadButton">選擇照片</button>
+                @* 圖片 *@
+                <div class="content__container__image">
+                    <div class="d-flex align-items-center">
+                        <div class="mb-4">
+                            <h4 class="fw-bold mt-5">向房客們展示物業的特色</h4>
+                            <div class="content__container__image__text">對於旅客來說，現場實景照片往往成為影響是否訂房的重要參考。因此，建議你上傳完整的高畫質實景照片，吸引旅客下訂，當然也可以晚點再增加照片囉。想獲得更多小撇步嗎？</div>
+                        </div>
+                        <div class="mt-2 me-5">
+                            <img class="equip_image w-100" src="~/image/ou/create_hotel_image.png" alt="..." />
                         </div>
                     </div>
-                    <div class="container" id="preview"></div>
+
+                    <div class="reminder__background">
+                        <div class="reminder__background__text">小提醒：房源上架後仍可管理照片。您可以先從最簡單的開始，並隨時更改或新增內容。</div>
+                    </div>
+
+                    <div class="mb-5 hotelImageBox">
+                        <h4 class="fw-bold mt-5">飯店照片</h4>
+                        <p>建築外觀、停車位、入口，以及任何其他開放使用的設施</p>
+                        <span class="alert-message"></span>
+                        <div class="file__upload">
+                            <div id="uploadSection">
+                                <img src="~/image/ou/upload.png" alt="..." />
+                                <div class="fw-bold">請將照片拖放至此</div>
+                                <p>僅限JPG和PNG格式（上限5 MB）</p>
+                                <input type="file" id="fileInput" accept=".jpg,.png" multiple style="display: none;" />
+                                <button id="uploadButton">選擇照片</button>
+                            </div>
+                        </div>
+                        <div class="container" id="preview"></div>
+                    </div>
+
+                    <div id="roomImagesContainer"></div>
+
+
                 </div>
 
-                <div id="roomImagesContainer"></div>
-
-
-            </div>
-
-            @*   button *@
-            <div class="d-flex justify-content-end my-5">
-                <a href="@Url.Action("RoomInfo", "HotelCreate")" class="btn_previous">上一步</a>
-                <button type="button" class="btn_next" id="btnFinish">開始上線銷售！</button>
-            </div>
-
+                @*   button *@
+                <div class="d-flex justify-content-end my-5">
+                    <a href="@Url.Action("RoomInfo", "HotelCreate")" class="btn_previous">上一步</a>
+                    <a href="@Url.Action("Home", "HostManage")" type="button" class="btn_next" id="btnFinish">開始上線銷售！</a>
+               @*      <button type="button" class="btn_next" id="btnFinish">開始上線銷售！</button> *@
+                </div>
+         
         </div>
     </section>
 </main>
@@ -237,9 +238,10 @@
             let rootUrl = '@Url.Content("~")';
             roomInfo.forEach((room, index) => {
                 roomContainerStr += `
-                                    <div class="mb-5">
+                                      <div class="mb-5 roomBoxes" id=roomBoxes${index}>
                                         <h4 class="fw-bold mt-5">客房${index + 1}照片</h4>
                                         <p>建築外觀、停車位、入口，以及任何其他開放使用的設施</p>
+                                          <span class="alert-message"></span>
                                           <div class="file__upload" id="file__upload${index}">
                                             <div id="uploadSection${index}">
                                                    <img src="${rootUrl}/image/ou/upload.png" alt="..." />
@@ -378,6 +380,46 @@
 
             //click Btnfinish
             $('#btnFinish').on('click', async function () {
+
+                event.preventDefault();
+
+                // 驗證飯店的照片
+                if ($('#preview').find('img').length === 0) {
+                    $('.hotelImageBox').find('.alert-message').html('請上傳至少一張飯店照片');
+                    
+                } else {
+                    $('.hotelImageBox').find('.alert-message').html('');
+                }
+
+
+                // 驗證每個客房的照片
+                roomInfo.forEach((room, index) => {
+                    if ($(`#preview${index}`).find('img').length === 0) {
+                        $(`#file__upload${index}`).closest('.roomBoxes').find('.alert-message').html('請上傳至少一張客房照片');
+                    } else {
+                        $(`#file__upload${index}`).closest('.roomBoxes').find('.alert-message').html('');                      
+                    }
+
+                });
+
+
+                let allCategoriesSelected = true;
+                $('.card').each(function () {
+                    const selectElement = $(this).find('select');
+                    if (selectElement.val() === null) {
+                        allCategoriesSelected = false;
+                        return false; // 結束遍歷
+                    }
+                });
+
+                if (!allCategoriesSelected) {
+                    alert('請為所有圖片選擇類別');
+                    return;
+                }
+
+              
+               
+            
                 // 從 sessionStorage 中獲取已有的數據
                 let hotelData = JSON.parse(sessionStorage.getItem('tHotel')) || {};
                 let roomData = JSON.parse(sessionStorage.getItem('tRoom')) || [];
@@ -419,29 +461,29 @@
 
 
                 //API
-                try {
-                    const hotelData = JSON.parse(sessionStorage.getItem('tHotel')) || {};
-                    const roomData = JSON.parse(sessionStorage.getItem('tRoom')) || [];
+                // try {
+                //     const hotelData = JSON.parse(sessionStorage.getItem('tHotel')) || {};
+                //     const roomData = JSON.parse(sessionStorage.getItem('tRoom')) || [];
 
-                    const formData = new FormData();
-                    formData.append('hotelData', JSON.stringify(hotelData));
-                    formData.append('roomData', JSON.stringify(roomData));
+                //     const formData = new FormData();
+                //     formData.append('hotelData', JSON.stringify(hotelData));
+                //     formData.append('roomData', JSON.stringify(roomData));
 
-                    const url = "https://localhost:7103/api/HotelCreate";
-                    const res = await fetch(url, {
-                        method: "POST",
-                        body: formData
-                    });
-                    if (res.ok) {
-                        const data = await res.json();
-                        console.log(data);
-                    } else {
-                        console.error('Error:', res.statusText);
-                    }
-                }
-                catch (err) {
-                    console.log(err)
-                }
+                //     const url = "https://localhost:7103/api/HotelCreate";
+                //     const res = await fetch(url, {
+                //         method: "POST",
+                //         body: formData
+                //     });
+                //     if (res.ok) {
+                //         const data = await res.json();
+                //         console.log(data);
+                //     } else {
+                //         console.error('Error:', res.statusText);
+                //     }
+                // }
+                // catch (err) {
+                //     console.log(err)
+                // }
 
 
 
