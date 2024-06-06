@@ -12,7 +12,7 @@
             display: inline-block;
         }
 
-        .dropdown-toggle {
+        .dropdown-toggle1 {
             padding: 15px 20px;
             font-size: 18px;
             border: 1px solid #ccc;
@@ -26,7 +26,7 @@
             width: 300px;
         }
 
-            .dropdown-toggle i {
+            .dropdown-toggle1 i {
                 margin-left: 10px;
             }
 
@@ -79,8 +79,8 @@
                     font-size: 16px;
                 }
 
-        .dropdown-toggle:hover,
-        .dropdown-toggle:focus {
+        .dropdown-toggle1:hover,
+        .dropdown-toggle1:focus {
             border-color: #007bff;
             box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
         }
@@ -182,7 +182,7 @@
             var rooms = document.getElementById("rooms").textContent;
             var adults = document.getElementById("adults").textContent;
             var children = document.getElementById("children").textContent;
-            var dropdownToggle = document.querySelector(".dropdown-toggle span");
+            var dropdownToggle = document.querySelector(".dropdown-toggle1 span");
             dropdownToggle.textContent = rooms + " 客房, " + adults + " 成人, " + children + " 小童";
         }
 
@@ -236,7 +236,7 @@
                             </div>
                          <div class="row">
                             <div class="col-md-6">
-                                <div class="book_tabel_item">
+                                <div class="book_tabel_item" style="margin-left:30px">
                                     <div class="form-group">
                                         <div class='input-group '>
                                             <!-- Air datepicker Html element -->
@@ -263,8 +263,8 @@
                             <div class="col-md-6">                    
                                  <div class="book_tabel_item">
                                     <div class="dropdown">
-                                        <div class="dropdown-toggle" onclick="toggleDropdown()">
-                                            <span>2 成人, 1 客房</span>
+                                        <div class="dropdown-toggle1" onclick="toggleDropdown()">
+                                            <span>請選擇人數及房數</span>
                                         </div>
                                         <div class="dropdown-menu" id="dropdownMenu">
                                             <div class="dropdown-item">
@@ -303,7 +303,7 @@
                     </div>
                     <div class="container">
                         <div>
-                            <div class='col-md-5 offset-md-1 text-center'>
+                            <div class='col-md-6 offset-md-1 text-center'>
                                 <div>
                                     <a class="book_now_btn button_hover" href="#" style="border-radius:20px;">Book Now</a>
                                 </div>
