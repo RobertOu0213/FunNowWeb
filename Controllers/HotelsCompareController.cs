@@ -1,24 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PrjFunNowWeb.Models;
-using PrjFunNowWeb.ViewModels;
 
 namespace PrjFunNowWeb.Controllers
 {
-    public class HostManageController : Controller
+    public class HotelsCompareController : Controller
     {
+
         private readonly ILogger<HomeController> _logger;
         private readonly FunNowContext _context;
 
-        public HostManageController(ILogger<HomeController> logger, FunNowContext context)
+        public HotelsCompareController(ILogger<HomeController> logger, FunNowContext context)
         {
             _logger = logger;
             _context = context;
         }
-        public IActionResult Home()
+
+        public IActionResult Index()
         {
             return View();
         }
 
-
+        public IActionResult HotelsCompareAccordion()
+        {
+            return View();
+        }
     }
 }

@@ -33,18 +33,6 @@ namespace PrjFunNowWeb.Controllers
         }
         
 
-        public IActionResult HotelsFavoritesList()            
-        {
-
-            return View();
-        }
-
-        public IActionResult HotelsFavoritesListToCity()
-        {
-
-            return View();
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
