@@ -1,8 +1,26 @@
 using Microsoft.EntityFrameworkCore;
 using PrjFunNowWeb.Models;
 using System.Configuration;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+})
+   .AddCookie()
+   .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+   {
+       options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientID").Value;
+       options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
+   });
+
+
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -51,6 +69,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=test}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
