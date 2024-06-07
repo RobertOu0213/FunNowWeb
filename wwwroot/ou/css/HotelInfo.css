@@ -148,6 +148,10 @@ main {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+.rightSection .content__container .alertMessage {
+  color: red;
+  font-size: 12px;
+}
 
 .btn_previous {
   min-width: 180px;
@@ -160,6 +164,8 @@ main {
   font-size: 14px;
   border-radius: 3px;
   padding: 10px 15px;
+  text-align: center;
+  text-decoration: none;
 }
 
 .btn_previous:hover {

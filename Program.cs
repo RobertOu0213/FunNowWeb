@@ -1,8 +1,27 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using PrjFunNowWeb.Models;
 using System.Configuration;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+})
+   .AddCookie()
+   .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+   {
+       options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientID").Value;
+       options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
+   });
+
+
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -29,22 +48,32 @@ builder.Services.AddSession(options =>
 });
 
 
-
+// Add SignalR client services if needed for SignalR client side (optional)
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
+
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+else
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+//if (!app.Environment.IsDevelopment())
+//{
+//    app.UseExceptionHandler("/Home/Error");
+//    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+//    app.UseHsts();
+//}
 
-app.UseSession();
+app.UseSession(); //註冊Session 服務
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 
 app.UseAuthorization();
@@ -53,4 +82,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=index}/{id?}");
 
+// 配置路由以支持 Angular 路由
+app.MapFallbackToFile("/dist/fun-now-angular1/index.html");
 app.Run();

@@ -41,8 +41,6 @@
                                     </div>
                                 </div>
 
-
-
                             </div>
 
                             <div class="d-grid">
@@ -62,7 +60,7 @@
                             <span class="line"></span>
                             <p></p>
                             <div class="d-grid mb-2">
-                                <button class="btn btn-outline-danger fw-bold py-2 btn-zoom" type="submit">
+                                <button class="btn btn-outline-danger fw-bold py-2 btn-zoom" type="submit" a asp-controller="Member" asp-action="LoginByGoogle">
                                     <i class="fab fa-google me-2"></i> Google
                                 </button>
                             </div>
@@ -170,6 +168,16 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        //Google驗證失敗時跳出的錯誤訊息
+        document.addEventListener("DOMContentLoaded", function () {
+            var errorMessage = '@TempData["ErrorMessage"]';
+            if (errorMessage) {
+                alert(errorMessage);
+            }
+        });
+        
+
+        //登入資料的錯誤訊息
         $(document).ready(function () {
             $('#loginBtn').click(function (event) {
                 event.preventDefault();
@@ -180,10 +188,13 @@
                     type: 'POST',
                     url: '@Url.Action("Login", "Member")',
                     data: { EmailInput: email, PasswordInput: password },
-                    success: function (response) {
-                        if (response.success) {
+                    success: function (response) 
+                    {
+                        if (response.success) 
+                        {
                             window.location.href = response.redirectUrl;
-                        } else {
+                        } else 
+                        {
                             alert('登入失敗，請檢查您的電子信箱和密碼。');
                         }
                     },
