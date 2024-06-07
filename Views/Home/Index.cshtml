@@ -126,42 +126,6 @@
 @section Scripts{    
     <script src="https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.min.js"></script>
 
-@*     <script>
-        const btnSubmit = document.querySelector('#buttonSubmit');
-
-        btnSubmit.addEventListener('click', async () => {
-            const inputkeyword = document.querySelector('#search-input').value;
-            const inputDatestart = document.querySelector('#myDatepickerstart').value;
-            const inputDateend = document.querySelector('#myDatepickerend').value;
-            const inputadults = parseInt(document.querySelector('#adults').textContent);
-            const inputchildren = parseInt(document.querySelector('#children').textContent);
-
-            const searchHotel = {
-                "keyword": inputkeyword,
-                "checkInDate": inputDatestart,
-                "checkOutDate": inputDateend,
-                "adults": inputadults,
-                "children": inputchildren
-            };
-            console.log(searchHotel);
-
-
-            const url = 'https://localhost:7103/api/HotelSearch/indexsearch';
-            const response = await fetch(url, {
-                method: 'POST',
-                body: JSON.stringify(searchHotel),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }); // 此處添加了右括號
-            const data = await response.json();
-            console.log(data);
-
-
-
-        });
-    </script>
- *@
     <script>
         const btnSubmit = document.querySelector('#buttonSubmit');
 
@@ -199,12 +163,17 @@
             dateFormat: 'yyyy-MM-dd',
             timeFormat: 'hh:mm aa',
             firstDay: 0
-        }
+        };
+
+        // 取得今天的日期
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // 設定時間為當天的0點0分0秒，避免時間因素影響
 
         const datepicker = new AirDatepicker('#myDatepicker', {
             locale: cn1,
             range: true,
             multipleDatesSeparator: ' - ',
+            minDate: today, // 設定最小日期為今天
             onSelect({ formattedDate, date }) {
                 document.getElementById('myDatepicker').value = "請確認訂房日期";
                 if (date.length === 2) {
