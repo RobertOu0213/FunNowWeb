@@ -90,9 +90,7 @@ public partial class FunNowContext : DbContext
             entity.ToTable("City");
 
             entity.Property(e => e.CityId).HasColumnName("CityID");
-            entity.Property(e => e.CityName)
-                .IsRequired()
-                .HasMaxLength(50);
+            entity.Property(e => e.CityName).IsRequired();
             entity.Property(e => e.CountryId).HasColumnName("CountryID");
 
             entity.HasOne(d => d.Country).WithMany(p => p.Cities)
@@ -173,7 +171,9 @@ public partial class FunNowContext : DbContext
             entity.Property(e => e.DialogId).HasColumnName("DialogID");
             entity.Property(e => e.CalltoMemberId).HasColumnName("CalltoMemberID");
             entity.Property(e => e.CreateAt).HasColumnType("datetime");
-            entity.Property(e => e.Detail).IsRequired();
+            entity.Property(e => e.Detail)
+                .IsRequired()
+                .IsUnicode(false);
             entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
             entity.HasOne(d => d.Member).WithMany(p => p.Dialogs)
@@ -188,16 +188,10 @@ public partial class FunNowContext : DbContext
 
             entity.Property(e => e.HotelId).HasColumnName("HotelID");
             entity.Property(e => e.CityId).HasColumnName("CityID");
-            entity.Property(e => e.HotelAddress)
-                .IsRequired()
-                .HasMaxLength(150);
+            entity.Property(e => e.HotelAddress).IsRequired();
             entity.Property(e => e.HotelDescription).IsRequired();
-            entity.Property(e => e.HotelName)
-                .IsRequired()
-                .HasMaxLength(100);
-            entity.Property(e => e.HotelPhone)
-                .IsRequired()
-                .HasMaxLength(50);
+            entity.Property(e => e.HotelName).IsRequired();
+            entity.Property(e => e.HotelPhone).IsRequired();
             entity.Property(e => e.HotelTypeId).HasColumnName("HotelTypeID");
             entity.Property(e => e.IsActive)
                 .HasDefaultValueSql("((0))")
@@ -227,9 +221,7 @@ public partial class FunNowContext : DbContext
             entity.ToTable("HotelEquipment");
 
             entity.Property(e => e.HotelEquipmentId).HasColumnName("HotelEquipmentID");
-            entity.Property(e => e.HotelEquipmentName)
-                .IsRequired()
-                .HasMaxLength(50);
+            entity.Property(e => e.HotelEquipmentName).IsRequired();
         });
 
         modelBuilder.Entity<HotelEquipmentReference>(entity =>
