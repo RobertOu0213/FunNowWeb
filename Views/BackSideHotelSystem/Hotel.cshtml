@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Hotel";
 }
 
@@ -77,35 +76,25 @@
 </nav>
 <!-- Navbar -->
 <div class="container">
-    <h3 class="m-3">房間審核管理</h3>
+    <h3 class="m-3">飯店審核管理</h3>
 </div>
 
 <div class="container mt-3 d-flex flex-row ">
     <div class="input-group width px-3">
-        <select class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
+        <select class="form-select" id="inputGroupSelecthotel" aria-label="Example select with button addon">
             <option selected>飯店名稱</option>
-            <option value="1">套資料吧</option>
+            <option value="1">套資料</option>
             <option value="2">一樣是套資料</option>
         </select>
     </div>
-    <div class="input-group width px-4">
-        <select class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
-            <option selected>房型</option>
-            <option value="1">單人房</option>
-            <option value="2">雙人房</option>
-            <option value="3">四人房</option>
-            <option value="4">六人房</option>
-            <option value="5">八人房</option>
-        </select>
-    </div>
+    
     <div class="input-group width px-1">
         <!--px-1(數字好像可以填1到9越小越寬) -->
-        <select class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
-            <option selected>房型審核狀態</option>
-            <option value="1">未審核</option>
-            <option value="2">已審核</option>
-            <option value="3">審核中</option>
-        </select>
+        <select class="form-select" id="inputGroupSelectstatus" aria-label="Example select with button addon">
+        <option value="all" selected>飯店審核狀態</option>
+        <option value="pending">待審核</option>
+        <option value="active">已上架</option>
+    </select>
     </div>
 
     <div class="ms-5">
@@ -126,29 +115,29 @@
             <tr>
                 <td>編號</td>
                 <td>飯店名稱</td>
-                <td>房型</td>
                 <td>地址</td>
                 <td>電話</td>
-               @*  <td>審核日期</td>
-                <td>審核狀態</td> *@
+                <td>飯店狀態</td>
+
             </tr>
         </thead>
-        <tr>
-            <td>1</td>
-            <td>三景花園飯店</td>
-            <td>雙人房</td>
-            <td>忠孝東路三段30號1樓 </td>
-            <td>(02)2781-1131</td>
-           @*  <td>審核日期</td>
-            <td>
-                <select>
-                    <option>未審核</option>
-                    <option>已審核</option>
-                    <option>審核中</option>
-                </select>
-            </td> *@
-            <td><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">詳細內容</button></td>
-        </tr>
+        <tbody id="hotelContainer">
+            <tr>
+                <td>1</td>
+                <td>三景花園飯店</td>
+                <td>雙人房</td>
+                <td>忠孝東路三段30號1樓 </td>
+                <td>(02)2781-1131</td>
+                <td>
+                    <select>
+                        <option>待審核</option>
+                        <option>已上架</option>
+                       
+                    </select>
+                </td>
+                <td><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">詳細內容</button></td>
+            </tr>
+        </tbody>
 
     </table>
 
@@ -247,7 +236,57 @@
 
 @section Scripts {
     <script>
+        let hotels = []; // 用於存儲從API獲取的所有飯店數據
+        const hotelContainer = document.getElementById('hotelContainer');
+        const statusSelect = document.getElementById('inputGroupSelectStatus');
 
+        // 獲取飯店數據
+        fetch('https://localhost:7103/api/BackSideHotel')
+            .then(response => response.json())
+            .then(data => {
+               
+                hotels = data;
+                console.log('Fetched hotels:', hotels); // 調試信息
+                renderHotels(hotels); // 初次渲染所有飯店
+            })
+            .catch(error => {
+                console.error('Error fetching hotels:', error);
+            });
 
+        // 根據選擇的狀態過濾並渲染飯店清單
+        function renderHotels(hotelList) {
+            let str = "";
+            hotelList.forEach(item => {
+                let status = item.hotelIsActive ? "已上架" : "待審核";
+                str += `
+                            <tr>
+                                <td>${item.hotelID}</td>
+                                <td>${item.hotelName}</td>
+                                <td>${item.hotelAddress}</td> <!-- 飯店地址 -->
+                                <td>${item.hotelPhone}</td> <!-- 飯店電話 -->
+                                <td>${status}</td> <!-- 飯店審核狀態 -->
+                                <td><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">詳細內容</button></td>
+                            </tr>
+                        `;
+            });
+            hotelContainer.innerHTML = str;
+            console.log('Rendered hotels:', hotelList); // 調試信息
+        }
+        // 將飯店名稱添加到選單
+        function populateHotelSelect(hotelsName) {
+            let str = "";
+            hotelsName.forEach(hotel => {
+                str += `
+                         <select>
+                    <option value="${hotel.hotelID}">${hotel.hotelName}</option>
+                             </select>
+                `;
+            });
+            inputGroupSelectHotel.innerHTML = str;
+            console.log('Rendered hotelsName:', hotelsName); // 調試信息
+        }
+
+   
     </script>
+}
 }
