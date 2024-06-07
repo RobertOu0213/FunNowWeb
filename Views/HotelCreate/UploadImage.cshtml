@@ -81,8 +81,8 @@
                 @*   button *@
                 <div class="d-flex justify-content-end my-5">
                     <a href="@Url.Action("RoomInfo", "HotelCreate")" class="btn_previous">上一步</a>
-                    <a href="@Url.Action("Home", "HostManage")" type="button" class="btn_next" id="btnFinish">開始上線銷售！</a>
-               @*      <button type="button" class="btn_next" id="btnFinish">開始上線銷售！</button> *@
+                  @*   <a href="@Url.Action("Home", "HostManage")" type="button" class="btn_next" id="btnFinish">開始上線銷售！</a> *@
+                    <button type="button" class="btn_next" id="btnFinish">開始上線銷售！</button>
                 </div>
          
         </div>
@@ -381,11 +381,12 @@
             //click Btnfinish
             $('#btnFinish').on('click', async function () {
 
-                event.preventDefault();
-
+                // event.preventDefault();
+                let isValid = true;
                 // 驗證飯店的照片
                 if ($('#preview').find('img').length === 0) {
                     $('.hotelImageBox').find('.alert-message').html('請上傳至少一張飯店照片');
+                    isValid = false;
                     
                 } else {
                     $('.hotelImageBox').find('.alert-message').html('');
@@ -396,6 +397,7 @@
                 roomInfo.forEach((room, index) => {
                     if ($(`#preview${index}`).find('img').length === 0) {
                         $(`#file__upload${index}`).closest('.roomBoxes').find('.alert-message').html('請上傳至少一張客房照片');
+                        isValid = false;
                     } else {
                         $(`#file__upload${index}`).closest('.roomBoxes').find('.alert-message').html('');                      
                     }
@@ -414,11 +416,13 @@
 
                 if (!allCategoriesSelected) {
                     alert('請為所有圖片選擇類別');
-                    return;
+                    isValid = false;
                 }
 
-              
-               
+
+                if (!isValid) {
+                    return;
+                }
             
                 // 從 sessionStorage 中獲取已有的數據
                 let hotelData = JSON.parse(sessionStorage.getItem('tHotel')) || {};
@@ -461,29 +465,36 @@
 
 
                 //API
-                // try {
-                //     const hotelData = JSON.parse(sessionStorage.getItem('tHotel')) || {};
-                //     const roomData = JSON.parse(sessionStorage.getItem('tRoom')) || [];
+                try {
+                    const hotelData = JSON.parse(sessionStorage.getItem('tHotel')) || {};
+                    const roomData = JSON.parse(sessionStorage.getItem('tRoom')) || [];
 
-                //     const formData = new FormData();
-                //     formData.append('hotelData', JSON.stringify(hotelData));
-                //     formData.append('roomData', JSON.stringify(roomData));
+                    const formData = new FormData();
+                    formData.append('hotelData', JSON.stringify(hotelData));
+                    formData.append('roomData', JSON.stringify(roomData));
 
-                //     const url = "https://localhost:7103/api/HotelCreate";
-                //     const res = await fetch(url, {
-                //         method: "POST",
-                //         body: formData
-                //     });
-                //     if (res.ok) {
-                //         const data = await res.json();
-                //         console.log(data);
-                //     } else {
-                //         console.error('Error:', res.statusText);
-                //     }
-                // }
-                // catch (err) {
-                //     console.log(err)
-                // }
+                    const url = "https://localhost:7103/api/HotelCreate";
+                    const res = await fetch(url, {
+                        method: "POST",
+                        body: formData
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        console.log(data);
+                        alert('飯店已成功上線！');
+                        sessionStorage.clear();
+                        window.location.href = '/HostManage/Home';
+                    } else {
+                      
+                        console.error('Error:', res.statusText);
+                    }
+                }
+                catch (err) {
+                    console.log(err)
+                    alert('飯店未成功，返回首頁');
+                    sessionStorage.clear();
+                    window.location.href = '/HostManage/Home';
+                }
 
 
 
