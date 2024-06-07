@@ -1,0 +1,178 @@
+﻿/* 基本樣式設置 */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.header {
+    background-color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+    .header .logo {
+        display: flex;
+        align-items: center;
+    }
+
+        .header .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+    .header .nav-links {
+        display: flex;
+        align-items: center;
+    }
+
+        .header .nav-links a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #333;
+        }
+
+            .header .nav-links a:hover {
+                color: #007bff;
+            }
+
+.container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.content-wrapper {
+    width: 1200px;
+    display: flex;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #fff;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    height: 800px;
+    padding-top: 20px;
+    position: fixed;
+    border-radius: 10px;
+}
+
+    .sidebar ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+        .sidebar ul li {
+            padding: 5px 20px;
+            border-bottom: 1px solid #eee;
+            border-radius: 10px;
+        }
+
+            .sidebar ul li:hover {
+                background-color: #f4f4f4;
+            }
+
+            .sidebar ul li a {
+                text-decoration: none;
+                color: #333;
+                display: flex;
+                align-items: center;
+            }
+
+.icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+}
+
+    .icon i {
+        font-size: 20px;
+    }
+
+.text span {
+    font-family: 'Microsoft JhengHei', sans-serif;
+    font-size: 16px;
+}
+
+.content {
+    margin-left: 270px;
+    padding: 20px;
+    background-color: #fff;
+    flex: 1;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 10px;
+}
+
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+    .content-header h2 {
+        margin: 0;
+    }
+
+    .content-header .actions {
+        display: flex;
+        align-items: center;
+    }
+
+        .content-header .actions input {
+            padding: 5px;
+            margin-left: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+.tabs {
+    display: flex;
+    border-bottom: 2px solid #eee;
+    margin-bottom: 20px;
+}
+
+    .tabs div {
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+
+        .tabs div.active {
+            border-bottom: 2px solid #007bff;
+            color: #007bff;
+        }
+
+.main-content {
+    text-align: center;
+    padding: 50px 0;
+}
+
+    .main-content h3 {
+        margin: 0 0 20px;
+    }
+
+    .main-content img {
+        width: 100px;
+        margin-bottom: 20px;
+    }
+
+    .main-content .buttons a {
+        display: inline-block;
+        margin: 10px;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+
+        .main-content .buttons a:hover {
+            background-color: #0056b3;
+        }

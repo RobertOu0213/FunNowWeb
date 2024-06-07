@@ -47,7 +47,8 @@ builder.Services.AddSession(options =>
 });
 
 
-
+// Add SignalR client services if needed for SignalR client side (optional)
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
