@@ -131,6 +131,11 @@ main {
             width: 100%;
             padding: 15px 15px 30px 15px;
         }
+
+        .alert-message {
+            color: red;
+            font-size: 12px;
+        }
     }
 }
 
@@ -146,6 +151,8 @@ main {
     font-size: 14px;
     border-radius: 3px;
     padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
 }
 
 .btn_previous:hover {
@@ -164,10 +171,13 @@ main {
     border-radius: 3px;
     padding: 10px 15px;
     margin-left: 5px;
+    text-align: center;
+    text-decoration: none;
 }
 
 .btn_next:hover {
     background-color: #0C5478;
+    color: #fff;
 }
 
 
@@ -219,11 +229,6 @@ main {
         align-items: center;
         background-color: #FFFFFF;
         color: gray;
-
-
-        #uploadButton {
-            @include uploadButtonStyles;
-        }
     }
 
     .container {
@@ -242,6 +247,8 @@ main {
                 right: 10px;
             }
         }
+
+        
     }
 
 
