@@ -1,220 +1,16 @@
-﻿<!DOCTYPE html>
+﻿@{
+    Layout = "_Layout_OrderManagement";
+}
+<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>範例頁面</title>
-    <style>
-        /* 設定整個網頁的字體、間距和背景顏色 */
-        body {
-            font-family: Arial, sans-serif; /* 使用Arial字體 */
-            margin: 0; /* 移除預設的外邊距 */
-            padding: 0; /* 移除預設的內邊距 */
-            background-color: #f4f4f4; /* 設定網頁背景顏色 */
-        }
-
-        /* 設定頁面頂部的導航欄樣式 */
-        .header {
-            background-color: #fff; /* 設定背景為白色 */
-            padding: 10px 20px; /* 設定上下內邊距為10px，左右內邊距為20px */
-            display: flex; /* 使用彈性盒子布局 */
-            justify-content: space-between; /* 讓子元素在主軸方向上兩端對齊 */
-            align-items: center; /* 垂直居中對齊子元素 */
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* 添加陰影效果 */
-        }
-
-            /* 設定標誌區域的樣式 */
-            .header .logo {
-                display: flex; /* 使用彈性盒子布局 */
-                align-items: center; /* 垂直居中對齊子元素 */
-            }
-
-                /* 設定標誌圖像的樣式 */
-                .header .logo img {
-                    height: 40px; /* 設定圖片高度為40px */
-                    margin-right: 10px; /* 設定右側外邊距為10px */
-                }
-
-            /* 設定導航鏈接區域的樣式 */
-            .header .nav-links {
-                display: flex; /* 使用彈性盒子布局 */
-                align-items: center; /* 垂直居中對齊子元素 */
-            }
-
-                /* 設定導航鏈接的樣式 */
-                .header .nav-links a {
-                    margin-left: 20px; /* 設定左側外邊距為20px */
-                    text-decoration: none; /* 移除鏈接的下劃線 */
-                    color: #333; /* 設定文本顏色為深灰色 */
-                }
-
-                    /* 設定導航鏈接在懸停時的樣式 */
-                    .header .nav-links a:hover {
-                        color: #007bff; /* 設定文本顏色為藍色 */
-                    }
-
-        /* 設定頁面內容區域的樣式 */
-        .container {
-            display: flex; /* 使用彈性盒子布局 */
-            justify-content: center; /* 在主軸方向上居中對齊子元素 */
-            padding: 20px; /* 設定內邊距為20px */
-        }
-
-        /* 設定內容包裹區域的樣式 */
-        .content-wrapper {
-            width: 1200px; /* 設定寬度為1200px */
-            display: flex; /* 使用彈性盒子布局 */
-        }
-
-        /* 設定側邊欄的樣式 */
-        .sidebar {
-            width: 250px; /* 設定寬度為250px */
-            background-color: #fff; /* 設定背景為白色 */
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1); /* 添加陰影效果 */
-            height: calc(800px); /* 設定高度為視窗高度減去60px */
-            padding-top: 20px; /* 設定頂部內邊距為20px */
-            position: fixed; /* 固定位置 */
-            border-radius: 10px;
-
-        }
-
-            /* 設定側邊欄中的列表樣式 */
-            .sidebar ul {
-                list-style-type: none; /* 移除列表項的樣式 */
-                padding: 0; /* 移除內邊距 */
-
-            }
-
-                /* 設定側邊欄中的每個列表項樣式 */
-                .sidebar ul li {
-                    padding: 15px 20px; /* 設定內邊距 */
-                    border-bottom: 1px solid #eee; /* 添加底部邊框 */
-                    border-radius: 10px;
-                }
-
-                    /* 設定側邊欄中的每個列表項在懸停時的樣式 */
-                    .sidebar ul li:hover {
-                        background-color: #f4f4f4; /* 設定背景顏色 */
-                    }
-
-                    /* 設定側邊欄中的鏈接樣式 */
-                    .sidebar ul li a {
-                        text-decoration: none; /* 移除鏈接的下劃線 */
-                        color: #333; /* 設定文本顏色為深灰色 */
-                        display: flex; /* 使用彈性盒子布局 */
-                        align-items: center; /* 垂直居中對齊子元素 */
-                    }
-
-                        /* 設定側邊欄中的鏈接圖像樣式 */
-                        .sidebar ul li a img {
-                            margin-right: 10px; /* 設定右側外邊距為10px */
-                        }
-                       
-
-                    
-
-        /* 設定主內容區域的樣式 */
-        .content {
-            margin-left: 270px; /* 設定左側外邊距為270px，為了給側邊欄留出空間 */
-            padding: 20px; /* 設定內邊距 */
-            background-color: #fff; /* 設定背景為白色 */
-            flex: 1; /* 允許內容區域自動調整大小 */
-            box-shadow: 0 0 10px rgba(0,0,0,0.1); /* 添加陰影效果 */
-            border-radius: 10px; /* 設定邊框圓角 */
-        }
-
-        /* 設定主內容區域標題的樣式 */
-        .content-header {
-            display: flex; /* 使用彈性盒子布局 */
-            justify-content: space-between; /* 在主軸方向上兩端對齊子元素 */
-            align-items: center; /* 垂直居中對齊子元素 */
-            margin-bottom: 20px; /* 設定底部外邊距 */
-        }
-
-            /* 設定主內容區域標題文字的樣式 */
-            .content-header h2 {
-                margin: 0; /* 移除外邊距 */
-            }
-
-            /* 設定操作區域的樣式 */
-            .content-header .actions {
-                display: flex; /* 使用彈性盒子布局 */
-                align-items: center; /* 垂直居中對齊子元素 */
-            }
-
-                /* 設定搜索框的樣式 */
-                .content-header .actions input {
-                    padding: 5px; /* 設定內邊距 */
-                    margin-left: 10px; /* 設定左側外邊距 */
-                    border: 1px solid #ccc; /* 設定邊框 */
-                    border-radius: 3px; /* 設定邊框圓角 */
-                }
-
-        /* 設定Tab欄的樣式 */
-        .tabs {
-            display: flex; /* 使用彈性盒子布局 */
-            border-bottom: 2px solid #eee; /* 設定底部邊框 */
-            margin-bottom: 20px; /* 設定底部外邊距 */
-        }
-
-            /* 設定每個Tab的樣式 */
-            .tabs div {
-                padding: 10px 20px; /* 設定內邊距 */
-                cursor: pointer; /* 設定鼠標為指針 */
-            }
-
-                /* 設定當前激活的Tab樣式 */
-                .tabs div.active {
-                    border-bottom: 2px solid #007bff; /* 設定底部邊框 */
-                    color: #007bff; /* 設定文本顏色 */
-                }
-
-        /* 設定主內容的樣式 */
-        .main-content {
-            text-align: center; /* 設定文本居中對齊 */
-            padding: 50px 0; /* 設定上下內邊距 */
-        }
-
-            /* 設定主內容標題的樣式 */
-            .main-content h3 {
-                margin: 0 0 20px; /* 設定外邊距 */
-            }
-
-            /* 設定主內容圖像的樣式 */
-            .main-content img {
-                width: 100px; /* 設定寬度 */
-                margin-bottom: 20px; /* 設定底部外邊距 */
-            }
-
-            /* 設定主內容中的按鈕區域樣式 */
-            .main-content .buttons a {
-                display: inline-block; /* 設定為行內塊元素 */
-                margin: 10px; /* 設定外邊距 */
-                padding: 10px 20px; /* 設定內邊距 */
-                background-color: #007bff; /* 設定背景顏色 */
-                color: #fff; /* 設定文本顏色 */
-                border-radius: 5px; /* 設定邊框圓角 */
-                text-decoration: none; /* 移除鏈接的下劃線 */
-            }
-
-                /* 設定主內容中的按鈕在懸停時的樣式 */
-                .main-content .buttons a:hover {
-                    background-color: #0056b3; /* 設定背景顏色 */
-                }
-        /* 為文本添加樣式 */
-        a span {
-            margin-left: 10px; /* 為了與圖示之間添加一些間距 */
-            font-family: 'Microsoft JhengHei', sans-serif;
-            font-size: 16px; /* 修改为您希望的字体大小 */
-        }
-        
-
-        
-
-    </style>
+    <link rel="stylesheet" href="/Ting/css/OrderManagement.css">
 </head>
 <body>
-    <div class="header">
+@*     <div class="header">
         <div class="logo">
             <img src="logo.png" alt="Logo">
             <span>agoda</span>
@@ -229,85 +25,86 @@
             <span>NT$ 0</span>
         </div>
     </div>
-    <div class="container">
+ *@
+  
+
+
+ <div class="container">
         <div class="content-wrapper">
             <div class="sidebar">
                 <ul>
-                    <ul>
-                        <li>
-                            <a href="#" alt="管理訂單">
-                                <div class="icon"><i class="fa-solid fa-calendar-days"></i></div>
-                                <div class="text"><span>管理訂單</span></div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" alt="所有訂單">
-                                <div class="icon"><i class="fa-solid fa-briefcase"></i></div>
-                                <div class="text"><span>所有訂單</span></div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" alt="住宿">
-                                <div class="icon"><i class="fa-solid fa-building"></i></div>
-                                <div class="text"><span>住宿</span></div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" alt="機票">
-                                <div class="icon"><i class="fa-solid fa-plane"></i></div>
-                                <div class="text"><span>機票</span></div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" alt="活動體驗">
-                                <div class="icon"><i class="fa-solid fa-person-skiing-nordic"></i></div>
-                                <div class="text"><span>活動體驗</span></div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" alt="住宿訊息">
-                                <div class="icon"><i class="fa-solid fa-comment-dots"></i></div>
-                                <div class="text"><span>住宿訊息</span></div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" alt="住宿評鑑">
-                                <div class="icon"><i class="fa-solid fa-star"></i></div>
-                                <div class="text"><span>住宿評鑑</span></div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" alt="AgodaVIP">
-                                <div class="icon"><i class="fa-solid fa-crown"></i></div>
-                                <div class="text"><span>AgodaVIP</span></div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" alt="A金回饋">
-                                <div class="icon"><i class="fa-solid fa-money-check-dollar"></i></div>
-                                <div class="text"><span>A金回饋</span></div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" alt="現金回饋">
-                                <div class="icon"><i class="fa-solid fa-sack-dollar"></i></div>
-                                <div class="text"><span>現金回饋</span></div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" alt="PointsMAX">
-                                <div class="icon"><i class="fa-solid fa-piggy-bank"></i></div>
-                                <div class="text"><span>PointsMAX</span></div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" alt="個人資料">
-                                <div class="icon"><i class="fa-solid fa-user"></i></div>
-                                <div class="text"><span>個人資料</span></div>
-                            </a>
-                        </li>
-                    </ul>
-
+                    <li>
+                        <a href="#" alt="管理訂單">
+                            <div class="icon"><i class="fa-solid fa-calendar-days"></i></div>
+                            <div class="text"><span>管理訂單</span></div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" alt="所有訂單">
+                            <div class="icon"><i class="fa-solid fa-briefcase"></i></div>
+                            <div class="text"><span>所有訂單</span></div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" alt="住宿">
+                            <div class="icon"><i class="fa-solid fa-building"></i></div>
+                            <div class="text"><span>住宿</span></div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" alt="機票">
+                            <div class="icon"><i class="fa-solid fa-plane"></i></div>
+                            <div class="text"><span>機票</span></div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" alt="活動體驗">
+                            <div class="icon"><i class="fa-solid fa-person-skiing-nordic"></i></div>
+                            <div class="text"><span>活動體驗</span></div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" alt="住宿訊息">
+                            <div class="icon"><i class="fa-solid fa-comment-dots"></i></div>
+                            <div class="text"><span>住宿訊息</span></div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" alt="住宿評鑑">
+                            <div class="icon"><i class="fa-solid fa-star"></i></div>
+                            <div class="text"><span>住宿評鑑</span></div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" alt="AgodaVIP">
+                            <div class="icon"><i class="fa-solid fa-crown"></i></div>
+                            <div class="text"><span>AgodaVIP</span></div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" alt="A金回饋">
+                            <div class="icon"><i class="fa-solid fa-money-check-dollar"></i></div>
+                            <div class="text"><span>A金回饋</span></div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" alt="現金回饋">
+                            <div class="icon"><i class="fa-solid fa-sack-dollar"></i></div>
+                            <div class="text"><span>現金回饋</span></div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" alt="PointsMAX">
+                            <div class="icon"><i class="fa-solid fa-piggy-bank"></i></div>
+                            <div class="text"><span>PointsMAX</span></div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" alt="個人資料">
+                            <div class="icon"><i class="fa-solid fa-user"></i></div>
+                            <div class="text"><span>個人資料</span></div>
+                        </a>
+                    </li>
                 </ul>
             </div>
             <div class="content">
@@ -324,7 +121,7 @@
                     <div>已取消</div>
                 </div>
                 <div class="main-content">
-                    <img src="../images/Flight-Planet.svg" alt="Travel" >
+                    <img src="../Ting/images/Flight-Planet.svg" alt="Travel">
                     <h3>WEN T.，目前沒有任何即將到來的預訂</h3>
                     <p>開始計劃下一次的旅行吧！</p>
                     <div class="buttons">
@@ -336,7 +133,6 @@
             </div>
         </div>
     </div>
+    <script src="https://kit.fontawesome.com/091893cea4.js" crossorigin="anonymous"></script>
 </body>
-<script src="https://kit.fontawesome.com/091893cea4.js" crossorigin="anonymous"></script>
-
 </html>
