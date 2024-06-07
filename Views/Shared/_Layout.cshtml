@@ -32,6 +32,7 @@
     <link rel="stylesheet" href="~/css/ming_css/responsive.css">
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.min.css">
 
 
     @await RenderSectionAsync("Styles", required: false)
@@ -281,9 +282,10 @@
             // 如果滾動至頁面中間，顯示浮動容器，否則隱藏
             if (scrollPosition > (window.innerHeight / 2)) {
                 floatingContainer.style.display = 'block';
-            } else {
-                floatingContainer.style.display = 'none';
             }
+            // else {
+            //     floatingContainer.style.display = 'none';
+            // }
         });
     </script>
     

@@ -3,11 +3,263 @@
     ViewBag.Title = "Index";
     Layout = "_Layout";
 }
-@section Styles{    
+@section Styles{
+    <style>
 
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-toggle1 {
+            padding: 15px 20px;
+            font-size: 18px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 300px;
+        }
+
+            .dropdown-toggle1 i {
+                margin-left: 10px;
+            }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 1000;
+            width: 100%;
+            padding: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+
+            .dropdown-menu.active {
+                display: block;
+            }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+        }
+
+            .dropdown-item label {
+                font-size: 16px;
+                margin: 0;
+            }
+
+            .dropdown-item .quantity-control {
+                display: flex;
+                align-items: center;
+            }
+
+                .dropdown-item .quantity-control button {
+                    border: none;
+                    background: none;
+                    font-size: 18px;
+                    padding: 5px;
+                    cursor: pointer;
+                    outline: none;
+                }
+
+                .dropdown-item .quantity-control span {
+                    margin: 0 10px;
+                    font-size: 16px;
+                }
+
+        .dropdown-toggle1:hover,
+        .dropdown-toggle1:focus {
+            border-color: #007bff;
+            box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+        }
+
+        .children-hint {
+            font-size: 12px;
+            color: #888;
+            display: block; /* 將提示文本設置為塊級元素 */
+        }
+
+        .search-container {
+            position: relative;
+            display: flex;
+            width: 100%; /* Adjust width as needed */
+            margin: 20px auto;
+        }
+
+        #search-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .search-icon {
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: #999;
+        }
+
+        /* Style the search icon when focused */
+        #search-input:focus + .search-icon {
+            color: #000;
+        }
+
+
+    </style>
 }
 
 @section Scripts{    
+    <script src="https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.min.js"></script>
+
+@*     <script>
+        const btnSubmit = document.querySelector('#buttonSubmit');
+
+        btnSubmit.addEventListener('click', async () => {
+            const inputkeyword = document.querySelector('#search-input').value;
+            const inputDatestart = document.querySelector('#myDatepickerstart').value;
+            const inputDateend = document.querySelector('#myDatepickerend').value;
+            const inputadults = parseInt(document.querySelector('#adults').textContent);
+            const inputchildren = parseInt(document.querySelector('#children').textContent);
+
+            const searchHotel = {
+                "keyword": inputkeyword,
+                "checkInDate": inputDatestart,
+                "checkOutDate": inputDateend,
+                "adults": inputadults,
+                "children": inputchildren
+            };
+            console.log(searchHotel);
+
+
+            const url = 'https://localhost:7103/api/HotelSearch/indexsearch';
+            const response = await fetch(url, {
+                method: 'POST',
+                body: JSON.stringify(searchHotel),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }); // 此處添加了右括號
+            const data = await response.json();
+            console.log(data);
+
+
+
+        });
+    </script>
+ *@
+    <script>
+        const btnSubmit = document.querySelector('#buttonSubmit');
+
+        btnSubmit.addEventListener('click', async (event) => {
+            const inputkeyword = document.querySelector('#search-input').value;
+            const inputDatestart = document.querySelector('#myDatepickerstart').value;
+            const inputDateend = document.querySelector('#myDatepickerend').value;
+            const inputadults = parseInt(document.querySelector('#adults').textContent);
+            const inputchildren = parseInt(document.querySelector('#children').textContent);
+
+            const searchHotel = {
+                "keyword": inputkeyword,
+                "checkInDate": inputDatestart,
+                "checkOutDate": inputDateend,
+                "adults": inputadults,
+                "children": inputchildren
+            };
+            // console.log(searchHotel);
+            // 将 searchHotel 对象存储在 sessionStorage 中
+            sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel));
+
+        });
+    </script>
+
+
+    <script>
+        const cn1 = {
+            days: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+            daysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+            daysMin: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+            months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            today: '今天',
+            clear: '清除',
+            dateFormat: 'yyyy-MM-dd',
+            timeFormat: 'hh:mm aa',
+            firstDay: 0
+        }
+
+        const datepicker = new AirDatepicker('#myDatepicker', {
+            locale: cn1,
+            range: true,
+            multipleDatesSeparator: ' - ',
+            onSelect({ formattedDate, date }) {
+                document.getElementById('myDatepicker').value = "請確認訂房日期";
+                if (date.length === 2) {
+                    document.getElementById('myDatepickerstart').value = `${formattedDate[0]}`;
+                    document.getElementById('myDatepickerend').value = `${formattedDate[1]}`;
+                } else {
+                    document.getElementById('myDatepickerstart').value = '';
+                    document.getElementById('myDatepickerend').value = '';
+                }
+            }
+        });
+    </script>
+
+    <script>
+        function toggleDropdown() {
+            var dropdownMenu = document.getElementById("dropdownMenu");
+            if (dropdownMenu.style.display === "none" || dropdownMenu.style.display === "") {
+                dropdownMenu.style.display = "block";
+                document.addEventListener('click', handleOutsideClick);
+            } else {
+                dropdownMenu.style.display = "none";
+                document.removeEventListener('click', handleOutsideClick);
+            }
+        }
+
+        function changeQuantity(type, value) {
+            var element = document.getElementById(type);
+            var currentValue = parseInt(element.textContent);
+            var newValue = currentValue + value;
+            if (newValue >= 0) {
+                element.textContent = newValue;
+            }
+            updateDropdownText();
+        }
+
+        function updateDropdownText() {
+            var rooms = document.getElementById("rooms").textContent;
+            var adults = document.getElementById("adults").textContent;
+            var children = document.getElementById("children").textContent;
+            var dropdownToggle = document.querySelector(".dropdown-toggle1 span");
+            dropdownToggle.textContent = rooms + " 客房, " + adults + " 成人, " + children + " 小童";
+        }
+
+        function handleOutsideClick(event) {
+            var dropdownContainer = document.querySelector('.dropdown-container');
+            var dropdownMenu = document.getElementById('dropdownMenu');
+
+            if (dropdownContainer && !dropdownContainer.contains(event.target)) {
+                dropdownMenu.style.display = 'none';
+                document.removeEventListener('click', handleOutsideClick);
+            }
+        }
+
+    </script>
+
 
 
 }
@@ -21,7 +273,7 @@
             <div class="banner_content text-center">
                 <h6></h6>
                 <br /><br /><br /><br /><br />
-                <h2>FunNow 給你家的感覺</h2>
+                <h2 style="color:darkcyan">FunNow 給你家的感覺</h2>
                 <p>
                     <br>
                 </p>
@@ -40,65 +292,83 @@
                 <div class="col-md-9">
                     <div class="boking_table">
                         <div class="row">
-                            <div class="col-md-4">
-                                <div class="book_tabel_item">
+                            <div class="col-md-12">
+                                <div class="search-container">
+                                    <input type="text" id="search-input" placeholder="Enter your search term" style="width:500px">
+                                </div>
+                            </div>
+                         <div class="row">
+                            <div class="col-md-6">
+                                <div class="book_tabel_item" style="margin-left:30px">
                                     <div class="form-group">
-                                        <div class='input-group date' id='datetimepicker11'>
-                                            <input type='text' class="form-control" placeholder="Arrival Date" />
-                                            <span class="input-group-addon">
-                                                <i class="fa fa-calendar" aria-hidden="true"></i>
-                                            </span>
+                                        <div class='input-group '>
+                                            <!-- Air datepicker Html element -->
+                                            <input type="text" id="myDatepicker" placeholder="選擇日期範圍">
+                                            <!-- Air datepicker JavaScript-->
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <div class='input-group date' id='datetimepicker1'>
-                                            <input type='text' class="form-control" placeholder="Departure Date" />
-                                            <span class="input-group-addon">
-                                                <i class="fa fa-calendar" aria-hidden="true"></i>
-                                            </span>
+                                        <div class='input-group ' >
+                                            <!-- Air datepicker Html element -->
+                                            <input id="myDatepickerstart" placeholder="開始日期">
+                                            <!-- Air datepicker JavaScript-->
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class='input-group ' >
+                                            <!-- Air datepicker Html element -->
+                                            <input id="myDatepickerend" placeholder="結束日期">
+                                            <!-- Air datepicker JavaScript-->
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="book_tabel_item">
-                                    <div class="input-group">
-                                        <select class="wide">
-                                            <option data-display="Adult">Adult</option>
-                                            <option value="1">Old</option>
-                                            <option value="2">Younger</option>
-                                            <option value="3">Potato</option>
-                                        </select>
-                                    </div>
-                                    <div class="input-group">
-                                        <select class="wide">
-                                            <option data-display="Child">Child</option>
-                                            <option value="1">Child</option>
-                                            <option value="2">Baby</option>
-                                            <option value="3">Child</option>
-                                        </select>
+                            <div class="col-md-6">                    
+                                 <div class="book_tabel_item">
+                                    <div class="dropdown">
+                                        <div class="dropdown-toggle1" onclick="toggleDropdown()">
+                                            <span>請選擇人數及房數</span>
+                                        </div>
+                                        <div class="dropdown-menu" id="dropdownMenu">
+                                            <div class="dropdown-item">
+                                                <label for="rooms">客房</label>
+                                                <div class="quantity-control">
+                                                    <button onclick="changeQuantity('rooms', -1)">-</button>
+                                                    <span id="rooms">1</span>
+                                                    <button onclick="changeQuantity('rooms', 1)">+</button>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown-item">
+                                                <label for="adults">成人</label>
+                                                <div class="quantity-control">
+                                                    <button onclick="changeQuantity('adults', -1)">-</button>
+                                                    <span id="adults">2</span>
+                                                    <button onclick="changeQuantity('adults', 1)">+</button>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown-item">
+                                                <label for="children">
+                                                    小童
+                                                    <span class="children-hint">(12歲以下)</span>
+                                                </label>
+                                                <div class="quantity-control">
+                                                    <button onclick="changeQuantity('children', -1)">-</button>
+                                                    <span id="children">0</span>
+                                                    <button onclick="changeQuantity('children', 1)">+</button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="book_tabel_item">
-                                    <div class="input-group">
-                                        <select class="wide">
-                                            <option data-display="Child">Number of Rooms</option>
-                                            <option value="1">Room 01</option>
-                                            <option value="2">Room 02</option>
-                                            <option value="3">Room 03</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
+                          </div>
                         </div>
                     </div>
                     <div class="container">
                         <div>
-                            <div class='col-md-5 offset-md-1 text-center'>
+                            <div class='col-md-6 offset-md-1 text-center'>
                                 <div>
-                                    <a class="book_now_btn button_hover" href="#" style="border-radius:20px;">Book Now</a>
+                                    <a class="book_now_btn button_hover" href="home/index2" style="border-radius:20px;" id="buttonSubmit">Book Now</a>
                                 </div>
                             </div>
                         </div>

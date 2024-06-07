@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PrjFunNowWeb.Models;
+using PrjFunNowWeb.Models.DTO;
 using System.Diagnostics;
 using System.Text.Json;
 
