@@ -1,0 +1,582 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <style>
+        .comment-cube {
+            border-radius: 8px;
+            background-color: #3f62ee;
+            color: white;
+            padding: 8px;
+        }
+
+        .container {
+            width: 70%;
+        }
+
+        .font-sty {
+            font-weight: bold;
+        }
+        /*各項評分條*/
+        .grid-container {
+            width: 70%;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .grid-item {
+            width: calc(33.33% - 10px);
+            margin-bottom: 20px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        /*進度條 http://www.webkaka.com/tutorial/html/2021/1028198/*/
+        .progress2 {
+            padding: 2px;
+            border-radius: 30px;
+            background: #D0D0D0;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25), 0 1px rgba(255, 255, 255, 0.08);
+            width: 90%;
+        }
+
+        .progress-bar2 {
+            height: 10px;
+            border-radius: 30px;
+            background-image: linear-gradient(to bottom, #005AB5, #0066CC));
+            transition: 0.4s linear;
+            transition-property: width, background-color;
+        }
+
+        .progress-moved .progress-bar2 {
+            width: 80%;
+            background-color: #0072E3;
+            animation: progressAnimation 6s;
+        }
+
+        }
+
+        @keyframes progressAnimation {
+            0% {
+                width: 5%;
+                background-color: #F9BCCA;
+            }
+
+            100% {
+                width: 85%;
+                background-color: #EF476F;
+            }
+        }
+
+        .commentList-right {
+            background-color: #ECF5FF;
+            border-radius: 10px;
+        }
+
+        .commentList-left-score {
+            font-family: Bahnschrift;
+            color: #0080FF;
+            font-size: 30px;
+        }
+
+        .commentList-left-scoretxt {
+            font-family: Bahnschrift;
+            color: #0080FF;
+        }
+
+        .comment-left-fontsty {
+            font-size: 14px;
+        }
+
+        .comment-font-color {
+            color: #8E8E8E;
+            font-size: 14px;
+        }
+
+        .dispaly {
+            display: none;
+        }
+
+        .link {
+            text-decoration: none;
+            font-family: 微軟正黑體;
+            color: #2894FF;
+        }
+
+            .link:hover {
+                color: #dc3545;
+            }
+
+        .slide-border {
+            border: 1px solid black;
+            border-radius: 15px;
+        }
+
+        .btncolor {
+            color: aquamarine;
+        }
+
+        .comment-sm {
+            margin-left: 8%;
+            margin-right: 8%;
+            width: 84%;
+        }
+
+        .comment-xs {
+            margin-left: 15%;
+            margin-right: 15%;
+            width: 70%;
+            padding-left: 10%;
+            padding-right: 10%;
+            font-size: 11px;
+        }
+
+        .font-sty2 {
+            font-size: 14px;
+            color: #0E46A3;
+            font-weight: bold;
+        }
+
+        .font-sty3 {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .tag {
+            font-size: 12px;
+            background-color: #e4f8e1;
+            color: #45a2ae;
+            margin: 2px;
+            padding: 2px;
+        }
+
+        .comment-bubble {
+            width: 285px;
+            height: 210px;
+            border: 1px solid #45a2ae;
+            border-radius: 8px;
+        }
+
+        .comment-sm-border {
+            border: 1px solid #45a2ae;
+            border-radius: 8px;
+            padding: 5px;
+            margin-top: 5px;
+        }
+
+        .indicatorsp {
+            bottom: -40px;
+        }
+        .rating-item {
+            width: 300px;
+            height: 350px;
+            font-size: 11px;
+            position: relative;
+            /*top: 50px;*/
+            left: 950px;
+            background-color: #FFFFFF;
+            display: none;
+
+        }
+        .tooltip {
+           
+            position: absolute;           
+            background-color: #333;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        .height {height:10px;
+        }
+       
+        
+       
+ 
+
+
+    </style>
+</head>
+<body>
+    <script>
+        //const searchBtn = document.getElementById("searchBtn");
+        //const searchBar = document.getElementById("searchBar");
+        //const searchBtnpic = document.getElementById("searchBtnpic");
+        //searchBtnpic.addEventListener("click", () => {
+        //    if (searchBar.style.display === "none" || searchBar.style.display === "") {
+        //        searchBar.style.display = "block";
+        //        searchBtn.style.display = "block";
+        //    } else {
+        //        searchBar.style.display = "none";
+        //        searchBtn.style.display = "none";
+        //    }
+        //});
+
+        //顯示tooltip
+        /*todo tooltip顯示不穩定*/
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const tooltiptrigger = document.getElementById("tooltiptrigger");
+            const tooltip = document.getElementById("tooltip");
+            let timeout;
+
+            tooltiptrigger.addEventListener('mouseenter', () => {
+                tooltip.style.display = 'block';
+                clearTimeout(timeout);
+            });
+
+            tooltiptrigger.addEventListener('mouseleave', () => {
+                timeout = setTimeout(() => {
+                    tooltip.style.display = 'none';
+                }, 200); // 延遲 200 毫秒
+            });
+        
+        });
+
+
+
+
+
+
+    </script>
+    <!--tooltip-->
+    <!--todo css的position確認一下-->
+    
+    <div class="height">
+        <div class="rating-item"  id="tooltip">
+            <div class="row m-2 ">
+                <div class="col">
+                    <div>
+                        <span>舒適程度</span>
+                        <span id="comfort-score-avg">10.0</span>
+                        <div class="progress2 progress-moved">
+                            <div class="progress-bar2">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div>
+                        <span>清潔程度</span>
+                        <span id="clean-score-avg">10.0</span>
+                        <div class="progress2 progress-moved">
+                            <div class="progress-bar2">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div>
+                        <span>員工素質</span>
+                        <span id="staff-score-avg">10.0</span>
+                        <div class="progress2 progress-moved">
+                            <div class="progress-bar2">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row m-2">
+                <div class="col">
+                    <div>
+                        <span>設施</span>
+                        <span id="facility-score-avg">10.0</span>
+                        <div class="progress2 progress-moved">
+                            <div class="progress-bar2">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div>
+                        <span>性價比</span>
+                        <span id="cost–performance-avg">10.0</span>
+                        <div class="progress2 progress-moved">
+                            <div class="progress-bar2">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div>
+                        <span>住宿地點</span>
+                        <span id="location-score-avg">10.0</span>
+                        <div class="progress2 progress-moved">
+                            <div class="progress-bar2">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row m-2">
+                <div class="col">
+                    <div>
+                        <span>免費WIFI</span>
+                        <span id="frre-wifi-avg">10.0</span>
+                        <div class="progress2 progress-moved">
+                            <div class="progress-bar2">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col"></div>
+                <div class="col"></div>
+            </div>
+            <div>
+                <div>評論概述</div>
+                <div></div>
+                <div></div>
+            </div>
+
+        </div>
+    </div>
+    
+
+
+
+    <div class="container my-3 comment-bubble" >
+        <div class="m-1 " id="tooltiptrigger">
+            <div class="font-sty3">
+                <!--評分-->
+                <span>10.0</span>
+                <span>超棒</span>
+                <div class="font-sty2">1,145則評論</div>
+
+
+            </div> <!--各項平均-->
+            <div class="d-flex justify-content-start flex-wrap ">
+                <div class="tag "><span>舒適程度 10.0</span></div>
+                <div class="tag "><span>清潔程度 10.0</span></div>
+                <div class="tag "><span>員工素質 10.0</span></div>
+                <div class="tag "><span>設施 10.0</span></div>
+                <div class="tag "><span>性價比 10.0</span></div>
+                <div class="tag "><span>住宿地點 10.0</span></div>
+                <div class="tag "><span>免費WIFI 10.0</span></div>
+            </div>
+        </div>
+        <div>
+            <!--留言標籤-->
+            <div id="carouselExampleIndicators" class="carousel carousel-dark slide" data-bs-ride="carousel">
+                <div class="carousel-indicators indicatorsp">
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4" aria-label="Slide 5"></button>
+                </div>
+                <div class="carousel-inner comment-sm-border comment-xs ">
+                    <div class="carousel-item active">
+                        <div>早班晚班的櫃檯都很親切的主動詢問及幫忙，房間很漂亮也很乾淨。</div>
+                    </div>
+                    <div class="carousel-item">
+                        <div>早班晚班的櫃檯都很親切的主動詢問及幫忙，房間很漂亮也很乾淨。</div>
+                    </div>
+                    <div class="carousel-item">
+                        <div>早班晚班的櫃檯都很親切的主動詢問及幫忙，房間很漂亮也很乾淨。</div>
+                    </div>
+                    <div class="carousel-item">
+                        <div>早班晚班的櫃檯都很親切的主動詢問及幫忙，房間很漂亮也很乾淨。</div>
+                    </div>
+                    <div class="carousel-item">
+                        <div>早班晚班的櫃檯都很親切的主動詢問及幫忙，房間很漂亮也很乾淨。</div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+
+
+        </div>
+    </div>
+    <!--飯店評論-->
+    <div class="container mt-5">
+        <div>
+            <h4 class="mb-3 font-sty">雀客旅館台中中山 住客評論</h4>
+            <span class="comment-cube">10.0</span>
+            <span>超棒</span>
+            <span>1,145則評論</span>
+        </div>
+        <hr />
+        <!--評分條-->
+        <div>
+            <div class="container ">
+                <h6 class="m-2 p-3">各項目評分：</h6>
+
+                <div class="row m-2 ">
+                    <div class="col">
+                        <div>
+                            <span>舒適程度</span>
+                            <span id="comfort-score-avg">10.0</span>
+                            <div class="progress2 progress-moved">
+                                <div class="progress-bar2">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div>
+                            <span>清潔程度</span>
+                            <span id="clean-score-avg">10.0</span>
+                            <div class="progress2 progress-moved">
+                                <div class="progress-bar2">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div>
+                            <span>員工素質</span>
+                            <span id="staff-score-avg">10.0</span>
+                            <div class="progress2 progress-moved">
+                                <div class="progress-bar2">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row m-2">
+                    <div class="col">
+                        <div>
+                            <span>設施</span>
+                            <span id="facility-score-avg">10.0</span>
+                            <div class="progress2 progress-moved">
+                                <div class="progress-bar2">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div>
+                            <span>性價比</span>
+                            <span id="cost–performance-avg">10.0</span>
+                            <div class="progress2 progress-moved">
+                                <div class="progress-bar2">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div>
+                            <span>住宿地點</span>
+                            <span id="location-score-avg">10.0</span>
+                            <div class="progress2 progress-moved">
+                                <div class="progress-bar2">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row m-2">
+                    <div class="col">
+                        <div>
+                            <span>免費WIFI</span>
+                            <span id="frre-wifi-avg">10.0</span>
+                            <div class="progress2 progress-moved">
+                                <div class="progress-bar2">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--篩選列-->
+    <br class="mt-5" />
+
+
+
+    <!--Carousel test-->
+    <div id="carouselExampleControls" class="carousel carousel-dark slide container my-3" data-bs-ride="carousel">
+        <div class="carousel-inner comment-sm">
+            <div class="carousel-item active ">
+                <div class="d-flex flex-row  ">
+                    <div class="container slide-border mx-2">
+                        <div><i class="fa-solid fa-user"></i> WANTING</div>
+                        <div class="my-2">早班晚班的櫃檯都很親切的主動詢問及幫忙，房間很漂亮也很乾淨。</div>
+                    </div>
+                    <div class="container slide-border mx-2">
+                        <div><i class="fa-solid fa-user"></i> WANTING</div>
+                        <div class="my-2">早班晚班的櫃檯都很親切的主動詢問及幫忙，房間很漂亮也很乾淨。</div>
+                    </div>
+                    <div class="container slide-border mx-2">
+                        <div><i class="fa-solid fa-user"></i> WANTING</div>
+                        <div class="my-2">早班晚班的櫃檯都很親切的主動詢問及幫忙，房間很漂亮也很乾淨。</div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="d-flex flex-row">
+                    <div class="container slide-border mx-2">
+                        <div><i class="fa-solid fa-user"></i> WANTING</div>
+                        <div class="my-2">早班晚班的櫃檯都很親切的主動詢問及幫忙，房間很漂亮也很乾淨。</div>
+                    </div>
+                    <div class="container slide-border mx-2">
+                        <div><i class="fa-solid fa-user"></i> WANTING</div>
+                        <div class="my-2">早班晚班的櫃檯都很親切的主動詢問及幫忙，房間很漂亮也很乾淨。</div>
+                    </div>
+                    <div class="container slide-border mx-2">
+                        <div><i class="fa-solid fa-user"></i> WANTING</div>
+                        <div class="my-2">早班晚班的櫃檯都很親切的主動詢問及幫忙，房間很漂亮也很乾淨。</div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="d-flex flex-row">
+                    <div class="container slide-border mx-2">
+                        <div><i class="fa-solid fa-user"></i> WANTING</div>
+                        <div class="my-2">早班晚班的櫃檯都很親切的主動詢問及幫忙，房間很漂亮也很乾淨。</div>
+                    </div>
+                    <div class="container slide-border mx-2">
+                        <div><i class="fa-solid fa-user"></i> WANTING</div>
+                        <div class="my-2">早班晚班的櫃檯都很親切的主動詢問及幫忙，房間很漂亮也很乾淨。</div>
+                    </div>
+                    <div class="container slide-border mx-2">
+                        <div><i class="fa-solid fa-user"></i> WANTING</div>
+                        <div class="my-2">早班晚班的櫃檯都很親切的主動詢問及幫忙，房間很漂亮也很乾淨。</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+
+    <div class="container">
+        <a href="comment_page.html" class="btn btn-outline-primary" id="searchBtn">查看所有評論</a>
+    </div>
+
+
+
+
+    <script src="https://kit.fontawesome.com/e519665520.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</body>
+</html>

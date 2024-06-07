@@ -16,7 +16,6 @@ namespace PrjFunNowWeb.Controllers
             _logger = logger;
             _context = context;
         }
-
         public IActionResult test()
         {
           
