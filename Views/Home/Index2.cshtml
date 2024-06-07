@@ -309,6 +309,14 @@
 
 
             <div class="col-lg-9 col-sm-12">
+                <div class="navbar">
+                    <button>排序</button>
+                    <button>最匹配選項</button>
+                    <button>住客評鑑最低</button>
+                    <button>最低價格優先</button>
+                    <button>鄰近交通&景點</button>
+                    <button class="special-button">搶手特惠!</button>
+                </div>
             @* //畫面靠右 9/12 位置 *@
                 <div class="col-lg-12" style="border:1px solid gray">
                     <div class="row" id="showhotels">
@@ -385,7 +393,6 @@
             }
         })();
     </script>
-
 
 
     <script>
@@ -514,6 +521,38 @@
                 width: 45%;
                 z-index: 1;
             }
+
+    </style>
+    <style>
+        .navbar {
+            display: flex;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+
+            .navbar button {
+                margin: 0 5px;
+                padding: 10px 15px;
+                border: 1px solid #ccc;
+                background-color: #fff;
+                cursor: pointer;
+            }
+
+                .navbar button:hover {
+                    background-color: #f1f1f1;
+                }
+
+            .navbar .special-button {
+                background-color: #4285f4;
+                color: white;
+                border: none;
+            }
+
+                .navbar .special-button:hover {
+                    background-color: #357ae8;
+                }
 
     </style>
 }
