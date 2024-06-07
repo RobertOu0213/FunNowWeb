@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewData["Title"] = "Angular_comment_page";
+}
+
+<h1>Angular_comment_page</h1>
+ 
+
+
+<app-root>
+    <router-outlet></router-outlet>
+</app-root>
+@section Scripts {
+    @* angular提供 *@
+   @*  <script src="~/node_modules/@@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js"></script>
+    <script src="~/dist/main-client.js"></script> *@
+    <script src="~/dist/fun-now-angular1/runtime.48f9e552146618a8.js" type="module"></script>
+    <script src="~/dist/fun-now-angular1/polyfills.b6cd8ceb7f42859a.js" type="module"></script>
+    <script src="~/dist/fun-now-angular1/main.f81e503038aad525.js" type="module"></script>
+
+    <script>
+        // document.addEventListener('DOMContentLoaded', function () {
+        //     const containerEl = document.getElementById('angular-component-container');
+
+        //     const ngPlatformBrowser = platformBrowserDynamic.platformBrowserDynamic();
+        //     ngPlatformBrowser.bootstrapModule(CommentModule) //改自己的
+        //         .then(ref => {
+        //             const factory = ref.injector.get(ComponentFactoryResolver);
+        //             const componentFactory = factory.resolveComponentFactory(CommentComponent);//改自己的
+        //             const componentRef = componentFactory.create(ref.injector);
+        //             containerEl.appendChild((componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0]);
+        //         })
+        //         .catch(err => console.error(err));
+        // });
+    </script>
+}
