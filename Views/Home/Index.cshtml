@@ -209,14 +209,13 @@
             // 單獨的按鈕按下事件監聽器,用於 btnSubmit 按鈕
             const btnSubmit = document.querySelector('#buttonSubmit');
             btnSubmit.addEventListener('click', async (event) => {
-                let inputkeyword, inputDatestart, inputDateend, inputadults, inputchildren;
                 // 檢查是哪個按鈕被點擊
                 // 方法1 的按鈕按下事件
-                inputkeyword = document.querySelector('#search-input').value;
-                inputDatestart = document.querySelector('#myDatepickerstart').value;
-                inputDateend = document.querySelector('#myDatepickerend').value;
-                inputadults = parseInt(document.querySelector('#adults').value);
-                inputchildren = parseInt(document.querySelector('#children').value);
+                const inputkeyword = document.querySelector('#search-input').value;
+                const inputDatestart = document.querySelector('#myDatepickerstart').value;
+                const inputDateend = document.querySelector('#myDatepickerend').value;
+                const inputadults = parseInt(document.querySelector('#adults').textContent);
+                const inputchildren = parseInt(document.querySelector('#children').textContent);
                 // 創建搜索酒店對象
                 const searchHotel = {
                     "keyword": inputkeyword,
@@ -416,7 +415,7 @@
                                                     <button onclick="changeQuantity('rooms', 1)">+</button>
                                                 </div>
                                             </div>
-                                            <div class="dropdown-item">
+                                                <div class="dropdown-item">
                                                 <label for="adults">成人</label>
                                                 <div class="quantity-control">
                                                     <button onclick="changeQuantity('adults', -1)">-</button>
@@ -424,7 +423,7 @@
                                                     <button onclick="changeQuantity('adults', 1)">+</button>
                                                 </div>
                                             </div>
-                                            <div class="dropdown-item">
+                                                <div class="dropdown-item">
                                                 <label for="children">
                                                     小童
                                                     <span class="children-hint">(12歲以下)</span>
