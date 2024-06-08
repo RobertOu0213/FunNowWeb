@@ -179,7 +179,7 @@
 @section Scripts{    
     <script src="https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.min.js"></script>
 
-    <script>
+@*     <script>  //單一方法搜尋
         const btnSubmit = document.querySelector('#buttonSubmit');
 
         btnSubmit.addEventListener('click', async (event) => {
@@ -201,8 +201,68 @@
             sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel));
 
         });
-    </script>
+    </script> *@
 
+    @* //兩個搜尋方法 *@
+    <script>
+
+        // 單獨的按鈕按下事件監聽器，用於 btnSubmit 按鈕
+        const btnSubmit = document.querySelector('#buttonSubmit');
+
+        btnSubmit.addEventListener('click', async (event) => {
+            let inputkeyword, inputDatestart, inputDateend, inputadults, inputchildren;
+
+            // 檢查是哪個按鈕被點擊
+            // 方法1 的按鈕按下事件
+            inputkeyword = document.querySelector('#search-input').value;
+            inputDatestart = document.querySelector('#myDatepickerstart').value;
+            inputDateend = document.querySelector('#myDatepickerend').value;
+            inputadults = parseInt(document.querySelector('#adults').value);
+            inputchildren = parseInt(document.querySelector('#children').value);
+
+            // 創建搜索酒店對象
+            const searchHotel = {
+                "keyword": inputkeyword,
+                "checkInDate": inputDatestart,
+                "checkOutDate": inputDateend,
+                "adults": inputadults,
+                "children": inputchildren
+            };
+
+            console.log(searchHotel);
+
+            // 將搜索酒店對象存儲在 sessionStorage 中
+            sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel));
+        });
+
+        // 方法2 的按鈕按下事件監聽器
+        const btnSubmit2 = document.querySelector('#buttonSubmit2');
+
+        btnSubmit2.addEventListener('click', async (event) => {
+            let inputkeyword2, inputDatestart2, inputDateend2, inputadults2, inputchildren2;
+
+            // 方法2 的按鈕按下事件
+            inputkeyword2 = document.querySelector('#search-input2').value;
+            inputDatestart2 = document.querySelector('#myDatepickerstart2').value;
+            inputDateend2 = document.querySelector('#myDatepickerend2').value;
+            inputadults2 = parseInt(document.querySelector('#adults2').value);
+            inputchildren2 = 0;
+
+            // 創建搜索酒店對象
+            const searchHotel2 = {
+                "keyword": inputkeyword2,
+                "checkInDate": inputDatestart2,
+                "checkOutDate": inputDateend2,
+                "adults": inputadults2,
+                "children": inputchildren2
+            };
+
+            console.log(searchHotel2);
+
+            // 將搜索酒店對象存儲在 sessionStorage 中
+            sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel2));
+        });
+    </script> 
 
     <script>
         const cn1 = {
