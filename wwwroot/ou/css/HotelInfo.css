@@ -74,9 +74,6 @@ main {
   color: white;
   font-size: 12px;
 }
-.active .stepper .step .circle-container {
-  background-color: #2196F3;
-}
 .stepper .step .circle-container::after {
   /*    position: absolute;*/
   /*top: 8%;*/

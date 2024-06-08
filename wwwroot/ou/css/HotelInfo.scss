@@ -78,11 +78,6 @@ main {
             color: white;
             font-size: 12px;
 
-
-            .active & {
-                background-color: #2196F3;
-            }
-
             &::after {
                 /*    position: absolute;*/
                 /*top: 8%;*/
