@@ -1,4 +1,4 @@
-/*----------------------------------------------------
+﻿/*----------------------------------------------------
 @File: Default Styles
 @Author: Rocky
 @URL: http://wethemez.com
@@ -494,13 +494,14 @@ button:focus {
 /*----------------------------------------------------*/
 /*============= Start banner_area css =============*/
 .banner_area {
-  background: #04091e;
-  position: relative;
-  z-index: 1;
+    background: #FCFCFC;
+    position: relative;
+    z-index: 1;
 }
 
-    .banner_area .bg-parallax { /*//�����Ϥ�*/
-        background: url('../../image/ming_img/333.jpg') no-repeat scroll center 0/cover;
+    .banner_area .bg-parallax {
+        background: url('../../image/777.jpg') no-repeat center center;
+        /*background-size: contain;*/ /* 确保图片完整显示 */
         opacity: 1;
     }
 
@@ -515,7 +516,7 @@ button:focus {
   position: relative;
   overflow: hidden;
   width: 100%;
-  min-height: 800px;
+  min-height: 600px;
 }
 
 .overlay {
@@ -555,15 +556,16 @@ button:focus {
 }
 
 /*============= End banner_area css =============*/
-.hotel_booking_table {
-  background: #04091e;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  padding: 40px 50px 30px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
+.hotel_booking_table { /*//主訂房搜尋介面*/
+    background-color: #DEE2E6;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: 40px 40px 30px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    min-height: 360px; /* 調整最小高度值 */
 }
 
 .hotel_booking_table h2 {
@@ -575,6 +577,7 @@ button:focus {
 
 .boking_table {
   margin-left: -50px;
+
 }
 
 .book_tabel_item .form-group {
