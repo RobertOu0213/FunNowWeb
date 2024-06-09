@@ -41,7 +41,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index2}/{id?}");
+    pattern: "{controller=Comment}/{action=Angular_comment_page}/{id?}");
 
 // 配置路由以支持 Angular 路由
 app.MapFallbackToFile("/dist/fun-now-angular1/index.html");
