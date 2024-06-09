@@ -94,12 +94,25 @@ namespace PrjFunNowWeb.Controllers
                 }
 
                 _context.SaveChanges();
-                return RedirectToAction("HostHotelInfo", new { id = hotelIn.HotelId });
+                var cityName = _context.Cities.FirstOrDefault(c => c.CityId == hotel.CityId);
+                var country = _context.Countries.FirstOrDefault(c => c.CountryId == hotel.City.CountryId);
+
+                return Json(new
+                {
+                    success = true,
+                    message = "Data saved successfully.",
+                    updatedHotel = new
+                    {
+     
+                        hotel.HotelName,                    
+                        CityName = cityName?.CityName,
+                        CountryName = country?.CountryName
+
+                    }
+                });
             }
 
-            hotelIn.AllHotelTypes = _context.HotelTypes.ToList();
-            hotelIn.AllHotelEquipments = _context.HotelEquipments.ToList();
-            return View(hotelIn);
+            return Json(new { success = false, message = "Invalid model state." });
         }
 
     }

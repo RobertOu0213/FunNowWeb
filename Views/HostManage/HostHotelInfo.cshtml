@@ -14,12 +14,12 @@
                 <div>
                     <div class="fw-bold">
                         <span>[@Model.HotelId]</span>
-                        <span>@Model.HotelName</span>
+                        <span id="spnHotelName">@Model.HotelName</span>
                     </div>
                     <div>
                         <span class="active-status">已啟用</span>
-                        <span class="city">@Model.CityName,</span>
-                        <span class="country">@Model.CountryName</span>
+                        <span class="city" id="spnCityName">@Model.CityName,</span>
+                        <span class="country" id="spnCountryName">@Model.CountryName</span>
                     </div>
                 </div>
             </div>
@@ -60,14 +60,12 @@
                 <a href="#">
                     <div>新增房間</div>
                 </a>
-
-
             </div>
         </aside>
         <section class="right-section">
             <div class="container">
                 <div class="content__container pt-5">
-                    <form method="post" action="/HostManage/HostHotelInfo">
+                    <form method="post" id="hotelForm">
                         <input type="hidden" name="HotelId" value="@Model.HotelId" />
                         <div class="content__container__title mb-5">
                             <h4 class="fw-bold">旅館基本資料。</h4>
@@ -111,7 +109,7 @@
                             <div class="address mb-4">
                                 <div class="fw-bold mb-2">街道地址</div>
                                 <input type="text" class="form-control" placeholder="請在此輸入..." id="iptAddress" name="HotelAddress" value="@Model.HotelAddress" />
-                                <span class="alertMessage" id="descMessage"></span>
+                                <span class="alertMessage" id="AddressMessage"></span>
                             </div>
                             <div class="row">
                                 <div class="col-md-4">
@@ -167,9 +165,16 @@
                             <span class="alertMessage" id="descMessage"></span>
                         </div>
 
-                        @*   button *@
-                        <div class="d-flex justify-content-end my-5">
-                            <button type="submit" class="btn_next" id="btnNext">儲存</button>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center successMessage" style="visibility: hidden">
+                                <img src="~/ou/image/checksign.png" />
+                                <span style="color:green">已儲存!</span>
+                            </div>
+                            @*   button *@
+                            <div class="d-flex justify-content-end my-5">
+                                <button type="button" class="btn_previous" id="btnPrevious">取消</button>
+                                <button type="submit" class="btn_next" id="btnNext">儲存</button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -185,10 +190,10 @@
     <script>
 
         $(document).ready(async function () {
+      
             // 從 Razor 模型中獲取國家名稱和城市名稱
-            var countryName = '@Html.Raw(Model.CountryName)';
-            var cityName = '@Html.Raw(Model.CityName)';
-
+            let countryName = '@Html.Raw(Model.CountryName)';
+            let cityName = '@Html.Raw(Model.CityName)';
 
             //國家
             try {
@@ -238,10 +243,108 @@
 
                 $('#selectCity').html(selectCityStr);
             }
+
+            //取消
+            $('#btnPrevious').on('click', function () {
+                location.reload();
+            });
+
+            //儲存
+            $('#hotelForm').on('submit', async function (event) {
+                event.preventDefault();
+
+                let isFormValid = true;
+
+                // 驗證住宿名稱
+                if ($('#iptHotelName').val().trim() === "") {
+                    $('#nameMessage').html('請輸入住宿名稱');
+                    isFormValid = false;
+                } else {
+                    $('#nameMessage').html('');
+                }
+
+                // 驗證地址
+                if ($('#iptAddress').val().trim() === "") {
+                    $('#AddressMessage').html('請輸入完整地址，包括街道名稱和號碼');
+                    isFormValid = false;
+                } else {
+                    $('#AddressMessage').html('');
+                }
+
+                // 驗證電話
+                if ($('#iptHotelPhone').val().trim() === "") {
+                    $('#phoneMessage').html('請輸入電話');
+                    isFormValid = false;
+                } else {
+                    $('#phoneMessage').html('');
+                }
+
+                // 驗證星級評等
+                let levelStar = $('#iptLevelStar').val();
+                if (levelStar.trim() === "" || levelStar < 1 || levelStar > 5) {
+                    $('#levelStarMessage').html('請輸入 1 到 5 之間的星級評等');
+                    isFormValid = false;
+                } else {
+                    $('#levelStarMessage').html('');
+                }
+
+
+                // 驗證設備
+                if ($('input[name="HotelEquipmentsNumber"]:checked').length === 0) {
+                    $('#hotelEqipMessage').html('請至少選擇一項設備');
+                    isFormValid = false;
+                } else {
+                    $('#hotelEqipMessage').html('');
+                }
+
+                // 驗證描述
+                if ($('#floatingTextarea').val().trim() === "") {
+                    $('#descMessage').html('請輸入描述');
+                    isFormValid = false;
+                } else {
+                    $('#descMessage').html('');
+                }
+
+
+                if (!isFormValid) {
+                    return;
+                }
+
+
+
+                const formData = new FormData(this);
+
+                try {
+                    const res = await fetch('/HostManage/HostHotelInfo', {
+                        method: 'POST',
+                        body: formData,
+                    });
+
+                    if (!res.ok) {
+                        throw new Error(res.statusText);
+                    }
+
+                    let data = await res.json();
+
+                    if (data.success) {
+                        console.log(data);
+                        $('#spnHotelName').text(data.updatedHotel.hotelName);
+                        $('#spnCityName').text(data.updatedHotel.cityName + ',');
+                        $('#spnCountryName').text(data.updatedHotel.countryName);
+                        $('.successMessage').css('visibility', 'visible');
+                        setTimeout(() => {
+                            $('.successMessage').css('visibility', 'hidden');
+                        }, 2000);
+                    } else {
+                        throw new Error(res.statusText);
+                    }
+                } catch (err) {
+                    console.log(err)
+                    alert('儲存失敗')
+                }
+            });
+
         });
-
-
-    
 
     </script>
 }
