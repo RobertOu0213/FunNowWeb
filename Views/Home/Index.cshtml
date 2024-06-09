@@ -250,13 +250,14 @@
             today: '今天',
             clear: '清除',
             dateFormat: 'yyyy-MM-dd',
-            timeFormat: 'hh:mm aa',
+            // timeFormat: 'hh:mm aa',
             firstDay: 0
         };
 
         // 取得今天的日期
         const today = new Date();
         today.setHours(0, 0, 0, 0); // 設定時間為當天的0點0分0秒，避免時間因素影響
+
 
         const datepicker = new AirDatepicker('#myDatepicker', {
             locale: cn1,
