@@ -35,6 +35,28 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.min.css">
 
+    <style>
+        .booking-area {
+            background-color: #20274d;
+            padding: 20px;
+        }
+
+        .form-control, .btn {
+            margin-bottom: 10px;
+        }
+
+        .d-flex.align-items-center label {
+            color: white;
+            margin-bottom: 0;
+            margin-right: 3px; /* 減少標籤與輸入框之間的間距 */
+            white-space: nowrap; /* 確保標籤不換行 */
+        }
+
+        .d-flex.align-items-center input {
+            flex-grow: 1; /* 確保輸入框佔據剩餘空間 */
+        }
+    </style>
+
 
     @await RenderSectionAsync("Styles", required: false)
 
@@ -122,12 +144,12 @@
                     <input class="form-control mb-2 mr-sm-2" type="date" placeholder="退房日期" aria-label="Check-out Date" id="myDatepickerend2">
                 </div>
                 <div class="col-md-2 d-flex align-items-center">
-                    <label class="form-control mb-2 mr-sm-2" for="quantity" style="background-color: transparent; border: none; color: white;">多少人FunNow</label>
-                    <input class="form-control mb-2 mr-sm-2" type="number" id="quantity" name="quantity" min="1" max="100" value="1">
+                    <label for="adults2" style="background-color: transparent; border: none; font-size:20px">多少人一起FunNow:</label>
+                    <input class="form-control mb-2 mr-sm-2" type="number" id="adults2" name="adults2" min="1" max="100" value="1">
                 </div>
                 <div class="col-md-1 d-flex align-items-center">
-                    <label class="form-control mb-2 mr-sm-2" for="quantity" style="background-color: transparent; border: none; color: white;">客房數</label>
-                    <input class="form-control mb-2 mr-sm-2" type="number" id="quantity" name="quantity" min="1" max="100" value="1">
+                    <label for="rooms2" style="background-color: transparent; border: none;font-size:20px">客房數:</label>
+                    <input class="form-control mb-2 mr-sm-2" type="number" id="rooms2" name="rooms2" min="1" max="100" value="1">
                 </div>
                 <div class="col-md-1">
                     <a class="btn btn-outline-success my-2 my-sm-0" href="home/index2" type="submit" id="buttonSubmit2">Book Now</a>
