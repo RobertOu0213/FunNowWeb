@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PrjFunNowWeb.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +11,8 @@ builder.Services.AddDbContext<FunNowContext>(
         builder.Configuration.GetConnectionString("FunNowConnection")
 ));
 
+// 添加 HttpClient 服务
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 
