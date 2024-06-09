@@ -31,6 +31,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=PgBack_Member}/{action=pgBack_Member}/{id?}");
+    pattern: "{controller=pgHotel}/{action=pgHotel}/{id?}");
 
 app.Run();
