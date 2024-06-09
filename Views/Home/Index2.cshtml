@@ -30,17 +30,17 @@
 
                 <!--//價格搜尋拉霸start-->
                 <div class="slider-container" style="margin: 10px">
-                    <div class="range-slider" id="rangeSlider" min="500" max="10000">
+                    <div class="range-slider" id="rangeSlider" min="1" max="10000">
                         <div class="slider-handle lower-handle" id="lowerHandle"></div>
                         <div class="slider-handle upper-handle" id="upperHandle"></div>
                     </div>
                     <div class="label-container">
-                        <span id="lowerLabel">下限：500</span>
+                        <span id="lowerLabel">下限：1</span>
                         <span id="upperLabel">上限：10000</span>
                     </div>
-                    <div class="input-container" ;">
-                        <input type="number" id="lowerInput" value="500" style="margin-right: 10px;">
-                        <input type="number" id="upperInput" value="500">
+                    <div class="input-container">
+                        <input type="number" id="lowerInput" value="1" style="margin-right: 10px;" class="no-spinner">
+                        <input type="number" id="upperInput" value="10000" class="no-spinner">
                     </div>
                 </div>
                 <!--//價格搜尋拉霸end-->
@@ -330,230 +330,285 @@
 <!--================ 台灣熱門城市 Area  =================-->
 @section Scripts {
 
- <script>
-        // 初始化時從 sessionStorage 加載搜索結果
-        (async () => {
-            const searchHotelJson = sessionStorage.getItem('searchHotel');
-            if (searchHotelJson) {
-                const searchHotel = JSON.parse(searchHotelJson);
-                console.log(searchHotel);
-                await fetchHotels(searchHotel);
-            } else {
-                console.log('searchHotel not found in sessionStorage');
-            }
-        })();
-
-        // 按鈕事件處理
-        const btnSubmit3 = document.querySelector('#buttonSubmit3');
-        btnSubmit3.addEventListener('click', async (event) => {
-            const inputkeyword3 = document.querySelector('#search-input3').value;
-            const inputDatestart3 = document.querySelector('#myDatepickerstart3').value;
-            const inputDateend3 = document.querySelector('#myDatepickerend3').value;
-            const inputadults3 = parseInt(document.querySelector('#adults3').value);
-            const inputrooms3 = parseInt(document.querySelector('#rooms3').value);
-            const inputchildren3 = 0;
-
-            // 創建搜索酒店對象
-            const searchHotel = {
-                keyword: inputkeyword3,
-                checkInDate: inputDatestart3,
-                checkOutDate: inputDateend3,
-                roomnum: inputrooms3,
-                adults: inputadults3,
-                children: inputchildren3,
-                sortBy: null,  // 初始化排序字段
-                sortType: null // 初始化排序類型
-            };
-
-            // 清除 sessionStorage 中的 searchHotel 資訊
-            sessionStorage.removeItem('searchHotel');
-
-            // 更新 sessionStorage
-            sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel));
-
-            // 發送請求並渲染結果
-            await fetchHotels(searchHotel);
-        });
-
-        // 定義函數以發送請求並渲染結果
+    <script>
+        // 定義 fetchHotels 函式
         async function fetchHotels(searchHotel) {
-            const url = 'https://localhost:7103/api/HotelSearch/indexsearch';
+            const url = "https://localhost:7103/api/HotelSearch/indexsearch";
             const response = await fetch(url, {
-                method: 'POST',
+                method: "POST",
                 body: JSON.stringify(searchHotel),
                 headers: {
-                    'Content-Type': 'application/json'
-                }
+                    "Content-Type": "application/json",
+                },
             });
 
             const data = await response.json();
             console.log(data);
 
-            const divHotels = document.querySelector('#showhotels');
+            const divHotels = document.querySelector("#showhotels");
             // 清空舊結果
-            divHotels.innerHTML = '';
+            divHotels.innerHTML = "";
 
-            const hotels = data.map(hotel => {
-                const { hotelName, hotelAddress, hotelPhone, hotelDescription, countryName, hotelEquipmentName, hotelImage, levelStar, hotelMaximumOccupancy, hotelPrice } = hotel;
-                return (`
-                    <div class="col-lg-4 col-sm-8" style="padding:0px">
-                        <table>
-                            <tr>
-                                <td colspan="3"><img src='https://localhost:7284/image/${hotelImage}' class="img-fluid" style="width:100%" /></td>
-                            </tr>
-                            <tr>
-                                <td><img src="/image/ming_img/room1.jpg" class="img-fluid" /></td>
-                                <td><img src="/image/ming_img/room3.jpg" class="img-fluid" /></td>
-                                <td><img src="/image/ming_img/room4.jpg" class="img-fluid" /></td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="col-lg-5 col-sm-10" style="border:1px solid gray">
-                        <h3>${hotelName}</h3>
-                        <span>${levelStar}星級飯店 </span><span style="color:blue">${hotelAddress}</span>
-                        <h6>此住宿提供:</h6>
-                        <h5 style="border: 1px solid black;display: inline-block;">${hotelEquipmentName}</h5>
-                        <br>
-                        <h5 style="border: 1px solid black;display: inline-block;">設施2</h5>
-                        <br>
-                        <h5 style="border: 1px solid black;display: inline-block;">設施3</h5>
-                        <br>
-                        <h6 style="color:green">${levelStar}星級飯店最優價</h6>
-                        <h6 style="color:red">昨天起已收到${levelStar}張訂單</h6>
-                    </div>
-                    <div class="col-lg-3 col-sm-12" style="border:1px solid gray;text-align: right">
-                        <h5>很出色</h5>
-                        <h6 style="color:gray"> 個評分</h6>
-                        <br>
-                        <h6 style="border: 1px solid red;display:inline-block;background-color: red;color:white">優惠只剩1間</h6>
-                        <h6 style="color:gray">每晚價格(不連税及其他费用)</h6>
-                        <br><br>
-                        <h3>NT$${hotelPrice}</h3>
-                    </div>
-                `);
+            const hotels = data.map((hotel) => {
+                const {
+                    hotelName,
+                    hotelAddress,
+                    hotelPhone,
+                    hotelDescription,
+                    countryName,
+                    hotelEquipmentName,
+                    hotelImage,
+                    levelStar,
+                    hotelMaximumOccupancy,
+                    hotelPrice,
+                } = hotel;
+                return `
+                        <div class="col-lg-4 col-sm-8" style="padding:0px">
+                            <table>
+                                <tr>
+                                    <td colspan="3"><img src='https://localhost:7284/image/${hotelImage}' class="img-fluid" style="width:100%" /></td>
+                                </tr>
+                                <tr>
+                                    <td><img src="/image/ming_img/room1.jpg" class="img-fluid" /></td>
+                                    <td><img src="/image/ming_img/room3.jpg" class="img-fluid" /></td>
+                                    <td><img src="/image/ming_img/room4.jpg" class="img-fluid" /></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-lg-5 col-sm-10" style="border:1px solid gray">
+                            <h3>${hotelName}</h3>
+                            <span>${levelStar}星級飯店 </span><span style="color:blue">${hotelAddress}</span>
+                            <h6>此住宿提供:</h6>
+                            <h5 style="border: 1px solid black;display: inline-block;">${hotelEquipmentName}</h5>
+                            <br>
+                            <h5 style="border: 1px solid black;display: inline-block;">設施2</h5>
+                            <br>
+                            <h5 style="border: 1px solid black;display: inline-block;">設施3</h5>
+                            <br>
+                            <h6 style="color:green">${levelStar}星級飯店最優價</h6>
+                            <h6 style="color:red">昨天起已收到${levelStar}張訂單</h6>
+                        </div>
+                        <div class="col-lg-3 col-sm-12" style="border:1px solid gray;text-align: right">
+                            <h5>很出色</h5>
+                            <h6 style="color:gray"> 個評分</h6>
+                            <br>
+                            <h6 style="border: 1px solid red;display:inline-block;background-color: red;color:white">優惠只剩1間</h6>
+                            <h6 style="color:gray">每晚價格(不連税及其他费用)</h6>
+                            <br><br>
+                            <h3>NT$${hotelPrice}</h3>
+                        </div>
+                    `;
             });
 
             divHotels.innerHTML = hotels.join("");
         }
 
-        // 定義按鈕事件處理函數
-        const sortBtn = document.querySelector('#sortBtn');
-        const bestMatchBtn = document.querySelector('#bestMatchBtn');
-        const highestRatedBtn = document.querySelector('#highestRatedBtn');
-        const lowestPriceBtn = document.querySelector('#lowestPriceBtn');
-        const nearbyBtn = document.querySelector('#nearbyBtn');
-        const hotDealBtn = document.querySelector('#hotDealBtn');
+        // 定義更新酒店的函式
+        async function updateHotels(lowerPrice, upperPrice) {
+            // 確保 fetchHotels 函式可用
+            if (typeof fetchHotels === 'function') {
+                const searchHotelJson = sessionStorage.getItem('searchHotel');
+                if (searchHotelJson) {
+                    const searchHotel = JSON.parse(searchHotelJson);
+                    searchHotel.lowerPrice = lowerPrice;
+                    searchHotel.upperPrice = upperPrice;
 
-        sortBtn.addEventListener('click', () => handleSort('HotelId', 'asc'));
-        bestMatchBtn.addEventListener('click', () => handleSort('LevelStar', 'desc'));
-        highestRatedBtn.addEventListener('click', () => handleSort('LevelStar', 'desc'));
-        lowestPriceBtn.addEventListener('click', () => handleSort('HotelPrice', 'asc'));
-        nearbyBtn.addEventListener('click', () => handleSort('CityName', 'asc'));
-        hotDealBtn.addEventListener('click', () => handleSort('deal', 'desc'));
+                    // 更新 sessionStorage
+                    sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel));
 
-        // 處理排序邏輯的函數
-        async function handleSort(sortBy, sortType) {
-            const searchHotelJson = sessionStorage.getItem('searchHotel');
-            if (searchHotelJson) {
-                const searchHotel = JSON.parse(searchHotelJson);
-                searchHotel.sortBy = sortBy;
-                searchHotel.sortType = sortType;
+                    // 調用 fetchHotels 函式
+                    await fetchHotels(searchHotel);
+                } else {
+                    console.log('searchHotel not found in sessionStorage');
+                }
+            } else {
+                console.log('fetchHotels is not defined');
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // 初始化時從 sessionStorage 加載搜索結果
+            (async () => {
+                const searchHotelJson = sessionStorage.getItem("searchHotel");
+                if (searchHotelJson) {
+                    const searchHotel = JSON.parse(searchHotelJson);
+                    console.log(searchHotel);
+                    await fetchHotels(searchHotel);
+                } else {
+                    console.log("searchHotel not found in sessionStorage");
+                }
+            })();
+
+            // 按鈕事件處理
+            const btnSubmit3 = document.querySelector("#buttonSubmit3");
+            btnSubmit3.addEventListener("click", async (event) => {
+                const inputkeyword3 = document.querySelector("#search-input3").value;
+                const inputDatestart3 = document.querySelector("#myDatepickerstart3").value;
+                const inputDateend3 = document.querySelector("#myDatepickerend3").value;
+                const inputadults3 = parseInt(document.querySelector("#adults3").value);
+                const inputrooms3 = parseInt(document.querySelector("#rooms3").value);
+                const inputchildren3 = 0;
+                const lowerPrice = parseInt(document.querySelector("#lowerInput").value);
+                const upperPrice = parseInt(document.querySelector("#upperInput").value);
+
+                // 創建搜索酒店對象
+                const searchHotel = {
+                    keyword: inputkeyword3,
+                    checkInDate: inputDatestart3,
+                    checkOutDate: inputDateend3,
+                    roomnum: inputrooms3,
+                    adults: inputadults3,
+                    children: inputchildren3,
+                    sortBy: null, // 初始化排序字段
+                    sortType: null, // 初始化排序類型
+                    lowerPrice: lowerPrice,
+                    upperPrice: upperPrice,
+                };
+
+                // 清除 sessionStorage 中的 searchHotel 資訊
+                sessionStorage.removeItem("searchHotel");
 
                 // 更新 sessionStorage
-                sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel));
+                sessionStorage.setItem("searchHotel", JSON.stringify(searchHotel));
 
                 // 發送請求並渲染結果
                 await fetchHotels(searchHotel);
+            });
+
+            // 定義按鈕事件處理函數
+            const sortBtn = document.querySelector("#sortBtn");
+            const bestMatchBtn = document.querySelector("#bestMatchBtn");
+            const highestRatedBtn = document.querySelector("#highestRatedBtn");
+            const lowestPriceBtn = document.querySelector("#lowestPriceBtn");
+            const nearbyBtn = document.querySelector("#nearbyBtn");
+            const hotDealBtn = document.querySelector("#hotDealBtn");
+
+            sortBtn.addEventListener("click", () => handleSort("HotelId", "asc"));
+            bestMatchBtn.addEventListener("click", () =>
+                handleSort("LevelStar", "desc")
+            );
+            highestRatedBtn.addEventListener("click", () =>
+                handleSort("LevelStar", "desc")
+            );
+            lowestPriceBtn.addEventListener("click", () =>
+                handleSort("HotelPrice", "asc")
+            );
+            nearbyBtn.addEventListener("click", () => handleSort("CityName", "asc"));
+            hotDealBtn.addEventListener("click", () => handleSort("deal", "desc"));
+
+            // 處理排序邏輯的函數
+            async function handleSort(sortBy, sortType) {
+                const searchHotelJson = sessionStorage.getItem('searchHotel');
+                if (searchHotelJson) {
+                    const searchHotel = JSON.parse(searchHotelJson);
+                    searchHotel.sortBy = sortBy;
+                    searchHotel.sortType = sortType;
+
+                    // 更新 sessionStorage
+                    sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel));
+
+                    // 發送請求並渲染結果
+                    await fetchHotels(searchHotel);
+                } else {
+                    console.log('searchHotel not found in sessionStorage');
+                }
+            }
+        });
+
+        // 定義範圍滑桿腳本
+        const lowerHandle = document.getElementById('lowerHandle');
+        const upperHandle = document.getElementById('upperHandle');
+        const rangeSlider = document.getElementById('rangeSlider');
+        const lowerLabel = document.getElementById('lowerLabel');
+        const upperLabel = document.getElementById('upperLabel');
+        const lowerInput = document.getElementById('lowerInput');
+        const upperInput = document.getElementById('upperInput');
+
+        lowerHandle.addEventListener('mousedown', startDrag);
+        upperHandle.addEventListener('mousedown', startDrag);
+
+        let isDragging = false;
+        let currentHandle = null;
+
+        function startDrag(event) {
+            isDragging = true;
+            currentHandle = event.target;
+            document.addEventListener('mousemove', handleDrag);
+            document.addEventListener('mouseup', stopDrag);
+        }
+
+        function handleDrag(event) {
+            if (!isDragging) return;
+
+            if (currentHandle === lowerHandle) {
+                handleDragLogic(event, lowerHandle, lowerLabel, upperLabel, lowerInput, upperInput);
             } else {
-                console.log('searchHotel not found in sessionStorage');
+                handleDragLogic(event, upperHandle, upperLabel, lowerLabel, lowerInput, upperInput);
             }
         }
- </script>
 
+        function handleDragLogic(event, handle, label, oppositeLabel, lowerInput, upperInput) {
+            const sliderRect = rangeSlider.getBoundingClientRect();
+            const sliderWidth = sliderRect.width;
+            const min = parseFloat(rangeSlider.getAttribute('min'));
+            const max = parseFloat(rangeSlider.getAttribute('max'));
+            const range = max - min;
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const rangeSlider = document.getElementById('rangeSlider');
-            const lowerHandle = document.getElementById('lowerHandle');
-            const upperHandle = document.getElementById('upperHandle');
-            const lowerLabel = document.getElementById('lowerLabel');
-            const upperLabel = document.getElementById('upperLabel');
-            const lowerInput = document.getElementById('lowerInput');
-            const upperInput = document.getElementById('upperInput');
+            let position = (event.clientX - sliderRect.left) / sliderWidth;
+            position = Math.min(1, Math.max(0, position)); // Clamp position between 0 and 1
+            const value = Math.round(min + position * range);
 
-            let isLowerDragging = false;
-            let isUpperDragging = false;
-
-            lowerHandle.addEventListener('mousedown', () => {
-                isLowerDragging = true;
-            });
-
-            upperHandle.addEventListener('mousedown', () => {
-                isUpperDragging = true;
-            });
-
-            document.addEventListener('mouseup', () => {
-                isLowerDragging = false;
-                isUpperDragging = false;
-            });
-
-            document.addEventListener('mousemove', (event) => {
-                if (isLowerDragging) {
-                    handleDrag(event, lowerHandle, lowerLabel, upperLabel, lowerInput, upperInput);
-                } else if (isUpperDragging) {
-                    handleDrag(event, upperHandle, upperLabel, lowerLabel, lowerInput, upperInput);
+            if (handle === lowerHandle) {
+                if (value >= parseFloat(oppositeLabel.textContent.split('：')[1])) {
+                    return; // Lower handle cannot exceed upper handle
                 }
-            });
-
-            function handleDrag(event, handle, label, oppositeLabel, lowerInput, upperInput) {
-                const sliderRect = rangeSlider.getBoundingClientRect();
-                const sliderWidth = sliderRect.width;
-                const min = parseFloat(rangeSlider.getAttribute('min'));
-                const max = parseFloat(rangeSlider.getAttribute('max'));
-                const range = max - min;
-
-                let position = (event.clientX - sliderRect.left) / sliderWidth;
-                position = Math.min(1, Math.max(0, position)); // Clamp position between 0 and 1
-                const value = Math.round(min + position * range);
-
-                if (handle === lowerHandle) {
-                    if (value >= parseFloat(upperLabel.textContent.split('：')[1])) {
-                        return; // Lower handle cannot exceed upper handle
-                    }
-                    handle.style.left = `${position * 100}%`;
-                    label.textContent = `下限：${value}`;
-                    lowerInput.value = value;
-                } else {
-                    if (value <= parseFloat(lowerLabel.textContent.split('：')[1])) {
-                        return; // Upper handle cannot be less than lower handle
-                    }
-                    handle.style.left = `${position * 100}%`;
-                    label.textContent = `上限：${value}`;
-                    upperInput.value = value;
+                handle.style.left = `${position * 100}%`;
+                label.textContent = `下限：${value}`;
+                lowerInput.value = value;
+                updateHotels(value, parseFloat(upperInput.value));
+            } else {
+                if (value <= parseFloat(oppositeLabel.textContent.split('：')[1])) {
+                    return; // Upper handle cannot be less than lower handle
                 }
+                handle.style.left = `${position * 100}%`;
+                label.textContent = `上限：${value}`;
+                upperInput.value = value;
+                updateHotels(parseFloat(lowerInput.value), value);
             }
+        }
 
-            lowerInput.addEventListener('input', () => {
-                const value = parseFloat(lowerInput.value);
-                if (value >= parseFloat(upperLabel.textContent.split('：')[1])) {
-                    return; // Lower input cannot exceed upper handle
-                }
-                const position = (value - parseFloat(rangeSlider.getAttribute('min'))) / (parseFloat(rangeSlider.getAttribute('max')) - parseFloat(rangeSlider.getAttribute('min')));
-                lowerHandle.style.left = `${position * 100}%`;
-                lowerLabel.textContent = `下限：${value}`;
-            });
+        function stopDrag() {
+            isDragging = false;
+            currentHandle = null;
+            document.removeEventListener('mousemove', handleDrag);
+            document.removeEventListener('mouseup', stopDrag);
+        }
 
-            upperInput.addEventListener('input', () => {
-                const value = parseFloat(upperInput.value);
-                if (value <= parseFloat(lowerLabel.textContent.split('：')[1])) {
-                    return; // Upper input cannot be less than lower handle
+        // 定義更新酒店的函式
+        async function updateHotels(lowerPrice, upperPrice) {
+            // 確保 fetchHotels 函式可用
+            if (typeof fetchHotels === 'function') {
+                const searchHotelJson = sessionStorage.getItem('searchHotel');
+                if (searchHotelJson) {
+                    const searchHotel = JSON.parse(searchHotelJson);
+                    searchHotel.lowerPrice = lowerPrice;
+                    searchHotel.upperPrice = upperPrice;
+
+                    // 更新 sessionStorage
+                    sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel));
+
+                    // 調用 fetchHotels 函式
+                    await fetchHotels(searchHotel);
+                } else {
+                    console.log('searchHotel not found in sessionStorage');
                 }
-                const position = (value - parseFloat(rangeSlider.getAttribute('min'))) / (parseFloat(rangeSlider.getAttribute('max')) - parseFloat(rangeSlider.getAttribute('min')));
-                upperHandle.style.left = `${position * 100}%`;
-                upperLabel.textContent = `上限：${value}`;
-            });
-        });
+            } else {
+                console.log('fetchHotels is not defined');
+            }
+        }
+
     </script>
+
 }
 
 @section Styles {
@@ -629,6 +684,12 @@
                 .navbar .special-button:hover {
                     background-color: #357ae8;
                 }
+        /* 移除 input 上下箭頭 */
+        .no-spinner::-webkit-outer-spin-button,
+        .no-spinner::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
 
     </style>
 }
