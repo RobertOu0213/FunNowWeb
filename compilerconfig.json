@@ -26,5 +26,9 @@
   {
     "outputFile": "wwwroot/ou/css/UploadImage.css",
     "inputFile": "wwwroot/ou/css/UploadImage.scss"
+  },
+  {
+    "outputFile": "wwwroot/ou/css/HostHotelInfo.css",
+    "inputFile": "wwwroot/ou/css/HostHotelInfo.scss"
   }
 ]

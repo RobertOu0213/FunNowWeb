@@ -1,0 +1,247 @@
+﻿@{
+    ViewData["Title"] = "HostHotelInfo";
+    Layout = "_Layout_HotelHome";
+}
+@model PrjFunNowWeb.Models.ViewModel.CsingleHotelViewModel
+
+<main>
+    <div id="hotelContainers">
+        <div class="hotelCardSingle">
+            <div class="d-flex align-items-center hotelCard__info">
+                <div>
+                    <img src="@(Model.HotelImage.StartsWith("http://") || Model.HotelImage.StartsWith("https://") ? Model.HotelImage : Url.Content("~/image/" + Model.HotelImage))" alt="..." class="hotelCard__img" />
+                </div>
+                <div>
+                    <div class="fw-bold">
+                        <span>[@Model.HotelId]</span>
+                        <span>@Model.HotelName</span>
+                    </div>
+                    <div>
+                        <span class="active-status">已啟用</span>
+                        <span class="city">@Model.CityName,</span>
+                        <span class="country">@Model.CountryName</span>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex align-items-center ms-3 hotelCard__connect">
+                <a href="#" class="">
+                    <div>
+                        編輯物業
+                    </div>
+                </a>
+                <a href="#" class="">
+                    <div>
+                        行事曆
+                    </div>
+                </a>
+                <a href="#" class="">
+                    <div>
+                        訂單&收入
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex">
+        <aside class="left-section">
+            <div class="left-section-items">
+                <a href="#" class="active">
+                    <div>旅館基本資料</div>
+                </a>
+                <a href="#">
+                    <div>房間基本資料</div>
+                </a>
+                <a href="#">
+                    <div>旅館照片</div>
+                </a>
+                <a href="#">
+                    <div>房間照片</div>
+                </a>
+                <a href="#">
+                    <div>新增房間</div>
+                </a>
+
+
+            </div>
+        </aside>
+        <section class="right-section">
+            <div class="container">
+                <div class="content__container pt-5">
+                    <form method="post" action="/HostManage/HostHotelInfo">
+                        <input type="hidden" name="HotelId" value="@Model.HotelId" />
+                        <div class="content__container__title mb-5">
+                            <h4 class="fw-bold">旅館基本資料。</h4>
+                            <div class="sm_titlt">*所有資訊皆為必填，除非另外標示為選填</div>
+                        </div>
+                        <div class="content__container__name">
+                            <h5 class="fw-bold">為住宿命名</h5>
+                            <div class="sm_titlt mb-3">住宿名稱要有吸引力，讓人印象深刻！</div>
+                            <div class="panel mb-5">
+                                <input type="text" class="form-control" placeholder="住宿名稱" name="HotelName" id="iptHotelName" value="@Model.HotelName" />
+                                <span class="alertMessage" id="nameMessage"></span>
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                <h5 class="fw-bold">選擇您的房源類別</h5>
+                                <div class="sm_titlt mb-3">請從下方類別中選擇一項：</div>
+                            </div>
+                            <div class="panel">
+                                <span class="alertMessage" id="roomTypeMessage"></span>
+                                <div class="fw-bold">房源類別</div>
+                                <div>
+                                    <div class="w-50 row" id="hotelType">
+                                        @foreach (var hotelType in Model.AllHotelTypes)
+                                        {
+                                            <div class="col-md-6 mb-4">
+                                                <div class="panel">
+                                                    <label>
+                                                        <input type="radio" class="custom-radio" value=@hotelType.HotelTypeId name="HotelType.HotelTypeId" id="iptHotelHotelTypeID@(hotelType.HotelTypeId)" @(Model.HotelType.HotelTypeId == hotelType.HotelTypeId ? "checked" : "") />
+                                                        @hotelType.HotelTypeName
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h5 class="fw-bold mt-5">住宿位置</h5>
+                        <div class="panel">
+                            <div class="address mb-4">
+                                <div class="fw-bold mb-2">街道地址</div>
+                                <input type="text" class="form-control" placeholder="請在此輸入..." id="iptAddress" name="HotelAddress" value="@Model.HotelAddress" />
+                                <span class="alertMessage" id="descMessage"></span>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="fw-bold mb-2">國家</div>
+                                    <select class="form-select" aria-label="Default select example" id="selectCountry" name="CountryName">
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="fw-bold mb-2">城市</div>
+                                    <select class="form-select" aria-label="Default select example" id="selectCity" name="CityName">
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                </div>
+                            </div>
+                        </div>
+                        <h5 class="fw-bold mt-5">星級評等</h5>
+                        <div class="sm_titlt mb-3">旅客對不同星等的住宿有不同的期待，為住宿提供一個適合的星級評等吧！</div>
+                        <div class="panel">
+                            <input type="number" min="1" max="5" class="form-control" name="LevelStar" id="iptLevelStar" value="@Model.LevelStar" />
+                            <span class="alertMessage" id="levelStarMessage"></span>
+                        </div>
+                        <h5 class="fw-bold mt-5">旅館電話</h5>
+                        <div class="panel mb-5">
+                            <input type="tel" class="form-control" placeholder="請輸入電話" name="HotelPhone" id="iptHotelPhone" value="@Model.HotelPhone" />
+                            <span class="alertMessage" id="phoneMessage"></span>
+                        </div>
+                        @* 設備 *@
+                        <h5 class="fw-bold">旅館設施</h5>
+                        <div class="sm_titlt mb-3">旅館有提供的設備</div>
+                        <div class="panel">
+                            <span class="alertMessage" id="hotelEqipMessage"></span>
+                            <div class="row row-cols-3" id="hotelEquipment">
+                                @for (int i = 0; i < Model.AllHotelEquipments.Count; i++)
+                                {
+                                    var hotelEquipment = Model.AllHotelEquipments[i];
+                                    <div class="col mb-2">
+                                        <label for="equipBundle@(hotelEquipment.HotelEquipmentId)">
+                                            <input type="checkbox" id="equipBundle@(hotelEquipment.HotelEquipmentId)" value="@hotelEquipment.HotelEquipmentId" name="HotelEquipmentsNumber" @(Model.HotelEquipments.Any(he => he.HotelEquipmentId == hotelEquipment.HotelEquipmentId) ? "checked" : "") />
+                                            @hotelEquipment.HotelEquipmentName
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <h5 class="fw-bold mt-5">旅館簡介</h5>
+                        <div class="panel">
+                            <div class="form-floating">
+                                <textarea class="form-control" placeholder="請介紹您的旅館" id="floatingTextarea" name="HotelDescription" style="height: 200px; resize: none">@Model.HotelDescription</textarea>
+                                <label for="floatingTextarea">請介紹您的飯店</label>
+                            </div>
+                            <span class="alertMessage" id="descMessage"></span>
+                        </div>
+
+                        @*   button *@
+                        <div class="d-flex justify-content-end my-5">
+                            <button type="submit" class="btn_next" id="btnNext">儲存</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+@section Styles {
+    <link href="~/ou/css/HostHotelInfo.css" rel="stylesheet" />
+}
+@section Scripts {
+    <script>
+
+        $(document).ready(async function () {
+            // 從 Razor 模型中獲取國家名稱和城市名稱
+            var countryName = '@Html.Raw(Model.CountryName)';
+            var cityName = '@Html.Raw(Model.CityName)';
+
+
+            //國家
+            try {
+                let selectCountryStr = ""
+                const res = await fetch('https://localhost:7103/api/Country/countriesAndCities');
+                if (!res.ok) {
+                    throw new Error(res.statusText);
+                }
+                const data = await res.json();
+                data.forEach(item => {
+                    selectCountryStr +=
+                        `
+                           <option value="${item.countryId}" ${item.countryName === countryName ? 'selected' : ''}>${item.countryName}</option>
+                        `
+                })
+
+                $('#selectCountry').html(selectCountryStr);
+
+                // 如果有國家資料，則載入選擇的國家的城市
+                const selectedCountry = data.find(country => country.countryName === countryName);
+                if (selectedCountry) {
+                    loadCities(selectedCountry);
+                }
+
+                //城市
+                $('#selectCountry').on('change', function () {
+                    const selectedCountryId = Number($(this).val());
+                    const selectedCountry = data.find(country => country.countryId === selectedCountryId);
+                    loadCities(selectedCountry);
+                });
+
+            }
+            catch (err) {
+                console.log(err)
+            }
+
+            function loadCities(country) {
+                let selectCityStr = '';
+                if (country && country.cities.length > 0) {
+                    country.cities.forEach(city => {
+                        selectCityStr += `<option value="${city.cityId}" ${city.cityName === cityName ? 'selected' : ''}>${city.cityName}</option>`;
+                    });
+                    $('#selectCity').prop('disabled', false);
+                } else {
+                    $('#selectCity').prop('disabled', true);
+                }
+
+                $('#selectCity').html(selectCityStr);
+            }
+        });
+
+
+    
+
+    </script>
+}

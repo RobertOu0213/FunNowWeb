@@ -4,33 +4,6 @@
     Layout = "_Layout_HotelHome";
 }
 
-@* 房東首頁nvabar *@
-<nav>
-    <div class="nav__container">
-        <div class="row">
-            <div class="col ps-5">
-               <img src="~/ou/image/funnow_logo_horizontal_orange.png" class="w-75" />
-            </div>
-          
-            <div class="col-8 pe-5 me-5">
-                 <a href="#"><div class="items"><i class="fa-solid fa-house me-2"></i>物業清單</div></a>
-                <a href="#"><div class="items"><i class="fa-solid fa-square-check me-2"></i>預訂</div></a>
-                <a href="#"><div class="items"><i class="fa-solid fa-comment-dots me-2"></i>訊息</div></a>
-                <a href="#"><div class="items"><i class="fa-solid fa-person me-2"></i>個人資料</div></a>
-            </div>
-          
-            <div class="col-2 ps-5">
-                <a href="#">
-                    <img class="avatar" />
-                    <span>Oliver</span>
-                    <span>Ou</span>
-                    <i class="fa-solid fa-caret-down"></i>
-                </a>
-            </div>
-        </div>
-    </div>
-</nav>
-
 <div class="search__container">
     <div class="search__container__search">
         <form class="d-flex">
@@ -70,9 +43,12 @@
             const res = await fetch('https://localhost:7103/api/HostManage');
             const data = await res.json();
             const filteredData = data.filter(item => item.isActive === isActive);
+            const baseUrl = window.location.origin + '/HostManage/HostHotelInfo';
 
             let isReviewStr = "";
             filteredData.forEach(item => {
+                let hotelInfoUrl = baseUrl + '/' + item.hotelId;
+
                 let imageUrl;
                 if (item.hotelImage.startsWith('http') || item.hotelImage.startsWith('https')) {
                     imageUrl = item.hotelImage;
@@ -102,7 +78,7 @@
                             </div>
                         </div>
                         <div class="d-flex align-items-center ms-3 hotelCard__connect">
-                                <a href="#" class="${linkClass}" aria-disabled="${ariaDisabled}">
+                                <a href="${hotelInfoUrl}" class="${linkClass}" aria-disabled="${ariaDisabled}">
                                 <div>
                                     編輯物業
                                 </div>
