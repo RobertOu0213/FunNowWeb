@@ -121,21 +121,15 @@
                 <div class="col-md-2">
                     <input class="form-control mb-2 mr-sm-2" type="date" placeholder="退房日期" aria-label="Check-out Date" id="myDatepickerend2">
                 </div>
-                <div class="col-md-2">
-                    <select class="custom-select mb-2 mr-sm-2" aria-label="Number of People" id="adults2">
-                        <option selected>多少人一起FunNow</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="5">6</option>
-                        <option value="5">7</option>
-                        <option value="5">8</option>
-                        <option value="5">9</option>
-                    </select>
+                <div class="col-md-2 d-flex align-items-center">
+                    <label class="form-control mb-2 mr-sm-2" for="quantity" style="background-color: transparent; border: none; color: white;">多少人FunNow</label>
+                    <input class="form-control mb-2 mr-sm-2" type="number" id="quantity" name="quantity" min="1" max="100" value="1">
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-1 d-flex align-items-center">
+                    <label class="form-control mb-2 mr-sm-2" for="quantity" style="background-color: transparent; border: none; color: white;">客房數</label>
+                    <input class="form-control mb-2 mr-sm-2" type="number" id="quantity" name="quantity" min="1" max="100" value="1">
+                </div>
+                <div class="col-md-1">
                     <a class="btn btn-outline-success my-2 my-sm-0" href="home/index2" type="submit" id="buttonSubmit2">Book Now</a>
                 </div>
             </div>
