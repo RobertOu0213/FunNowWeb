@@ -87,10 +87,6 @@
         </div>
     </section>
 
-    <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-        Launch static backdrop modal
-    </button>
 
     <!-- Modal -->
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -104,8 +100,9 @@
                         <p style="font-size:14px">飯店上線後我們將寄給您一封email。與此同時，您可以查看並管理飯店資訊。</p>
                     </div>
                     <div class="d-flex justify-content-end">
-                        <button type="button" class="btn_next">返回首頁</button>
+                        <a href="@Url.Action("Home", "HostManage")" class="btn_next">返回首頁</a>
                     </div>
+                   
                 </div>
             </div>
         </div>
@@ -485,6 +482,7 @@
                 });
 
                 sessionStorage.setItem('tRoom', JSON.stringify(roomData));
+                // sessionStorage.setItem('forceRedirect', 'true');
 
 
 
@@ -505,9 +503,12 @@
                     if (res.ok) {
                         const data = await res.json();
                         console.log(data);
-                        alert('飯店已成功上線！');
-                        sessionStorage.clear();
-                        window.location.href = '/HostManage/Home';
+                        sessionStorage.removeItem('tHotel');
+                        sessionStorage.removeItem('tRoom');
+                        showModal();
+
+                  
+                        // sessionStorage.clear();
                     } else {
                         throw new Error(`HTTP error! status: ${res.status}`);
                     }
@@ -519,9 +520,21 @@
                     window.location.href = '/HostManage/Home';
                 }
 
-
-
             });
+
+            $(window).on('load', function () {
+                if (sessionStorage.getItem('forceRedirect') === 'true') {
+                    showModal();
+                  
+                }
+            });
+
+            function showModal() {
+                var resultModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+                resultModal.show();
+                sessionStorage.setItem('forceRedirect', 'true');
+            }
+           
         });
     </script>
 }
