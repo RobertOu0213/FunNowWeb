@@ -112,7 +112,6 @@ body {
 .right-section .container {
   width: 90%;
   margin: 0 auto;
-  border: 1px solid black;
   height: 100%;
 }
 .right-section .container .panel {
@@ -194,5 +193,47 @@ body {
 }
 
 .btn_next:hover {
+  background-color: #0C5478;
+}
+
+.content__container__image__text {
+  width: 80%;
+}
+.content__container__image .uploaded {
+  border: 3px dashed #CCCCCC;
+  text-align: center;
+  background-color: #FFFFFF;
+  color: gray;
+  width: 100%;
+  height: auto;
+}
+.content__container__image .container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.content__container__image .container .card {
+  position: relative;
+  width: 18rem;
+  margin-top: 10px;
+}
+.content__container__image .container .card .delete-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.content__container__image #uploadButton {
+  color: #fff;
+  background-color: #1174a6;
+  border: 1px solid #1174a6;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 3px;
+  padding: 10px 15px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.content__container__image #uploadButton:hover {
   background-color: #0C5478;
 }

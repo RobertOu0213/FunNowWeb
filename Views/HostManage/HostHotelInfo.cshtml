@@ -1,10 +1,10 @@
 ﻿@{
-    ViewData["Title"] = "HostHotelInfo";
-    Layout = "_Layout_HotelHome";
+    ViewData["Title"] = "FunNow Home_Update";
+    Layout = "_Layout_HotelUpdate";
 }
 @model PrjFunNowWeb.Models.ViewModel.CsingleHotelViewModel
 
-<main>
+@* <main>
     <div id="hotelContainers">
         <div class="hotelCardSingle">
             <div class="d-flex align-items-center hotelCard__info">
@@ -51,7 +51,7 @@
                 <a href="#">
                     <div>房間基本資料</div>
                 </a>
-                <a href="#">
+                <a href="@Url.Action("HostHotelPhoto", "HostManage",new { id = Model.HotelId })">
                     <div>旅館照片</div>
                 </a>
                 <a href="#">
@@ -61,7 +61,7 @@
                     <div>新增房間</div>
                 </a>
             </div>
-        </aside>
+        </aside> *@
         <section class="right-section">
             <div class="container">
                 <div class="content__container pt-5">
@@ -137,7 +137,7 @@
                             <input type="tel" class="form-control" placeholder="請輸入電話" name="HotelPhone" id="iptHotelPhone" value="@Model.HotelPhone" />
                             <span class="alertMessage" id="phoneMessage"></span>
                         </div>
-                        @* 設備 *@
+                        設備
                         <h5 class="fw-bold">旅館設施</h5>
                         <div class="sm_titlt mb-3">旅館有提供的設備</div>
                         <div class="panel">
@@ -170,7 +170,7 @@
                                 <img src="~/ou/image/checksign.png" />
                                 <span style="color:green">已儲存!</span>
                             </div>
-                            @*   button *@
+                          @*   button *@
                             <div class="d-flex justify-content-end my-5">
                                 <button type="button" class="btn_previous" id="btnPrevious">取消</button>
                                 <button type="submit" class="btn_next" id="btnNext">儲存</button>
@@ -180,8 +180,8 @@
                 </div>
             </div>
         </section>
-    </div>
-</main>
+@*    </div>
+</main>  *@
 
 @section Styles {
     <link href="~/ou/css/HostHotelInfo.css" rel="stylesheet" />

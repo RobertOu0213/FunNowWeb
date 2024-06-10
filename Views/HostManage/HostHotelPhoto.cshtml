@@ -1,0 +1,302 @@
+﻿
+@{
+    ViewData["Title"] = "HostHotelPhoto";
+    Layout = "_Layout_HotelUpdate";
+}
+@model PrjFunNowWeb.Models.ViewModel.CHotelImageViewModel
+
+ <section class="right-section">
+    <div class="container">
+        <div class="content__container pt-2">
+         @*    <form method="post" id="hotelForm">
+                <input type="hidden" name="HotelId" value="@Model.HotelId" />
+
+            </form> *@
+
+            <div class="content__container__image">
+                <div class="d-flex align-items-center">
+                    <div class="mb-4">
+                        <h4 class="fw-bold mt-5">照片</h4>
+                        <div class="content__container__image__text">對於旅客來說，現場實景照片往往成為影響是否訂房的重要參考。因此，建議你上傳完整的高畫質實景照片，吸引旅客下訂。想獲得更多小撇步嗎？</div>
+                    </div>
+                    <div class="mt-2 me-5">
+                        <img class="equip_image w-100" src="@Url.Content("~/image/ou/create_hotel_image.png")" alt="..." />
+                    </div>
+                </div>
+
+                <div class="mb-5 hotelImageBox">
+                    <h4 class="fw-bold mt-5">飯店照片</h4>
+                    <p>建築外觀、停車位、入口，以及任何其他開放使用的設施</p>
+                    <span class="alert-message"></span>
+                    <div class="uploaded">
+                        <div id="uploadSection">
+                            <img src="~/image/ou/upload.png" alt="..." />
+                            <div class="fw-bold">請將照片拖放至此</div>
+                            <p>僅限JPG和PNG格式（上限5 MB）</p>
+                            <input type="file" id="fileInput" accept=".jpg,.png" multiple style="display: none;" />
+                            <button id="uploadButton">選擇照片</button>
+                        </div>
+                    </div>
+                    <div class="container" id="preview">
+
+                        @foreach (var hotelImages in Model.AllhotelImages)
+                        {
+                            <div class="card hotelImageCard" data-id="@hotelImages.HotelImageId" data-is-new="false">
+                                @{
+                                    var imageUrl = hotelImages.HotelImage1.StartsWith("http://") || hotelImages.HotelImage1.StartsWith("https://")
+                                    ? hotelImages.HotelImage1
+                                    : Url.Content($"~/image/{hotelImages.HotelImage1}");
+                                }
+                                <img src="@imageUrl" class="card-img-top h-100" alt="..." data-file-name="@hotelImages.HotelImage1">
+                                <div class="card-body">
+                                    <select class="form-select" aria-label="Default select example" id="selectImageCategory">
+                                        <option selected disabled> 請選擇標題 </option>
+                                        @foreach (var imageCategory in Model.AllimageCategories)
+                                        {
+                                            var isSelected = hotelImages.ImageCategoryReferences.Any(icr => icr.ImageCategoryId == imageCategory.ImageCategoryId);
+                                            <option value="@imageCategory.ImageCategoryId" selected="@(isSelected ? "selected" : null)">@imageCategory.ImageCategoryName</option>
+                                        })
+                                      </select>
+                                </div>
+                                <button class="btn btn-danger delete-button" style="display: none;">刪除照片</button>
+                            </div>
+
+                        }
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center successMessage" style="visibility: hidden">
+                    <img src="@Url.Content("~/ou/image/checksign.png")" />
+                    <span style="color:green">已儲存!</span>
+                </div>
+                <div class="d-flex justify-content-end my-5">
+                    <button type="button" class="btn_previous" id="btnPrevious">取消</button>
+                    <button type="submit" class="btn_next" id="btnNext">儲存</button>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</section> 
+
+@{
+    var json = System.Text.Json.JsonSerializer.Serialize(Model.AllimageCategories, new System.Text.Json.JsonSerializerOptions
+            {
+                ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles
+            });
+}
+
+@section Styles {
+    <style>
+
+    </style>
+
+}
+@section Scripts {
+    <script>
+
+        var allImageCategories = @Html.Raw(json);
+        $(document).ready(async () => {
+            const hotelId = @Model.HotelId;
+            const maxTotalSize = 5 * 1024 * 1024; // 5MB
+            let totalSize = 0;
+            let filenames = new Set();
+            let allFiles = [];
+            let deletedImages = [];
+
+            $('#uploadButton').on('click', function () {
+                $('#fileInput').trigger('click');
+            });
+
+            $('#fileInput').on('change', async function (e) {
+
+                const allowedTypes = ['image/jpeg', 'image/png'];
+                const files = Array.from(e.target.files);
+                const fileInput = $('#fileInput');
+                let newSize = 0;
+
+                files.forEach((file, index) => {
+
+                    if (!allowedTypes.includes(file.type)) {
+                        alert('只允許上傳 JPG 和 PNG 格式的圖片');
+                        return;
+                    }
+
+                    if (filenames.has(file.name)) {
+                        alert(`檔名 ${file.name} 已存在，請選擇不同的檔案。`);
+                        return;
+                    }
+
+                    newSize += file.size;
+                    if (totalSize + newSize > maxTotalSize) {
+                        alert('所有照片加起來不能超過 5MB。');
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        let options = '';
+                        options += ' <option selected disabled> 請選擇標題 </option>'
+                        allImageCategories.forEach(ic => {
+                            options += `<option value="${ic.ImageCategoryId}">${ic.ImageCategoryName}</option>`;
+                        });
+                        const hotelImageCardStr = `
+                                                <div class="card hotelImageCard" data-is-new="true">
+                                          <img src="${e.target.result}" class="card-img-top h-100" alt="..." data-file-name="${file.name}" data-file-size="${file.size}">
+                                          <div class="card-body">
+                                              <select class="form-select" aria-label="Default select example" id="selectImageCategory">
+                                                     ${options}
+                                              </select>
+                                          </div>
+                                          <button class="btn btn-danger delete-button" style="display: none;">刪除照片</button>
+                                       </div>
+                                     `;
+
+                        $('#preview').append(hotelImageCardStr);
+
+                        // 當所有文件都讀取完畢後，改變樣式、儲存fileName到set及計算儲存的容量
+                        if (index === files.length - 1) {
+                            files.forEach(f => {
+                                filenames.add(f.name);
+                                allFiles.push({ file: f, category: null });
+                            });
+                            totalSize += newSize;
+                            fileInput.val('');          
+                        }
+                    };
+
+                    reader.readAsDataURL(file);
+                });
+            });
+
+
+            $('#preview').on('mouseover', '.card', function () {
+                $(this).find('.delete-button').css('display', 'block');
+            });
+
+            $('#preview').on('mouseout', '.card', function () {
+                $(this).find('.delete-button').css('display', 'none');
+            });
+
+            $('#preview').on('change', 'select', function () {
+                const card = $(this).closest('.hotelImageCard');
+                const imgElement = card.find('img');
+                const fileName = imgElement.data('file-name');
+                const category = $(this).val();
+    
+
+                allFiles.forEach(fileObj => {
+
+                    if (fileObj.file.name === fileName) {
+                        fileObj.category = category;
+                    }
+                });
+            });
+
+            $('#preview').on('click', '.delete-button', function () {
+                const card = $(this).closest('.card');
+                const imageId = card.data('id');
+                const imgElement = card.find('img');
+                const fileName = imgElement.data('file-name');
+                const fileSize = parseInt(imgElement.data('file-size'), 10);
+
+                
+                if (confirm('確定要刪除這張圖片嗎？')) {
+                    filenames.delete(fileName);
+                    totalSize -= fileSize;
+                    allFiles = allFiles.filter(fileObj => fileObj.file.name !== fileName);
+                    if (imageId) {          
+                        deletedImages.push(imageId);
+                    }
+                
+                    card.remove();
+                }
+
+
+            });
+
+            $(document).on('click', '.delete-button', function () {
+                $(this).closest('.hotelImageCard').addClass('deleted');
+            });
+
+            $('#btnNext').on('click', async function () {
+
+                let allValid = true;
+                allFiles.forEach(fileObj => {
+                    if (!fileObj.category) {
+                        allValid = false;
+                        alert(`請為圖片增加類別`);
+                    }
+                });
+
+                if ($('.hotelImageCard').length === 0) {
+                    alert('至少需要一張圖片');
+                    allValid = false;
+                }
+
+                if (!allValid) {
+                    return; 
+                }
+
+
+                let formData = new FormData();
+                formData.append('HotelId', hotelId);
+
+                allFiles.forEach(fileObj => {
+                    console.log(fileObj);
+                    formData.append('newImages', fileObj.file);
+                    formData.append('newImagesCategories', fileObj.category);
+                });
+
+                // 收集所有照片信息
+                $('.hotelImageCard').each(function () {
+                    const categorySelect = $(this).find('select');
+                    const isNew = $(this).data('is-new');
+                    const imageId = $(this).data('id');
+
+                    if (!isNew) {
+
+                        formData.append('updatedImages', imageId);
+                        formData.append('updatedImagesCategories', categorySelect.val());
+
+                    }
+                });
+
+                deletedImages.forEach(id => {
+                    formData.append('deletedImages', id);
+                });
+
+                try {
+                    const res = await fetch('/HostManage/HostHotelPhoto', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (!res.ok) {
+                        throw new Error(`HTTP error! status: ${res.status}`);
+                    }
+
+                    const data = await res.json();
+                    if(data.success) {
+                        $('.successMessage').css('visibility', 'visible');
+                        setTimeout(() => {
+                            $('.successMessage').css('visibility', 'hidden');
+                        }, 2000);
+                    }
+
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('發生錯誤儲存失敗');
+                }
+
+            });
+
+
+
+        });
+    </script>
+}

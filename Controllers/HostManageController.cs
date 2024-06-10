@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PrjFunNowWeb.Models;
+using PrjFunNowWeb.Models.DTO;
 using PrjFunNowWeb.Models.ViewModel;
 
 namespace PrjFunNowWeb.Controllers
@@ -7,10 +9,12 @@ namespace PrjFunNowWeb.Controllers
     public class HostManageController : Controller
     {
         private readonly FunNowContext _context;
+        private readonly IWebHostEnvironment _env;
 
-        public HostManageController(FunNowContext context)
+        public HostManageController(FunNowContext context, IWebHostEnvironment env)
         {
             _context = context;
+            _env = env;
         }
         public IActionResult Home()
         {
@@ -76,7 +80,7 @@ namespace PrjFunNowWeb.Controllers
                 var city = _context.Cities.FirstOrDefault(c => c.CityId == Convert.ToInt64(hotelIn.CityName));
                 if (city != null)
                 {
- 
+
                     hotel.CityId = city.CityId;
                 }
 
@@ -103,8 +107,8 @@ namespace PrjFunNowWeb.Controllers
                     message = "Data saved successfully.",
                     updatedHotel = new
                     {
-     
-                        hotel.HotelName,                    
+
+                        hotel.HotelName,
                         CityName = cityName?.CityName,
                         CountryName = country?.CountryName
 
@@ -114,6 +118,142 @@ namespace PrjFunNowWeb.Controllers
 
             return Json(new { success = false, message = "Invalid model state." });
         }
+
+
+        public IActionResult HostHotelPhoto(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home");
+            }
+
+            var hotel = (from h in _context.Hotels
+                         where h.HotelId == id
+                         select new CHotelImageViewModel
+                         {
+                             HotelId = h.HotelId,
+                             HotelName = h.HotelName,
+                             CityName = h.City.CityName,
+                             CountryName = h.City.Country.CountryName,
+                             HotelImage = h.HotelImages.Select(hi => hi.HotelImage1).FirstOrDefault(),
+                             AllhotelImages = h.HotelImages.ToList(),
+                             AllimageCategoryReferences = h.HotelImages.SelectMany(hi => hi.ImageCategoryReferences).ToList(),
+                             AllimageCategories = _context.ImageCategories.ToList()
+                         }).FirstOrDefault();
+
+
+            if (hotel == null)
+            {
+                return NotFound();
+            }
+
+            hotel.HotelImage = hotel.HotelImage != null && (hotel.HotelImage.StartsWith("http://") || hotel.HotelImage.StartsWith("https://"))
+                             ? hotel.HotelImage
+                             : $"{hotel.HotelImage}";
+
+            return View(hotel);
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> HostHotelPhoto([FromForm] CSaveHotelImageDTO changesData)
+        {
+            if (changesData == null)
+            {
+                return BadRequest("No data received.");
+            }
+
+            // 保存新照片
+            if (changesData.NewImages != null)
+            {
+                for (int i = 0; i < changesData.NewImages.Count; i++)
+                {
+                    var imageFile = changesData.NewImages[i];
+                    var categoryId = changesData.NewImagesCategories[i];
+
+
+                    var extension = Path.GetExtension(imageFile.FileName);
+                    var fileName = $"{Guid.NewGuid()}{extension}";
+                    var filePath = Path.Combine(_env.WebRootPath, "image", fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await imageFile.CopyToAsync(stream);
+                    }
+
+                    var hotelImage = new HotelImage
+                    {
+                        HotelImage1 = fileName,
+                        HotelId = changesData.HotelId
+                        
+                    };
+
+                    hotelImage.ImageCategoryReferences.Add(new ImageCategoryReference
+                    {
+                        ImageCategoryId = categoryId,
+                        HotelImageId = hotelImage.HotelImageId
+                    });
+
+                    _context.HotelImages.Add(hotelImage);
+                }
+            }
+
+            // 更新舊照片類別
+            if (changesData.UpdatedImages != null)
+            {
+                for (int i = 0; i < changesData.UpdatedImages.Count; i++)
+                {
+                    var imageId = changesData.UpdatedImages[i];
+                    var categoryId = changesData.UpdatedImagesCategories[i];
+
+                    var hotelImage = _context.HotelImages.Include(hi => hi.ImageCategoryReferences)
+                                                         .FirstOrDefault(hi => hi.HotelImageId == imageId);
+                    if (hotelImage != null)
+                    {
+                        hotelImage.ImageCategoryReferences.Clear();
+                        hotelImage.ImageCategoryReferences.Add(new ImageCategoryReference
+                        {
+                            ImageCategoryId = categoryId
+                        });
+                    }
+                }
+            }
+
+            // 删除舊照片
+            if (changesData.DeletedImages != null)
+            {
+                foreach (var imageId in changesData.DeletedImages)
+                {
+                    var hotelImage = _context.HotelImages.Include(hi => hi.ImageCategoryReferences)
+                                                         .FirstOrDefault(hi => hi.HotelImageId == imageId);
+                    if (hotelImage != null)
+                    {
+                        // 删除對應類別
+                        var categoryReference = hotelImage.ImageCategoryReferences.FirstOrDefault();
+                        if (categoryReference != null)
+                        {
+                            _context.ImageCategoryReferences.Remove(categoryReference);
+                        }
+
+                        // 删除硬碟照片
+                        var filePath = Path.Combine(_env.WebRootPath, "image", hotelImage.HotelImage1);
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            System.IO.File.Delete(filePath);
+                        }
+
+                        // 删除DB資料
+                        _context.HotelImages.Remove(hotelImage);
+                    }
+                }
+            }
+
+            _context.SaveChanges();
+
+            return Ok(new { success = true, message = "All changes saved successfully" });
+
+        }
+      
 
     }
 }

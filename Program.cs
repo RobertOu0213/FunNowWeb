@@ -51,6 +51,12 @@ builder.Services.AddSession(options =>
 // Add SignalR client services if needed for SignalR client side (optional)
 builder.Services.AddSignalR();
 
+
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+});
+
 var app = builder.Build();
 
 
