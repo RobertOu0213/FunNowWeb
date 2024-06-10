@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @model PrjFunNowWeb.Models.louie_viewmodel.pgHotel_HotelDetailViewModel
-<div class="container mt-5 pt-5">
+<div class="container mt-5 pt-5" id="top">
     <div class="row">
         <div>
             @*麵包屑*@
@@ -168,70 +168,25 @@
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-10">
-                                    <div id="carouselExampleIndicators" class="carousel slide">
-                                        <div class="carousel-indicators">
-                                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                                    <div class="d-flex flex-wrap" style="max-height: 400px; overflow-y: auto;">
+                                        @* @foreach (var image in Model.HotelDetail.HotelImages)
+                                        {
+                                        <div class="p-2" style="flex: 1 0 50%;">
+                                        <img src="@image.ImageUrl" class="img-fluid" alt="Hotel Image" />
                                         </div>
-                                        <div class="carousel-inner">
-                                            <div class="carousel-item active">
-                                                <img src="~/image/louieee_img/yuanshan.png" class="d-block w-100" />
-                                            </div>
-                                            <div class="carousel-item">
-                                                <img src="~/image/louieee_img/yuanshan.png" class="d-block w-100" />
-                                            </div>
-                                            <div class="carousel-item">
-                                                <img src="~/image/louieee_img/yuanshan.png" class="d-block w-100" />
-                                            </div>
-                                        </div>
-                                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Previous</span>
-                                        </button>
-                                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Next</span>
-                                        </button>
+                                        } *@
                                     </div>
                                 </div>
                                 <div class="col-2">
-                                    <h2>圓山大飯店</h2>
-                                    <h3>飯店設備</h3>
+                                    <h3>@Model.HotelDetail.HotelName</h3>
+                                    <h4>設施與服務</h4>
                                     <div class="d-flex flex-column">
-                                        <div class="d-flex align-items-center">
-                                            <i class="fa-solid fa-water-ladder">室外泳池</i>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <i class="fa-solid fa-water-ladder">室外泳池</i>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <i class="fa-solid fa-water-ladder">室外泳池</i>
-                                        </div>
-                                    </div>
-                                    <h3>飯店設備</h3>
-                                    <div class="d-flex flex-column">
-                                        <div class="d-flex align-items-center">
-                                            <i class="fa-solid fa-water-ladder">室外泳池</i>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <i class="fa-solid fa-water-ladder">室外泳池</i>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <i class="fa-solid fa-water-ladder">室外泳池</i>
-                                        </div>
-                                    </div>
-                                    <h3>飯店設備</h3>
-                                    <div class="d-flex flex-column">
-                                        <div class="d-flex align-items-center">
-                                            <i class="fa-solid fa-water-ladder">室外泳池</i>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <i class="fa-solid fa-water-ladder">室外泳池</i>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <i class="fa-solid fa-water-ladder">室外泳池</i>
-                                        </div>
+                                        @foreach (var equipment in Model.HotelDetail.HotelEquipments)
+                                        {
+                                            <div>
+                                                <i class="fa-regular fa-circle-check"></i> @equipment
+                                            </div>
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -239,28 +194,15 @@
 
                         <div class="modal-footer">
                             <div class="row">
-                                <div class="col-10">
-                                    <table>
-                                        <tr>
-                                            <td><img src="~/image/louieee_img/yuanshan.png" class="img-fluid" /></td>
-                                            <td><img src="~/image/louieee_img/yuanshan.png" class="img-fluid" /></td>
-                                            <td><img src="~/image/louieee_img/yuanshan.png" class="img-fluid" /></td>
-                                            <td><img src="~/image/louieee_img/yuanshan.png" class="img-fluid" /></td>
-                                            <td><img src="~/image/louieee_img/yuanshan.png" class="img-fluid" /></td>
-                                            <td><img src="~/image/louieee_img/yuanshan.png" class="img-fluid" /></td>
-                                        </tr>
-                                    </table>
-                                </div>
-                                <div class="col-2">
-                                    <h3>TWD 2,180</h3>
-                                    <button class="btn btn-primary btn-lg">查看房型</button>
-                                </div>
+
+                                <h3>TWD @(Model.HotelDetail.AverageRoomPrice.ToString("F2"))</h3>
+                                <button class="btn btn-primary btn-lg" onclick="scrollToRoomTypes()">查看房型</button>
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
 
             @*飯店導覽列*@
             <ul class="nav nav-underline fixed-nav">
@@ -268,7 +210,7 @@
                     <a class="nav-link" href="#room-types">房型</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">評論</a>
+                    <a class="nav-link" href="#hotel-reviews">評論</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#hotel-equips">設施</a>
@@ -277,7 +219,7 @@
                     <a class="nav-link" href="#hotel-map">周邊</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-up-long"></i></a>
+                    <a class="nav-link" href="#top"><i class="fa-solid fa-up-long"></i></a>
                 </li>
             </ul>
 
@@ -288,7 +230,7 @@
                 {
                     @foreach (var room in Model.HotelDetail.Rooms)
                     {
-                        <div class="row">
+                        <div class="row room-item" data-room-name="@room.RoomName" data-room-price="@room.RoomPrice" data-room-equips="@Newtonsoft.Json.JsonConvert.SerializeObject(room.RoomEquipments)">
                             <h3 data-bs-toggle="modal" data-bs-target="#roomModal">@room.RoomName</h3>
                             <div class="col-4">
                                 <table data-bs-toggle="modal" data-bs-target="#roomModal">
@@ -346,133 +288,44 @@
                 }
             </div>
 
-
             @*房間彈出視窗*@
-            @*                 <div class="modal fade" id="roomModal" tabindex="-1" aria-labelledby="roomModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-            <div class="modal-header">
-            <div>
-            <ul class="nav nav-underline">
-            <li class="nav-item">
-            <a class="nav-link" href="#">所有照片</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link" href="#">客房</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link" href="#">住宿</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link" href="#">設施與服務</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link" href="#">餐飲</a>
-            </li>
-            </ul>
-            </div>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
+            <div class="modal fade" id="roomModal" tabindex="-1" aria-labelledby="roomModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
 
-            <div class="modal-body">
-            <div class="row">
-            <div class="col-10">
-            <div id="carouselExampleIndicators" class="carousel slide">
-            <div class="carousel-indicators">
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-            </div>
-            <div class="carousel-inner">
-            <div class="carousel-item active">
-            <img src="~/image/louieee_img/yuanshan_room.png" class="d-block w-100" />
-            </div>
-            <div class="carousel-item">
-            <img src="~/image/louieee_img/yuanshan_room.png" class="d-block w-100" />
-            </div>
-            <div class="carousel-item">
-            <img src="~/image/louieee_img/yuanshan_room.png" class="d-block w-100" />
-            </div>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-            </button>
-            </div>
-            </div>
-            <div class="col-2">
-            <h2>精緻客房</h2>
-            <h3>房間設備</h3>
-            <div class="d-flex flex-column">
-            <div class="d-flex align-items-center">
-            <i class="fa-solid fa-bath">超大浴缸</i>
-            </div>
-            <div class="d-flex align-items-center">
-            <i class="fa-solid fa-bath">超大浴缸</i>
-            </div>
-            <div class="d-flex align-items-center">
-            <i class="fa-solid fa-bath">超大浴缸</i>
-            </div>
-            </div>
-            <h3>房間設備</h3>
-            <div class="d-flex flex-column">
-            <div class="d-flex align-items-center">
-            <i class="fa-solid fa-bath">超大浴缸</i>
-            </div>
-            <div class="d-flex align-items-center">
-            <i class="fa-solid fa-bath">超大浴缸</i>
-            </div>
-            <div class="d-flex align-items-center">
-            <i class="fa-solid fa-bath">超大浴缸</i>
-            </div>
-            </div>
-            <h3>房間設備</h3>
-            <div class="d-flex flex-column">
-            <div class="d-flex align-items-center">
-            <i class="fa-solid fa-bath">超大浴缸</i>
-            </div>
-            <div class="d-flex align-items-center">
-            <i class="fa-solid fa-bath">超大浴缸</i>
-            </div>
-            <div class="d-flex align-items-center">
-            <i class="fa-solid fa-bath">超大浴缸</i>
-            </div>
-            </div>
-            </div>
-            </div>
-            </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-10" id="room-images">
+                                    <!-- 這裡放房間圖片 -->
+                                </div>
+                                <div class="col-2">
+                                    <h2 id="room-name"></h2>
+                                    <h3>房間設備</h3>
+                                    <div id="room-equipments" class="d-flex flex-column">
+                                        <!-- 動態添加設備 -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-            <div class="modal-footer">
-            <div class="row">
-            <div class="col-10">
-            <table>
-            <tr>
-            <td><img src="~/image/louieee_img/yuanshan_room.png" class="img-fluid" /></td>
-            <td><img src="~/image/louieee_img/yuanshan_room.png" class="img-fluid" /></td>
-            <td><img src="~/image/louieee_img/yuanshan_room.png" class="img-fluid" /></td>
-            <td><img src="~/image/louieee_img/yuanshan_room.png" class="img-fluid" /></td>
-            <td><img src="~/image/louieee_img/yuanshan_room.png" class="img-fluid" /></td>
-            <td><img src="~/image/louieee_img/yuanshan_room.png" class="img-fluid" /></td>
-            </tr>
-            </table>
+                        <div class="modal-footer">
+                            <div class="row">
+                                <h3 id="room-price"></h3>
+                                <button class="btn btn-outline-primary btn-lg">加入購物車</button>
+                                <button class="btn btn-primary btn-lg">立即下訂</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-2">
-            <h3>TWD 2,180</h3>
-            <button class="btn btn-outline-primary btn-lg">加入購物車</button>
-            <button class="btn btn-primary btn-lg">立即下訂</button>
-            </div>
-            </div>
-            </div>
-            </div>
-            </div>
-            </div> *@
 
             @*評論區(亭蓉做)*@
-
+            <div id="hotel-reviews">
+                <h2>評論</h2>
+            </div>
             @*設施區*@
             <div id="hotel-equips">
                 <h2>設施與服務</h2>
@@ -735,30 +588,109 @@
                     isExpanded = !isExpanded;
                 });
             }
-        });
 
-        //你可能也喜歡-輪播
-        $(document).ready(function () {
-            $('#carouselExampleControls').carousel({
-                interval: false // 禁用自动轮播
-            });
 
-            $('#carouselExampleControls').on('slide.bs.carousel', function (e) {
-                var $e = $(e.relatedTarget);
-                var idx = $e.index();
-                var itemsPerSlide = 3;
-                var totalItems = $('.carousel-item').length;
+            //你可能也喜歡-輪播
+            $(document).ready(function () {
+                $('#carouselExampleControls').carousel({
+                    interval: false // 禁用自动轮播
+                });
 
-                if (idx >= totalItems - (itemsPerSlide - 1)) {
-                    var it = itemsPerSlide - (totalItems - idx);
-                    for (var i = 0; i < it; i++) {
-                        // append slides to end
-                        if (e.direction === "left") {
-                            $('.carousel-item').eq(i).appendTo('.carousel-inner');
-                        } else {
-                            $('.carousel-item').eq(0).appendTo('.carousel-inner');
+                $('#carouselExampleControls').on('slide.bs.carousel', function (e) {
+                    var $e = $(e.relatedTarget);
+                    var idx = $e.index();
+                    var itemsPerSlide = 3;
+                    var totalItems = $('.carousel-item').length;
+
+                    if (idx >= totalItems - (itemsPerSlide - 1)) {
+                        var it = itemsPerSlide - (totalItems - idx);
+                        for (var i = 0; i < it; i++) {
+                            // append slides to end
+                            if (e.direction === "left") {
+                                $('.carousel-item').eq(i).appendTo('.carousel-inner');
+                            } else {
+                                $('.carousel-item').eq(0).appendTo('.carousel-inner');
+                            }
                         }
                     }
+                });
+            });
+
+            //飯店彈出視窗-查看房型紐
+            function scrollToRoomTypes() {
+                var roomTypesElement = document.getElementById('room-types');
+                var hotelModal = document.getElementById('hotelModal');
+
+                if (roomTypesElement && hotelModal) {
+                    // 添加事件监听器以在模态框完全隐藏后滚动到目标元素
+                    hotelModal.addEventListener('hidden.bs.modal', function () {
+                        roomTypesElement.scrollIntoView({ behavior: 'smooth' });
+                    }, { once: true });
+
+                    // 关闭模态框
+                    var modalInstance = bootstrap.Modal.getInstance(hotelModal);
+                    if (modalInstance) {
+                        modalInstance.hide();
+                    }
+                }
+            }
+
+            //導覽列-避免被遮住
+            const links = document.querySelectorAll('.nav-link');
+
+            links.forEach(link => {
+                link.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+
+                    if (targetElement) {
+                        const offset = 100; // 调整偏移量，根据您的实际情况设置
+                        const elementPosition = targetElement.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            //房間彈出視窗
+            var roomModal = document.getElementById('roomModal');
+            var roomNameElement = document.getElementById('room-name');
+            var roomEquipmentsElement = document.getElementById('room-equipments');
+            var roomPriceElement = document.getElementById('room-price');
+            var roomImagesElement = document.getElementById('room-images');
+
+            var roomItems = document.querySelectorAll('.room-item');
+            roomItems.forEach(function (roomItem) {
+                roomItem.addEventListener('click', function () {//打開彈跳視窗
+                    var roomName = roomItem.getAttribute('data-room-name');
+                    var roomPrice = roomItem.getAttribute('data-room-price');
+                    var roomEquipments = JSON.parse(roomItem.getAttribute('data-room-equips'));
+
+                    roomNameElement.textContent = roomName;
+                    roomPriceElement.textContent = 'TWD ' + parseFloat(roomPrice).toFixed(2);
+
+                    roomEquipmentsElement.innerHTML = '';
+                    roomEquipments.forEach(function (equip) {
+                        var equipElement = document.createElement('div');
+                        equipElement.classList.add('d-flex', 'align-items-center');
+                        equipElement.innerHTML = '<i class="fa-regular fa-thumbs-up"></i> ' + equip;
+                        roomEquipmentsElement.appendChild(equipElement);
+                    });
+
+                    roomImagesElement.innerHTML = '<img src="~/image/louieee_img/yuanshan_room.png" class="img-fluid" />';
+                });
+            });
+            
+            roomModal.addEventListener('hidden.bs.modal', function () {//關閉彈跳視窗
+                document.body.classList.remove('modal-open');
+                var backdrop = document.querySelector('.modal-backdrop');
+                if (backdrop) {
+                    backdrop.remove();
                 }
             });
         });
