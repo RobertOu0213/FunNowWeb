@@ -48,134 +48,62 @@
                 <br />
 
 
-                <!--//住宿類型Start-->
                 <div style="margin:20px 10px">
                     <p>住宿類型</p>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
+                @foreach (var hotelType in Model.HotelTypes)
+                {
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="@hotelType.HotelTypeId" id="hotelType_@hotelType.HotelTypeId">
+                            <label class="form-check-label" for="hotelType_@hotelType.HotelTypeId">
+                            @hotelType.HotelTypeName
+                            </label>
+                        </div>
+                }
                 </div>
-                <!--//住宿類型END-->
-                <hr />
 
-                <!--//星級start-->
                 <div style="margin:20px 10px">
-                    <p>星級</p>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
+                    <p>住宿設備</p>
+                @foreach (var hotelEquipment in Model.HotelEquipments)
+                {
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="@hotelEquipment.HotelEquipmentId" id="hotelEquipment_@hotelEquipment.HotelEquipmentId">
+                            <label class="form-check-label" for="hotelEquipment_@hotelEquipment.HotelEquipmentId">
+                            @hotelEquipment.HotelEquipmentName
+                            </label>
+                        </div>
+                }
                 </div>
-                <!--//星級End-->
-                <hr />
 
-                <!--//區域start-->
                 <div style="margin:20px 10px">
-                    <p>區域</p>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
+                    <p>城市</p>
+                    <div class="form-check-container">
+                    @foreach (var city in Model.Cities)
+                    {
+                            <div class="form-check city-item">
+                                <input class="form-check-input" type="checkbox" value="@city.CityId" id="city_@city.CityId">
+                                <label class="form-check-label" for="city_@city.CityId">
+                                @city.CityName
+                                </label>
+                            </div>
+                    }
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
+                    <button id="toggleCityButton" class="toggle-button">顯示更多</button>
                 </div>
-                <!--//區域End-->
-                <hr />
+
+                <div style="margin:20px 10px">
+                    <p>房間設備</p>
+                @foreach (var roomEquipment in Model.RoomEquipments)
+                {
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="@roomEquipment.RoomEquipmentId" id="roomEquipment_@roomEquipment.RoomEquipmentId">
+                            <label class="form-check-label" for="roomEquipment_@roomEquipment.RoomEquipmentId">
+                            @roomEquipment.RoomEquipmentName
+                            </label>
+                        </div>
+                }
+                </div>
+
+
 
                 <!--//房型優惠start-->
                 <div style="margin:20px 10px">
@@ -218,49 +146,6 @@
                     </div>
                 </div>
                 <!--//房型優惠End-->
-                <hr />
-
-                <!--//住宿設施start-->
-                <div style="margin:20px 10px">
-                    <p>住宿設施</p>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
-                </div>
-                <!--//住宿設施End-->
                 <hr />
 
                 <!--//熱門景點start-->
@@ -608,6 +493,22 @@
         }
 
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const toggleButton = document.querySelector("#toggleCityButton");
+            const formCheckContainer = document.querySelector(".form-check-container");
+
+            toggleButton.addEventListener("click", function () {
+                formCheckContainer.classList.toggle("expanded");
+                if (formCheckContainer.classList.contains("expanded")) {
+                    toggleButton.textContent = "顯示較少";
+                } else {
+                    toggleButton.textContent = "顯示更多";
+                }
+            });
+        });
+    </script>
+
 
 }
 
@@ -692,6 +593,30 @@
         }
 
     </style>
+    <style>
+        .form-check-container .city-item {
+            display: none;
+        }
+
+            .form-check-container .city-item:nth-child(-n+10) {
+                display: block;
+            }
+
+        .form-check-container.expanded .city-item {
+            display: block;
+        }
+
+        .toggle-button {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+
 }
 
 
