@@ -456,27 +456,22 @@
                 @*評論區(亭蓉做)*@
 
                 @*設施區*@
-                <div id="hotel-equips">
-                    <h2>設施與服務</h2>
-                    <div>
-                        <h3>運動設施</h3>
-                        <i class="fa-regular fa-circle-check">室外泳池</i>
-                        <i class="fa-regular fa-circle-check">室外泳池</i>
-                        <i class="fa-regular fa-circle-check">室外泳池</i>
-                    </div>
-                    <div>
-                        <h3>運動設施</h3>
-                        <i class="fa-regular fa-circle-check">室外泳池</i>
-                        <i class="fa-regular fa-circle-check">室外泳池</i>
-                        <i class="fa-regular fa-circle-check">室外泳池</i>
-                    </div>
-                    <div>
-                        <h3>運動設施</h3>
-                        <i class="fa-regular fa-circle-check">室外泳池</i>
-                        <i class="fa-regular fa-circle-check">室外泳池</i>
-                        <i class="fa-regular fa-circle-check">室外泳池</i>
-                    </div>
-                </div>
+            <div id="hotel-equips">
+                <h2>設施與服務</h2>
+                @if (Model.HotelDetail.HotelEquipments != null && Model.HotelDetail.HotelEquipments.Any())
+                {
+                    foreach (var equipment in Model.HotelDetail.HotelEquipments)
+                    {
+                        <div>
+                            <i class="fa-regular fa-circle-check">@equipment</i>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p>目前沒有任何設備資料。</p>
+                }
+            </div>
 
                 @*周邊區*@
                 <div class="row" id="hotel-map">
