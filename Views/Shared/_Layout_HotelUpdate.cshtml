@@ -14,7 +14,12 @@
 </head>
 <body>
     @{
-        var action = ViewContext.RouteData.Values["action"].ToString();
+        var action = string.Empty;
+        if (ViewContext.RouteData != null && ViewContext.RouteData.Values != null)
+        {
+            var actionValue = ViewContext.RouteData.Values["action"];
+            action = actionValue != null ? actionValue.ToString() : string.Empty;
+        }
     }
 
 
@@ -87,18 +92,21 @@
         <div class="d-flex">
             <aside class="left-section">
                 <div class="left-section-items">
-                    <a href="@Url.Action("HostHotelInfo", "HostManage",new { id = Model.HotelId })" class="@(action == "HostHotelInfo" ? "active" : "")">                        <div>旅館基本資料</div>
+              
+                    <a href="@Url.Action("HostHotelInfo", "HostManage",new { id = Model.HotelId })" class="@(action == "HostHotelInfo" ? "active" : "")">
+                        <div>旅館基本資料</div>
                     </a>
                     <a href="#">
                         <div>房間基本資料</div>
                     </a>
+              
                     <a href="@Url.Action("HostHotelPhoto", "HostManage",new { id = Model.HotelId })" class="@(action == "HostHotelPhoto" ? "active" : "")">
                         <div>旅館照片</div>
                     </a>
                     <a href="#">
                         <div>房間照片</div>
                     </a>
-                    <a href="#">
+                    <a href="@Url.Action("HostRoomCreate", "HostManage",new { id = Model.HotelId })" class="@(action == "HostRoomCreate" ? "active" : "")">
                         <div>新增房間</div>
                     </a>
                 </div>

@@ -4,64 +4,6 @@
 }
 @model PrjFunNowWeb.Models.ViewModel.CsingleHotelViewModel
 
-@* <main>
-    <div id="hotelContainers">
-        <div class="hotelCardSingle">
-            <div class="d-flex align-items-center hotelCard__info">
-                <div>
-                    <img src="@(Model.HotelImage.StartsWith("http://") || Model.HotelImage.StartsWith("https://") ? Model.HotelImage : Url.Content("~/image/" + Model.HotelImage))" alt="..." class="hotelCard__img" />
-                </div>
-                <div>
-                    <div class="fw-bold">
-                        <span>[@Model.HotelId]</span>
-                        <span id="spnHotelName">@Model.HotelName</span>
-                    </div>
-                    <div>
-                        <span class="active-status">已啟用</span>
-                        <span class="city" id="spnCityName">@Model.CityName,</span>
-                        <span class="country" id="spnCountryName">@Model.CountryName</span>
-                    </div>
-                </div>
-            </div>
-            <div class="d-flex align-items-center ms-3 hotelCard__connect">
-                <a href="#" class="">
-                    <div>
-                        編輯物業
-                    </div>
-                </a>
-                <a href="#" class="">
-                    <div>
-                        行事曆
-                    </div>
-                </a>
-                <a href="#" class="">
-                    <div>
-                        訂單&收入
-                    </div>
-                </a>
-            </div>
-        </div>
-    </div>
-    <div class="d-flex">
-        <aside class="left-section">
-            <div class="left-section-items">
-                <a href="#" class="active">
-                    <div>旅館基本資料</div>
-                </a>
-                <a href="#">
-                    <div>房間基本資料</div>
-                </a>
-                <a href="@Url.Action("HostHotelPhoto", "HostManage",new { id = Model.HotelId })">
-                    <div>旅館照片</div>
-                </a>
-                <a href="#">
-                    <div>房間照片</div>
-                </a>
-                <a href="#">
-                    <div>新增房間</div>
-                </a>
-            </div>
-        </aside> *@
         <section class="right-section">
             <div class="container">
                 <div class="content__container pt-5">
@@ -180,8 +122,7 @@
                 </div>
             </div>
         </section>
-@*    </div>
-</main>  *@
+
 
 @section Styles {
     <link href="~/ou/css/HostHotelInfo.css" rel="stylesheet" />

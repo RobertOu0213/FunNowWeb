@@ -8,11 +8,6 @@
  <section class="right-section">
     <div class="container">
         <div class="content__container pt-2">
-         @*    <form method="post" id="hotelForm">
-                <input type="hidden" name="HotelId" value="@Model.HotelId" />
-
-            </form> *@
-
             <div class="content__container__image">
                 <div class="d-flex align-items-center">
                     <div class="mb-4">
@@ -219,10 +214,12 @@
 
             });
 
-            $(document).on('click', '.delete-button', function () {
-                $(this).closest('.hotelImageCard').addClass('deleted');
+            //取消
+            $('#btnPrevious').on('click', function () {
+                location.reload();
             });
 
+            //儲存
             $('#btnNext').on('click', async function () {
 
                 let allValid = true;

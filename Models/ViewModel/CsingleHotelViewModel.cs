@@ -19,6 +19,11 @@ namespace PrjFunNowWeb.Models.ViewModel
         public List<HotelType> AllHotelTypes { get; set; }
         public HotelType HotelType { get; set; }
         public List<int> HotelEquipmentsNumber { get; set; }
+
+        public List<RoomType> AllRoomTypes { get; set; }
+        public List<RoomEquipment> AllRoomEquipments { get; set; }
+
+        public List<ImageCategory> AllimageCategories { get; set; }
     }
 }
 
