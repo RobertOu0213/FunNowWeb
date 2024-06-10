@@ -39,6 +39,12 @@ namespace PrjFunNowWeb.Controllers
                 hotelDetail.Rooms = new List<pgHotel_RoomDTO>();
             }
 
+            // 检查 SimilarHotels 是否为空
+            if (hotelDetail.SimilarHotels == null)
+            {
+                hotelDetail.SimilarHotels = new List<pgHotel_SimilarHotelsDTO>();
+            }
+
             // 将数据传递给视图
             var viewModel = new pgHotel_HotelDetailViewModel
             {

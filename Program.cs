@@ -33,6 +33,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=HotelCreate}/{action=Hotel}/{id?}");
+    pattern: "{controller=PgHotel}/{action=pgHotel}/{id?}");
 
 app.Run();

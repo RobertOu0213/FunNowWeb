@@ -16,5 +16,8 @@
         public List<pgHotel_ImageDTO>? HotelImages { get; set; }
         public List<pgHotel_RoomDTO>? Rooms { get; set; }
         public decimal AverageRoomPrice { get; set; }
+        //你可能喜歡
+        public int CityId { get; set; } // 新增 CityId 属性
+        public List<pgHotel_SimilarHotelsDTO>? SimilarHotels { get; set; } // 新增 SimilarHotels 属性
     }
 }
