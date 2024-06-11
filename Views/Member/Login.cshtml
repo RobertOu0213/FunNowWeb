@@ -23,8 +23,9 @@
                         <form id="loginForm">
                             <div class="mb-3">
                                 <label for="EmailInput" class="form-label" style="font-size:15px">電子信箱</label>
-                                <input type="email" class="form-control" id="EmailInput1" name="EmailInput" placeholder="電子信箱">
+                                <input type="email" class="form-control" id="EmailInput1" name="EmailInput" placeholder="電子信箱" onchange="queryEmail()">
                             </div>
+                            <div id="result"></div>
                             <p></p>
                             <div class="mb-3">
                                 <label for="PasswordInput" class="form-label" style="font-size:15px">密碼</label>
@@ -47,7 +48,7 @@
                                 <button class="btn btn-primary btn-login text-uppercase fw-bold" type="button" id="loginBtn">登入</button>
                             </div>
                             <p></p>
-                            <div id="error" class="alert alert-danger" style="display:none;"></div>
+                            <p id="error" class="alert alert-danger" style="display:none;">登入失敗，請重新確認電子信箱與密碼</p>
                             <div class="row">
                                 <div>
                                     <a class="col ff1">我是新朋友</a>
@@ -176,14 +177,34 @@
 
         // 當正在打信箱密碼時,清除錯誤訊息
         //如果要即時比對是否有帳號，要在這裡串查詢會員的API!!!!
-        emailInput.addEventListener("input", clearError);
-        passwordInput.addEventListener("input", clearError);
+        async function queryEmail() {
+            var email = emailInput.value;
 
-        function clearError() 
-        {
-            errorElement.innerText = "";
-            errorElement.style.display = "none";
+            try {
+                const response = await fetch("https://localhost:7103/api/Members/query", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email: email })
+                });
+
+                const data = await response.json();
+                var resultElement = document.getElementById("result");
+
+                if (data.message === "YES") {
+                    resultElement.innerText = "歡迎回來~趕緊輸入密碼來登入吧";
+                    resultElement.style.backgroundColor = "green";
+                } else {
+                    resultElement.innerText = "這個Email沒有註冊過，請點選「我是新朋友」加入我們!";
+                    resultElement.style.backgroundColor = "red";
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
         }
+
+       
 
         //按下登入按鈕時，串接包含JWT驗證的Login API
         loginBtn.addEventListener("click", async function (event) {
@@ -271,6 +292,7 @@
                 {
                     passwordInput.value = ""; // 清空密碼
                     alert("登入失敗，請重新確認電子信箱和密碼");
+                    //errorElement.style.display = "block";
                 }
             } 
             catch (error) 
