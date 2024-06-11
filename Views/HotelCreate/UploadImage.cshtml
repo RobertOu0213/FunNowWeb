@@ -119,8 +119,25 @@
 }
 @section Scripts {
     <script>
+
+        //需再修改
+        $(window).on('load', function () {
+    
+            if (sessionStorage.getItem('forceRedirect') === 'true') {
+                showModal();
+
+            }
+        });
+
+        function showModal() {
+            var resultModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+            resultModal.show();
+            sessionStorage.setItem('forceRedirect', 'true');
+        }
        
         $(document).ready(async () => {
+
+
 
             const maxTotalSize = 5 * 1024 * 1024; // 5MB
             let totalSize = 0;
@@ -257,144 +274,146 @@
             // 根據客房資訊生成 HTML 代碼
             let roomContainerStr = '';
             let rootUrl = '@Url.Content("~")';
-            roomInfo.forEach((room, index) => {
-                roomContainerStr += `
-                                      <div class="mb-5 roomBoxes" id=roomBoxes${index}>
-                                        <h4 class="fw-bold mt-5">客房${index + 1}照片</h4>
-                                        <p>建築外觀、停車位、入口，以及任何其他開放使用的設施</p>
-                                          <span class="alert-message"></span>
-                                          <div class="file__upload" id="file__upload${index}">
-                                            <div id="uploadSection${index}">
-                                                   <img src="${rootUrl}/image/ou/upload.png" alt="..." />
-                                                <div class="fw-bold">請將照片拖放至此</div>
-                                                <p>僅限JPG和PNG格式（上限5 MB）</p>
-                                                <input type="file" id="fileInput${index}" accept=".jpg,.png" multiple style="display: none;" />
-                                                <button id="uploadButton${index}">選擇照片</button>
-                                            </div>
-                                        </div>
-                                        <div class="container" id="preview${index}"></div>
-                                    </div>
-                                `;
-
-            });
-
-            $('#roomImagesContainer').html(roomContainerStr);
-
-            roomInfo.forEach((room, index) => {
-
-                $(`#uploadButton${index}`).on('click', function () {
-                    $(`#fileInput${index}`).trigger('click');
-                });
-
-                // 為每個檔案輸入元素添加變更事件處理器
-                $(`#fileInput${index}`).on('change', async function (e) {
-
-                    const allowedTypes = ['image/jpeg', 'image/png'];
-                    const files = Array.from(e.target.files);
-
-                    const fileInput = $(`#fileInput${index}`);
-                    let newSize = 0;
-
-                    files.forEach((file, fileIndex) => {
-
-                        if (!allowedTypes.includes(file.type)) {
-                            alert('只允許上傳 JPG 和 PNG 格式的圖片');
-                            return;
-                        }
-
-                        if (filenames.has(file.name)) {
-                            alert(`檔名 ${file.name} 已存在，請選擇不同的檔案。`);
-                            return;
-                        }
-
-                        newSize += file.size;
-                        if (totalSize + newSize > maxTotalSize) {
-                            alert('所有照片加起來不能超過 5MB。');
-                            return;
-                        }
-
-                        const reader = new FileReader();
-
-                        reader.onload = function (e) {
-
-                            const string = `
-                                            <div class="card">
-                                                        <img src="${e.target.result}" class="card-img-top h-100" alt="..." data-file-name="${file.name}" data-file-size="${file.size}">
-                                                <div class="card-body">
-                                                    <select class="form-select" aria-label="Default select example" id="selectImageCategory">
-
-
-                                                              ${imageCategoryStr}
-
-                                                    </select>
+            if (roomInfo !== null) {
+                roomInfo.forEach((room, index) => {
+                    roomContainerStr += `
+                                              <div class="mb-5 roomBoxes" id=roomBoxes${index}>
+                                                <h4 class="fw-bold mt-5">客房${index + 1}照片</h4>
+                                                <p>建築外觀、停車位、入口，以及任何其他開放使用的設施</p>
+                                                  <span class="alert-message"></span>
+                                                  <div class="file__upload" id="file__upload${index}">
+                                                    <div id="uploadSection${index}">
+                                                           <img src="${rootUrl}/image/ou/upload.png" alt="..." />
+                                                        <div class="fw-bold">請將照片拖放至此</div>
+                                                        <p>僅限JPG和PNG格式（上限5 MB）</p>
+                                                        <input type="file" id="fileInput${index}" accept=".jpg,.png" multiple style="display: none;" />
+                                                        <button id="uploadButton${index}">選擇照片</button>
+                                                    </div>
                                                 </div>
-                                                <button class="btn btn-danger delete-button" style="display: none;">刪除照片</button>
+                                                <div class="container" id="preview${index}"></div>
                                             </div>
                                         `;
 
-                            $(`#preview${index}`).append(string);
+                });
+            }
+            $('#roomImagesContainer').html(roomContainerStr);
 
-                            // 當所有文件都讀取完畢後，改變樣式、儲存fileName到set及計算儲存的容量
-                            if (fileIndex === files.length - 1) {
+            if (roomInfo !== null) {
+                roomInfo.forEach((room, index) => {
 
-
-                                //晚點改
-                                // $(`#uploadSection${index}`).removeClass('file__upload${index}').addClass('uploaded');
-
-                                files.forEach(f => filenames.add(f.name));
-                                totalSize += newSize;
-
-                                fileInput.val('');
-                            }
-                        };
-
-                        reader.readAsDataURL(file);
+                    $(`#uploadButton${index}`).on('click', function () {
+                        $(`#fileInput${index}`).trigger('click');
                     });
 
-                });
+                    // 為每個檔案輸入元素添加變更事件處理器
+                    $(`#fileInput${index}`).on('change', async function (e) {
+
+                        const allowedTypes = ['image/jpeg', 'image/png'];
+                        const files = Array.from(e.target.files);
+
+                        const fileInput = $(`#fileInput${index}`);
+                        let newSize = 0;
+
+                        files.forEach((file, fileIndex) => {
+
+                            if (!allowedTypes.includes(file.type)) {
+                                alert('只允許上傳 JPG 和 PNG 格式的圖片');
+                                return;
+                            }
+
+                            if (filenames.has(file.name)) {
+                                alert(`檔名 ${file.name} 已存在，請選擇不同的檔案。`);
+                                return;
+                            }
+
+                            newSize += file.size;
+                            if (totalSize + newSize > maxTotalSize) {
+                                alert('所有照片加起來不能超過 5MB。');
+                                return;
+                            }
+
+                            const reader = new FileReader();
+
+                            reader.onload = function (e) {
+
+                                const string = `
+                                                    <div class="card">
+                                                                <img src="${e.target.result}" class="card-img-top h-100" alt="..." data-file-name="${file.name}" data-file-size="${file.size}">
+                                                        <div class="card-body">
+                                                            <select class="form-select" aria-label="Default select example" id="selectImageCategory">
 
 
+                                                                      ${imageCategoryStr}
 
-                $(`#preview${index}`).on('mouseover', '.card', function () {
-                    $(this).find('.delete-button').css('display', 'block');
-                });
+                                                            </select>
+                                                        </div>
+                                                        <button class="btn btn-danger delete-button" style="display: none;">刪除照片</button>
+                                                    </div>
+                                                `;
 
-                $(`#preview${index}`).on('mouseout', '.card', function () {
-                    $(this).find('.delete-button').css('display', 'none');
-                });
+                                $(`#preview${index}`).append(string);
 
-                $(`#preview${index}`).on('click', '.delete-button', function () {
-                    const card = $(this).closest('.card');
-                    const imgElement = card.find('img');
-                    const fileName = imgElement.data('file-name');
-                    const fileSize = parseInt(imgElement.data('file-size'), 10);
+                                // 當所有文件都讀取完畢後，改變樣式、儲存fileName到set及計算儲存的容量
+                                if (fileIndex === files.length - 1) {
 
-                    filenames.delete(fileName);
-                    totalSize -= fileSize;
 
-                    if (confirm('確定要刪除這張圖片嗎？')) {
-                        card.remove();
-                        let roomData = JSON.parse(sessionStorage.getItem('tRoom')) || {};
+                                    //晚點改
+                                    // $(`#uploadSection${index}`).removeClass('file__upload${index}').addClass('uploaded');
 
-                        roomData.forEach(room => {
-                            // 創建一個新的數組，該數組不包含被刪除的物件
-                            room.RoomImages = room.RoomImages.filter(item => item.FileName !== fileName);
+                                    files.forEach(f => filenames.add(f.name));
+                                    totalSize += newSize;
+
+                                    fileInput.val('');
+                                }
+                            };
+
+                            reader.readAsDataURL(file);
                         });
 
-                        sessionStorage.setItem('tRoom', JSON.stringify(roomData));
-                    }
+                    });
 
-                    if (filenames.size === 0) {
 
-                        // uploadSection.removeClass('uploaded').addClass('file__upload');
-                    }
+
+                    $(`#preview${index}`).on('mouseover', '.card', function () {
+                        $(this).find('.delete-button').css('display', 'block');
+                    });
+
+                    $(`#preview${index}`).on('mouseout', '.card', function () {
+                        $(this).find('.delete-button').css('display', 'none');
+                    });
+
+                    $(`#preview${index}`).on('click', '.delete-button', function () {
+                        const card = $(this).closest('.card');
+                        const imgElement = card.find('img');
+                        const fileName = imgElement.data('file-name');
+                        const fileSize = parseInt(imgElement.data('file-size'), 10);
+
+                        filenames.delete(fileName);
+                        totalSize -= fileSize;
+
+                        if (confirm('確定要刪除這張圖片嗎？')) {
+                            card.remove();
+                            let roomData = JSON.parse(sessionStorage.getItem('tRoom')) || {};
+
+                            roomData.forEach(room => {
+                                // 創建一個新的數組，該數組不包含被刪除的物件
+                                room.RoomImages = room.RoomImages.filter(item => item.FileName !== fileName);
+                            });
+
+                            sessionStorage.setItem('tRoom', JSON.stringify(roomData));
+                        }
+
+                        if (filenames.size === 0) {
+
+                            // uploadSection.removeClass('uploaded').addClass('file__upload');
+                        }
+
+                    });
+
+
 
                 });
-
-
-
-            });
-
+            }
 
             //使用所有button並改變樣式樣式
             $("[id^='uploadButton']").addClass('uploadButton');
@@ -413,18 +432,18 @@
                     $('.hotelImageBox').find('.alert-message').html('');
                 }
 
+                if (roomInfo !== null) {
+                    // 驗證每個客房的照片
+                    roomInfo.forEach((room, index) => {
+                        if ($(`#preview${index}`).find('img').length === 0) {
+                            $(`#file__upload${index}`).closest('.roomBoxes').find('.alert-message').html('請上傳至少一張客房照片');
+                            isValid = false;
+                        } else {
+                            $(`#file__upload${index}`).closest('.roomBoxes').find('.alert-message').html('');
+                        }
 
-                // 驗證每個客房的照片
-                roomInfo.forEach((room, index) => {
-                    if ($(`#preview${index}`).find('img').length === 0) {
-                        $(`#file__upload${index}`).closest('.roomBoxes').find('.alert-message').html('請上傳至少一張客房照片');
-                        isValid = false;
-                    } else {
-                        $(`#file__upload${index}`).closest('.roomBoxes').find('.alert-message').html('');                      
-                    }
-
-                });
-
+                    });
+                }
 
                 let allCategoriesSelected = true;
                 $('.card').each(function () {
@@ -520,21 +539,8 @@
                     window.location.href = '/HostManage/Home';
                 }
 
-            });
-
-            $(window).on('load', function () {
-                if (sessionStorage.getItem('forceRedirect') === 'true') {
-                    showModal();
-                  
-                }
-            });
-
-            function showModal() {
-                var resultModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
-                resultModal.show();
-                sessionStorage.setItem('forceRedirect', 'true');
-            }
-           
+            });   
+            
         });
     </script>
 }

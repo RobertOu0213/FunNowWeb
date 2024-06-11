@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PrjFunNowWeb.Models;
 using PrjFunNowWeb.Models.DTO;
 using PrjFunNowWeb.Models.ViewModel;
+using System;
 
 namespace PrjFunNowWeb.Controllers
 {
@@ -289,8 +290,180 @@ namespace PrjFunNowWeb.Controllers
 
         }
 
+        [HttpPost]
+        public async Task<IActionResult> HostRoomCreate([FromForm] CRoomCreateDTO roomDto)
+        {
+            if (roomDto == null)
+            {
+                return BadRequest("Invalid room data.");
+            }
+
+            var room = new Room
+            {
+                RoomName = roomDto.RoomName,
+                RoomTypeId = roomDto.RoomTypeId,
+                RoomSize = roomDto.RoomSize,
+                MaximumOccupancy = roomDto.RoomPeople,
+                RoomPrice = roomDto.RoomPrice,
+                Description = roomDto.RoomDescription,
+                RoomStatus = true,
+                MemberId = 1,
+                HotelId = roomDto.HotelId
+            };
+            _context.Rooms.Add(room);
+
+            foreach (var equipmentId in roomDto.RoomEquipmentIds)
+            {
+                var roomEquipmentReference = new RoomEquipmentReference
+                {
+                    RoomId = room.RoomId,
+                    RoomEquipmentId = equipmentId
+                };
+
+                room.RoomEquipmentReferences.Add(roomEquipmentReference);
+            }
+
+            foreach (var imageDto in roomDto.Images)
+            {
+
+                var extension = Path.GetExtension(imageDto.ImageFile.FileName);
+                var fileName = $"{Guid.NewGuid()}{extension}";
+                var filePath = Path.Combine(_env.WebRootPath, "image", fileName);
 
 
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await imageDto.ImageFile.CopyToAsync(stream);
+                }
+
+                var image = new RoomImage
+                {
+                    RoomImage1 = fileName,
+                    RoomId = room.RoomId
+                };
+
+                room.RoomImages.Add(image);
+
+
+                image.ImageCategoryReferences.Add(new ImageCategoryReference
+                {
+                    ImageCategoryId = imageDto.ImageCategoryId,
+                    RoomImageId = image.RoomImageId
+                });
+            }
+
+            _context.SaveChanges();
+
+            return Ok(new { success = true, message = "All changes saved successfully" });
+
+        }
+
+        public IActionResult HostRoomUpdate(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home");
+            }
+
+            var hotel = (from h in _context.Hotels
+                         where h.HotelId == id
+                         select new CsingleHotelViewModel
+                         {
+                             HotelId = h.HotelId,
+                             HotelName = h.HotelName,
+                             CityName = h.City.CityName,
+                             CountryName = h.City.Country.CountryName,
+                             HotelImage = h.HotelImages.Select(hi => hi.HotelImage1).FirstOrDefault(),
+                             AllRoomTypes = _context.RoomTypes.ToList(),
+                             AllRoomEquipments = _context.RoomEquipments.ToList(),
+                             AllimageCategories = _context.ImageCategories.ToList(),
+                             AllRooms = h.Rooms.Select(room => new Room { RoomId = room.RoomId, RoomName = room.RoomName }).ToList()
+                         }).FirstOrDefault();
+
+            if (hotel == null)
+            {
+                return NotFound();
+            }
+
+            hotel.HotelImage = hotel.HotelImage != null && (hotel.HotelImage.StartsWith("http://") || hotel.HotelImage.StartsWith("https://"))
+                             ? hotel.HotelImage
+                             : $"{hotel.HotelImage}";
+
+            return View(hotel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetRoomDetails (int roomId)
+        {
+            var room = _context.Rooms
+           .Include(r => r.RoomType)
+           .Include(r => r.RoomEquipmentReferences)
+           .FirstOrDefault(r => r.RoomId == roomId);
+
+            if (room == null)
+            {
+                return Json(new { success = false, message = "Room not found" });
+            }
+
+            return Ok(new
+            {
+                success = true,
+                data = new
+                {
+                    room.RoomName,
+                    room.RoomTypeId,
+                    room.RoomSize,
+                    room.MaximumOccupancy,
+                    room.RoomPrice,
+                    RoomEquipmentIds=room.RoomEquipmentReferences.Select(e => e.RoomEquipmentId),
+                    room.Description
+                }
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> HostRoomUpdate([FromBody] CRoomSaveDTO roomIn)
+        {
+            if(roomIn == null)
+            {
+                return (BadRequest("No data received."));
+            }
+   
+            try
+            {
+                var room = await _context.Rooms
+                    .Include(r => r.RoomEquipmentReferences)
+                    .FirstOrDefaultAsync(r => r.RoomId == roomIn.RoomId);
+
+                if (room == null)
+                {
+                    return Ok(new { success = false, message = "Room not found" });
+                }
+
+                room.RoomName = roomIn.RoomName;
+                room.RoomTypeId = roomIn.RoomTypeId;
+                room.RoomSize = roomIn.RoomSize;
+                room.MaximumOccupancy = roomIn.MaximumOccupancy;
+                room.RoomPrice = roomIn.RoomPrice;
+                room.Description = roomIn.Description;
+
+                _context.RoomEquipmentReferences.RemoveRange(room.RoomEquipmentReferences);
+
+                foreach (var equipmentId in roomIn.RoomEquipmentIds)
+                {
+                    room.RoomEquipmentReferences.Add(new RoomEquipmentReference { RoomId = room.RoomId, RoomEquipmentId = equipmentId });
+                }
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { success = false, message = ex.Message });
+            }
+
+        }
 
     }
 }

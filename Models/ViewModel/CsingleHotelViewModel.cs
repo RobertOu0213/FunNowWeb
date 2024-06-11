@@ -24,6 +24,8 @@ namespace PrjFunNowWeb.Models.ViewModel
         public List<RoomEquipment> AllRoomEquipments { get; set; }
 
         public List<ImageCategory> AllimageCategories { get; set; }
+
+        public List<Room> AllRooms { get; set; }
     }
 }
 

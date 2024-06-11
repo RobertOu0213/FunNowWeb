@@ -1,0 +1,310 @@
+﻿
+@{
+    ViewData["Title"] = "HostRoomUpdate";
+    Layout = "_Layout_HotelUpdate";
+}
+@model PrjFunNowWeb.Models.ViewModel.CsingleHotelViewModel
+
+<section class="rightSection">
+    <div class="content__container pt-3">
+
+        @* 客房基本資料 *@
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="mb-4">
+                <h4 class="fw-bold mt-5">修改客房資訊</h4>
+            </div>
+            <div>
+                <select class="form-select" aria-label="Default select example" id="roomUpdate">
+                    <option selected disabled>請選擇要修改的房間</option>
+                    @foreach (var item in Model.AllRooms)
+                    {
+                        <option value="@item.RoomId">@item.RoomName</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="mb-4">
+            <h4 class="fw-bold mt-5">客房詳情與定價</h4>
+        </div>
+
+        @*  room card *@
+        <div id="panels-container">
+            <div class="panel__room mb-4">
+                <div class="position-relative">
+                    <div class="fw-bold pb-3 mb-3 border-bottom panel__room__count">客房</div>
+                </div>
+                <div class="panel__content" style="display: block;">
+                    <div class="fw-bold fs-5 mb-4">基本資訊</div>
+                    <div class="mb-3">
+                        <div class="mb-2 fw-bold">為住宿命名</div>
+                        <input type="text" class="form-control roomNames" placeholder="請輸入房間名稱" />
+                        <span class="alert-message"></span>
+                    </div>
+                    <div class="mb-4">
+                        <div class="mb-2 fw-bold">請選擇房型</div>
+
+                        <select class="form-select roomTypes" aria-label="Default select example" id="roomType">
+                            <option selected disabled>請選擇房型</option>
+                            @foreach (var item in Model.AllRoomTypes)
+                            {
+                                <option value="@item.RoomTypeId">@item.RoomTypeName</option>
+                            }
+                        </select>
+                        <span class="alert-message"></span>
+                    </div>
+                    <div class="mb-4 roomSizeBox">
+                        <div class="mb-2 fw-bold">Room size</div>
+                        <div class="d-flex">
+                            <div>
+                                <input type="number" min="0" class="form-Room-size roomSizes" />
+                            </div>
+                            <div class="form-Room-size-unit">平方公尺</div>
+                        </div>
+                        <span class="alert-message"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="fw-bold mb-2">客房人數限制</div>
+                        <div>
+                            <button class="btn-icon" id="minus-btn" type="button"><i class="fa-solid fa-minus"></i></button>
+                            <input value="1" type="number" min="1" step="1" max="99" class="form-Room-size roomPeople" id="room-size-input" />
+                            <button class="btn-icon" id="plus-btn" type="button"><i class="fa-solid fa-plus"></i></button>
+                        </div>
+                        <span class="alert-message"></span>
+                    </div>
+
+                    <div class="mb-4 roomPriceBox">
+                        <div class="fw-bold mb-2">房價設定</div>
+                        <div>該房型的最低房價，不包括促銷優惠、稅金或其他費用。</div>
+                        <div class="d-flex mt-2">
+                            <div>
+                                <input type="number" min="0" step="1" class="form-Room-size roomPrice" />
+                            </div>
+                            <div class="form-Room-size-unit">TWD</div>
+                        </div>
+                        <span class="alert-message"></span>
+                    </div>
+                    @* 設備 *@
+                    <h5 class="fw-bold">房間設施</h5>
+                    <div class="sm_titlt mb-3">房間有提供的設備</div>
+                    <div class="roomEquipmentBox">
+                        <div class="panel">
+                            <div class="row row-cols-3" id="roomEquipment">
+                                @foreach (var item in Model.AllRoomEquipments)
+                                {
+                                    <div class="col mb-2">
+                                        <label>
+                                            <input type="checkbox" value="@item.RoomEquipmentId" />
+                                            @item.RoomEquipmentName
+                                        </label>
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+                        <span class="alert-message"></span>
+                    </div>
+                    <h5 class="fw-bold mt-5">房間簡介</h5>
+                    <div class="panel descBox">
+                        <div class="form-floating">
+                            <textarea class="form-control" placeholder="請介紹您的房間" style="height: 200px; resize: none"></textarea>
+                            <label>請介紹您的房間</label>
+                        </div>
+                        <span class="alert-message"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+      
+
+        @*   button *@
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center successMessage" style="visibility: hidden">
+                <img src="@Url.Content("~/ou/image/checksign.png")" />
+                <span style="color:green">已儲存!</span>
+            </div>
+            <div class="d-flex justify-content-end my-5">
+                <button type="button" class="btn_previous" id="btnPrevious">取消</button>
+                <button type="submit" class="btn_next" id="btnNext">儲存</button>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+@section Styles {
+    <style>
+
+    </style>
+
+}
+@section Scripts {
+    <script>
+
+        $(document).ready(async () => {
+
+            //客房人數限制
+            $('#plus-btn').on('click', () => {
+
+                const currentValue = parseInt($('#room-size-input').val());
+                if (currentValue < parseInt($('#room-size-input').attr('max'))) {
+                    $('#room-size-input').val(currentValue + 1);
+                }
+            });
+
+            $('#minus-btn').on('click', () => {
+
+                const currentValue = parseInt($('#room-size-input').val());
+                if (currentValue > parseInt($('#room-size-input').attr('min'))) {
+                    $('#room-size-input').val(currentValue - 1);
+                }
+            });
+
+            //選擇房間
+            $('#roomUpdate').on('change', async function() {
+                var roomId = $(this).val()
+                if (roomId) {
+                    try {
+                        const res = await fetch(`@Url.Action("GetRoomDetails", "HostManage")?roomId=${roomId}`);
+                        if (!res.ok) {
+                            throw new Error(res.statusText);
+                        }
+                        const data = await res.json();                 
+                        if (data.success) {
+                            let roomData = data.data;
+                            console.log(roomData);
+                            $('.roomNames').val(roomData.roomName);
+                            $('#roomType').val(roomData.roomTypeId);
+                            $('.roomSizes').val(roomData.roomSize);
+                            $('#room-size-input').val(roomData.maximumOccupancy);
+                            $('.roomPrice').val(roomData.roomPrice);
+                            $('textarea').val(roomData.description);
+                            $('#roomEquipment input[type="checkbox"]').each(function () {
+                                let checkbox = $(this);
+                                checkbox.prop('checked', roomData.roomEquipmentIds.includes(parseInt(checkbox.val())));
+                            });
+                     
+                        }
+                    } catch (err) {
+                        console.log(err);
+                    }
+                }
+            })
+
+            //取消
+            $('#btnPrevious').on('click', function () {
+                location.reload();
+            });
+
+            //儲存
+            $('#btnNext').on('click', async function () {
+
+                let roomNameAlert = $('.roomNames').val().trim();
+                let roomTypeAlert = $('.roomTypes').val();
+                let roomSizeAlert = $('.roomSizes').val();
+                let roomPriceAlert = $('.roomPrice').val();
+                let description = $('textarea').val().trim();
+                let checkedEquipments = $('#roomEquipment input[type="checkbox"]:checked');
+                let isFormValid = true;
+
+                //沒選擇房間
+                if ($('#roomUpdate').val() === null) {
+                    alert('請選擇房間');
+                    return;
+                }
+
+                if (roomNameAlert === '') {
+                    $('.roomNames').next('.alert-message').html('請輸入房間名稱');
+                    isFormValid = false;
+                } else {
+                    $('.roomNames').next('.alert-message').html('');
+                }
+
+                if (roomTypeAlert === null) {
+                    $('.roomTypes').next('.alert-message').html('請選擇房型');
+                    isFormValid = false;
+                } else {
+                    $('.roomTypes').next('.alert-message').html('');
+
+                }
+
+                if (roomSizeAlert === '') {
+                    $('.roomSizes').closest('.roomSizeBox').find('.alert-message').html('請輸入房間大小');
+                    isFormValid = false;
+                } else {
+                    $('.roomSizes').closest('.roomSizeBox').find('.alert-message').html('');
+                }
+
+                if (roomPriceAlert === '') {
+                    $('.roomPrice').closest('.roomPriceBox').find('.alert-message').html('請輸入房價');
+                    isFormValid = false;
+                } else {
+                    $('.roomPrice').closest('.roomPriceBox').find('.alert-message').html('');
+                }
+
+                if (description === '') {
+                    $('textarea').closest('.descBox').find('.alert-message').html('輸入房間描述');
+                    isFormValid = false;
+                } else {
+                    $('textarea').closest('.descBox').find('.alert-message').html('');
+                }
+
+
+                if (checkedEquipments.length === 0) {
+                    $('#roomEquipment').closest('.roomEquipmentBox').find('.alert-message').html('請選擇至少一種設備');
+                    isFormValid = false;
+                } else {
+                    $('#roomEquipment').closest('.roomEquipmentBox').find('.alert-message').html('');
+                }
+
+                if (!isFormValid) {
+                    return;
+                }
+
+                let roomData = {
+                    roomId: $('#roomUpdate').val(),
+                    roomName: $('.roomNames').val(),
+                    roomTypeId: $('#roomType').val(),
+                    roomSize: $('.roomSizes').val(),
+                    maximumOccupancy: $('#room-size-input').val(),
+                    roomPrice: $('.roomPrice').val(),
+                    roomEquipmentIds: $('#roomEquipment input[type="checkbox"]:checked').map(function () {
+                        return parseInt($(this).val());
+                    }).get(),
+                    description: $('textarea').val()
+                };
+
+                try {
+                    const res = await fetch('@Url.Action("HostRoomUpdate", "HostManage")', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',                           
+                        },
+                        body: JSON.stringify(roomData)
+                    });
+
+                    if (!res.ok) {
+                        throw new Error(res.statusText);
+                    }
+
+                    const data = await res.json();
+                    if (data.success) {
+                        $('.successMessage').css('visibility', 'visible');
+                        setTimeout(() => {
+                            $('.successMessage').css('visibility', 'hidden');
+                        }, 2000);
+                    } 
+                } catch (err) {
+                    console.log(err);
+                }
+
+            })
+
+        }) 
+
+        
+
+ 
+
+    </script>
+}

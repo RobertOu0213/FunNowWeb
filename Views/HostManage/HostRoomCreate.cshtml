@@ -128,19 +128,7 @@
                     </div>
                 </div>
                 <div class="container" id="preview">
-@*                     <div class="card hotelImageCard" data-id="">
-                        <img src="" class="card-img-top h-100" alt="..." data-file-name="">
-                        <div class="card-body">
-                            <select class="form-select" aria-label="Default select example" id="selectImageCategory">
-                                <option selected disabled> 請選擇標題 </option> *@
-                                @*                                     @foreach (var imageCategory in Model.AllimageCategories)
-                                {
-                                <option value="@imageCategory.ImageCategoryId">@imageCategory.ImageCategoryName</option>
-                                }) *@
-   @*                          </select>
-                        </div>
-                        <button class="btn btn-danger delete-button" style="display: none;">刪除照片</button>
-                    </div>*@
+
                 </div> 
             </div>
         </div>
@@ -176,13 +164,15 @@
 }
 @section Scripts {
     <script>
+        
         var allImageCategories = @Html.Raw(json);
-        $(document).ready(() => {
+        $(document).ready(async() => {
+            const hotelId = @Model.HotelId;
             const maxTotalSize = 5 * 1024 * 1024; // 5MB
             let totalSize = 0;
             let filenames = new Set();
             let allFiles = [];
-            let deletedImages = [];
+   
 
 
             $('#uploadButton').on('click', function () {
@@ -223,7 +213,7 @@
                             options += `<option value="${ic.ImageCategoryId}">${ic.ImageCategoryName}</option>`;
                         });
                         const hotelImageCardStr = `
-                                               <div class="card hotelImageCard" data-is-new="true">
+                                               <div class="card hotelImageCard">
                                                   <img src="${e.target.result}" class="card-img-top h-100" alt="..." data-file-name="${file.name}" data-file-size="${file.size}">
                                                   <div class="card-body">
                                                       <select class="form-select" aria-label="Default select example" id="selectImageCategory">
@@ -271,9 +261,7 @@
                     filenames.delete(fileName);
                     totalSize -= fileSize;
                     allFiles = allFiles.filter(fileObj => fileObj.file.name !== fileName);
-                    if (imageId) {
-                        deletedImages.push(imageId);
-                    }
+  
 
                     card.remove();
                 }
@@ -281,11 +269,7 @@
 
             });
 
-            //取消
-            $('#btnPrevious').on('click', function () {
-                location.reload();
-            });
-
+           
 
             //客房人數限制
             $('#plus-btn').on('click', () => {
@@ -303,8 +287,154 @@
                     $('#room-size-input').val(currentValue - 1);
                 }
             });
+
+            //取消
+            $('#btnPrevious').on('click', function () {
+                location.reload();
+            });
+
+
+            $('#btnNext').on('click', function () {
+
+                let roomNameAlert = $('.roomNames').val().trim();
+                let roomTypeAlert = $('.roomTypes').val();
+                let roomSizeAlert = $('.roomSizes').val();
+                let roomPriceAlert = $('.roomPrice').val();
+                let description = $('textarea').val().trim();
+                let checkedEquipments = $('#roomEquipment input[type="checkbox"]:checked');
+                let isFormValid = true;
+                 
+                if (roomNameAlert === '') {
+                    $('.roomNames').next('.alert-message').html('請輸入房間名稱');
+                    isFormValid = false;
+                } else {
+                    $('.roomNames').next('.alert-message').html('');
+                }
+
+                if (roomTypeAlert === null) {
+                    $('.roomTypes').next('.alert-message').html('請選擇房型');
+                    isFormValid = false;
+                } else {
+                    $('.roomTypes').next('.alert-message').html('');
+
+                }
+
+                if (roomSizeAlert === '') {
+                    $('.roomSizes').closest('.roomSizeBox').find('.alert-message').html('請輸入房間大小');
+                    isFormValid = false;
+                } else {
+                    $('.roomSizes').closest('.roomSizeBox').find('.alert-message').html('');
+                }
+
+                if (roomPriceAlert === '') {
+                    $('.roomPrice').closest('.roomPriceBox').find('.alert-message').html('請輸入房價');
+                    isFormValid = false;
+                } else {
+                    $('.roomPrice').closest('.roomPriceBox').find('.alert-message').html('');
+                }
+
+                if (description === '') {
+                    $('textarea').closest('.descBox').find('.alert-message').html('輸入房間描述');
+                    isFormValid = false;
+                } else {
+                    $('textarea').closest('.descBox').find('.alert-message').html('');
+                }
+
+
+                if (checkedEquipments.length === 0) {
+                    $('#roomEquipment').closest('.roomEquipmentBox').find('.alert-message').html('請選擇至少一種設備');
+                    isFormValid = false;
+                } else {
+                    $('#roomEquipment').closest('.roomEquipmentBox').find('.alert-message').html('');
+                }
+
+                if ($('.hotelImageCard').length === 0) {
+                    alert('至少需要一張圖片');
+                    isFormValid = false;
+                }
+
+                let allCategoriesSelected = true;
+                $('.card').each(function () {
+                    const selectElement = $(this).find('select');
+                    if (selectElement.val() === null) {
+                        allCategoriesSelected = false;
+                        return;
+                    }
+                });
+
+                if (!allCategoriesSelected) {
+                    alert('請為所有圖片選擇類別');
+                    isFormValid = false;
+                }
+
+                if (!isFormValid) {
+                    return;
+                }
+
+
+
+                let formData = new FormData();
+                let roomName = $('.roomNames').val();
+                let roomTypeId = $('#roomType').val();
+                let roomSize = $('.roomSizes').val();
+                let roomPeople = $('#room-size-input').val();
+                let roomPrice = $('.roomPrice').val();
+                let roomDescription = $('.descBox textarea').val();
+                let roomEquipmentIds = [];
+                $('#roomEquipment input:checked').each(function () {
+                    roomEquipmentIds.push($(this).val());
+                });
+
+
+                formData.append('RoomName', roomName);
+                formData.append('RoomTypeId', roomTypeId);
+                formData.append('RoomSize', roomSize);
+                formData.append('RoomPeople', roomPeople);
+                formData.append('RoomPrice', roomPrice);
+                formData.append('RoomDescription', roomDescription);
+                roomEquipmentIds.forEach(id => {
+                    formData.append('RoomEquipmentIds', id);
+                });
+                formData.append('HotelId', hotelId)
+
+                $('#preview .hotelImageCard').each(function (index) {
+                    let fileInput = $(this).find('img').data('file-name');
+                    let file = allFiles.find(f => f.file.name === fileInput).file;
+                    let categoryId = $(this).find('select').val();
+                    formData.append(`Images[${index}].ImageFile`, file);
+                    formData.append(`Images[${index}].ImageCategoryId`, categoryId);
+                });
+
+
+                (async() => {
+                    try {
+                        let res = await fetch('/HostManage/HostRoomCreate', {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        if (!res.ok) {
+                            throw new Error('Error adding room');
+                        }
+
+                        let data = await res.json();
+
+                        if (data.success) {
         
-        
+                            $('.successMessage').css('visibility', 'visible');
+                            setTimeout(() => {
+                                $('.successMessage').css('visibility', 'hidden');
+                                location.reload();
+                            }, 2000);
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('新增房間失敗!')
+                    }
+                })();
+                       
+            });
+
             
         });
     </script>
