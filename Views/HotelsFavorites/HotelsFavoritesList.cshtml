@@ -1,4 +1,5 @@
-﻿
+﻿@* // 視圖
+@model int *@
 
 
 @section Styles {
@@ -9,10 +10,14 @@
             margin-top: 50px;
         }
 
+
+
         /* 調整卡片和圖片的統一大小 */
         .card {
+            min-width: 300px; /* 设置一个最小宽度 */
             height: 280px; /* 統一卡片高度 */
             margin-top: 25px;
+        
         }
 
         /* 文字置中 */
@@ -21,9 +26,10 @@
         }
 
         .card img {
-            height: 180px; /* 統一圖片高度 */
-            width: 100%; /* 圖片寬度全滿 */
-            object-fit: cover; /* 圖片覆蓋整個區域，避免失真 */
+            height: auto; /* 使用自动高度 */
+            max-height: 180px; /* 最大高度限制 */
+            width: 100%;
+            object-fit: cover;
         }
 
 
@@ -57,7 +63,7 @@
         <h6 id="totalCities">n個城市清單</h6>
     </div>
     <div class="container">
-        <div class="row" id="hotelsContainer">
+        <div class=" row row-cols-md-3" id="hotelsContainer">
             <!-- 卡片會動態插入到這裡 -->
         </div>
     </div>
@@ -67,9 +73,12 @@
 
 @section Scripts {
     <script>
+        const errorMessageContainer = document.querySelector('#errorMessageContainer');
         const hotelsContainer = document.querySelector('#hotelsContainer');
         const totalCitiesLabel = document.querySelector('#totalCities');
        /*  const memberId = getCurrentUserId(); */ // 獲取當前登入用戶的 ID
+        // const memberId = @Model; // 從視圖模型獲取會員ID
+
         const memberId = 5;   //先寫死
 
         const url ='https://localhost:7103/api/HotelsFavorite/5/FavoriteHotels';
@@ -84,12 +93,12 @@
                 const cities = await response.json();
                 console.log(cities);
 
-                const favoriteHotelsHtml = cities.map(city => {
+                const citiesHtml = cities.map(city => {
                     return( `
-                            <a href="/api/HotelsFavorite/${memberId}/FavoriteHotels/${encodeURIComponent(city.city)}">
+                                            <a href="/HotelsFavorites/HotelsFavoritesListToCity?memberId=${memberId}&city=${city.city}&country=${city.country}">
                             <div class="col-md-4">
                                 <div class="card">
-                                       <a href="/HotelsFavorites/HotelsFavoritesListToCity/${encodeURIComponent(city.city)}">            //TODO...
+                                    <img src="${city.imageUrl}" class="card-img-top" alt="${city.city}">
                                     <div class="card-body">
                                         <h5 class="card-title">${city.city}, ${city.country}</h5>
                                         <p class="card-text">${city.hotelCount} 間住宿</p>
@@ -100,7 +109,7 @@
                         `)
                 });
 
-                hotelsContainer.innerHTML = favoriteHotelsHtml.join('');
+                hotelsContainer.innerHTML = citiesHtml.join('');
                 totalCitiesLabel.textContent = `${cities.length} 份清單`;
             } catch (error) {
                 console.error('Failed to fetch hotels:', error);

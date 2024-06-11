@@ -92,7 +92,7 @@
     <div class="container">
         <a href="/api/HotelsFavorite/${memberId}/FavoriteHotels">口袋清單</a>
         <span>/</span>
-        <h3 id="cityCountry">花蓮縣,台灣</h3>
+        <h3 id="cityandCountry">花蓮縣,台灣</h3>
     </div>
 
 <div class="container">
@@ -103,15 +103,18 @@
 
 @section Scripts {
 
-    <script>
-        const hotelsContainer = document.querySelector('#hotelsContainer');
-        const cityCountryLabel = document.querySelector('#cityCountry');
+    
+        <script>
+                const hotelsContainer = document.querySelector('#hotelsContainer');
+        const cityCountryLabel = document.querySelector('#cityandCountry');
 
-        const memberId = 5; // 先写死
         // 使用 URLSearchParams 解析 URL 中的參數
         const urlParams = new URLSearchParams(window.location.search);
-        const cityName = urlParams.get('cityName');  // 從 URL 參數獲取城市名稱
-        const countryName = urlParams.get('countryName');  // 從 URL 參數獲取國家名稱
+        const memberId = urlParams.get('memberId') || 5;  // 從 URL 參數獲取 memberId，如果無，默認為 5
+        const cityName = urlParams.get('city');  // 從 URL 參數獲取城市名稱
+        const countryName = urlParams.get('country');  // 從 URL 參數獲取國家名稱
+        console.log("City: ", cityName);  // 应显示 "大阪"
+        console.log("Country: ", decodeURIComponent(countryName));  // 应显示 "日本"
 
         const url = `https://localhost:7103/api/HotelsFavorite/${memberId}/FavoriteHotels/${encodeURIComponent(cityName)}`;
 
@@ -122,28 +125,25 @@
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 const hotels = await response.json();
-                console.log(hotels);
                 const favoriteHotelsHtml = hotels.map(hotel => {
                     return (`
                                 <div class="col-md-3">
                                     <div class="card">
-                                               <i class="fa-solid fa-heart love-button"></i>                                                              //TODO...  /* 爱心按钮 */                 /*  要加邏輯 移除的功能 */
-                                       
+                                             <img src="${hotel.HotelImage}" alt="Image of ${hotel.HotelName}" class="card-img-top">  // 添加图片显示
+                                        <i class="fa-solid fa-heart love-button"></i>  // 愛心按鈕
                                         <div class="card-body">
                                             <h5 class="card-title">${hotel.hotelName}</h5>
                                             <p class="card-text">${hotel.city}, ${hotel.country}</p>
-                                            <p>
-                                                ${generateStars(hotel.levelStar)}
-                                            </p>
-
+                                            <p>${generateStars(hotel.levelStar)}</p>
                                             <p class="price">$${hotel.minimumPrice} / 晚</p>
                                         </div>
                                     </div>
                                 </div>
-                            `)
+                            `);
                 });
                 hotelsContainer.innerHTML = favoriteHotelsHtml.join('');
-                cityCountryLabel.textContent = `${cityName}, ${countryName}`;  // 更新標籤顯示正確的城市和國家
+               // cityCountryLabel.textContent = `${cityName}, ${countryName}`;  // 更新標籤顯示正確的城市和國家
+                cityCountryLabel.textContent = `${decodeURIComponent(cityName)}, ${decodeURIComponent(countryName)}`;
 
             } catch (error) {
                 console.error('Failed to fetch hotels:', error);

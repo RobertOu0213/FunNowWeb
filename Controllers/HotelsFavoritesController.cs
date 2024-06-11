@@ -26,15 +26,22 @@ namespace PrjFunNowWeb.Controllers
 
         public IActionResult HotelsFavoritesList(int memberId)            //抓到會員收藏的所有飯店,這些飯店會依照城市/國家分類,並顯示n間飯店
         {
+            // var currentUser = _userService.GetCurrentUser(); 獲取當前用戶
+            //int currentUserId = // 獲取當前用戶ID
 
             return View();
         }
-
-        public IActionResult HotelsFavoritesListToCity(string CityName)
-        {
-
-            return View();
+        
+        public IActionResult HotelsFavoritesListToCity(int memberId, string city, string country) 
+        { 
+            return View(); 
         }
+
+        //public IActionResult HotelsFavoritesListToCity(string CityName)
+        //{
+
+        //    return View();
+        //}
 
 
 
