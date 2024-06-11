@@ -284,31 +284,40 @@
     <script>
         //決定會員資訊是否顯示
         document.addEventListener("DOMContentLoaded", function () {
-            
+
+            // 儲存在Session storage中的資訊(自己輸入帳號密碼的登入者)
             var memberId = sessionStorage.getItem("MemberID");
             var memberFirstName = sessionStorage.getItem("MemberFisrtName");
             const token = sessionStorage.getItem("JWToken");
-            // memberId = '@Context.Session.GetString("MemberID")';
-            // memberFirstName = '@Context.Session.GetString("MemberFirstName")';
-            
-            
 
-            if (memberId && memberFirstName) 
+            // 儲存在Session中的資訊（從後端傳遞到前端的變數）(用Google的登入者)
+            var sessionMemberId = '@Context.Session.GetString("MemberID")';
+            var sessionMemberFirstName = '@Context.Session.GetString("MemberFirstName")';
+            
+            // 檢查Session storage中的資料
+            if (token && memberId && memberFirstName) 
             {
-                
                 document.getElementById("memberContent").style.display = "block";
                 document.getElementById("memberId").innerText = memberId;
                 document.getElementById("memberFirstName").innerText = memberFirstName;
-                sessionStorage.setItem("MemberID", '@Context.Session.GetString("MemberID")');
-                sessionStorage.setItem("MemberFisrtName", '@Context.Session.GetString("MemberFirstName")');
-
-            } 
-            else
+            }
+            // 檢查Session中的資料
+            else if (sessionMemberId && sessionMemberFirstName) 
+            {
+                document.getElementById("memberContent").style.display = "block";
+                document.getElementById("memberId").innerText = sessionMemberId;
+                document.getElementById("memberFirstName").innerText = sessionMemberFirstName;
+            }
+            // 如果兩個地方都沒有資料，顯示訪客內容
+            else 
             {
                 document.getElementById("guestContent").style.display = "block";
             }
 
-                document.getElementById("logoutButton").addEventListener("click", function () {
+            
+            //點下登出按鈕，把session storage的資料清空，也把google登入的session清空
+            document.getElementById("logoutButton").addEventListener("click", function () 
+             {
                     sessionStorage.removeItem("JWToken");
                     sessionStorage.removeItem("MemberID");
                     sessionStorage.removeItem("MemberFisrtName");

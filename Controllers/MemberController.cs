@@ -61,7 +61,7 @@ namespace PrjFunNowWeb.Controllers
             // 檢查使用者是否已經存在於資料庫中
             var existingMember = _context.Members.FirstOrDefault(m => m.Email == email);
 
-            if (existingMember == null) // 如果不存在則創建新的使用者記錄
+            if (existingMember == null) // 如果不存在則創建新的使用者
             {
                 var newMember = new Member
                 {
@@ -77,6 +77,9 @@ namespace PrjFunNowWeb.Controllers
                 existingMember = newMember; // 設置existingMember為新創建的Member實例
             }
 
+            // 在Session中儲存會員ID
+            HttpContext.Session.SetString("MemberID", existingMember.MemberId.ToString());
+            HttpContext.Session.SetString("MemberFirstName", existingMember.FirstName);
             return RedirectToAction("Index", "Home");
         }
 

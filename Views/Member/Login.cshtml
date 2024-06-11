@@ -166,7 +166,6 @@
 @section Scripts
 {
 
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     
     <script>
@@ -175,16 +174,18 @@
         const errorElement = document.getElementById("error");
         const loginBtn = document.getElementById("loginBtn");
 
-        // 當輸入欄位變化時,清除錯誤訊息
+        // 當正在打信箱密碼時,清除錯誤訊息
+        //如果要即時比對是否有帳號，要在這裡串查詢會員的API!!!!
         emailInput.addEventListener("input", clearError);
         passwordInput.addEventListener("input", clearError);
 
-        function clearError() {
+        function clearError() 
+        {
             errorElement.innerText = "";
             errorElement.style.display = "none";
         }
 
-
+        //按下登入按鈕時，串接包含JWT驗證的Login API
         loginBtn.addEventListener("click", async function (event) {
             event.preventDefault();
 
@@ -202,18 +203,22 @@
                         body: JSON.stringify({ email, password })
                     });
 
-                if (!response.ok) {
+                if (!response.ok) 
+                {
                     passwordInput.value = ""; // 清空密碼
                     throw new Error("登入失敗，請重新確認電子信箱和密碼");
                 }
 
+                //從API拿回資料
                 const data = await response.json();
 
-                if (data.token && data.memberInfo) {
+                //如果API有拿回到資料，把他們儲存在Session Storage裡面
+                if (data.token && data.memberInfo) 
+                {
                     // 清除先前的會員資訊
                     clearSessionStorage();
 
-                    // 儲存新的會員資訊
+                    // 儲存新的會員資訊，並重新導向首頁
                     sessionStorage.setItem("JWToken", data.token);
                     sessionStorage.setItem("MemberID", data.memberInfo.memberId);
                     sessionStorage.setItem("MemberFisrtName", data.memberInfo.firstName);
@@ -224,22 +229,25 @@
                     sessionStorage.setItem("MemberRoleID", data.memberInfo.roleId);
                     window.location.href = "/Home/Index";
                 }
-                else {
-                    showerror("尚未取得Token和MemberID");
-
+                else 
+                {
+                    showError("尚未取得Token和MemberID");
                 }
-            } catch (error) {
+            } 
+            catch (error) 
+            {
                 showError(error.message);
-
             }
         });
 
-        function showError(message) {
+        function showError(message) 
+        {
             errorElement.innerText = message;
             errorElement.style.display = "block";
         }
 
-        function clearSessionStorage() {
+        function clearSessionStorage() 
+        {
             sessionStorage.removeItem("JWToken");
             sessionStorage.removeItem("MemberID");
             sessionStorage.removeItem("MemberFisrtName");
@@ -261,9 +269,10 @@
                 alert(errorMessage);
             }
         });
-        
 
-        //改成用串接API的方式
+   
+
+        //改成用串接API的方式，就不用這個了~
         // //登入資料的錯誤訊息
         // $(document).ready(function () {
         //     $('#loginBtn').click(function (event) {
@@ -291,5 +300,7 @@
         //         });
         //     });
         // });
+
     </script>
+   
 }
