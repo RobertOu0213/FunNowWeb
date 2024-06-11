@@ -25,7 +25,7 @@ namespace PrjFunNowWeb.Controllers
             return View();
         }
 
-        public IActionResult Angular()
+        public IActionResult Angular_test()
         {
             return View();
         }
