@@ -1,4 +1,5 @@
-﻿@{
+﻿@using PrjFunNowWeb.Models.louie_dto
+@{
     ViewData["Title"] = "pgHotel";
 }
 @{
@@ -65,20 +66,35 @@
             @*飯店介紹區-第二層*@
             <div class="row">
                 <div class="col-4 d-flex align-items-stretch" data-bs-toggle="modal" data-bs-target="#hotelModal">
-                    <img src="~/image/louieee_img/yuanshan.png" class="img-fluid" />
+                    @if (Model.HotelDetail.HotelImages != null && Model.HotelDetail.HotelImages.Any())
+                    {
+                        <img src="https://localhost:7284/image/@Model.HotelDetail.HotelImages.First().ImageUrl" class="img-fluid" />
+                    }
                 </div>
                 <div class="col-8">
                     <table data-bs-toggle="modal" data-bs-target="#hotelModal">
-                        <tr>
-                            <td><img src="~/image/louieee_img/yuanshan.png" class="img-fluid" /></td>
-                            <td><img src="~/image/louieee_img/yuanshan.png" class="img-fluid" /></td>
-                            <td><img src="~/image/louieee_img/yuanshan.png" class="img-fluid" /></td>
-                        </tr>
-                        <tr>
-                            <td><img src="~/image/louieee_img/yuanshan.png" class="img-fluid" /></td>
-                            <td><img src="~/image/louieee_img/yuanshan.png" class="img-fluid" /></td>
-                            <td><img src="~/image/louieee_img/yuanshan.png" class="img-fluid" /></td>
-                        </tr>
+                        @if (Model.HotelDetail.HotelImages != null && Model.HotelDetail.HotelImages.Count > 1)
+                        {
+                            var images = Model.HotelDetail.HotelImages.Skip(1).Take(6).ToList(); // 跳过第一张，获取接下来的6张图片
+                            for (int i = 0; i < images.Count; i += 3)
+                            {
+                                <tr>
+                                    @for (int j = 0; j < 3; j++)
+                                    {
+                                        if (i + j < images.Count)
+                                        {
+                                            <td>
+                                                <img src="https://localhost:7284/image/@images[i + j].ImageUrl" class="img-fluid" />
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td></td> <!-- 填补空缺的td -->
+                                        }
+                                    }
+                                </tr>
+                            }
+                        }
                     </table>
                 </div>
             </div>
@@ -143,25 +159,23 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <div>
-                                <ul class="nav nav-underline">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">所有照片</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">客房</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">住宿</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">設施與服務</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">餐飲</a>
-                                    </li>
-                                </ul>
-                            </div>
+                            <ul class="nav nav-underline">
+                                <li class="nav-item">
+                                    <a class="nav-link hotel-modal-nav-link" href="#" onclick="scrollToCategory('category-1')">所有照片</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link hotel-modal-nav-link" href="#" onclick="scrollToCategory('category-2')">客房</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link hotel-modal-nav-link" href="#" onclick="scrollToCategory('category-3')">住宿</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link hotel-modal-nav-link" href="#" onclick="scrollToCategory('category-4')">設施與服務</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link hotel-modal-nav-link" href="#" onclick="scrollToCategory('category-5')">餐飲</a>
+                                </li>
+                            </ul>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
@@ -169,23 +183,38 @@
                             <div class="row">
                                 <div class="col-10">
                                     <div class="d-flex flex-wrap" style="max-height: 400px; overflow-y: auto;">
-                                        @* @foreach (var image in Model.HotelDetail.HotelImages)
+                                        @{
+                                            var hotelImages = Model.HotelDetail.HotelImages ?? new List<pgHotel_ImageDTO>();
+                                            var roomImages = Model.HotelDetail.Rooms?.SelectMany(r => r.RoomImages) ?? new List<pgHotel_ImageDTO>();
+                                            var allImages = hotelImages.Concat(roomImages);
+
+                                            var categories = allImages
+                                            .GroupBy(img => img.ImageCategoryID)
+                                            .OrderBy(g => g.Key)
+                                            .ToList();
+                                        }
+
+                                        @foreach (var category in categories)
                                         {
-                                        <div class="p-2" style="flex: 1 0 50%;">
-                                        <img src="@image.ImageUrl" class="img-fluid" alt="Hotel Image" />
-                                        </div>
-                                        } *@
+                                            var isFirstImage = true;
+                                            foreach (var image in category)
+                                            {
+                                                <div class="p-2" style="flex: 1 0 50%;">
+                                                    <img src="https://localhost:7284/image/@image.ImageUrl" class="img-fluid" alt="Hotel Image"
+                                                    @(isFirstImage ? $"id='category-{image.ImageCategoryID}'" : "") />
+                                                    isFirstImage = false;
+                                                </div>
+                                            }
+                                        }
                                     </div>
                                 </div>
                                 <div class="col-2">
-                                    <h3>@Model.HotelDetail.HotelName</h3>
-                                    <h4>設施與服務</h4>
+                                    <h2>@Model.HotelDetail.HotelName</h2>
+                                    <h3>設施與服務</h3>
                                     <div class="d-flex flex-column">
                                         @foreach (var equipment in Model.HotelDetail.HotelEquipments)
                                         {
-                                            <div>
-                                                <i class="fa-regular fa-circle-check"></i> @equipment
-                                            </div>
+                                            <i class="fa-regular fa-thumbs-up">@equipment</i>
                                         }
                                     </div>
                                 </div>
@@ -194,15 +223,21 @@
 
                         <div class="modal-footer">
                             <div class="row">
-
-                                <h3>TWD @(Model.HotelDetail.AverageRoomPrice.ToString("F2"))</h3>
-                                <button class="btn btn-primary btn-lg" onclick="scrollToRoomTypes()">查看房型</button>
-
+                                <div class="col-10">
+                                    <!-- 你的内容 -->
+                                </div>
+                                <div class="col-2">
+                                    <h3>TWD @(Model.HotelDetail.AverageRoomPrice.ToString("F2"))</h3>
+                                    <button class="btn btn-primary btn-lg" onclick="scrollToRoomTypes()">查看房型</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+
+
 
             @*飯店導覽列*@
             <ul class="nav nav-underline fixed-nav">
@@ -566,6 +601,10 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            //痊癒--------------------------------------------------------
+            
+
+
 
             //飯店描述-顯示更多
             var toggleDescription = document.getElementById('toggle-description');
@@ -616,8 +655,34 @@
                 });
             });
 
-            //飯店彈出視窗-查看房型紐
-            function scrollToRoomTypes() {
+            
+
+            //飯店彈出視窗
+            // 选择特定模态框内的导航链接
+            const modalLinks = document.querySelectorAll('.hotel-modal-nav-link');
+
+            modalLinks.forEach(link => {
+                link.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+
+            // 滚动到指定类别
+            window.scrollToCategory = function (categoryId) {
+                var targetElement = document.getElementById(categoryId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            };
+
+            // 滚动到房型
+            window.scrollToRoomTypes = function () {
                 var roomTypesElement = document.getElementById('room-types');
                 var hotelModal = document.getElementById('hotelModal');
 
@@ -633,7 +698,9 @@
                         modalInstance.hide();
                     }
                 }
-            }
+            };
+
+            
 
             //導覽列-避免被遮住
             const links = document.querySelectorAll('.nav-link');
@@ -694,6 +761,8 @@
                 }
             });
         });
+
+
     </script>
 
 }
