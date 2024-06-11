@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "登入";
+    // ViewData["Title"] = "登入";
     Layout = "_Layout_login";
 }
 
@@ -20,7 +20,7 @@
                         <h3 class="sc-fzqyvX kJWwZs kite-js-Typography ">FunNow咖登入</h3>
                         <p>為了保障你的個資安全，請先登入才能查看個人資訊</p>
                         <hr style="border-top: 3px solid #0D6EFD; ">
-                        <form>
+                        <form id="loginForm">
                             <div class="mb-3">
                                 <label for="EmailInput" class="form-label" style="font-size:15px">電子信箱</label>
                                 <input type="email" class="form-control" id="EmailInput1" name="EmailInput" placeholder="電子信箱">
@@ -44,9 +44,10 @@
                             </div>
 
                             <div class="d-grid">
-                                <button class="btn btn-primary btn-login text-uppercase fw-bold" type="submit" id="loginBtn">登入</button>
+                                <button class="btn btn-primary btn-login text-uppercase fw-bold" type="button" id="loginBtn">登入</button>
                             </div>
                             <p></p>
+                            <div id="error" class="alert alert-danger" style="display:none;"></div>
                             <div class="row">
                                 <div>
                                     <a class="col ff1">我是新朋友</a>
@@ -167,6 +168,91 @@
 
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <script>
+        const emailInput = document.getElementById("EmailInput1");
+        const passwordInput = document.getElementById("PasswordInput1");
+        const errorElement = document.getElementById("error");
+        const loginBtn = document.getElementById("loginBtn");
+
+        // 當輸入欄位變化時,清除錯誤訊息
+        emailInput.addEventListener("input", clearError);
+        passwordInput.addEventListener("input", clearError);
+
+        function clearError() {
+            errorElement.innerText = "";
+            errorElement.style.display = "none";
+        }
+
+
+        loginBtn.addEventListener("click", async function (event) {
+            event.preventDefault();
+
+            const email = emailInput.value;
+            const password = passwordInput.value;
+
+            try {
+                const response = await fetch("https://localhost:7103/api/Login",
+                    {
+                        method: "POST",
+                        headers:
+                        {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ email, password })
+                    });
+
+                if (!response.ok) {
+                    passwordInput.value = ""; // 清空密碼
+                    throw new Error("登入失敗，請重新確認電子信箱和密碼");
+                }
+
+                const data = await response.json();
+
+                if (data.token && data.memberInfo) {
+                    // 清除先前的會員資訊
+                    clearSessionStorage();
+
+                    // 儲存新的會員資訊
+                    sessionStorage.setItem("JWToken", data.token);
+                    sessionStorage.setItem("MemberID", data.memberInfo.memberId);
+                    sessionStorage.setItem("MemberFisrtName", data.memberInfo.firstName);
+                    sessionStorage.setItem("MemberLastName", data.memberInfo.lastName);
+                    sessionStorage.setItem("MemberEmail", data.memberInfo.email);
+                    sessionStorage.setItem("MemberPhone", data.memberInfo.phone);
+                    sessionStorage.setItem("MemberBirthday", data.memberInfo.birthday);
+                    sessionStorage.setItem("MemberRoleID", data.memberInfo.roleId);
+                    window.location.href = "/Home/Index";
+                }
+                else {
+                    showerror("尚未取得Token和MemberID");
+
+                }
+            } catch (error) {
+                showError(error.message);
+
+            }
+        });
+
+        function showError(message) {
+            errorElement.innerText = message;
+            errorElement.style.display = "block";
+        }
+
+        function clearSessionStorage() {
+            sessionStorage.removeItem("JWToken");
+            sessionStorage.removeItem("MemberID");
+            sessionStorage.removeItem("MemberFisrtName");
+            sessionStorage.removeItem("MemberLastName");
+            sessionStorage.removeItem("MemberEmail");
+            sessionStorage.removeItem("MemberPhone");
+            sessionStorage.removeItem("MemberBirthday");
+            sessionStorage.removeItem("MemberRole");
+        }
+    </script>
+
+
+    
     <script>
         //Google驗證失敗時跳出的錯誤訊息
         document.addEventListener("DOMContentLoaded", function () {
@@ -177,32 +263,33 @@
         });
         
 
-        //登入資料的錯誤訊息
-        $(document).ready(function () {
-            $('#loginBtn').click(function (event) {
-                event.preventDefault();
-                var email = $('#EmailInput1').val();
-                var password = $('#PasswordInput1').val();
+        //改成用串接API的方式
+        // //登入資料的錯誤訊息
+        // $(document).ready(function () {
+        //     $('#loginBtn').click(function (event) {
+        //         event.preventDefault();
+        //         var email = $('#EmailInput1').val();
+        //         var password = $('#PasswordInput1').val();
 
-                $.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("Login", "Member")',
-                    data: { EmailInput: email, PasswordInput: password },
-                    success: function (response) 
-                    {
-                        if (response.success) 
-                        {
-                            window.location.href = response.redirectUrl;
-                        } else 
-                        {
-                            alert('登入失敗，請檢查您的電子信箱和密碼。');
-                        }
-                    },
-                    error: function () {
-                        alert('發生錯誤，請稍後再試。');
-                    }
-                });
-            });
-        });
+        //         $.ajax({
+        //             type: 'POST',
+        //             url: '@Url.Action("Login", "Member")',
+        //             data: { EmailInput: email, PasswordInput: password },
+        //             success: function (response) 
+        //             {
+        //                 if (response.success) 
+        //                 {
+        //                     window.location.href = response.redirectUrl;
+        //                 } else 
+        //                 {
+        //                     alert('登入失敗，請檢查您的電子信箱和密碼。');
+        //                 }
+        //             },
+        //             error: function () {
+        //                 alert('發生錯誤，請稍後再試。');
+        //             }
+        //         });
+        //     });
+        // });
     </script>
 }

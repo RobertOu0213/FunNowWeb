@@ -1,6 +1,6 @@
-﻿ @{
+﻿ @* @{
    ViewBag.Title = "Index";
-} 
+}  *@
 
 <!DOCTYPE html>
 <html lang="en">
@@ -61,8 +61,14 @@
                 <a class="navbar-brand logo_h" href="index.html" style="padding:5px;">
                     <img src="~/image/ming_img/FunNowlogo.png" style="height: 60px; border-radius: 12px;">
                 </a>
-                <h6>@ViewData["SessionKey"]</h6>
-                <label>現在是登入狀態</label>
+                <div id="guestContent" style="display: none;">
+                    <label>歡迎客人~~現在是沒登入的狀態!!請<a href="/Member/Login">登入</a>來探索更多精彩內容</label>
+                </div>
+                <div id="memberContent" style="display: none;">
+                    <label>歡迎Member ID是<span id="memberId"></span>號的<span id="memberFirstName"></span>登入，現在是登入狀態</label>
+                    <button id="logoutButton" class="btn btn-primary">登出</button>
+                </div>
+                
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -274,6 +280,54 @@
     <script src="~/ming/vendors/lightbox/simpleLightbox.min.js"></script>
     <script src="~/js/ming_js/custom.js"></script>
 
+    
+    <script>
+        //決定會員資訊是否顯示
+        document.addEventListener("DOMContentLoaded", function () {
+            
+            var memberId = sessionStorage.getItem("MemberID");
+            var memberFirstName = sessionStorage.getItem("MemberFisrtName");
+            const token = sessionStorage.getItem("JWToken");
+            // memberId = '@Context.Session.GetString("MemberID")';
+            // memberFirstName = '@Context.Session.GetString("MemberFirstName")';
+            
+            
+
+            if (memberId && memberFirstName) 
+            {
+                
+                document.getElementById("memberContent").style.display = "block";
+                document.getElementById("memberId").innerText = memberId;
+                document.getElementById("memberFirstName").innerText = memberFirstName;
+                sessionStorage.setItem("MemberID", '@Context.Session.GetString("MemberID")');
+                sessionStorage.setItem("MemberFisrtName", '@Context.Session.GetString("MemberFirstName")');
+
+            } 
+            else
+            {
+                document.getElementById("guestContent").style.display = "block";
+            }
+
+                document.getElementById("logoutButton").addEventListener("click", function () {
+                    sessionStorage.removeItem("JWToken");
+                    sessionStorage.removeItem("MemberID");
+                    sessionStorage.removeItem("MemberFisrtName");
+                    sessionStorage.removeItem("MemberLastName");
+                    sessionStorage.removeItem("MemberEmail");
+                    sessionStorage.removeItem("MemberPhone");
+                    sessionStorage.removeItem("MemberBirthday");
+                    sessionStorage.removeItem("MemberRoleID");
+
+                    // 重定向到登出操作方法
+                    window.location.href = "@Url.Action("Logout", "Member")";
+                });
+            });
+    </script>
+    
+    
+    
+    
+    
     <script>
         // 監聽滾動事件
         window.addEventListener('scroll', function () {
