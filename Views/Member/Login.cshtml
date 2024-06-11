@@ -203,22 +203,16 @@
                         body: JSON.stringify({ email, password })
                     });
 
-                if (!response.ok) 
+                //如果成功串接API
+                if (response.ok) 
                 {
-                    passwordInput.value = ""; // 清空密碼
-                    throw new Error("登入失敗，請重新確認電子信箱和密碼");
-                }
+                    //拿到API回傳的資訊
+                    const data = await response.json();
 
-                //從API拿回資料
-                const data = await response.json();
+                    // 清除先前的LocalStorage，避免爆錯
+                    clearLocalStorage();
 
-                //如果API有拿回到資料，把他們儲存在Session Storage裡面
-                if (data.token && data.memberInfo) 
-                {
-                    // 清除先前的會員資訊
-                    clearSessionStorage();
-
-                    // 儲存新的會員資訊，並重新導向首頁
+                    // 把拿到資訊儲存在localStorage裡面
                     sessionStorage.setItem("JWToken", data.token);
                     sessionStorage.setItem("MemberID", data.memberInfo.memberId);
                     sessionStorage.setItem("MemberFisrtName", data.memberInfo.firstName);
@@ -227,26 +221,66 @@
                     sessionStorage.setItem("MemberPhone", data.memberInfo.phone);
                     sessionStorage.setItem("MemberBirthday", data.memberInfo.birthday);
                     sessionStorage.setItem("MemberRoleID", data.memberInfo.roleId);
-                    window.location.href = "/Home/Index";
+
+                    console.log("攔截器啟動");
+                    // 設置請求攔截器以自動添加Authorization標頭
+                    // 重新定義全域的 window.fetch 函式, 在發送每個請求時自動將 JWT Token 添加到請求標頭中。
+                    
+                    // 保存了原始的 fetch 函式
+                    const originalFetch = window.fetch;
+
+                    // 重新定義 window.fetch
+                    // ...args 是一個 rest 參數語法,它可以將所有傳入的參數收集到一個陣列中
+                    window.fetch = async (...args) => {
+                        //這一行是使用解構賦值來從 args 陣列中取出第一個元素(即資源 URL)並指派給 resource 變數,
+                        //同時將第二個元素(即請求配置物件)指派給 config 變數。
+                        const [resource, config] = args;
+
+                        const token = sessionStorage.getItem('JWToken');
+
+                        if (!token) 
+                        {
+                            console.log("沒有拿到token");
+                            console.log(resource);
+                            console.log(config);
+                            return originalFetch(resource, config);
+                        }
+                        
+                         // 如果有 Token,構建一個新的請求配置物件
+                            const newConfig = {
+                                ...config,
+                                headers: {
+                                    ...config.headers,
+                                    Authorization: `Bearer ${token}`
+                                }
+                            };
+
+                        console.log("拿到token");
+                        console.log(resource);
+                        console.log(newConfig);
+                        console.log("攔截器結束");
+                        //如果原始配置物件 config 不存在,它會直接創建一個新物件,只包含 headers 屬性,其值為 { Authorization: Bearer ${token} }。
+                        return originalFetch(resource, newConfig);
+                    };
+
+                    //通過攔截器後重新導向首頁
+                   window.location.href = "/Home/Index";
                 }
+                
                 else 
                 {
-                    showError("尚未取得Token和MemberID");
+                    passwordInput.value = ""; // 清空密碼
+                    alert("登入失敗，請重新確認電子信箱和密碼");
                 }
             } 
             catch (error) 
             {
-                showError(error.message);
+                console.error('錯誤為:',error);
             }
         });
 
-        function showError(message) 
-        {
-            errorElement.innerText = message;
-            errorElement.style.display = "block";
-        }
 
-        function clearSessionStorage() 
+        function clearLocalStorage() 
         {
             sessionStorage.removeItem("JWToken");
             sessionStorage.removeItem("MemberID");

@@ -311,14 +311,14 @@
             //點下登出按鈕，把session storage的資料清空，也把google登入的session清空
             document.getElementById("logoutButton").addEventListener("click", function () 
              {
-                    sessionStorage.removeItem("JWToken");
-                    sessionStorage.removeItem("MemberID");
-                    sessionStorage.removeItem("MemberFisrtName");
-                    sessionStorage.removeItem("MemberLastName");
-                    sessionStorage.removeItem("MemberEmail");
-                    sessionStorage.removeItem("MemberPhone");
-                    sessionStorage.removeItem("MemberBirthday");
-                    sessionStorage.removeItem("MemberRoleID");
+                sessionStorage.removeItem("JWToken");
+                sessionStorage.removeItem("MemberID");
+                sessionStorage.removeItem("MemberFisrtName");
+                sessionStorage.removeItem("MemberLastName");
+                sessionStorage.removeItem("MemberEmail");
+                sessionStorage.removeItem("MemberPhone");
+                sessionStorage.removeItem("MemberBirthday");
+                sessionStorage.removeItem("MemberRoleID");
 
                     // 重定向到登出操作方法
                     window.location.href = "@Url.Action("Logout", "Member")";
