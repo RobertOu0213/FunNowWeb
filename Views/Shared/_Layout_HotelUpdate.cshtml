@@ -102,7 +102,7 @@
                     <a href="@Url.Action("HostHotelPhoto", "HostManage",new { id = Model.HotelId })" class="@(action == "HostHotelPhoto" ? "active" : "")">
                         <div>旅館照片</div>
                     </a>
-                    <a href="#">
+                    <a href="@Url.Action("HostRoomImageUpdate", "HostManage",new { id = Model.HotelId })" class="@(action == "HostRoomImageUpdate" ? "active" : "")">
                         <div>房間照片</div>
                     </a>
                     <a href="@Url.Action("HostRoomCreate", "HostManage",new { id = Model.HotelId })" class="@(action == "HostRoomCreate" ? "active" : "")">

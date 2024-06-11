@@ -1,0 +1,96 @@
+﻿
+@{
+    ViewData["Title"] = "HostRoomImageUpdate";
+    Layout = "_Layout_HotelUpdate";
+}
+
+<section class="right-section">
+    <div class="container">
+        <div class="content__container pt-2">
+            <div class="content__container__image">
+                <div class="d-flex align-items-center">
+                    <div class="mb-4">
+                        <h4 class="fw-bold mt-5">照片修改</h4>
+                        <div class="content__container__image__text" style="width:70%;">對於旅客來說，現場實景照片往往成為影響是否訂房的重要參考。因此，建議你上傳完整的高畫質實景照片，吸引旅客下訂。想獲得更多小撇步嗎？</div>
+                    </div>
+                    <div>
+                        <select class="form-select" aria-label="Default select example" id="roomUpdate">
+                            <option selected disabled>請選擇要修改的房間</option>
+               @*              @foreach (var item in Model.AllRooms)
+                            {
+                                <option value="@item.RoomId">@item.RoomName</option>
+                            }  *@
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-5 hotelImageBox">
+                    <h4 class="fw-bold mt-5">房間照片</h4>
+                    <p>建築外觀、停車位、入口，以及任何其他開放使用的設施</p>
+                    <span class="alert-message"></span>
+                    <div class="uploaded">
+                        <div id="uploadSection">
+                            <img src="~/image/ou/upload.png" alt="..." />
+                            <div class="fw-bold">請將照片拖放至此</div>
+                            <p>僅限JPG和PNG格式（上限5 MB）</p>
+                            <input type="file" id="fileInput" accept=".jpg,.png" multiple style="display: none;" />
+                            <button id="uploadButton">選擇照片</button>
+                        </div>
+                    </div>
+                    <div class="container" id="preview">
+
+                        @foreach (var hotelImages in Model.AllhotelImages)
+                        {
+                            <div class="card hotelImageCard" data-id="@hotelImages.HotelImageId" data-is-new="false">
+                                @{
+                                    var imageUrl = hotelImages.HotelImage1.StartsWith("http://") || hotelImages.HotelImage1.StartsWith("https://")
+                                    ? hotelImages.HotelImage1
+                                    : Url.Content($"~/image/{hotelImages.HotelImage1}");
+                                }
+                                <img src="@imageUrl" class="card-img-top h-100" alt="..." data-file-name="@hotelImages.HotelImage1">
+                                <div class="card-body">
+                                    <select class="form-select" aria-label="Default select example" id="selectImageCategory">
+                                        <option selected disabled> 請選擇標題 </option>
+                                        @foreach (var imageCategory in Model.AllimageCategories)
+                                        {
+                                            @* var isSelected = hotelImages.ImageCategoryReferences.Any(icr => icr.ImageCategoryId == imageCategory.ImageCategoryId); *@
+                                            @* <option value="@imageCategory.ImageCategoryId" selected="@(isSelected ? "selected" : null)">@imageCategory.ImageCategoryName</option> *@
+                                        })
+                                    </select>
+                                </div>
+                                <button class="btn btn-danger delete-button" style="display: none;">刪除照片</button>
+                            </div>
+
+                        }
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center successMessage" style="visibility: hidden">
+                    <img src="@Url.Content("~/ou/image/checksign.png")" />
+                    <span style="color:green">已儲存!</span>
+                </div>
+                <div class="d-flex justify-content-end my-5">
+                    <button type="button" class="btn_previous" id="btnPrevious">取消</button>
+                    <button type="submit" class="btn_next" id="btnNext">儲存</button>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</section>
+
+@section Styles {
+    <style>
+
+    </style>
+
+}
+@section Scripts {
+    <script>
+
+    </script>
+}
