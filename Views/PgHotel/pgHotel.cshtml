@@ -161,19 +161,19 @@
                         <div class="modal-header">
                             <ul class="nav nav-underline">
                                 <li class="nav-item">
-                                    <a class="nav-link hotel-modal-nav-link" href="#" onclick="scrollToCategory('category-1')">所有照片</a>
+                                    <a class="nav-link hotel-modal-nav-link" onclick="smoothScroll('category-0')">所有照片</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link hotel-modal-nav-link" href="#" onclick="scrollToCategory('category-2')">客房</a>
+                                    <a class="nav-link hotel-modal-nav-link" onclick="smoothScroll('category-1')">客房</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link hotel-modal-nav-link" href="#" onclick="scrollToCategory('category-3')">住宿</a>
+                                    <a class="nav-link hotel-modal-nav-link" onclick="smoothScroll('category-2')">住宿</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link hotel-modal-nav-link" href="#" onclick="scrollToCategory('category-4')">設施與服務</a>
+                                    <a class="nav-link hotel-modal-nav-link" onclick="smoothScroll('category-3')">設施與服務</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link hotel-modal-nav-link" href="#" onclick="scrollToCategory('category-5')">餐飲</a>
+                                    <a class="nav-link hotel-modal-nav-link" onclick="smoothScroll('category-4')">餐飲</a>
                                 </li>
                             </ul>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -181,8 +181,8 @@
 
                         <div class="modal-body">
                             <div class="row">
-                                <div class="col-10">
-                                    <div class="d-flex flex-wrap" style="max-height: 400px; overflow-y: auto;">
+                                <div class="col-10 scrollable-container">
+                                    <div class="d-flex flex-wrap">
                                         @{
                                             var hotelImages = Model.HotelDetail.HotelImages ?? new List<pgHotel_ImageDTO>();
                                             var roomImages = Model.HotelDetail.Rooms?.SelectMany(r => r.RoomImages) ?? new List<pgHotel_ImageDTO>();
@@ -202,15 +202,17 @@
                                                 <div class="p-2" style="flex: 1 0 50%;">
                                                     <img src="https://localhost:7284/image/@image.ImageUrl" class="img-fluid" alt="Hotel Image"
                                                     @(isFirstImage ? $"id='category-{image.ImageCategoryID}'" : "") />
-                                                    isFirstImage = false;
+                                                    @{
+                                                        isFirstImage = false;
+                                                    }
                                                 </div>
                                             }
                                         }
                                     </div>
                                 </div>
-                                <div class="col-2">
-                                    <h2>@Model.HotelDetail.HotelName</h2>
-                                    <h3>設施與服務</h3>
+                                <div class="col-2 fixed-sidebar">
+                                    <h3>@Model.HotelDetail.HotelName</h3>
+                                    <h4>設施與服務</h4>
                                     <div class="d-flex flex-column">
                                         @foreach (var equipment in Model.HotelDetail.HotelEquipments)
                                         {
@@ -220,17 +222,9 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="modal-footer">
-                            <div class="row">
-                                <div class="col-10">
-                                    <!-- 你的内容 -->
-                                </div>
-                                <div class="col-2">
-                                    <h3>TWD @(Model.HotelDetail.AverageRoomPrice.ToString("F2"))</h3>
-                                    <button class="btn btn-primary btn-lg" onclick="scrollToRoomTypes()">查看房型</button>
-                                </div>
-                            </div>
+                        <div class="modal-footer d-flex justify-content-end align-items-center">
+                            <h3 class="mb-0">TWD @(Model.HotelDetail.AverageRoomPrice.ToString("F2"))</h3>
+                            <button class="btn btn-primary btn-lg ml-3">查看房型</button>
                         </div>
                     </div>
                 </div>
@@ -238,23 +232,22 @@
 
 
 
-
             @*飯店導覽列*@
             <ul class="nav nav-underline fixed-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="#room-types">房型</a>
+                    <a class="nav-link this-page-nav-link" href="#room-types">房型</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#hotel-reviews">評論</a>
+                    <a class="nav-link this-page-nav-link" href="#hotel-reviews">評論</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#hotel-equips">設施</a>
+                    <a class="nav-link this-page-nav-link" href="#hotel-equips">設施</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#hotel-map">周邊</a>
+                    <a class="nav-link this-page-nav-link" href="#hotel-map">周邊</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#top"><i class="fa-solid fa-up-long"></i></a>
+                    <a class="nav-link this-page-nav-link" href="#top"><i class="fa-solid fa-up-long"></i></a>
                 </li>
             </ul>
 
@@ -265,17 +258,27 @@
                 {
                     @foreach (var room in Model.HotelDetail.Rooms)
                     {
-                        <div class="row room-item" data-room-name="@room.RoomName" data-room-price="@room.RoomPrice" data-room-equips="@Newtonsoft.Json.JsonConvert.SerializeObject(room.RoomEquipments)">
+                        var limitedRoomImages = room.RoomImages?.Take(4).ToList() ?? new List<pgHotel_ImageDTO>();
+                        <div class="row room-item" data-room-name="@room.RoomName" data-room-price="@room.RoomPrice" data-room-equips="@Newtonsoft.Json.JsonConvert.SerializeObject(room.RoomEquipments)" data-room-images="@Newtonsoft.Json.JsonConvert.SerializeObject(room.RoomImages)">
                             <h3 data-bs-toggle="modal" data-bs-target="#roomModal">@room.RoomName</h3>
                             <div class="col-4">
                                 <table data-bs-toggle="modal" data-bs-target="#roomModal">
                                     <tr>
-                                        <td colspan="3"><img src="~/image/louieee_img/yuanshan_room.png" class="img-fluid" /></td>
+                                        <td colspan="3"><img src="https://localhost:7284/image/@(limitedRoomImages.Count > 0 ? limitedRoomImages[0].ImageUrl : "default_image.png")" class="img-fluid" /></td>
                                     </tr>
                                     <tr>
-                                        <td><img src="~/image/louieee_img/yuanshan_room.png" class="img-fluid" /></td>
-                                        <td><img src="~/image/louieee_img/yuanshan_room.png" class="img-fluid" /></td>
-                                        <td><img src="~/image/louieee_img/yuanshan_room.png" class="img-fluid" /></td>
+                                        @if (limitedRoomImages.Count > 1)
+                                        {
+                                            <td><img src="https://localhost:7284/image/@limitedRoomImages[1].ImageUrl" class="img-fluid" /></td>
+                                        }
+                                        @if (limitedRoomImages.Count > 2)
+                                        {
+                                            <td><img src="https://localhost:7284/image/@limitedRoomImages[2].ImageUrl" class="img-fluid" /></td>
+                                        }
+                                        @if (limitedRoomImages.Count > 3)
+                                        {
+                                            <td><img src="https://localhost:7284/image/@limitedRoomImages[3].ImageUrl" class="img-fluid" /></td>
+                                        }
                                     </tr>
                                 </table>
                             </div>
@@ -293,7 +296,7 @@
                                                 foreach (var equipment in room.RoomEquipments.Take(8))
                                                 {
                                                     <div class="d-flex align-items-center">
-                                                        <i class="fa-regular fa-thumbs-up">@equipment</i>
+                                                        <i class="fa-regular fa-thumbs-up"></i> @equipment
                                                     </div>
                                                 }
                                             }
@@ -330,10 +333,9 @@
                         <div class="modal-header">
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-
                         <div class="modal-body">
                             <div class="row">
-                                <div class="col-10" id="room-images">
+                                <div class="col-10" id="room-images" style="max-height: 400px; overflow-y: auto;">
                                     <!-- 這裡放房間圖片 -->
                                 </div>
                                 <div class="col-2">
@@ -345,12 +347,15 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="modal-footer">
-                            <div class="row">
-                                <h3 id="room-price"></h3>
-                                <button class="btn btn-outline-primary btn-lg">加入購物車</button>
-                                <button class="btn btn-primary btn-lg">立即下訂</button>
+                            <div class="row w-100">
+                                <div class="col-9 text-end">
+                                    <h3 id="room-price"></h3>
+                                </div>
+                                <div class="col-3 text-end">
+                                    <button class="btn btn-outline-primary btn-lg">加入購物車</button>
+                                    <button class="btn btn-primary btn-lg">立即下訂</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -435,7 +440,7 @@
                                     {
                                         <div class="row mb-3">
                                             <div class="col-3">
-                                                <img src="~/image/louieee_img/otherhotel01.png" class="img-fluid full-height-img" />
+                                                <img src="https://localhost:7284/image/@hotel.HotelImage.ImageUrl" class="img-fluid full-height-img" />
                                             </div>
                                             <div class="col-9 vertical-align">
                                                 <div style="display:flex;">
@@ -479,45 +484,45 @@
                             .ToList();
                             for (int i = 0; i < hotelGroups.Count; i++)
                             {
-                                <div class="carousel-item @(i == 0 ? "active" : "")">
-                                    <div class="card-deck mb-5">
-                                        @foreach (var index in hotelGroups[i])
+                                        <div class="carousel-item @(i == 0 ? "active" : "")">
+                                            <div class="card-deck mb-5">
+                                                @foreach (var index in hotelGroups[i])
                                         {
                                             var hotel = index < Model.HotelDetail.SimilarHotels.Count ? Model.HotelDetail.SimilarHotels[index] : null;
-                                            <a href="@((hotel != null) ? ("/PgHotel/pgHotel?hotelId=" + hotel.HotelId) : "#")" class="card">
-                                                <div class="card">
-                                                    <img src="~/image/louieee_img/otherHotel01.png" class="card-img-top" alt="Hotel Image">
-                                                    <div class="card-body">
-                                                        @if (hotel != null)
+                                                    <a href="@((hotel != null) ? ("/PgHotel/pgHotel?hotelId=" + hotel.HotelId) : "#")" class="card">
+                                                        <div class="card">
+                                                            <img src="~/image/louieee_img/otherHotel01.png" class="card-img-top" alt="Hotel Image">
+                                                            <div class="card-body">
+                                                                @if (hotel != null)
                                                         {
-                                                            <h5 class="card-title">@hotel.HotelName</h5>
+                                                                    <h5 class="card-title">@hotel.HotelName</h5>
                                                             for (int j = 0; j < hotel.LevelStar; j++)
                                                             {
-                                                                <img src="~/image/louieee_img/star.png" />
+                                                                        <img src="~/image/louieee_img/star.png" />
                                                             }
-                                                            <p class="card-text">
-                                                                <span>4.3/5 很好(681則評論)</span>
-                                                                <i class="fa-solid fa-location-dot">@hotel.HotelAddress</i>
-                                                            </p>
+                                                                    <p class="card-text">
+                                                                        <span>4.3/5 很好(681則評論)</span>
+                                                                        <i class="fa-solid fa-location-dot">@hotel.HotelAddress</i>
+                                                                    </p>
                                                         }
                                                         else
                                                         {
-                                                            <h5 class="card-title">占位符酒店名稱</h5>
-                                                            <p class="card-text">
-                                                                <span>占位符評論</span>
-                                                                <i class="fa-solid fa-location-dot">占位符酒店地址</i>
-                                                            </p>
+                                                                    <h5 class="card-title">占位符酒店名稱</h5>
+                                                                    <p class="card-text">
+                                                                        <span>占位符評論</span>
+                                                                        <i class="fa-solid fa-location-dot">占位符酒店地址</i>
+                                                                    </p>
                                                         }
-                                                    </div>
-                                                    <div class="card-footer">
-                                                        <small class="text-body-secondary">只剩 @hotel?.AvailableRooms 間房</small>
-                                                    </div>
+                                                            </div>
+                                                            <div class="card-footer">
+                                                                <small class="text-body-secondary">只剩 @hotel?.AvailableRooms 間房</small>
+                                                            </div>
 
-                                                </div>
-                                            </a>
+                                                        </div>
+                                                    </a>
                                         }
-                                    </div>
-                                </div>
+                                            </div>
+                                        </div>
                             }
                         }
                     </div>
@@ -569,32 +574,43 @@
         }
 
         .scrollable-container {
-            max-height: 400px; /* 根据需要设置合适的高度 */
-            overflow-y: auto; /* 启用垂直滚动条 */
-            padding-right: 15px; /* 防止滚动条遮盖内容 */
+            max-height: calc(100vh - 200px); /* Increase the height of the modal body */
+            overflow-y: auto; /* Enable vertical scrollbar */
+            padding-right: 15px; /* Prevent scrollbar from overlaying content */
         }
 
         .fixed-nav {
             position: fixed;
-            bottom: 20px; /* 距离底部20px */
-            right: 20px; /* 距离左边20px */
-            z-index: 1000; /* 确保在其他内容之上 */
-            background-color: #fff; /* 背景颜色 */
-            border-radius: 10px; /* 圆角边框 */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 阴影效果 */
-            padding: 10px; /* 内边距 */
+            bottom: 20px; /* Distance from the bottom */
+            right: 20px; /* Distance from the right */
+            z-index: 1000; /* Ensure it's above other content */
+            background-color: #fff; /* Background color */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow effect */
+            padding: 10px; /* Padding */
         }
 
             .fixed-nav .nav-link {
-                color: #555; /* 链接颜色 */
-                padding: 10px; /* 链接内边距 */
-                display: block; /* 链接显示为块元素 */
+                color: #555; /* Link color */
+                padding: 10px; /* Link padding */
+                display: block; /* Display link as block element */
             }
 
                 .fixed-nav .nav-link:hover {
-                    background-color: #f1f1f1; /* 鼠标悬停背景颜色 */
-                    border-radius: 5px; /* 链接圆角边框 */
+                    background-color: #f1f1f1; /* Background color on hover */
+                    border-radius: 5px; /* Rounded corners on hover */
                 }
+
+        .scrollable-images {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        #room-images img {
+    max-width: 48%;
+    width: 48%;
+    margin: 1%;
+}
+
     </style>
 }
 @section Scripts {
@@ -657,31 +673,7 @@
 
             
 
-            //飯店彈出視窗
-            // 选择特定模态框内的导航链接
-            const modalLinks = document.querySelectorAll('.hotel-modal-nav-link');
-
-            modalLinks.forEach(link => {
-                link.addEventListener('click', function (event) {
-                    event.preventDefault();
-                    const targetId = this.getAttribute('href').substring(1);
-                    const targetElement = document.getElementById(targetId);
-
-                    if (targetElement) {
-                        targetElement.scrollIntoView({ behavior: 'smooth' });
-                    }
-                });
-            });
-
-            // 滚动到指定类别
-            window.scrollToCategory = function (categoryId) {
-                var targetElement = document.getElementById(categoryId);
-                if (targetElement) {
-                    targetElement.scrollIntoView({ behavior: 'smooth' });
-                }
-            };
-
-            // 滚动到房型
+            //飯店彈出視窗-查看房型
             window.scrollToRoomTypes = function () {
                 var roomTypesElement = document.getElementById('room-types');
                 var hotelModal = document.getElementById('hotelModal');
@@ -702,8 +694,10 @@
 
             
 
+            
+
             //導覽列-避免被遮住
-            const links = document.querySelectorAll('.nav-link');
+            const links = document.querySelectorAll('.this-page-nav-link');
 
             links.forEach(link => {
                 link.addEventListener('click', function (event) {
@@ -725,43 +719,64 @@
             });
 
             //房間彈出視窗
-            var roomModal = document.getElementById('roomModal');
-            var roomNameElement = document.getElementById('room-name');
-            var roomEquipmentsElement = document.getElementById('room-equipments');
-            var roomPriceElement = document.getElementById('room-price');
-            var roomImagesElement = document.getElementById('room-images');
-
-            var roomItems = document.querySelectorAll('.room-item');
-            roomItems.forEach(function (roomItem) {
-                roomItem.addEventListener('click', function () {//打開彈跳視窗
-                    var roomName = roomItem.getAttribute('data-room-name');
-                    var roomPrice = roomItem.getAttribute('data-room-price');
-                    var roomEquipments = JSON.parse(roomItem.getAttribute('data-room-equips'));
-
-                    roomNameElement.textContent = roomName;
-                    roomPriceElement.textContent = 'TWD ' + parseFloat(roomPrice).toFixed(2);
-
-                    roomEquipmentsElement.innerHTML = '';
-                    roomEquipments.forEach(function (equip) {
-                        var equipElement = document.createElement('div');
-                        equipElement.classList.add('d-flex', 'align-items-center');
-                        equipElement.innerHTML = '<i class="fa-regular fa-thumbs-up"></i> ' + equip;
-                        roomEquipmentsElement.appendChild(equipElement);
-                    });
-
-                    roomImagesElement.innerHTML = '<img src="~/image/louieee_img/yuanshan_room.png" class="img-fluid" />';
-                });
-            });
             
-            roomModal.addEventListener('hidden.bs.modal', function () {//關閉彈跳視窗
-                document.body.classList.remove('modal-open');
-                var backdrop = document.querySelector('.modal-backdrop');
-                if (backdrop) {
-                    backdrop.remove();
-                }
-            });
+                var roomModal = document.getElementById('roomModal');
+                var roomNameElement = document.getElementById('room-name');
+                var roomEquipmentsElement = document.getElementById('room-equipments');
+                var roomPriceElement = document.getElementById('room-price');
+                var roomImagesElement = document.getElementById('room-images');
+
+                var roomItems = document.querySelectorAll('.room-item');
+                roomItems.forEach(function (roomItem) {
+                    roomItem.addEventListener('click', function () {
+                        var roomName = roomItem.getAttribute('data-room-name');
+                        var roomPrice = roomItem.getAttribute('data-room-price');
+                        var roomEquipments = JSON.parse(roomItem.getAttribute('data-room-equips'));
+                        var roomImages = JSON.parse(roomItem.getAttribute('data-room-images'));
+
+                        roomNameElement.textContent = roomName;
+                        roomPriceElement.textContent = 'TWD ' + parseFloat(roomPrice).toFixed(2);
+
+                        roomEquipmentsElement.innerHTML = '';
+                        roomEquipments.forEach(function (equip) {
+                            var equipElement = document.createElement('div');
+                            equipElement.classList.add('d-flex', 'align-items-center');
+                            equipElement.innerHTML = '<i class="fa-regular fa-thumbs-up"></i> ' + equip;
+                            roomEquipmentsElement.appendChild(equipElement);
+                        });
+
+                        roomImagesElement.innerHTML = '';
+                        for (var i = 0; i < roomImages.length; i += 2) {
+                            var rowElement = document.createElement('div');
+                            rowElement.classList.add('d-flex', 'flex-row', 'mb-2');
+
+                            for (var j = 0; j < 2; j++) {
+                                if (i + j < roomImages.length) {
+                                    var imgElement = document.createElement('img');
+                                    imgElement.src = 'https://localhost:7284/image/' + roomImages[i + j].ImageUrl;
+                                    imgElement.classList.add('img-fluid', 'p-2');
+                                    rowElement.appendChild(imgElement);
+                                }
+                            }
+
+                            roomImagesElement.appendChild(rowElement);
+                        }
+                    });
+                });
+            
+
         });
 
+        function smoothScroll(targetId) {
+            console.log(targetId)
+            const targetEle = document.getElementById(targetId)
+            if (targetEle) {
+                window.scrollTo({
+                    top: targetEle.offsetTop,
+                    behavior: 'smooth'
+                })
+            }
+        }
 
     </script>
 
