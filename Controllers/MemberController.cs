@@ -79,11 +79,12 @@ namespace PrjFunNowWeb.Controllers
 
             // 在Session中儲存會員ID
             HttpContext.Session.SetString("MemberID", existingMember.MemberId.ToString());
+            HttpContext.Session.SetString("MemberEmail", existingMember.Email);
             HttpContext.Session.SetString("MemberFirstName", existingMember.FirstName);
             return RedirectToAction("Index", "Home");
         }
 
-
+        
         public IActionResult Logout()
         {
             // 清除 Session 資料
@@ -94,26 +95,7 @@ namespace PrjFunNowWeb.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        //一般帳號密碼+JWT驗證，改成用API的方式串接
-        //[HttpPost]
-        //public JsonResult Login(CLoginViewModel vm) //用於處理登入請求並返回 JSON 格式的結果。接受 CLoginViewModel 類型的參數vm。
-        //{
-        //    if (ModelState.IsValid) //檢查模型是否有效
-        //    {
-        //        Member member = _context.Members.FirstOrDefault(m => m.Email == vm.EmailInput && m.Password == vm.PasswordInput);
-
-        //        if (member != null) //如果有找到符合資料的會員
-        //        {
-        //            string json = JsonSerializer.Serialize(member); //將會員資料序列化為 JSON
-        //            HttpContext.Session.SetString(CDictionary.SK_LOGIN_MEMBER, json); //將 JSON 資料存入 Session
-        //            return Json(new { success = true, redirectUrl = Url.Action("Index", "Home") }); //返回成功結果轉到首頁
-        //        }
-        //    }
-
-        //    return Json(new { success = false }); //登入失敗，返回失敗結果。
-        //}
-
-
+       
         public IActionResult Register()
         {
             return View();

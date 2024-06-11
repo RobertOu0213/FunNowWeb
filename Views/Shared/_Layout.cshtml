@@ -45,27 +45,16 @@
     <header class="header_area">
         <!-- 導航欄 -->
         <div class="container-fluid" style="padding: 0;">
-          @*   @if (@ViewData["SessionKey"].ToString()!=null)
-            {
-                @Html.Partial("_LogINPartial")
-            }
-            else
-            {
-                @Html.Partial("_LogOutPartial")
-            } *@
-
-
-
             <nav class="navbar navbar-expand-lg navbar-light" style="height: 60px;">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <a class="navbar-brand logo_h" href="index.html" style="padding:5px;">
                     <img src="~/image/ming_img/FunNowlogo.png" style="height: 60px; border-radius: 12px;">
                 </a>
                 <div id="guestContent" style="display: none;">
-                    <label>歡迎客人~~現在是沒登入的狀態!!請<a href="/Member/Login">登入</a>來探索更多精彩內容</label>
+                    <label>歡迎路過客～哎呀~我發現你還沒登入！！！ 趕緊 <a class="btn btn-danger"  href="/Member/Login">登入</a>來探索更多精彩內容!!!</label>
                 </div>
                 <div id="memberContent" style="display: none;">
-                    <label>歡迎Member ID是<span id="memberId"></span>號的<span id="memberFirstName"></span>登入，現在是登入狀態</label>
+                    <label>歡迎我們尊貴的會員ID是<span id="memberId"></span>號的<span id="memberFirstName"></span>完成登入</label>
                     <button id="logoutButton" class="btn btn-primary">登出</button>
                 </div>
                 
@@ -283,7 +272,8 @@
     
     <script>
         //決定會員資訊是否顯示
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function () 
+        {
 
             // 儲存在Session storage中的資訊(自己輸入帳號密碼的登入者)
             var memberId = sessionStorage.getItem("MemberID");
@@ -307,7 +297,10 @@
                 document.getElementById("memberContent").style.display = "block";
                 document.getElementById("memberId").innerText = sessionMemberId;
                 document.getElementById("memberFirstName").innerText = sessionMemberFirstName;
+                sessionStorage.setItem("MemberID", sessionMemberId);
+                sessionStorage.setItem("MemberFisrtName", sessionMemberFirstName);
             }
+
             // 如果兩個地方都沒有資料，顯示訪客內容
             else 
             {
