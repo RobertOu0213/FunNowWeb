@@ -734,8 +734,23 @@
     </style>
     <style>
         /* 點擊旅館的效果 */
+        .col-lg-4.col-sm-8 {
+            height: 280px; /* 設置一個固定的高度，可根據需要調整 */
+            padding: 0;
+        }
+
+            .col-lg-4.col-sm-8 table {
+                height: 100%;
+                width: 100%;
+            }
+
+            .col-lg-4.col-sm-8 img {
+                object-fit: cover; /* 讓圖片完整顯示，並填滿容器 */
+                height: 100%;
+                width: 100%;
+            }
         .hotel-card {
-            margin: 20px 0; /* 添加間距 */
+            margin: 10px 0; /* 添加間距 */
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             border-radius: 5px;
             overflow: hidden;
@@ -751,11 +766,6 @@
             .hotel-card:hover .hotel-details, .hotel-card:hover .hotel-pricing {
                 background-color: #f0f8ff; /* 滑鼠滑過時變為淺藍色 */
             }
-
-        .hotel-card img {
-            width: 100%;
-            height: auto;
-        }
 
         .hotel-card h3 {
             margin-top: 10px;
