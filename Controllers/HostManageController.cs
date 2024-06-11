@@ -4,6 +4,7 @@ using PrjFunNowWeb.Models;
 using PrjFunNowWeb.Models.DTO;
 using PrjFunNowWeb.Models.ViewModel;
 using System;
+using System.Linq;
 
 namespace PrjFunNowWeb.Controllers
 {
@@ -475,15 +476,15 @@ namespace PrjFunNowWeb.Controllers
 
             var hotel = (from h in _context.Hotels
                          where h.HotelId == id
-                         select new CHotelImageViewModel
+                         select new CRoomImageViewModel
                          {
                              HotelId = h.HotelId,
                              HotelName = h.HotelName,
                              CityName = h.City.CityName,
                              CountryName = h.City.Country.CountryName,
                              HotelImage = h.HotelImages.Select(hi => hi.HotelImage1).FirstOrDefault(),
-                             AllhotelImages = h.HotelImages.ToList(),
-                             AllimageCategoryReferences = h.HotelImages.SelectMany(hi => hi.ImageCategoryReferences).ToList(),
+                             AllRooms = h.Rooms.Select(room => new Room { RoomId = room.RoomId, RoomName = room.RoomName }).ToList(),
+                             AllroomImages = h.Rooms.SelectMany(ri => ri.RoomImages).ToList(),
                              AllimageCategories = _context.ImageCategories.ToList()
                          }).FirstOrDefault();
 
