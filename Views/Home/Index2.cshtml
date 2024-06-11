@@ -48,7 +48,7 @@
                 <br />
 
 
-                <div style="margin:20px 10px">
+                <div style="margin:20px 10px" class="form-check-container-hotel-type">
                     <p>住宿類型</p>
                 @foreach (var hotelType in Model.HotelTypes)
                 {
@@ -61,7 +61,7 @@
                 }
                 </div>
 
-                <div style="margin:20px 10px">
+                <div style="margin:20px 10px" class="form-check-container-hotel-equipment">
                     <p>住宿設備</p>
                 @foreach (var hotelEquipment in Model.HotelEquipments)
                 {
@@ -74,7 +74,7 @@
                 }
                 </div>
 
-                <div style="margin:20px 10px">
+                <div style="margin:20px 10px" class="form-check-container-city">
                     <p>城市</p>
                     <div class="form-check-container">
                     @foreach (var city in Model.Cities)
@@ -90,7 +90,7 @@
                     <button id="toggleCityButton" class="toggle-button">顯示更多</button>
                 </div>
 
-                <div style="margin:20px 10px">
+                <div style="margin:20px 10px" class="form-check-container-room-equipment">
                     <p>房間設備</p>
                 @foreach (var roomEquipment in Model.RoomEquipments)
                 {
@@ -105,91 +105,6 @@
 
 
 
-                <!--//房型優惠start-->
-                <div style="margin:20px 10px">
-                    <p>房型優惠</p>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
-                </div>
-                <!--//房型優惠End-->
-                <hr />
-
-                <!--//熱門景點start-->
-                <div style="margin:20px 10px">
-                    <p>熱門景點</p>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
-                </div>
-                <!--//熱門景點End-->
-                <hr />
             </div>
 
 
@@ -215,7 +130,9 @@
 <!--================ 台灣熱門城市 Area  =================-->
 @section Scripts {
 
+    
     <script>
+        //這是函式1
         // 定義 fetchHotels 函式
         async function fetchHotels(searchHotel) {
             const url = "https://localhost:7103/api/HotelSearch/indexsearch";
@@ -493,6 +410,7 @@
         }
 
     </script>
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const toggleButton = document.querySelector("#toggleCityButton");
@@ -507,6 +425,195 @@
                 }
             });
         });
+    </script>
+
+    <script>
+         //這是函式2
+        function getSelectedCheckboxes(containerSelector) {
+            const checkboxes = document.querySelectorAll(`${containerSelector} input[type="checkbox"]:checked`);
+            return Array.from(checkboxes).map(checkbox => checkbox.value);
+        }
+        async function updateSearchFilters() {
+            const searchHotelJson = sessionStorage.getItem('searchHotel');
+            if (searchHotelJson) {
+                const searchHotel = JSON.parse(searchHotelJson);
+                searchHotel.hotelTypes = getSelectedCheckboxes('.form-check-container-hotel-type');
+                searchHotel.hotelEquipments = getSelectedCheckboxes('.form-check-container-hotel-equipment');
+                searchHotel.cities = getSelectedCheckboxes('.form-check-container-city');
+                searchHotel.roomEquipments = getSelectedCheckboxes('.form-check-container-room-equipment');
+
+                searchHotel.lowerPrice = parseFloat(document.querySelector("#lowerInput").value);
+                searchHotel.upperPrice = parseFloat(document.querySelector("#upperInput").value);
+
+                sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel));
+
+                await fetchHotels(searchHotel);
+            } else {
+                console.log('searchHotel not found in sessionStorage');
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const lowerHandle = document.getElementById('lowerHandle');
+            const upperHandle = document.getElementById('upperHandle');
+            const rangeSlider = document.getElementById('rangeSlider');
+            const lowerLabel = document.getElementById('lowerLabel');
+            const upperLabel = document.getElementById('upperLabel');
+            const lowerInput = document.getElementById('lowerInput');
+            const upperInput = document.getElementById('upperInput');
+
+            lowerHandle.addEventListener('mousedown', startDrag);
+            upperHandle.addEventListener('mousedown', startDrag);
+
+            let isDragging = false;
+            let currentHandle = null;
+
+            function startDrag(event) {
+                isDragging = true;
+                currentHandle = event.target;
+                document.addEventListener('mousemove', handleDrag);
+                document.addEventListener('mouseup', stopDrag);
+            }
+
+            function handleDrag(event) {
+                if (!isDragging) return;
+
+                if (currentHandle === lowerHandle) {
+                    handleDragLogic(event, lowerHandle, lowerLabel, upperLabel, lowerInput, upperInput);
+                } else {
+                    handleDragLogic(event, upperHandle, upperLabel, lowerLabel, lowerInput, upperInput);
+                }
+            }
+
+            function handleDragLogic(event, handle, label, oppositeLabel, lowerInput, upperInput) {
+                const sliderRect = rangeSlider.getBoundingClientRect();
+                const sliderWidth = sliderRect.width;
+                const min = parseFloat(rangeSlider.getAttribute('min'));
+                const max = parseFloat(rangeSlider.getAttribute('max'));
+                const range = max - min;
+
+                let position = (event.clientX - sliderRect.left) / sliderWidth;
+                position = Math.min(1, Math.max(0, position));
+                const value = Math.round(min + position * range);
+
+                if (handle === lowerHandle) {
+                    if (value >= parseFloat(oppositeLabel.textContent.split('：')[1])) {
+                        return;
+                    }
+                    handle.style.left = `${position * 100}%`;
+                    label.textContent = `下限：${value}`;
+                    lowerInput.value = value;
+                } else {
+                    if (value <= parseFloat(oppositeLabel.textContent.split('：')[1])) {
+                        return;
+                    }
+                    handle.style.left = `${position * 100}%`;
+                    label.textContent = `上限：${value}`;
+                    upperInput.value = value;
+                }
+
+                // 更新搜索條件
+                updateSearchFilters();
+            }
+
+            function stopDrag() {
+                isDragging = false;
+                currentHandle = null;
+                document.removeEventListener('mousemove', handleDrag);
+                document.removeEventListener('mouseup', stopDrag);
+            }
+        });
+        document.querySelectorAll('.form-check-container-hotel-type input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', updateSearchFilters);
+        });
+
+        document.querySelectorAll('.form-check-container-hotel-equipment input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', updateSearchFilters);
+        });
+
+        document.querySelectorAll('.form-check-container-city input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', updateSearchFilters);
+        });
+
+        document.querySelectorAll('.form-check-container-room-equipment input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', updateSearchFilters);
+        });
+        async function fetchHotels(searchHotel) {
+            const url = "https://localhost:7103/api/HotelSearch/advancedsearch";
+            const response = await fetch(url, {
+                method: "POST",
+                body: JSON.stringify(searchHotel),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (!response.ok) {
+                console.error("Failed to fetch hotels:", response.statusText);
+                return;
+            }
+
+            const data = await response.json();
+            console.log(data);
+
+            const divHotels = document.querySelector("#showhotels");
+            divHotels.innerHTML = "";
+
+            const hotels = data.map((hotel) => {
+                const {
+                    hotelName,
+                    hotelAddress,
+                    hotelPhone,
+                    hotelDescription,
+                    countryName,
+                    hotelEquipmentName,
+                    hotelImage,
+                    levelStar,
+                    hotelMaximumOccupancy,
+                    hotelPrice,
+                } = hotel;
+                return `
+                        <div class="col-lg-4 col-sm-8" style="padding:0px">
+                            <table>
+                                <tr>
+                                    <td colspan="3"><img src='https://localhost:7284/image/${hotelImage}' class="img-fluid" style="width:100%" /></td>
+                                </tr>
+                                <tr>
+                                    <td><img src="/image/ming_img/room1.jpg" class="img-fluid" /></td>
+                                    <td><img src="/image/ming_img/room3.jpg" class="img-fluid" /></td>
+                                    <td><img src="/image/ming_img/room4.jpg" class="img-fluid" /></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-lg-5 col-sm-10" style="border:1px solid gray">
+                            <h3>${hotelName}</h3>
+                            <span>${levelStar}星級飯店 </span><span style="color:blue">${hotelAddress}</span>
+                            <h6>此住宿提供:</h6>
+                            <h5 style="border: 1px solid black;display: inline-block;">${hotelEquipmentName}</h5>
+                            <br>
+                            <h5 style="border: 1px solid black;display: inline-block;">設施2</h5>
+                            <br>
+                            <h5 style="border: 1px solid black;display: inline-block;">設施3</h5>
+                            <br>
+                            <h6 style="color:green">${levelStar}星級飯店最優價</h6>
+                            <h6 style="color:red">昨天起已收到${levelStar}張訂單</h6>
+                        </div>
+                        <div class="col-lg-3 col-sm-12" style="border:1px solid gray;text-align: right">
+                            <h5>很出色</h5>
+                            <h6 style="color:gray"> 個評分</h6>
+                            <br>
+                            <h6 style="border: 1px solid red;display:inline-block;background-color: red;color:white">優惠只剩1間</h6>
+                            <h6 style="color:gray">每晚價格(不連税及其他费用)</h6>
+                            <br><br>
+                            <h3>NT$${hotelPrice}</h3>
+                        </div>
+                    `;
+            });
+
+            divHotels.innerHTML = hotels.join("");
+        }
+
+
     </script>
 
 
