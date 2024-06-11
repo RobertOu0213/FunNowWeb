@@ -90,118 +90,77 @@
 
 <div class="container">
     <div class="container">
-        <a asp-action="HotelsFavoritesList">口袋清單</a>
+        <a href="/api/HotelsFavorite/${memberId}/FavoriteHotels">口袋清單</a>
         <span>/</span>
-        <span>花蓮縣,台灣</span>
-        <h3>花蓮縣,台灣</h3>
+        <h3 id="cityCountry">花蓮縣,台灣</h3>
     </div>
-</div>
+
 <div class="container">
-    <div class="row">
-
-        <!-- Card 1 -->
-        <div class="col-md-3">
-            <div class="card">
-                <i class="fa-solid fa-heart love-button"></i> <!-- 爱心按钮 -->
-                <img src="~/image/julia/高雄海嗨嗨渡假村.jpg" class="card-img-top" alt="Room Image">
-                <div class="card-body">
-                    <h5 class="card-title">蛙滴家</h5>
-                    <p class="card-text">九份xxx,台北</p>
-                    <p>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                    </p>
-                    <p class="card-text"> 8.5很讚  4,880篇評鑑 </p>
-                    <p class="price">$1,200 / 晚</p>
-
-                </div>
-            </div>
-        </div>
-        <!-- Card 2 -->
-        <div class="col-md-3">
-            <div class="card">
-                <i class="fa-solid fa-heart love-button"></i> <!-- 爱心按钮 -->
-                <img src="~/image/julia/高雄海嗨嗨渡假村.jpg" class="card-img-top" alt="Room Image">
-                <div class="card-body">
-                    <h5 class="card-title">九份九重町民宿 </h5>
-                    <p class="card-text">九份,台北市</p>
-                    <p>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                    </p>
-                    <p class="card-text"> 8.5很讚  4,880篇評鑑 </p>
-                    <p class="price">$1,200 / 晚</p>
-
-                </div>
-            </div>
-        </div>
-        <!-- Card 3 -->
-        <div class="col-md-3">
-            <div class="card">
-                <i class="fa-solid fa-heart love-button"></i> <!-- 爱心按钮 -->
-                <img src="~/image/julia/高雄海嗨嗨渡假村.jpg" class="card-img-top" alt="Room Image">
-                <div class="card-body">
-                    <h5 class="card-title">九份山旅</h5>
-                    <p class="card-text">九份,台北市</p>
-                    <p>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                    </p>
-                    <p class="card-text"> 8.5很讚  4,880篇評鑑 </p>
-                    <p class="price">$1,200 / 晚</p>
-
-                </div>
-            </div>
-        </div>
-        <!-- Card 4 -->
-        <div class="col-md-3">
-            <div class="card">
-                <i class="fa-solid fa-heart love-button"></i> <!-- 爱心按钮 -->
-                <img src="~/image/julia/高雄海嗨嗨渡假村.jpg" class="card-img-top" alt="Room Image">
-                <div class="card-body">
-                    <h5 class="card-title">窄巷子公寓</h5>
-                    <p class="card-text">九份,九份</p>
-                    <p>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                    </p>
-                    <p class="card-text"> 8.2很讚  706篇評鑑 </p>
-                    <p class="price">$1,200 / 晚</p>
-
-                </div>
-            </div>
-        </div>
-        <!-- Card 5 -->
-        <div class="col-md-3">
-            <div class="card">
-                <i class="fa-solid fa-heart love-button"></i> <!-- 爱心按钮 -->
-                <img src="~/image/julia/高雄海嗨嗨渡假村.jpg" class="card-img-top" alt="Room Image">
-                <div class="card-body">
-                    <h5 class="card-title">窄巷子公寓</h5>
-                    <p class="card-text">九份,九份</p>
-                    <p>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                    </p>
-                    <p class="card-text"> 8.2很讚  706篇評鑑 </p>
-                    <p class="price">$1,200 / 晚</p>
-
-                </div>
-            </div>
-
-        </div>
+    <div class="row" id="hotelsContainer">
     </div>
 </div>
-
+</div>
 
 @section Scripts {
 
+    <script>
+        const hotelsContainer = document.querySelector('#hotelsContainer');
+        const cityCountryLabel = document.querySelector('#cityCountry');
 
+        const memberId = 5; // 先写死
+        // 使用 URLSearchParams 解析 URL 中的參數
+        const urlParams = new URLSearchParams(window.location.search);
+        const cityName = urlParams.get('cityName');  // 從 URL 參數獲取城市名稱
+        const countryName = urlParams.get('countryName');  // 從 URL 參數獲取國家名稱
+
+        const url = `https://localhost:7103/api/HotelsFavorite/${memberId}/FavoriteHotels/${encodeURIComponent(cityName)}`;
+
+        const loadFavoriteHotels = async () => {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const hotels = await response.json();
+                console.log(hotels);
+                const favoriteHotelsHtml = hotels.map(hotel => {
+                    return (`
+                                <div class="col-md-3">
+                                    <div class="card">
+                                               <i class="fa-solid fa-heart love-button"></i>                                                              //TODO...  /* 爱心按钮 */                 /*  要加邏輯 移除的功能 */
+                                       
+                                        <div class="card-body">
+                                            <h5 class="card-title">${hotel.hotelName}</h5>
+                                            <p class="card-text">${hotel.city}, ${hotel.country}</p>
+                                            <p>
+                                                ${generateStars(hotel.levelStar)}
+                                            </p>
+
+                                            <p class="price">$${hotel.minimumPrice} / 晚</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            `)
+                });
+                hotelsContainer.innerHTML = favoriteHotelsHtml.join('');
+                cityCountryLabel.textContent = `${cityName}, ${countryName}`;  // 更新標籤顯示正確的城市和國家
+
+            } catch (error) {
+                console.error('Failed to fetch hotels:', error);
+                errorMessageContainer.textContent = '抱歉,加載收藏飯店列表時發生錯誤,請等待維修。';
+            }
+        };
+
+        const generateStars = (stars) => {
+            let starsHtml = '';
+            for (let i = 0; i < stars; i++) {
+                starsHtml += '<i class="fa-solid fa-star"></i>';
+            }
+            return starsHtml;
+        };
+
+        loadFavoriteHotels();
+    </script>
 }
 
 

@@ -24,13 +24,13 @@ namespace PrjFunNowWeb.Controllers
             return View();
         }
 
-        public IActionResult HotelsFavoritesList()            //抓到會員收藏的所有飯店,這些飯店會依照城市/國家分類,並顯示n間飯店
+        public IActionResult HotelsFavoritesList(int memberId)            //抓到會員收藏的所有飯店,這些飯店會依照城市/國家分類,並顯示n間飯店
         {
 
             return View();
         }
 
-        public IActionResult HotelsFavoritesListToCity()
+        public IActionResult HotelsFavoritesListToCity(string CityName)
         {
 
             return View();

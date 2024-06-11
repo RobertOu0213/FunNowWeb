@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PrjFunNowWeb.ViewModels.OrderViewModel>
+﻿
 
 
 @section Styles {
@@ -51,85 +51,65 @@
 }
 
 
-<div class="container">
+<div class="container" id="div1">
     <div class="container">
         <h3>口袋清單</h3>
-        <h6>8份清單</h6>          <!--<span class="container">8份清單</span>-->
-
+        <h6 id="totalCities">n個城市清單</h6>
     </div>
-
     <div class="container">
-        <div class="row">
-            <!-- Card 1 -->
-            <div class="col-md-4 ">
-                <a href="https://www.agoda.com/zh-tw/the-moment-hotel-hualien-by-lakeshore/hotel/hualien-tw.html?checkIn=2024-05-30&los=1&adults=2&rooms=1&travellerType=1">
-                    <div class="card">
-                        <img src="~/image/julia/haiou.png" class="card-img-top" alt="Room Image">
-                        <div class="card-body">
-                            <h5 class="card-title">台北市,台灣</h5>
-                            <p class="card-text">7間住宿</p>
-
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <!-- Card 2 -->
-            <div class="col-md-4 ">
-                <a href="https://www.agoda.com/zh-tw/the-moment-hotel-hualien-by-lakeshore/hotel/hualien-tw.html?checkIn=2024-05-30&los=1&adults=2&rooms=1&travellerType=1">
-                    <div class="card">
-                        <img src="~/image/julia/hidden.png" class="card-img-top" alt="Room Image">
-                        <div class="card-body">
-                            <h5 class="card-title">高雄市,台灣</h5>
-                            <p class="card-text">1間住宿</p>
-
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <!-- Card 3 -->
-            <div class="col-md-4 ">
-                <a href="https://www.agoda.com/zh-tw/the-moment-hotel-hualien-by-lakeshore/hotel/hualien-tw.html?checkIn=2024-05-30&los=1&adults=2&rooms=1&travellerType=1">
-                    <div class="card">
-                        <img src="~/image/julia/高雄海嗨嗨渡假村.jpg" class="card-img-top" alt="Room Image">
-                        <div class="card-body">
-                            <h5 class="card-title">東京,日本</h5>
-                            <p class="card-text">6間住宿</p>
-
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <!-- Card 4 -->
-            <div class="col-md-4 ">
-                <a href="https://www.agoda.com/zh-tw/the-moment-hotel-hualien-by-lakeshore/hotel/hualien-tw.html?checkIn=2024-05-30&los=1&adults=2&rooms=1&travellerType=1">
-                    <div class="card">
-                        <img src="~/image/julia/rabe.png" class="card-img-top" alt="Room Image">
-                        <div class="card-body">
-                            <h5 class="card-title">大阪,日本</h5>
-                            <p class="card-text">3間住宿</p>
-
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <!-- Card 5 -->
-            <div class="col-md-4 ">
-                <a href="https://www.agoda.com/zh-tw/the-moment-hotel-hualien-by-lakeshore/hotel/hualien-tw.html?checkIn=2024-05-30&los=1&adults=2&rooms=1&travellerType=1">
-                    <div class="card">
-                        <img src="~/image/julia/台北文華東方飯店-4.jpg" class="card-img-top" alt="Room Image">
-                        <div class="card-body">
-                            <h5 class="card-title">大阪,日本</h5>
-                            <p class="card-text">3間住宿</p>
-
-                        </div>
-                    </div>
-                </a>
-            </div>
+        <div class="row" id="hotelsContainer">
+            <!-- 卡片會動態插入到這裡 -->
         </div>
     </div>
 </div>
-@section Scripts {
 
+ 
+
+@section Scripts {
+    <script>
+        const hotelsContainer = document.querySelector('#hotelsContainer');
+        const totalCitiesLabel = document.querySelector('#totalCities');
+       /*  const memberId = getCurrentUserId(); */ // 獲取當前登入用戶的 ID
+        const memberId = 5;   //先寫死
+
+        const url ='https://localhost:7103/api/HotelsFavorite/5/FavoriteHotels';
+    
+
+        const loadFavoriteHotels = async () => {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const cities = await response.json();
+                console.log(cities);
+
+                const favoriteHotelsHtml = cities.map(city => {
+                    return( `
+                            <a href="/api/HotelsFavorite/${memberId}/FavoriteHotels/${encodeURIComponent(city.city)}">
+                            <div class="col-md-4">
+                                <div class="card">
+                                       <a href="/HotelsFavorites/HotelsFavoritesListToCity/${encodeURIComponent(city.city)}">            //TODO...
+                                    <div class="card-body">
+                                        <h5 class="card-title">${city.city}, ${city.country}</h5>
+                                        <p class="card-text">${city.hotelCount} 間住宿</p>
+                                    </div>
+                                </div>
+                            </div>
+                            </a>
+                        `)
+                });
+
+                hotelsContainer.innerHTML = favoriteHotelsHtml.join('');
+                totalCitiesLabel.textContent = `${cities.length} 份清單`;
+            } catch (error) {
+                console.error('Failed to fetch hotels:', error);
+                errorMessageContainer.textContent = '抱歉,加載收藏飯店列表時發生錯誤,請等待維修。';
+            }
+        };
+
+        loadFavoriteHotels();  //调用函数以加载数据
+    </script>
 
 }
 
