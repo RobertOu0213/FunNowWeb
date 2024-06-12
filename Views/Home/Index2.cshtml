@@ -58,7 +58,7 @@
                 }
                 </div>
 
-@*                 <div style="margin:20px 10px" class="form-check-container-hotel-equipment">
+                <div style="margin:20px 10px" class="form-check-container-hotel-equipment">
                     <p>住宿設備</p>
                 @foreach (var hotelEquipment in Model.HotelEquipments)
                 {
@@ -73,17 +73,15 @@
 
                 <div style="margin:20px 10px" class="form-check-container-city">
                     <p>城市</p>
-                    <div class="form-check-container">
-                    @foreach (var city in Model.Cities)
-                    {
-                            <div class="form-check city-item">
-                                <input class="form-check-input" type="checkbox" value="@city.CityId" id="city_@city.CityId">
-                                <label class="form-check-label" for="city_@city.CityId">
-                                @city.CityName
-                                </label>
-                            </div>
-                    }
-                    </div>
+                @foreach (var city in Model.Cities)
+                {
+                        <div class="form-check city-item">
+                            <input class="form-check-input" type="checkbox" value="@city.CityId" id="city_@city.CityId">
+                            <label class="form-check-label" for="city_@city.CityId">
+                            @city.CityName
+                            </label>
+                        </div>
+                }
                     <button id="toggleCityButton" class="toggle-button">顯示更多</button>
                 </div>
 
@@ -98,7 +96,8 @@
                             </label>
                         </div>
                 }
-                </div> *@
+                </div>
+
             </div>
 
 
@@ -133,7 +132,6 @@
     <script>
         document.addEventListener("DOMContentLoaded", async function () {
             // 網頁加載完成後自動加載儲存在 sessionStorage 的 searchHotel 資訊
-            // 一開始網頁加載來自index.cshtml
             const searchHotelJson = sessionStorage.getItem("searchHotel");
             if (searchHotelJson) {
                 const searchHotel = JSON.parse(searchHotelJson);
@@ -142,10 +140,113 @@
             } else {
                 console.log("searchHotel not found in sessionStorage");
             }
+
+            // 監聽提交按鈕，獲取輸入值並發送請求
+            const btnSubmit3 = document.querySelector("#buttonSubmit3");
+            if (btnSubmit3) {
+                btnSubmit3.addEventListener("click", async () => {
+                    handleSubmitButtonClick();
+                });
+            }
+
+            // 綁定所有複選框的事件監聽器
+            const containerSelectors = [
+                '.form-check-container-hotel-type',
+                '.form-check-container-hotel-equipment',
+                '.form-check-container-city',
+                '.form-check-container-room-equipment'
+            ];
+
+            containerSelectors.forEach(selector => {
+                document.querySelectorAll(`${selector} input[type="checkbox"]`).forEach(checkbox => {
+                    checkbox.addEventListener('change', updateSearchFilters);
+                });
+            });
+
+            // 綁定排序按鈕的點擊事件
+            const sortButtons = {
+                sortBtn: ["HotelId", "asc"],
+                bestMatchBtn: ["LevelStar", "desc"],
+                highestRatedBtn: ["LevelStar", "desc"],
+                lowestPriceBtn: ["HotelPrice", "asc"],
+                nearbyBtn: ["CityName", "asc"],
+                hotDealBtn: ["deal", "desc"],
+            };
+
+            Object.keys(sortButtons).forEach(id => {
+                document.querySelector(`#${id}`).addEventListener("click", () => handleSort(...sortButtons[id]));
+            });
+
+            // 設定 upperHandle 初始位置在滑動條的尾端
+            const rangeSlider = {
+                lowerHandle: document.getElementById('lowerHandle'),
+                upperHandle: document.getElementById('upperHandle'),
+                slider: document.getElementById('rangeSlider'),
+                lowerLabel: document.getElementById('lowerLabel'),
+                upperLabel: document.getElementById('upperLabel'),
+                lowerInput: document.getElementById('lowerInput'),
+                upperInput: document.getElementById('upperInput')
+            };
+
+            const max = parseFloat(rangeSlider.slider.getAttribute('max'));
+            const position = 100; // 百分比位置
+            rangeSlider.upperHandle.style.left = `${position}%`;
+            rangeSlider.upperLabel.textContent = `上限：${max}`;
+            rangeSlider.upperInput.value = max;
+
+            // 初始化 lowerHandle 和 lowerLabel
+            rangeSlider.lowerHandle.style.left = '0%';
+            rangeSlider.lowerLabel.textContent = '下限：1';
+            rangeSlider.lowerInput.value = 1;
+
+            // 綁定滑桿拖動事件
+            [rangeSlider.lowerHandle, rangeSlider.upperHandle].forEach(handle => {
+                handle.addEventListener('mousedown', startDrag);
+            });
+
+            let isDragging = false;
+            let currentHandle = null;
+
+            // 開始拖動的處理函數
+            function startDrag(event) {
+                isDragging = true;
+                currentHandle = event.target;
+                document.addEventListener('mousemove', handleDrag);
+                document.addEventListener('mouseup', stopDrag);
+            }
+
+            // 處理拖動邏輯的函數
+            function handleDrag(event) {
+                if (!isDragging) return;
+
+                const handleType = currentHandle === rangeSlider.lowerHandle ? 'lower' : 'upper';
+                const { handle, label, oppositeLabel, lowerInput, upperInput } = handleType === 'lower' ?
+                    { handle: rangeSlider.lowerHandle, label: rangeSlider.lowerLabel, oppositeLabel: rangeSlider.upperLabel, lowerInput: rangeSlider.lowerInput, upperInput: rangeSlider.upperInput } :
+                    { handle: rangeSlider.upperHandle, label: rangeSlider.upperLabel, oppositeLabel: rangeSlider.lowerLabel, lowerInput: rangeSlider.lowerInput, upperInput: rangeSlider.upperInput };
+
+                const sliderRect = rangeSlider.slider.getBoundingClientRect();
+                const position = Math.min(1, Math.max(0, (event.clientX - sliderRect.left) / sliderRect.width));
+                const value = Math.round(parseFloat(rangeSlider.slider.getAttribute('min')) + position * (parseFloat(rangeSlider.slider.getAttribute('max')) - parseFloat(rangeSlider.slider.getAttribute('min'))));
+
+                // 防止下限超過上限或上限低於下限
+                if (handleType === 'lower' && value >= parseFloat(oppositeLabel.textContent.split('：')[1])) return;
+                if (handleType === 'upper' && value <= parseFloat(oppositeLabel.textContent.split('：')[1])) return;
+
+                handle.style.left = `${position * 100}%`;
+                label.textContent = `${handleType === 'lower' ? '下限' : '上限'}：${value}`;
+                handleType === 'lower' ? lowerInput.value = value : upperInput.value = value;
+                updateHotels(parseFloat(rangeSlider.lowerInput.value), parseFloat(rangeSlider.upperInput.value));
+            }
+
+            // 停止拖動的處理函數
+            function stopDrag() {
+                isDragging = false;
+                currentHandle = null;
+                document.removeEventListener('mousemove', handleDrag);
+                document.removeEventListener('mouseup', stopDrag);
+            }
         });
 
-        // 監聽提交按鈕，獲取輸入值並發送請求
-        // 此處網頁加載來自index2.cshtml
         // 檢查所有選中的 checkbox 並返回其值的列表
         function getSelectedCheckboxes(containerSelector) {
             const checkboxes = document.querySelectorAll(`${containerSelector} input[type="checkbox"]:checked`);
@@ -158,18 +259,15 @@
             if (searchHotelJson) {
                 const searchHotel = JSON.parse(searchHotelJson);
                 searchHotel.hotelTypes = getSelectedCheckboxes('.form-check-container-hotel-type');
+                searchHotel.hotelEquipments = getSelectedCheckboxes('.form-check-container-hotel-equipment');
+                searchHotel.cities = getSelectedCheckboxes('.form-check-container-city');
+                searchHotel.roomEquipments = getSelectedCheckboxes('.form-check-container-room-equipment');
                 sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel));
                 await loadHotels(searchHotel);
             } else {
                 console.log('searchHotel not found in sessionStorage');
             }
         }
-
-        // 監聽提交按鈕，獲取輸入值並發送請求
-        const btnSubmit3 = document.querySelector("#buttonSubmit3");
-        btnSubmit3.addEventListener("click", async () => {
-            handleSubmitButtonClick();
-        });
 
         // 提交按鈕功能的函數
         async function handleSubmitButtonClick() {
@@ -184,131 +282,16 @@
                 sortType: null,
                 lowerPrice: parseInt(document.querySelector("#lowerInput").value),
                 upperPrice: parseInt(document.querySelector("#upperInput").value),
-                hotelTypes: getSelectedCheckboxes('.form-check-container-hotel-type')
+                hotelTypes: getSelectedCheckboxes('.form-check-container-hotel-type'),
+                hotelEquipments: getSelectedCheckboxes('.form-check-container-hotel-equipment'),
+                cities: getSelectedCheckboxes('.form-check-container-city'),
+                roomEquipments: getSelectedCheckboxes('.form-check-container-room-equipment')
             };
 
             // 儲存搜尋條件至 sessionStorage
             sessionStorage.setItem("searchHotel", JSON.stringify(searchHotel));
             // 發送請求並更新顯示結果
             await loadHotels(searchHotel);
-        }
-
-        // 監聽 checkbox 的更改
-        document.querySelectorAll('.form-check-container-hotel-type input[type="checkbox"]').forEach(checkbox => {
-            checkbox.addEventListener('change', updateSearchFilters);
-        });
-
-
-        // 當網頁加載完成後自動加載儲存在 sessionStorage 的 searchHotel 資訊
-        document.addEventListener("DOMContentLoaded", async function () {
-            const searchHotelJson = sessionStorage.getItem("searchHotel");
-            if (searchHotelJson) {
-                const searchHotel = JSON.parse(searchHotelJson);
-                console.log(searchHotel);
-                await loadHotels(searchHotel);
-            } else {
-                console.log("searchHotel not found in sessionStorage");
-            }
-        });
-
-
-        // 定義排序按鈕及其對應的排序條件
-        const sortButtons = {
-            sortBtn: ["HotelId", "asc"],
-            bestMatchBtn: ["LevelStar", "desc"],
-            highestRatedBtn: ["LevelStar", "desc"],
-            lowestPriceBtn: ["HotelPrice", "asc"],
-            nearbyBtn: ["CityName", "asc"],
-            hotDealBtn: ["deal", "desc"],
-        };
-
-        // 綁定排序按鈕的點擊事件
-        Object.keys(sortButtons).forEach(id => {
-            document.querySelector(`#${id}`).addEventListener("click", () => handleSort(...sortButtons[id]));
-        });
-
-        // 處理排序的邏輯函數
-        async function handleSort(sortBy, sortType) {
-            const searchHotelJson = sessionStorage.getItem('searchHotel');
-            if (searchHotelJson) {
-                const searchHotel = JSON.parse(searchHotelJson);
-                searchHotel.sortBy = sortBy;
-                searchHotel.sortType = sortType;
-                sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel));
-                await loadHotels(searchHotel);
-            } else {
-                console.log('searchHotel not found in sessionStorage');
-            }
-        }
-
-        // 定義範圍滑桿相關元素
-        const rangeSlider = {
-            lowerHandle: document.getElementById('lowerHandle'),
-            upperHandle: document.getElementById('upperHandle'),
-            slider: document.getElementById('rangeSlider'),
-            lowerLabel: document.getElementById('lowerLabel'),
-            upperLabel: document.getElementById('upperLabel'),
-            lowerInput: document.getElementById('lowerInput'),
-            upperInput: document.getElementById('upperInput')
-        };
-
-        // 設定 upperHandle 初始位置在滑動條的尾端
-        const max = parseFloat(rangeSlider.slider.getAttribute('max'));
-        const position = 100; // 百分比位置
-        rangeSlider.upperHandle.style.left = `${position}%`;
-        rangeSlider.upperLabel.textContent = `上限：${max}`;
-        rangeSlider.upperInput.value = max;
-
-        // 初始化 lowerHandle 和 lowerLabel
-        rangeSlider.lowerHandle.style.left = '0%';
-        rangeSlider.lowerLabel.textContent = '下限：1';
-        rangeSlider.lowerInput.value = 1;
-
-        // 綁定滑桿拖動事件
-        [rangeSlider.lowerHandle, rangeSlider.upperHandle].forEach(handle => {
-            handle.addEventListener('mousedown', startDrag);
-        });
-
-        let isDragging = false;
-        let currentHandle = null;
-
-        // 開始拖動的處理函數
-        function startDrag(event) {
-            isDragging = true;
-            currentHandle = event.target;
-            document.addEventListener('mousemove', handleDrag);
-            document.addEventListener('mouseup', stopDrag);
-        }
-
-        // 處理拖動邏輯的函數
-        function handleDrag(event) {
-            if (!isDragging) return;
-
-            const handleType = currentHandle === rangeSlider.lowerHandle ? 'lower' : 'upper';
-            const { handle, label, oppositeLabel, lowerInput, upperInput } = handleType === 'lower' ?
-                { handle: rangeSlider.lowerHandle, label: rangeSlider.lowerLabel, oppositeLabel: rangeSlider.upperLabel, lowerInput: rangeSlider.lowerInput, upperInput: rangeSlider.upperInput } :
-                { handle: rangeSlider.upperHandle, label: rangeSlider.upperLabel, oppositeLabel: rangeSlider.lowerLabel, lowerInput: rangeSlider.lowerInput, upperInput: rangeSlider.upperInput };
-
-            const sliderRect = rangeSlider.slider.getBoundingClientRect();
-            const position = Math.min(1, Math.max(0, (event.clientX - sliderRect.left) / sliderRect.width));
-            const value = Math.round(parseFloat(rangeSlider.slider.getAttribute('min')) + position * (parseFloat(rangeSlider.slider.getAttribute('max')) - parseFloat(rangeSlider.slider.getAttribute('min'))));
-
-            // 防止下限超過上限或上限低於下限
-            if (handleType === 'lower' && value >= parseFloat(oppositeLabel.textContent.split('：')[1])) return;
-            if (handleType === 'upper' && value <= parseFloat(oppositeLabel.textContent.split('：')[1])) return;
-
-            handle.style.left = `${position * 100}%`;
-            label.textContent = `${handleType === 'lower' ? '下限' : '上限'}：${value}`;
-            handleType === 'lower' ? lowerInput.value = value : upperInput.value = value;
-            updateHotels(parseFloat(rangeSlider.lowerInput.value), parseFloat(rangeSlider.upperInput.value));
-        }
-
-        // 停止拖動的處理函數
-        function stopDrag() {
-            isDragging = false;
-            currentHandle = null;
-            document.removeEventListener('mousemove', handleDrag);
-            document.removeEventListener('mouseup', stopDrag);
         }
 
         // 更新飯店列表的函數
@@ -345,7 +328,7 @@
                 return `
                     <div class="col-lg-12 hotel-card">
                         <div class="row">
-                            <div class="col-lg-4 col-sm-8" style="padding:0px">
+                                                        <div class="col-lg-4 col-sm-8" style="padding:0px">
                                 <table>
                                     <tr>
                                         <td colspan="3"><img src='https://localhost:7284/image/${hotelImage}' class="img-fluid" style="width:100%" /></td>
@@ -385,26 +368,41 @@
             });
 
             divHotels.innerHTML = hotels.join("");
-
         };
+
+        // 處理排序的邏輯函數
+        async function handleSort(sortBy, sortType) {
+            const searchHotelJson = sessionStorage.getItem('searchHotel');
+            if (searchHotelJson) {
+                const searchHotel = JSON.parse(searchHotelJson);
+                searchHotel.sortBy = sortBy;
+                searchHotel.sortType = sortType;
+                sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel));
+                await loadHotels(searchHotel);
+            } else {
+                console.log('searchHotel not found in sessionStorage');
+            }
+        }
+
+
 
     </script>
 
     <script>
-        //解決checkbox內容太長的問題
-        // document.addEventListener("DOMContentLoaded", function () {
-        //     const toggleButton = document.querySelector("#toggleCityButton");
-        //     const formCheckContainer = document.querySelector(".form-check-container");
+        // 解決 checkbox 內容太長的問題
+        document.addEventListener("DOMContentLoaded", function () {
+            const toggleButton = document.querySelector("#toggleCityButton");
+            const formCheckContainer = document.querySelector(".form-check-container-city");
 
-        //     toggleButton.addEventListener("click", function () {
-        //         formCheckContainer.classList.toggle("expanded");
-        //         if (formCheckContainer.classList.contains("expanded")) {
-        //             toggleButton.textContent = "顯示較少";
-        //         } else {
-        //             toggleButton.textContent = "顯示更多";
-        //         }
-        //     });
-        // });
+            toggleButton.addEventListener("click", function () {
+                formCheckContainer.classList.toggle("expanded");
+                if (formCheckContainer.classList.contains("expanded")) {
+                    toggleButton.textContent = "顯示較少";
+                } else {
+                    toggleButton.textContent = "顯示更多";
+                }
+            });
+        });
     </script>
 
 }
@@ -494,15 +492,15 @@
     </style>
     <style>
         /* checkbox設定 */
-        .form-check-container .city-item {
+        .form-check-container-city .city-item {
             display: none;
         }
 
-            .form-check-container .city-item:nth-child(-n+10) {
+            .form-check-container-city .city-item:nth-child(-n+10) {
                 display: block;
             }
 
-        .form-check-container.expanded .city-item {
+        .form-check-container-city.expanded .city-item {
             display: block;
         }
 
@@ -515,6 +513,7 @@
             cursor: pointer;
             border-radius: 5px;
         }
+
     </style>
     <style>
         /* 點擊旅館的效果 */

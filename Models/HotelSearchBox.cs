@@ -27,6 +27,8 @@ public partial class HotelSearchBox
 
     public int MemberId { get; set; }
 
+    public int CityId { get; set; }
+
     public string CityName { get; set; }
 
     public string CommentTitle { get; set; }
@@ -35,7 +37,9 @@ public partial class HotelSearchBox
 
     public string CountryName { get; set; }
 
-    public string HotelEquipmentName { get; set; }
+    public int HotelEquipmentId { get; set; }
+
+    public string HotelEquipmentNames { get; set; }
 
     public string HotelImage { get; set; }
 
@@ -43,7 +47,9 @@ public partial class HotelSearchBox
 
     public string HotelTypeName { get; set; }
 
-    public string RoomEquipmentName { get; set; }
+    public int RoomEquipmentId { get; set; }
+
+    public string RoomEquipmentNames { get; set; }
 
     public decimal? HotelPrice { get; set; }
 
