@@ -331,6 +331,23 @@
         });
 
     </script>
+    <script>
+        //調整浮動搜尋欄的預設日期
+        document.addEventListener('DOMContentLoaded', function () {
+            // 獲取今天的日期
+            var today = new Date();
+            var tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+
+            // 格式化日期為 yyyy-mm-dd
+            var todayFormatted = today.toISOString().split('T')[0];
+            var tomorrowFormatted = tomorrow.toISOString().split('T')[0];
+
+            // 設定 input 預設值
+            document.getElementById('myDatepickerstart3').value = todayFormatted;
+            document.getElementById('myDatepickerend3').value = tomorrowFormatted;
+        });
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

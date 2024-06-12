@@ -512,11 +512,11 @@ button:focus {
   position: absolute;
 }
 
-.booking_table {
+.booking_table {  
   position: relative;
   overflow: hidden;
   width: 100%;
-  min-height: 600px;
+  min-height: 300px;
 }
 
 .overlay {
@@ -565,7 +565,7 @@ button:focus {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    min-height: 360px; /* 調整最小高度值 */
+    min-height: 260px; /* 調整最小高度值 */
 }
 
 .hotel_booking_table h2 {

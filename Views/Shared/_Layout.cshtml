@@ -83,8 +83,8 @@
                 <a class="navbar-brand logo_h" href="index.html" style="padding:5px;">
                     <img src="~/image/ming_img/FunNowlogo.png" style="height: 60px; border-radius: 12px;">
                 </a>
-                <h6>@ViewData["SessionKey"]</h6>
-                <label>現在是登入狀態</label>
+                @* <h6>@ViewData["SessionKey"]</h6>
+                <label>現在是登入狀態</label> *@
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -94,7 +94,7 @@
                 <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                     <ul class="nav navbar-nav menu_nav ml-auto">
                         <li class="nav-item active">
-                            <button class="navBtn">刊登家中空房</button>
+                            <a class="nav-link" href="index.html" style="color:red;">刊登家中空房</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="about.html">
