@@ -90,7 +90,7 @@
 
 <div class="container">
     <div class="container">
-        <a href="/api/HotelsFavorite/${memberId}/FavoriteHotels">口袋清單</a>
+        <a href="/HotelsFavorites/HotelsFavoritesList">口袋清單</a>
         <span>/</span>
         <h3 id="cityandCountry">花蓮縣,台灣</h3>
     </div>
@@ -160,6 +160,34 @@
         };
 
         loadFavoriteHotels();
+
+        const loveButtons = document.querySelectorAll('.love-button');
+        loveButtons.forEach(button => {
+            button.addEventListener('click', async () => {
+                const hotelId = button.closest('.card').dataset.hotelId;
+                const likeStatus = button.classList.contains('loved') ? false : true;
+                try {
+                    const response = await fetch(`/api/HotelsFavorite/${memberId}/${hotelId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(likeStatus)
+                    });
+                    if (response.ok) {
+                        button.classList.toggle('loved');
+                    } else {
+                        console.error('Failed to update like status:', response.status);
+                    }
+                } catch (error) {
+                    console.error('Error updating like status:', error);
+                }
+            });
+        });
+
+
+
+
     </script>
 }
 
