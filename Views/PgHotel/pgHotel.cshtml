@@ -491,7 +491,7 @@
                                             var hotel = index < Model.HotelDetail.SimilarHotels.Count ? Model.HotelDetail.SimilarHotels[index] : null;
                                                     <a href="@((hotel != null) ? ("/PgHotel/pgHotel?hotelId=" + hotel.HotelId) : "#")" class="card">
                                                         <div class="card">
-                                                            <img src="~/image/louieee_img/otherHotel01.png" class="card-img-top" alt="Hotel Image">
+                                                    <img src="@(hotel != null && hotel.HotelImage != null ? "https://localhost:7284/image/" + hotel.HotelImage.ImageUrl : "~/image/louieee_img/otherHotel01.png")" class="card-img-top" alt="Hotel Image">
                                                             <div class="card-body">
                                                                 @if (hotel != null)
                                                         {
