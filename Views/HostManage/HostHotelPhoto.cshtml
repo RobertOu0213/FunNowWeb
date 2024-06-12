@@ -11,7 +11,7 @@
             <div class="content__container__image">
                 <div class="d-flex align-items-center">
                     <div class="mb-4">
-                        <h4 class="fw-bold mt-5">照片</h4>
+                        <h4 class="fw-bold mt-5">照片修改</h4>
                         <div class="content__container__image__text">對於旅客來說，現場實景照片往往成為影響是否訂房的重要參考。因此，建議你上傳完整的高畫質實景照片，吸引旅客下訂。想獲得更多小撇步嗎？</div>
                     </div>
                     <div class="mt-2 me-5">
@@ -20,7 +20,7 @@
                 </div>
 
                 <div class="mb-5 hotelImageBox">
-                    <h4 class="fw-bold mt-5">飯店照片</h4>
+                    <h4 class="fw-bold mt-5">旅館照片</h4>
                     <p>建築外觀、停車位、入口，以及任何其他開放使用的設施</p>
                     <span class="alert-message"></span>
                     <div class="uploaded">
@@ -246,7 +246,7 @@
                 formData.append('HotelId', hotelId);
 
                 allFiles.forEach(fileObj => {
-                    console.log(fileObj);
+                    // console.log(fileObj);
                     formData.append('newImages', fileObj.file);
                     formData.append('newImagesCategories', fileObj.category);
                 });

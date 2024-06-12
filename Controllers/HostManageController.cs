@@ -187,7 +187,7 @@ namespace PrjFunNowWeb.Controllers
                     {
                         HotelImage1 = fileName,
                         HotelId = changesData.HotelId
-                        
+
                     };
 
                     hotelImage.ImageCategoryReferences.Add(new ImageCategoryReference
@@ -484,7 +484,7 @@ namespace PrjFunNowWeb.Controllers
                              CountryName = h.City.Country.CountryName,
                              HotelImage = h.HotelImages.Select(hi => hi.HotelImage1).FirstOrDefault(),
                              AllRooms = h.Rooms.Select(room => new Room { RoomId = room.RoomId, RoomName = room.RoomName }).ToList(),
-                             AllroomImages = h.Rooms.SelectMany(ri => ri.RoomImages).ToList(),
+                             //AllroomImages = h.Rooms.SelectMany(ri => ri.RoomImages).ToList(),
                              AllimageCategories = _context.ImageCategories.ToList()
                          }).FirstOrDefault();
 
@@ -502,5 +502,162 @@ namespace PrjFunNowWeb.Controllers
         }
 
 
-    }
+        [HttpGet]
+        public async Task<IActionResult> GetRoomsImage(int roomId)
+        {
+            try
+            {
+                var roomImages = await _context.RoomImages
+                    .Where(ri => ri.RoomId == roomId)
+                    .Select(ri => new
+                    {
+                        roomImageId = ri.RoomImageId,
+                        imageUrl = ri.RoomImage1,
+                        categories = _context.ImageCategoryReferences
+                            .Where(icr => icr.RoomImageId == ri.RoomImageId)
+                            .Select(icr => new
+                            {
+                                id = icr.ImageCategoryId,
+                                CategoryName = _context.ImageCategories
+                                    .Where(ic => ic.ImageCategoryId == icr.ImageCategoryId)
+                                    .Select(ic => ic.ImageCategoryName)
+                                    .FirstOrDefault()
+                            })
+                             .FirstOrDefault()
+                    })
+                    .ToListAsync();
+
+                var allCategories = await _context.ImageCategories
+                .Select(ic => new
+                {
+                    id = ic.ImageCategoryId,
+                    name = ic.ImageCategoryName
+                })
+               .ToListAsync();
+
+                return Ok(new { success = true, data = roomImages, allCategories = allCategories });
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateRoomImages([FromForm] CSaveRoomImageDTO changesData)
+        {
+            if (changesData == null)
+            {
+                return BadRequest("No data received.");
+            }
+
+            try
+            {
+
+                // 保存新照片
+                if (changesData.NewImages != null)
+                {
+                    for (int i = 0; i < changesData.NewImages.Count; i++)
+                    {
+                        var imageFile = changesData.NewImages[i];
+                        var categoryId = changesData.NewImagesCategories[i];
+
+
+                        var extension = Path.GetExtension(imageFile.FileName);
+                        var fileName = $"{Guid.NewGuid()}{extension}";
+                        var filePath = Path.Combine(_env.WebRootPath, "image", fileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await imageFile.CopyToAsync(stream);
+                        }
+
+                        var roomImage = new RoomImage
+                        {
+                            RoomImage1 = fileName,
+                            RoomId = changesData.RoomId
+
+                        };
+
+                        roomImage.ImageCategoryReferences.Add(new ImageCategoryReference
+                        {
+                            ImageCategoryId = categoryId,
+                            RoomImageId = roomImage.RoomImageId
+                        });
+
+                        _context.RoomImages.Add(roomImage);
+                    }
+                }
+
+                // 更新舊照片類別
+                if (changesData.UpdatedImages != null)
+                {
+                    for (int i = 0; i < changesData.UpdatedImages.Count; i++)
+                    {
+                        var imageId = changesData.UpdatedImages[i];
+                        var categoryId = changesData.UpdatedImagesCategories[i];
+
+                        var roomImage = _context.RoomImages.Include(ri => ri.ImageCategoryReferences)
+                                                             .FirstOrDefault(ri => ri.RoomImageId == imageId);
+                        if (roomImage != null)
+                        {
+                            roomImage.ImageCategoryReferences.Clear();
+                            roomImage.ImageCategoryReferences.Add(new ImageCategoryReference
+                            {
+                                ImageCategoryId = categoryId
+                            });
+                        }
+                    }
+                }
+
+                // 删除舊照片
+                if (changesData.DeletedImages != null)
+                {
+                    foreach (var imageId in changesData.DeletedImages)
+                    {
+                        var RoomImage = _context.RoomImages.Include(hi => hi.ImageCategoryReferences)
+                                                             .FirstOrDefault(hi => hi.RoomImageId == imageId);
+                        if (RoomImage != null)
+                        {
+                            // 删除對應類別
+                            var categoryReference = RoomImage.ImageCategoryReferences.FirstOrDefault();
+                            if (categoryReference != null)
+                            {
+                                _context.ImageCategoryReferences.Remove(categoryReference);
+                            }
+
+                            // 删除硬碟照片
+                            var filePath = Path.Combine(_env.WebRootPath, "image", RoomImage.RoomImage1);
+                            if (System.IO.File.Exists(filePath))
+                            {
+                                System.IO.File.Delete(filePath);
+                            }
+
+                            // 删除DB資料
+                            _context.RoomImages.Remove(RoomImage);
+                        }
+                    }
+                }
+
+                _context.SaveChanges();
+
+                return Ok(new { success = true, message = "All changes saved successfully" });
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { success = false, message = ex.Message });
+            }
+
+        }
+
+
+
+
+
+
+
+    }  
 }

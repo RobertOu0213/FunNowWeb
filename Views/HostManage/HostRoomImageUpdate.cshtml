@@ -28,7 +28,7 @@
                 <div class="mb-5 hotelImageBox">
                     <h4 class="fw-bold mt-5">房間照片</h4>
                     <p>建築外觀、停車位、入口，以及任何其他開放使用的設施</p>
-                    <span class="alert-message"></span>
+                    <span class="alert-message" style="color:red; font-weight:900"></span>
                     <div class="uploaded">
                         <div id="uploadSection">
                             <img src="~/image/ou/upload.png" alt="..." />
@@ -85,6 +85,60 @@
             let allFiles = [];
             let deletedImages = [];
 
+            $('#roomUpdate').on('change', async function () {
+                var roomId = $(this).val();
+                if (roomId) {
+                    try {
+                        const res = await fetch(`@Url.Action("GetRoomsImage", "HostManage")?roomId=${roomId}`);
+                        if (!res.ok) {
+                            throw new Error(res.statusText);
+                        }
+                        const data = await res.json();
+                        if (data.success) {
+                            let roomData = data.data;
+                            let allCategories = data.allCategories;
+                          
+                            displayRoomImages(roomData, allCategories);
+                        }
+                    } catch (err) {
+                        console.log(err);
+                    }
+                }
+            });
+           
+            function displayRoomImages(roomData, allCategories) {
+                let previewContainer = $('#preview');
+                previewContainer.empty();
+                const baseUrl = window.location.origin + '/image/';
+
+                roomData.forEach(item => {
+
+                    let options = '<option selected disabled>請選擇標題</option>';
+                    allCategories.forEach(category => {
+                        let selected = item.categories && category.id === item.categories.id ? 'selected' : '';                     
+                        options += `<option value="${category.id}" ${selected}>${category.name}</option>`;
+                    });
+
+
+                    let imageUrl = item.imageUrl.startsWith('http') || item.imageUrl.startsWith('https')
+                        ? item.imageUrl
+                        : baseUrl + item.imageUrl;
+                   
+                    const hotelImageCardStr = `
+                            <div class="card hotelImageCard" data-id="${item.roomImageId}"  data-is-new="false">
+                        <img src="${imageUrl}" class="card-img-top h-100" alt="..." data-file-name="${item.fileName}" data-file-size="${item.fileSize}">
+                        <div class="card-body">
+                            <select class="form-select" aria-label="Default select example" id="selectImageCategory">
+                                ${options}
+                            </select>
+                        </div>
+                        <button class="btn btn-danger delete-button" style="display: none;">刪除照片</button>
+                    </div>
+                `;
+                    previewContainer.append(hotelImageCardStr);
+                });
+            }
+
             $('#uploadButton').on('click', function () {
                 $('#fileInput').trigger('click');
             });
@@ -122,7 +176,7 @@
                             options += `<option value="${ic.ImageCategoryId}">${ic.ImageCategoryName}</option>`;
                         });
                         const hotelImageCardStr = `
-                                                        <div class="card hotelImageCard" data-is-new="true">
+                                               <div class="card hotelImageCard" data-is-new="true">
                                                   <img src="${e.target.result}" class="card-img-top h-100" alt="..." data-file-name="${file.name}" data-file-size="${file.size}">
                                                   <div class="card-body">
                                                       <select class="form-select" aria-label="Default select example" id="selectImageCategory">
@@ -176,7 +230,7 @@
 
             $('#preview').on('click', '.delete-button', function () {
                 const card = $(this).closest('.card');
-                const imageId = card.data('id');
+                const imageId = card.data('id'); //舊照片才有roomImageID
                 const imgElement = card.find('img');
                 const fileName = imgElement.data('file-name');
                 const fileSize = parseInt(imgElement.data('file-size'), 10);
@@ -186,7 +240,7 @@
                     filenames.delete(fileName);
                     totalSize -= fileSize;
                     allFiles = allFiles.filter(fileObj => fileObj.file.name !== fileName);
-                    if (imageId) {
+                    if (imageId) { //舊照片刪除才需堆到deletedImages
                         deletedImages.push(imageId);
                     }
 
@@ -201,7 +255,97 @@
                 location.reload();
             });
 
+            //儲存
+            $('#btnNext').on('click', async function () {
+                const roomId = $('#roomUpdate').val();
+                if (!roomId) {
+                    alert('請選擇房間');
+                    return;
+                }
 
+             
+
+                //圖片類別請選擇
+                let allCategoriesSelected = true;
+                let isValid = true;
+                $('.card').each(function () {
+                    const selectElement = $(this).find('select');
+                    if (selectElement.val() === null) {
+                        allCategoriesSelected = false;
+                        return; // 結束遍歷
+                    }
+                });
+
+                if (!allCategoriesSelected) {
+                    alert('請為所有圖片選擇類別');
+                    isValid = false;
+                }
+
+                if ($('#preview').find('img').length === 0) {
+                    $('.hotelImageBox').find('.alert-message').html('請上傳至少一張飯店照片');
+                    isValid = false;
+
+                } else {
+                    $('.hotelImageBox').find('.alert-message').html('');
+                }
+
+
+                if (!isValid) {
+                    return;
+                }
+
+
+                const formData = new FormData();
+                formData.append('roomId', roomId);
+
+                allFiles.forEach(fileObj => {
+              
+                    formData.append('newImages', fileObj.file);
+                    formData.append('newImagesCategories', fileObj.category);
+                });
+
+                deletedImages.forEach(imageId => {
+
+                    formData.append('deletedImages', imageId);
+
+
+                });
+
+                // 收集舊照片照片信息
+                $('.hotelImageCard').each(function () {
+                    const categorySelect = $(this).find('select');
+                    const isNew = $(this).data('is-new');
+                    const imageId = $(this).data('id');
+
+                    if (!isNew) {
+
+                        formData.append('updatedImages', imageId);
+                        formData.append('updatedImagesCategories', categorySelect.val());
+
+                    }
+                });
+
+                try {
+                    const res = await fetch('@Url.Action("UpdateRoomImages", "HostManage")', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (!res.ok) {
+                        throw new Error(res.statusText);
+                    }
+
+                    const data = await res.json();
+                    if (data.success) {
+                        $('.successMessage').css('visibility', 'visible');
+                        setTimeout(() => {
+                            $('.successMessage').css('visibility', 'hidden');
+                        }, 2000);
+                    } 
+                } catch (err) {
+                    console.log(err);
+                }
+            });
 
 
         

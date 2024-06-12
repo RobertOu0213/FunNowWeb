@@ -4,7 +4,7 @@
     {
 
         public List<Room> AllRooms { get; set; }
-        public List<RoomImage> AllroomImages { get; set; }
+        //public List<RoomImage> AllroomImages { get; set; }
 
       
     }

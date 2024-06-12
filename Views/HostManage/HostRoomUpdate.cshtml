@@ -172,7 +172,7 @@
                         const data = await res.json();                 
                         if (data.success) {
                             let roomData = data.data;
-                            console.log(roomData);
+
                             $('.roomNames').val(roomData.roomName);
                             $('#roomType').val(roomData.roomTypeId);
                             $('.roomSizes').val(roomData.roomSize);
