@@ -318,9 +318,15 @@
     <button id="hotDealBtn" class="special-button">搶手特惠!</button>
 </div>
             @* //畫面靠右 9/12 位置 *@
-                <div class="col-lg-12" style="border:1px solid gray">
-                    <div class="row" id="showhotels">
-
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12" style="border:1px solid gray">
+                            <div class="container">
+                                <div class="row" id="showhotels">
+                                @* //動態生成旅館 *@
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -362,40 +368,45 @@
                     hotelMaximumOccupancy,
                     hotelPrice,
                 } = hotel;
+                // 動態生成旅館，包裹在.hotel-card裡面
                 return `
-                        <div class="col-lg-4 col-sm-8" style="padding:0px">
-                            <table>
-                                <tr>
-                                    <td colspan="3"><img src='https://localhost:7284/image/${hotelImage}' class="img-fluid" style="width:100%" /></td>
-                                </tr>
-                                <tr>
-                                    <td><img src="/image/ming_img/room1.jpg" class="img-fluid" /></td>
-                                    <td><img src="/image/ming_img/room3.jpg" class="img-fluid" /></td>
-                                    <td><img src="/image/ming_img/room4.jpg" class="img-fluid" /></td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="col-lg-5 col-sm-10" style="border:1px solid gray">
-                            <h3>${hotelName}</h3>
-                            <span>${levelStar}星級飯店 </span><span style="color:blue">${hotelAddress}</span>
-                            <h6>此住宿提供:</h6>
-                            <h5 style="border: 1px solid black;display: inline-block;">${hotelEquipmentName}</h5>
-                            <br>
-                            <h5 style="border: 1px solid black;display: inline-block;">設施2</h5>
-                            <br>
-                            <h5 style="border: 1px solid black;display: inline-block;">設施3</h5>
-                            <br>
-                            <h6 style="color:green">${levelStar}星級飯店最優價</h6>
-                            <h6 style="color:red">昨天起已收到${levelStar}張訂單</h6>
-                        </div>
-                        <div class="col-lg-3 col-sm-12" style="border:1px solid gray;text-align: right">
-                            <h5>很出色</h5>
-                            <h6 style="color:gray"> 個評分</h6>
-                            <br>
-                            <h6 style="border: 1px solid red;display:inline-block;background-color: red;color:white">優惠只剩1間</h6>
-                            <h6 style="color:gray">每晚價格(不連税及其他费用)</h6>
-                            <br><br>
-                            <h3>NT$${hotelPrice}</h3>
+                        <div class="col-lg-12 hotel-card">
+                            <div class="row">
+                                <div class="col-lg-4 col-sm-8" style="padding:0px">
+                                    <table>
+                                        <tr>
+                                            <td colspan="3"><img src='https://localhost:7284/image/${hotelImage}' class="img-fluid" style="width:100%" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td><img src="/image/ming_img/room1.jpg" class="img-fluid" /></td>
+                                            <td><img src="/image/ming_img/room3.jpg" class="img-fluid" /></td>
+                                            <td><img src="/image/ming_img/room4.jpg" class="img-fluid" /></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-lg-5 col-sm-10 hotel-details">
+                                    <h3>${hotelName}</h3>
+                                    <span>${levelStar}星級飯店 </span><span style="color:blue">${hotelAddress}</span>
+                                    <h6>此住宿提供:</h6>
+                                    <h5 style="border: 1px solid black;display: inline-block;">${hotelEquipmentName}</h5>
+                                    <br>
+                                    <h5 style="border: 1px solid black;display: inline-block;">設施2</h5>
+                                    <br>
+                                    <h5 style="border: 1px solid black;display: inline-block;">設施3</h5>
+                                    <br>
+                                    <h6 style="color:green">${levelStar}星級飯店最優價</h6>
+                                    <h6 style="color:red">昨天起已收到${levelStar}張訂單</h6>
+                                </div>
+                                <div class="col-lg-3 col-sm-12 hotel-pricing">
+                                    <h5>很出色</h5>
+                                    <h6 style="color:gray"> 個評分</h6>
+                                    <br>
+                                    <h6 style="border: 1px solid red;display:inline-block;background-color: red;color:white">優惠只剩1間</h6>
+                                    <h6 style="color:gray">每晚價格(不連税及其他费用)</h6>
+                                    <br><br>
+                                    <h3>NT$${hotelPrice}</h3>
+                                </div>
+                            </div>
                         </div>
                     `;
             });
@@ -692,6 +703,70 @@
         }
 
     </style>
+    <style>
+        /* 點擊旅館的效果 */
+        .col-lg-4.col-sm-8 {
+            height: 280px; /* 設置一個固定的高度，可根據需要調整 */
+            padding: 0;
+        }
+
+            .col-lg-4.col-sm-8 table {
+                height: 100%;
+                width: 100%;
+            }
+
+            .col-lg-4.col-sm-8 img {
+                object-fit: cover; /* 讓圖片完整顯示，並填滿容器 */
+                height: 100%;
+                width: 100%;
+            }
+
+        .hotel-card {
+            margin: 10px 0; /* 添加間距 */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            background-color: #fff; /* 設置初始背景為白色 */
+            transition: box-shadow 0.3s ease, background-color 0.3s ease; /* 添加過渡效果 */
+            display: flex; /* 使用 flex 布局 */
+        }
+
+            .hotel-card:hover {
+                box-shadow: 0 8px 16px rgba(0,0,0,0.2); /* 滑鼠滑過時增加陰影 */
+            }
+
+                .hotel-card:hover .hotel-details, .hotel-card:hover .hotel-pricing {
+                    background-color: #f0f8ff; /* 滑鼠滑過時變為淺藍色 */
+                }
+
+            .hotel-card h3 {
+                margin-top: 10px;
+            }
+
+        .hotel-details {
+            border: 1px solid gray;
+            background-color: #fff; /* 初始背景為白色 */
+            padding: 10px; /* 增加內邊距 */
+            flex: 2; /* 設置 flex 屬性 */
+            transition: background-color 0.3s ease; /* 添加過渡效果 */
+        }
+
+        .hotel-pricing {
+            border: 1px solid gray;
+            border-left: none; /* 移除左邊框 */
+            text-align: right;
+            background-color: #fff; /* 初始背景為白色 */
+            padding: 10px; /* 增加內邊距 */
+            flex: 1; /* 設置 flex 屬性 */
+            transition: background-color 0.3s ease; /* 添加過渡效果 */
+        }
+
+        .hotel-info {
+            display: flex; /* 使用 flex 布局 */
+            width: 100%;
+        }
+    </style>
+
 }
 
 
