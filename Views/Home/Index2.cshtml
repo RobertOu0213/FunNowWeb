@@ -44,8 +44,6 @@
                     </div>
                 </div>
                 <!--//價格搜尋拉霸end-->
-                <br />
-                <br />
 
                 <div style="margin:20px 10px" class="form-check-container-hotel-type">
                     <p>住宿類型</p>
@@ -60,7 +58,7 @@
                 }
                 </div>
 
-                <div style="margin:20px 10px" class="form-check-container-hotel-equipment">
+@*                 <div style="margin:20px 10px" class="form-check-container-hotel-equipment">
                     <p>住宿設備</p>
                 @foreach (var hotelEquipment in Model.HotelEquipments)
                 {
@@ -100,7 +98,7 @@
                             </label>
                         </div>
                 }
-                </div>
+                </div> *@
             </div>
 
 
@@ -148,8 +146,33 @@
 
         // 監聽提交按鈕，獲取輸入值並發送請求
         // 此處網頁加載來自index2.cshtml
+        // 檢查所有選中的 checkbox 並返回其值的列表
+        function getSelectedCheckboxes(containerSelector) {
+            const checkboxes = document.querySelectorAll(`${containerSelector} input[type="checkbox"]:checked`);
+            return Array.from(checkboxes).map(checkbox => parseInt(checkbox.value)); // 確保值是數字類型
+        }
+
+        // 更新搜尋篩選條件並加載飯店
+        async function updateSearchFilters() {
+            const searchHotelJson = sessionStorage.getItem('searchHotel');
+            if (searchHotelJson) {
+                const searchHotel = JSON.parse(searchHotelJson);
+                searchHotel.hotelTypes = getSelectedCheckboxes('.form-check-container-hotel-type');
+                sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel));
+                await loadHotels(searchHotel);
+            } else {
+                console.log('searchHotel not found in sessionStorage');
+            }
+        }
+
+        // 監聽提交按鈕，獲取輸入值並發送請求
         const btnSubmit3 = document.querySelector("#buttonSubmit3");
         btnSubmit3.addEventListener("click", async () => {
+            handleSubmitButtonClick();
+        });
+
+        // 提交按鈕功能的函數
+        async function handleSubmitButtonClick() {
             const searchHotel = {
                 keyword: document.querySelector("#search-input3").value,
                 checkInDate: document.querySelector("#myDatepickerstart3").value,
@@ -161,13 +184,33 @@
                 sortType: null,
                 lowerPrice: parseInt(document.querySelector("#lowerInput").value),
                 upperPrice: parseInt(document.querySelector("#upperInput").value),
+                hotelTypes: getSelectedCheckboxes('.form-check-container-hotel-type')
             };
 
             // 儲存搜尋條件至 sessionStorage
             sessionStorage.setItem("searchHotel", JSON.stringify(searchHotel));
             // 發送請求並更新顯示結果
             await loadHotels(searchHotel);
+        }
+
+        // 監聽 checkbox 的更改
+        document.querySelectorAll('.form-check-container-hotel-type input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', updateSearchFilters);
         });
+
+
+        // 當網頁加載完成後自動加載儲存在 sessionStorage 的 searchHotel 資訊
+        document.addEventListener("DOMContentLoaded", async function () {
+            const searchHotelJson = sessionStorage.getItem("searchHotel");
+            if (searchHotelJson) {
+                const searchHotel = JSON.parse(searchHotelJson);
+                console.log(searchHotel);
+                await loadHotels(searchHotel);
+            } else {
+                console.log("searchHotel not found in sessionStorage");
+            }
+        });
+
 
         // 定義排序按鈕及其對應的排序條件
         const sortButtons = {
@@ -349,19 +392,19 @@
 
     <script>
         //解決checkbox內容太長的問題
-        document.addEventListener("DOMContentLoaded", function () {
-            const toggleButton = document.querySelector("#toggleCityButton");
-            const formCheckContainer = document.querySelector(".form-check-container");
+        // document.addEventListener("DOMContentLoaded", function () {
+        //     const toggleButton = document.querySelector("#toggleCityButton");
+        //     const formCheckContainer = document.querySelector(".form-check-container");
 
-            toggleButton.addEventListener("click", function () {
-                formCheckContainer.classList.toggle("expanded");
-                if (formCheckContainer.classList.contains("expanded")) {
-                    toggleButton.textContent = "顯示較少";
-                } else {
-                    toggleButton.textContent = "顯示更多";
-                }
-            });
-        });
+        //     toggleButton.addEventListener("click", function () {
+        //         formCheckContainer.classList.toggle("expanded");
+        //         if (formCheckContainer.classList.contains("expanded")) {
+        //             toggleButton.textContent = "顯示較少";
+        //         } else {
+        //             toggleButton.textContent = "顯示更多";
+        //         }
+        //     });
+        // });
     </script>
 
 }

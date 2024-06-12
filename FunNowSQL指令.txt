@@ -1,3 +1,67 @@
+1130612
+ALTER VIEW HotelSearchBox AS
+SELECT 
+    H.[HotelID],
+    H.[HotelName],
+    H.[HotelAddress],
+    H.[HotelPhone],
+    H.[HotelDescription],
+    H.[LevelStar],
+    H.[Latitude],
+    H.[Longitude],
+    H.[isActive],
+    H.[MemberID],
+    C.CityName,
+    CM.[CommentTitle],
+    CM.[CommentText],
+    CT.[CountryName],
+    STRING_AGG(HE.HotelEquipmentName, ', ') AS HotelEquipmentName, 
+    STRING_AGG(HIMG.HotelImage, ', ') AS HotelImage, 
+    H.[HotelTypeID],    
+	HT.[HotelTypeName],
+    STRING_AGG(RE.RoomEquipmentName, ', ') AS RoomEquipmentName,
+    AVG(CAST(R.RoomPrice AS DECIMAL(10, 2))) AS HotelPrice,
+    SUM(CAST(R.MaximumOccupancy AS INT)) AS HotelMaximumOccupancy
+FROM 
+    [dbo].[Hotel] H
+JOIN 
+    [dbo].[City] C ON H.[CityID] = C.CityID 
+JOIN
+    [dbo].[Comments] CM ON CM.HotelID = H.HotelID  
+JOIN
+    [dbo].[Country] CT ON CT.CountryID = C.CountryID 
+JOIN
+    [dbo].[Hotel_Equipment_Reference] HER ON HER.HotelID = H.HotelID 
+JOIN
+    [dbo].[HotelEquipment] HE ON HE.HotelEquipmentID = HER.HotelEquipmentID 
+JOIN
+    [dbo].[HotelImage] HIMG ON HIMG.HotelID = H.HotelID 
+JOIN
+    [dbo].[HotelType] HT ON HT.HotelTypeID = H.HotelTypeID
+JOIN
+    [dbo].[Room] R ON R.HotelID = H.HotelID 
+JOIN
+    [dbo].[Room_Equipment_Reference] RER ON RER.RoomID = R.RoomID 
+JOIN
+    [dbo].[RoomEquipment] RE ON RE.RoomEquipmentID = RER.RoomEquipmentID
+GROUP BY 
+    H.[HotelID],
+    H.[HotelName],
+    H.[HotelAddress],
+    H.[HotelPhone],
+    H.[HotelDescription],
+    H.[LevelStar],
+    H.[Latitude],
+    H.[Longitude],
+    H.[isActive],
+    H.[MemberID],
+    C.CityName,
+    CM.[CommentTitle],
+    CM.[CommentText],
+    CT.[CountryName],
+	H.[HotelTypeID],  
+	HT.[HotelTypeName];
+
 ALTER VIEW HotelSearchBox AS
 SELECT 
     H.[HotelID],
