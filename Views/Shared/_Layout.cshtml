@@ -275,10 +275,15 @@
     <script src="~/js/ming_js/custom.js"></script>
 
     <script>
-        // 監聽滾動事件
-        window.addEventListener('scroll', function () {
-            var floatingContainer = document.querySelector('.floating-container');
-            var scrollPosition = window.scrollY || window.pageYOffset;
+        document.addEventListener('DOMContentLoaded', function () {
+            // 監聽滾動事件
+            window.addEventListener('scroll', function () {
+                var floatingContainer = document.querySelector('.floating-container');
+                if (!floatingContainer) {
+                    console.warn('No floating container found.');
+                    return; // 如果沒有找到 floating-container 元素，直接返回
+                }
+                var scrollPosition = window.scrollY || window.pageYOffset;
 
             // 如果滾動至頁面中間，顯示浮動容器，否則隱藏
             if (scrollPosition > (window.innerHeight / 2)) {
@@ -289,6 +294,8 @@
             // }
         });
     </script>
+
+
     
     <script>
         $(document).ready(function () {

@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+ï»¿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using PrjFunNowWeb.Models;
 using System.Configuration;
@@ -31,19 +31,21 @@ builder.Services.AddDbContext<FunNowContext>(
         builder.Configuration.GetConnectionString("FunNowConnection")
 ));
 
-// ²K¥[ Session ªA°È
+// æ·»åŠ  HttpClient æœåŠ¡
+builder.Services.AddHttpClient();
+// æ·»åŠ  Session æœå‹™
 builder.Services.AddSession(options =>
 {
-    // ³]¸m Session ªº cookie ¦WºÙ
+    // è¨­ç½® Session çš„ cookie åç¨±
     options.Cookie.Name = ".YourApp.Session";
 
-    // ³]¸m Session ªº¹L´Á®É¶¡
+    // è¨­ç½® Session çš„éæœŸæ™‚é–“
     options.IdleTimeout = TimeSpan.FromMinutes(30);
 
-    // ³]¸m cookie ¬O¤£¬O¥u¦b HTTPS ¤¤¦³®Ä
+    // è¨­ç½® cookie æ˜¯ä¸æ˜¯åªåœ¨ HTTPS ä¸­æœ‰æ•ˆ
     options.Cookie.HttpOnly = true;
 
-    // ³]¸m cookie ªº¦w¥şµ¥¯Å
+    // è¨­ç½® cookie çš„å®‰å…¨ç­‰ç´š
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 });
 
@@ -71,7 +73,7 @@ else
 //    app.UseHsts();
 //}
 
-app.UseSession(); //µù¥USession ªA°È
+app.UseSession(); //è¨»å†ŠSession æœå‹™
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
@@ -82,6 +84,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=HostManage}/{action=Home}/{id?}");
 
-// °t¸m¸ô¥Ñ¥H¤ä«ù Angular ¸ô¥Ñ
+// é…ç½®è·¯ç”±ä»¥æ”¯æŒ Angular è·¯ç”±
 app.MapFallbackToFile("/dist/fun-now-angular1/index.html");
 app.Run();
