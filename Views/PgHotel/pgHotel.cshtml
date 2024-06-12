@@ -310,8 +310,8 @@
                                         <td class="align-bottom">
                                             <h3>TWD @room.RoomPrice</h3>
                                             <div style="margin-left: auto;">
-                                                <button class="btn btn-outline-primary btn-lg">加入購物車</button>
-                                                <button class="btn btn-primary btn-lg">立即下訂</button>
+                                                <button class="btn btn-outline-primary btn-lg addCart" data-roomid="">加入購物車</button>
+                                                <button class="btn btn-primary btn-lg directBuy" data-roomid="">立即下訂</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -474,7 +474,7 @@
 
             @*推薦其他飯店*@
             <div>
-                <h2>你可能也喜歡</h2>
+                <h2>你可能也喜歡</h2> 
                 <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner">
                         @{
@@ -484,45 +484,45 @@
                             .ToList();
                             for (int i = 0; i < hotelGroups.Count; i++)
                             {
-                                        <div class="carousel-item @(i == 0 ? "active" : "")">
-                                            <div class="card-deck mb-5">
-                                                @foreach (var index in hotelGroups[i])
+                                    <div class="carousel-item @(i == 0 ? "active" : "")">
+                                        <div class="card-deck mb-5">
+                                            @foreach (var index in hotelGroups[i])
                                         {
                                             var hotel = index < Model.HotelDetail.SimilarHotels.Count ? Model.HotelDetail.SimilarHotels[index] : null;
-                                                    <a href="@((hotel != null) ? ("/PgHotel/pgHotel?hotelId=" + hotel.HotelId) : "#")" class="card">
-                                                        <div class="card">
-                                                    <img src="@(hotel != null && hotel.HotelImage != null ? "https://localhost:7284/image/" + hotel.HotelImage.ImageUrl : "~/image/louieee_img/otherHotel01.png")" class="card-img-top" alt="Hotel Image">
-                                                            <div class="card-body">
-                                                                @if (hotel != null)
+                                                <a href="@((hotel != null) ? ("/PgHotel/pgHotel?hotelId=" + hotel.HotelId) : "#")" class="card">
+                                                    <div class="card">
+                                                        @* <img src="@(hotel != null && hotel.HotelImage != null ? "https://localhost:7284/image/" + hotel.HotelImage.ImageUrl : "~/image/louieee_img/otherHotel01.png")" class="card-img-top" alt="Hotel Image">*@
+                                                        <div class="card-body">
+                                                            @if (hotel != null)
                                                         {
-                                                                    <h5 class="card-title">@hotel.HotelName</h5>
+                                                                <h5 class="card-title">@hotel.HotelName</h5>
                                                             for (int j = 0; j < hotel.LevelStar; j++)
                                                             {
-                                                                        <img src="~/image/louieee_img/star.png" />
+                                                                    <img src="~/image/louieee_img/star.png" />
                                                             }
-                                                                    <p class="card-text">
-                                                                        <span>4.3/5 很好</span>
-                                                                        <i class="fa-solid fa-location-dot">@hotel.HotelAddress</i>
-                                                                    </p>
+                                                                <p class="card-text">
+                                                                    <span>4.3/5 很好</span>
+                                                                    <i class="fa-solid fa-location-dot">@hotel.HotelAddress</i>
+                                                                </p>
                                                         }
                                                         else
                                                         {
-                                                                    <h5 class="card-title">占位符酒店名稱</h5>
-                                                                    <p class="card-text">
-                                                                        <span>占位符評論</span>
-                                                                        <i class="fa-solid fa-location-dot">占位符酒店地址</i>
-                                                                    </p>
+                                                                <h5 class="card-title">占位符酒店名稱</h5>
+                                                                <p class="card-text">
+                                                                    <span>占位符評論</span>
+                                                                    <i class="fa-solid fa-location-dot">占位符酒店地址</i>
+                                                                </p>
                                                         }
-                                                            </div>
-                                                            <div class="card-footer">
-                                                                <small class="text-body-secondary">只剩 @hotel?.AvailableRooms 間房</small>
-                                                            </div>
-
                                                         </div>
-                                                    </a>
+                                                        <div class="card-footer">
+                                                            <small class="text-body-secondary">只剩 @hotel?.AvailableRooms 間房</small>
+                                                        </div>
+
+                                                    </div>
+                                                </a>
                                         }
-                                            </div>
                                         </div>
+                                    </div>
                             }
                         }
                     </div>
@@ -763,12 +763,99 @@
                         }
                     });
                 });
-            
+
+            //購物車
+            $('.addCart').on('click', async function () {
+                // const roomID = $(this).data('roomid');
+
+                //是否有登入
+                // const memberID = getMemberID();
+                // if (!memberID) {
+                //     window.location.href = '/login'; 
+                //     return;
+                // }
+
+                const orderDetail = {
+                    MemberID: 1,
+                    RoomID:10,   //寫死roomID,
+                    CheckInDate: "2024-06-15", 
+                    CheckOutDate: "2024-06-20",
+               
+                };
+
+                try {
+                    const response = await fetch('https://localhost:7103/api/Cart', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(orderDetail)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(response.statusText);
+                    }
+
+                    const data = await response.json();
+                    if (data.success) {
+                        console.log(data);
+                    }
+
+                } catch (err) {
+                    console.error(err);
+ 
+                }
+            });
+
+            //直接購買
+            $('.directBuy').on('click', async function () {
+                // const roomID = $(this).data('roomid');
+
+                //是否有登入
+                // const memberID = getMemberID();
+                // if (!memberID) {
+                //     window.location.href = '/login';
+                //     return;
+                // }
+
+                const orderDetail = {
+                    MemberID: 1,
+                    RoomID: 10,   //寫死roomID,
+                    CheckInDate: "2024-06-15", 
+                    CheckOutDate: "2024-06-20", 
+                };
+
+                try {
+                    const response = await fetch('https://localhost:7103/api/Cart', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(orderDetail)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(response.statusText);
+                    }
+
+                    const data = await response.json();
+                    if (data.success) {
+                        console.log(data);
+                        // window.location.href = "";
+                    }
+                   
+                } catch (err) {
+                    console.error(err);
+
+                }
+            });
+
+
 
         });
 
         function smoothScroll(targetId) {
-            console.log(targetId)
+            console.log(targetId);
             const targetEle = document.getElementById(targetId)
             if (targetEle) {
                 window.scrollTo({
@@ -777,6 +864,8 @@
                 })
             }
         }
+
+      
 
     </script>
 
