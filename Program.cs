@@ -88,7 +88,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=cart}/{action=cartItems}/{id?}");
+    pattern: "{controller=PgHotel}/{action=pgHotel}/{id?}");
 
 // 配置路由以支持 Angular 路由
 //app.MapFallbackToFile("/dist/fun-now-angular1/index.html");
