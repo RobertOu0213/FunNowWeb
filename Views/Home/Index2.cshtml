@@ -337,210 +337,91 @@
 @section Scripts {
 
     <script>
-        // 定義 fetchHotels 函式
-        async function fetchHotels(searchHotel) {
-            const url = "https://localhost:7103/api/HotelSearch/indexsearch";
-            const response = await fetch(url, {
-                method: "POST",
-                body: JSON.stringify(searchHotel),
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-
-            const data = await response.json();
-            console.log(data);
-
-            const divHotels = document.querySelector("#showhotels");
-            // 清空舊結果
-            divHotels.innerHTML = "";
-
-            const hotels = data.map((hotel) => {
-                const {
-                    hotelName,
-                    hotelAddress,
-                    hotelPhone,
-                    hotelDescription,
-                    countryName,
-                    hotelEquipmentName,
-                    hotelImage,
-                    levelStar,
-                    hotelMaximumOccupancy,
-                    hotelPrice,
-                } = hotel;
-                // 動態生成旅館，包裹在.hotel-card裡面
-                return `
-                        <div class="col-lg-12 hotel-card">
-                            <div class="row">
-                                <div class="col-lg-4 col-sm-8" style="padding:0px">
-                                    <table>
-                                        <tr>
-                                            <td colspan="3"><img src='https://localhost:7284/image/${hotelImage}' class="img-fluid" style="width:100%" /></td>
-                                        </tr>
-                                        <tr>
-                                            <td><img src="/image/ming_img/room1.jpg" class="img-fluid" /></td>
-                                            <td><img src="/image/ming_img/room3.jpg" class="img-fluid" /></td>
-                                            <td><img src="/image/ming_img/room4.jpg" class="img-fluid" /></td>
-                                        </tr>
-                                    </table>
-                                </div>
-                                <div class="col-lg-5 col-sm-10 hotel-details">
-                                    <h3>${hotelName}</h3>
-                                    <span>${levelStar}星級飯店 </span><span style="color:blue">${hotelAddress}</span>
-                                    <h6>此住宿提供:</h6>
-                                    <h5 style="border: 1px solid black;display: inline-block;">${hotelEquipmentName}</h5>
-                                    <br>
-                                    <h5 style="border: 1px solid black;display: inline-block;">設施2</h5>
-                                    <br>
-                                    <h5 style="border: 1px solid black;display: inline-block;">設施3</h5>
-                                    <br>
-                                    <h6 style="color:green">${levelStar}星級飯店最優價</h6>
-                                    <h6 style="color:red">昨天起已收到${levelStar}張訂單</h6>
-                                </div>
-                                <div class="col-lg-3 col-sm-12 hotel-pricing">
-                                    <h5>很出色</h5>
-                                    <h6 style="color:gray"> 個評分</h6>
-                                    <br>
-                                    <h6 style="border: 1px solid red;display:inline-block;background-color: red;color:white">優惠只剩1間</h6>
-                                    <h6 style="color:gray">每晚價格(不連税及其他费用)</h6>
-                                    <br><br>
-                                    <h3>NT$${hotelPrice}</h3>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-            });
-
-            divHotels.innerHTML = hotels.join("");
-        }
-
-        // 定義更新酒店的函式
-        async function updateHotels(lowerPrice, upperPrice) {
-            // 確保 fetchHotels 函式可用
-            if (typeof fetchHotels === 'function') {
-                const searchHotelJson = sessionStorage.getItem('searchHotel');
-                if (searchHotelJson) {
-                    const searchHotel = JSON.parse(searchHotelJson);
-                    searchHotel.lowerPrice = lowerPrice;
-                    searchHotel.upperPrice = upperPrice;
-
-                    // 更新 sessionStorage
-                    sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel));
-
-                    // 調用 fetchHotels 函式
-                    await fetchHotels(searchHotel);
-                } else {
-                    console.log('searchHotel not found in sessionStorage');
-                }
+        document.addEventListener("DOMContentLoaded", async function () {
+            // 網頁加載完成後自動加載儲存在 sessionStorage 的 searchHotel 資訊
+            // 一開始網頁加載來自index.cshtml
+            const searchHotelJson = sessionStorage.getItem("searchHotel");
+            if (searchHotelJson) {
+                const searchHotel = JSON.parse(searchHotelJson);
+                console.log(searchHotel);
+                await loadHotels(searchHotel);
             } else {
-                console.log('fetchHotels is not defined');
-            }
-        }
-
-        document.addEventListener("DOMContentLoaded", function () {
-            // 初始化時從 sessionStorage 加載搜索結果
-            (async () => {
-                const searchHotelJson = sessionStorage.getItem("searchHotel");
-                if (searchHotelJson) {
-                    const searchHotel = JSON.parse(searchHotelJson);
-                    console.log(searchHotel);
-                    await fetchHotels(searchHotel);
-                } else {
-                    console.log("searchHotel not found in sessionStorage");
-                }
-            })();
-
-            // 按鈕事件處理
-            const btnSubmit3 = document.querySelector("#buttonSubmit3");
-            btnSubmit3.addEventListener("click", async (event) => {
-                const inputkeyword3 = document.querySelector("#search-input3").value;
-                const inputDatestart3 = document.querySelector("#myDatepickerstart3").value;
-                const inputDateend3 = document.querySelector("#myDatepickerend3").value;
-                const inputadults3 = parseInt(document.querySelector("#adults3").value);
-                const inputrooms3 = parseInt(document.querySelector("#rooms3").value);
-                const inputchildren3 = 0;
-                const lowerPrice = parseInt(document.querySelector("#lowerInput").value);
-                const upperPrice = parseInt(document.querySelector("#upperInput").value);
-
-                // 創建搜索酒店對象
-                const searchHotel = {
-                    keyword: inputkeyword3,
-                    checkInDate: inputDatestart3,
-                    checkOutDate: inputDateend3,
-                    roomnum: inputrooms3,
-                    adults: inputadults3,
-                    children: inputchildren3,
-                    sortBy: null, // 初始化排序字段
-                    sortType: null, // 初始化排序類型
-                    lowerPrice: lowerPrice,
-                    upperPrice: upperPrice,
-                };
-
-                // 清除 sessionStorage 中的 searchHotel 資訊
-                sessionStorage.removeItem("searchHotel");
-
-                // 更新 sessionStorage
-                sessionStorage.setItem("searchHotel", JSON.stringify(searchHotel));
-
-                // 發送請求並渲染結果
-                await fetchHotels(searchHotel);
-            });
-
-            // 定義按鈕事件處理函數
-            const sortBtn = document.querySelector("#sortBtn");
-            const bestMatchBtn = document.querySelector("#bestMatchBtn");
-            const highestRatedBtn = document.querySelector("#highestRatedBtn");
-            const lowestPriceBtn = document.querySelector("#lowestPriceBtn");
-            const nearbyBtn = document.querySelector("#nearbyBtn");
-            const hotDealBtn = document.querySelector("#hotDealBtn");
-
-            sortBtn.addEventListener("click", () => handleSort("HotelId", "asc"));
-            bestMatchBtn.addEventListener("click", () =>
-                handleSort("LevelStar", "desc")
-            );
-            highestRatedBtn.addEventListener("click", () =>
-                handleSort("LevelStar", "desc")
-            );
-            lowestPriceBtn.addEventListener("click", () =>
-                handleSort("HotelPrice", "asc")
-            );
-            nearbyBtn.addEventListener("click", () => handleSort("CityName", "asc"));
-            hotDealBtn.addEventListener("click", () => handleSort("deal", "desc"));
-
-            // 處理排序邏輯的函數
-            async function handleSort(sortBy, sortType) {
-                const searchHotelJson = sessionStorage.getItem('searchHotel');
-                if (searchHotelJson) {
-                    const searchHotel = JSON.parse(searchHotelJson);
-                    searchHotel.sortBy = sortBy;
-                    searchHotel.sortType = sortType;
-
-                    // 更新 sessionStorage
-                    sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel));
-
-                    // 發送請求並渲染結果
-                    await fetchHotels(searchHotel);
-                } else {
-                    console.log('searchHotel not found in sessionStorage');
-                }
+                console.log("searchHotel not found in sessionStorage");
             }
         });
 
-        // 定義範圍滑桿腳本
-        const lowerHandle = document.getElementById('lowerHandle');
-        const upperHandle = document.getElementById('upperHandle');
-        const rangeSlider = document.getElementById('rangeSlider');
-        const lowerLabel = document.getElementById('lowerLabel');
-        const upperLabel = document.getElementById('upperLabel');
-        const lowerInput = document.getElementById('lowerInput');
-        const upperInput = document.getElementById('upperInput');
+        // 監聽提交按鈕，獲取輸入值並發送請求
+        // 此處網頁加載來自index2.cshtml
+        const btnSubmit3 = document.querySelector("#buttonSubmit3");
+        btnSubmit3.addEventListener("click", async () => {
+            const searchHotel = {
+                keyword: document.querySelector("#search-input3").value,
+                checkInDate: document.querySelector("#myDatepickerstart3").value,
+                checkOutDate: document.querySelector("#myDatepickerend3").value,
+                roomnum: parseInt(document.querySelector("#rooms3").value),
+                adults: parseInt(document.querySelector("#adults3").value),
+                children: 0,
+                sortBy: null,
+                sortType: null,
+                lowerPrice: parseInt(document.querySelector("#lowerInput").value),
+                upperPrice: parseInt(document.querySelector("#upperInput").value),
+            };
 
-        lowerHandle.addEventListener('mousedown', startDrag);
-        upperHandle.addEventListener('mousedown', startDrag);
+            // 儲存搜尋條件至 sessionStorage
+            sessionStorage.setItem("searchHotel", JSON.stringify(searchHotel));
+            // 發送請求並更新顯示結果
+            await loadHotels(searchHotel);
+        });
+
+        // 定義排序按鈕及其對應的排序條件
+        const sortButtons = {
+            sortBtn: ["HotelId", "asc"],
+            bestMatchBtn: ["LevelStar", "desc"],
+            highestRatedBtn: ["LevelStar", "desc"],
+            lowestPriceBtn: ["HotelPrice", "asc"],
+            nearbyBtn: ["CityName", "asc"],
+            hotDealBtn: ["deal", "desc"],
+        };
+
+        // 綁定排序按鈕的點擊事件
+        Object.keys(sortButtons).forEach(id => {
+            document.querySelector(`#${id}`).addEventListener("click", () => handleSort(...sortButtons[id]));
+        });
+
+        // 處理排序的邏輯函數
+        async function handleSort(sortBy, sortType) {
+            const searchHotelJson = sessionStorage.getItem('searchHotel');
+            if (searchHotelJson) {
+                const searchHotel = JSON.parse(searchHotelJson);
+                searchHotel.sortBy = sortBy;
+                searchHotel.sortType = sortType;
+                sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel));
+                await loadHotels(searchHotel);
+            } else {
+                console.log('searchHotel not found in sessionStorage');
+            }
+        }
+
+        // 定義範圍滑桿相關元素
+        const rangeSlider = {
+            lowerHandle: document.getElementById('lowerHandle'),
+            upperHandle: document.getElementById('upperHandle'),
+            slider: document.getElementById('rangeSlider'),
+            lowerLabel: document.getElementById('lowerLabel'),
+            upperLabel: document.getElementById('upperLabel'),
+            lowerInput: document.getElementById('lowerInput'),
+            upperInput: document.getElementById('upperInput')
+        };
+
+        // 綁定滑桿拖動事件
+        [rangeSlider.lowerHandle, rangeSlider.upperHandle].forEach(handle => {
+            handle.addEventListener('mousedown', startDrag);
+        });
 
         let isDragging = false;
         let currentHandle = null;
 
+        // 開始拖動的處理函數
         function startDrag(event) {
             isDragging = true;
             currentHandle = event.target;
@@ -548,46 +429,30 @@
             document.addEventListener('mouseup', stopDrag);
         }
 
+        // 處理拖動邏輯的函數
         function handleDrag(event) {
             if (!isDragging) return;
 
-            if (currentHandle === lowerHandle) {
-                handleDragLogic(event, lowerHandle, lowerLabel, upperLabel, lowerInput, upperInput);
-            } else {
-                handleDragLogic(event, upperHandle, upperLabel, lowerLabel, lowerInput, upperInput);
-            }
+            const handleType = currentHandle === rangeSlider.lowerHandle ? 'lower' : 'upper';
+            const { handle, label, oppositeLabel, lowerInput, upperInput } = handleType === 'lower' ?
+                { handle: rangeSlider.lowerHandle, label: rangeSlider.lowerLabel, oppositeLabel: rangeSlider.upperLabel, lowerInput: rangeSlider.lowerInput, upperInput: rangeSlider.upperInput } :
+                { handle: rangeSlider.upperHandle, label: rangeSlider.upperLabel, oppositeLabel: rangeSlider.lowerLabel, lowerInput: rangeSlider.lowerInput, upperInput: rangeSlider.upperInput };
+
+            const sliderRect = rangeSlider.slider.getBoundingClientRect();
+            const position = Math.min(1, Math.max(0, (event.clientX - sliderRect.left) / sliderRect.width));
+            const value = Math.round(parseFloat(rangeSlider.slider.getAttribute('min')) + position * (parseFloat(rangeSlider.slider.getAttribute('max')) - parseFloat(rangeSlider.slider.getAttribute('min'))));
+
+            // 防止下限超過上限或上限低於下限
+            if (handleType === 'lower' && value >= parseFloat(oppositeLabel.textContent.split('：')[1])) return;
+            if (handleType === 'upper' && value <= parseFloat(oppositeLabel.textContent.split('：')[1])) return;
+
+            handle.style.left = `${position * 100}%`;
+            label.textContent = `${handleType === 'lower' ? '下限' : '上限'}：${value}`;
+            handleType === 'lower' ? lowerInput.value = value : upperInput.value = value;
+            updateHotels(parseFloat(rangeSlider.lowerInput.value), parseFloat(rangeSlider.upperInput.value));
         }
 
-        function handleDragLogic(event, handle, label, oppositeLabel, lowerInput, upperInput) {
-            const sliderRect = rangeSlider.getBoundingClientRect();
-            const sliderWidth = sliderRect.width;
-            const min = parseFloat(rangeSlider.getAttribute('min'));
-            const max = parseFloat(rangeSlider.getAttribute('max'));
-            const range = max - min;
-
-            let position = (event.clientX - sliderRect.left) / sliderWidth;
-            position = Math.min(1, Math.max(0, position)); // Clamp position between 0 and 1
-            const value = Math.round(min + position * range);
-
-            if (handle === lowerHandle) {
-                if (value >= parseFloat(oppositeLabel.textContent.split('：')[1])) {
-                    return; // Lower handle cannot exceed upper handle
-                }
-                handle.style.left = `${position * 100}%`;
-                label.textContent = `下限：${value}`;
-                lowerInput.value = value;
-                updateHotels(value, parseFloat(upperInput.value));
-            } else {
-                if (value <= parseFloat(oppositeLabel.textContent.split('：')[1])) {
-                    return; // Upper handle cannot be less than lower handle
-                }
-                handle.style.left = `${position * 100}%`;
-                label.textContent = `上限：${value}`;
-                upperInput.value = value;
-                updateHotels(parseFloat(lowerInput.value), value);
-            }
-        }
-
+        // 停止拖動的處理函數
         function stopDrag() {
             isDragging = false;
             currentHandle = null;
@@ -595,28 +460,82 @@
             document.removeEventListener('mouseup', stopDrag);
         }
 
-        // 定義更新酒店的函式
+        // 更新飯店列表的函數
         async function updateHotels(lowerPrice, upperPrice) {
-            // 確保 fetchHotels 函式可用
-            if (typeof fetchHotels === 'function') {
-                const searchHotelJson = sessionStorage.getItem('searchHotel');
-                if (searchHotelJson) {
-                    const searchHotel = JSON.parse(searchHotelJson);
-                    searchHotel.lowerPrice = lowerPrice;
-                    searchHotel.upperPrice = upperPrice;
-
-                    // 更新 sessionStorage
-                    sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel));
-
-                    // 調用 fetchHotels 函式
-                    await fetchHotels(searchHotel);
-                } else {
-                    console.log('searchHotel not found in sessionStorage');
-                }
+            const searchHotelJson = sessionStorage.getItem('searchHotel');
+            if (searchHotelJson) {
+                const searchHotel = JSON.parse(searchHotelJson);
+                searchHotel.lowerPrice = lowerPrice;
+                searchHotel.upperPrice = upperPrice;
+                sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel));
+                await loadHotels(searchHotel);
             } else {
-                console.log('fetchHotels is not defined');
+                console.log('searchHotel not found in sessionStorage');
             }
         }
+
+        // 加載飯店的函數
+        const loadHotels = async function (searchHotel) {
+            const url = "https://localhost:7103/api/HotelSearch/indexsearch";
+            const response = await fetch(url, {
+                method: "POST",
+                body: JSON.stringify(searchHotel),
+                headers: { "Content-Type": "application/json" },
+            });
+            const data = await response.json();
+            console.log(data);
+
+            const divHotels = document.querySelector("#showhotels");
+            divHotels.innerHTML = "";
+
+            // 生成並顯示飯店信息
+            const hotels = data.map(hotel => {
+                const { hotelName, hotelAddress, hotelImage, levelStar, hotelEquipmentName, hotelPrice } = hotel;
+                return `
+                    <div class="col-lg-12 hotel-card">
+                        <div class="row">
+                            <div class="col-lg-4 col-sm-8" style="padding:0px">
+                                <table>
+                                    <tr>
+                                        <td colspan="3"><img src='https://localhost:7284/image/${hotelImage}' class="img-fluid" style="width:100%" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td><img src="/image/ming_img/room1.jpg" class="img-fluid" /></td>
+                                        <td><img src="/image/ming_img/room3.jpg" class="img-fluid" /></td>
+                                        <td><img src="/image/ming_img/room4.jpg" class="img-fluid" /></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-lg-5 col-sm-10 hotel-details">
+                                <h3>${hotelName}</h3>
+                                <span>${levelStar}星級飯店 </span><span style="color:blue">${hotelAddress}</span>
+                                <h6>此住宿提供:</h6>
+                                <h5 style="border: 1px solid black;display: inline-block;">${hotelEquipmentName}</h5>
+                                <br>
+                                <h5 style="border: 1px solid black;display: inline-block;">設施2</h5>
+                                <br>
+                                <h5 style="border: 1px solid black;display: inline-block;">設施3</h5>
+                                <br>
+                                <h6 style="color:green">${levelStar}星級飯店最優價</h6>
+                                <h6 style="color:red">昨天起已收到${levelStar}張訂單</h6>
+                            </div>
+                            <div class="col-lg-3 col-sm-12 hotel-pricing">
+                                <h5>很出色</h5>
+                                <h6 style="color:gray"> 個評分</h6>
+                                <br>
+                                <h6 style="border: 1px solid red;display:inline-block;background-color: red;color:white">優惠只剩1間</h6>
+                                <h6 style="color:gray">每晚價格(不連税及其他费用)</h6>
+                                <br><br>
+                                <h3>NT$${hotelPrice}</h3>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            divHotels.innerHTML = hotels.join("");
+
+        };
 
     </script>
 
