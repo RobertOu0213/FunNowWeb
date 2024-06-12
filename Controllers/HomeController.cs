@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PrjFunNowWeb.Models;
 using PrjFunNowWeb.Models.DTO;
+using PrjFunNowWeb.Models.ViewModel;
 using System.Diagnostics;
 using System.Text.Json;
 
@@ -41,7 +42,14 @@ namespace PrjFunNowWeb.Controllers
 
         public IActionResult Index2()
         {
-            return View();
+            var viewModel = new HotelViewModel
+            {
+                HotelTypes = _context.HotelTypes.ToList(),
+                HotelEquipments = _context.HotelEquipments.ToList(),
+                Cities = _context.Cities.ToList(),
+                RoomEquipments = _context.RoomEquipments.ToList()
+            };
+            return View(viewModel);
         }
 
         public IActionResult Privacy()
