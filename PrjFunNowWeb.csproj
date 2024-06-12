@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\image\hotel_test_01.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\image\hotel_test_021.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="efpt.config.json.user" />
   </ItemGroup>
 
