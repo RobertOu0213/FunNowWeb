@@ -310,7 +310,7 @@
                                         <td class="align-bottom">
                                             <h3>TWD @room.RoomPrice</h3>
                                             <div style="margin-left: auto;">
-                                                <button class="btn btn-outline-primary btn-lg addCart" data-roomid="">加入購物車</button>
+                                                <button class="btn btn-outline-primary btn-lg addCart" data-id="@room.RoomId">加入購物車</button>
                                                 <button class="btn btn-primary btn-lg directBuy" data-roomid="">立即下訂</button>
                                             </div>
                                         </td>
@@ -548,29 +548,7 @@
 </button>
 
 <div class="cartModal">
-    <div class="modal right fade" id="rightModal" tabindex="-1" aria-labelledby="rightModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="rightModalLabel">已加入購物車</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body d-flex align-items-center">
-                    <img src="path_to_image.jpg" alt="...">
-                    <div class="room-info">
-                        <p>樓中樓單室套房 (Mezzanine Studio)x1晚已新增至購物車</p>
-                        <p>（價格為NT$ 687）</p>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">前往購物車</button>
-
-                    <div class="note">訂越多，省越多！</div>
-                    <p>同時預訂多個項目，還能省更多！</p>
-                </div>
-            </div>
-        </div>
-    </div>
+ 
 </div>
 
 @section Styles {
@@ -687,7 +665,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: start;
-            height: 500px; /* 调整模态窗口页脚的高度 */
+            height: 500px; 
         }
 
         .cartModal .modal-backdrop {
@@ -707,8 +685,9 @@
         }
 
         .cartModal .modal-body img {
-            width: 100px;
-            height: auto;
+            border-radius: 5px;
+            width: 56px;
+            height: 56px;
         }
 
         .cartModal .modal-body .room-info {
@@ -722,7 +701,7 @@
         }
 
             .cartModal .modal-footer .btn:hover {
-                opacity: 0.7; /* 调整透明度 */
+                opacity: 0.7; 
                 background-color:green;
             }
 
@@ -886,7 +865,8 @@
 
             //購物車
             $('.addCart').on('click', async function () {
-                // const roomID = $(this).data('roomid');
+                const roomID = $(this).data('id');
+                // console.log(roomID);
 
                 //是否有登入
                 // const memberID = getMemberID();
@@ -897,7 +877,7 @@
 
                 const orderDetail = {
                     MemberID: 1,
-                    RoomID:10,   //寫死roomID,
+                    RoomID: roomID,
                     CheckInDate: "2024-06-15", 
                     CheckOutDate: "2024-06-20",
                
@@ -918,15 +898,16 @@
 
                     const data = await response.json();
                     if (data.success) {
-                        console.log(data);
-                        $('#rightModal').modal('show');
+                        // console.log(data);
+                        showCartModal(data);
                     }
-
                 } catch (err) {
                     console.error(err);
  
                 }
             });
+
+           
 
             //直接購買
             $('.directBuy').on('click', async function () {
@@ -971,6 +952,15 @@
                 }
             });
 
+            //前往購物車
+            $(document).on('click', '#ToCartItems', function () {
+
+                var userId = 1;
+                var cartPageUrl = window.location.origin + '/cart/cartItems?userId=' + userId;
+
+                window.location.href = cartPageUrl;
+            });
+
             $('#rightModal').on('show.bs.modal', function (e) {
                 $('body').addClass('modal-open');
             });
@@ -980,6 +970,62 @@
             });
 
         });
+
+
+        function getDaysBetweenDates(checkInDate, checkOutDate) {
+            const checkIn = new Date(checkInDate);
+            const checkOut = new Date(checkOutDate);
+            const timeDifference = checkOut - checkIn;
+            const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24)); // 轉換為天數
+            return daysDifference;
+        }
+
+        function getImageUrl(imagePath) {
+            if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
+                return imagePath;
+            } else {
+                return window.location.origin + '/image/' + imagePath;
+            }
+        }
+
+        function showCartModal(data) {
+
+            const days = getDaysBetweenDates(data.checkInDate, data.checkOutDate);
+            const totalPrice = days * data.roomPrice;
+            const imageUrl = getImageUrl(data.roomImage);
+
+            let cartString = `
+
+                            <div class="modal right fade" id="rightModal" tabindex="-1" aria-labelledby="rightModalLabel" aria-hidden="true">
+                             <div class="modal-dialog">
+                                 <div class="modal-content">
+                                     <div class="modal-header">
+                                         <h5 class="modal-title" id="rightModalLabel">已加入購物車</h5>
+                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                     </div>
+                                     <div class="modal-body d-flex align-items-center">
+                                          <img src="${imageUrl}" alt="...">
+                                              <div class="room-info d-flex flex-column">
+                                             <p>${data.roomName} x ${days}晚已新增至購物車</p>
+                                             <p>（價格為NT$ ${totalPrice}）</p>
+                                         </div>
+                                     </div>
+                                     <div class="modal-footer">
+                                         <button type="button" class="btn btn-primary" id="ToCartItems">前往購物車</button>
+
+                                         <div class="note">訂越多，省越多！</div>
+                                         <p>同時預訂多個項目，還能省更多！</p>
+                                     </div>
+                                 </div>
+                             </div>
+                           </div>
+
+                        `
+
+            $('.cartModal').html(cartString);
+            $('#rightModal').modal('show');
+        }
+
 
         function smoothScroll(targetId) {
             console.log(targetId);

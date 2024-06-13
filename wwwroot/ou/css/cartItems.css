@@ -158,7 +158,15 @@ main {
 
 .cartCheck-container {
   position: fixed;
-  top: 150px;
+  top: 100px;
   z-index: 99;
   width: 408px;
 }
+
+/*.active {
+    display: block;
+}
+
+.inactive {
+    display: none;
+}*/

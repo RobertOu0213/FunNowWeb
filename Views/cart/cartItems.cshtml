@@ -2,128 +2,41 @@
 @{
     ViewData["Title"] = "cartItems";
     // layout等大家
+    // @model PrjFunNowWeb.Controllers.cartController
 }
 
 <main>
     <section class="cartLists">
+
         <div class="cartLists-title">
-            <h3 class="cartLists-title-font">您的購物車(2)</h3>
-        </div>
-        <div class="cartRoom">
-            <div class="cartRoom-basicInfo">
-                <div class="cartRoom-basicInfo-image">
-                    <img class="cartRoom-basicInfo-image-img" src="https://pix8.agoda.net/hotelImages/445007/-1/9498d2a3865159bceb3899bb59330f5e.jpg?ce=0&s=828x464&ar=16x9" alt="">
-                </div>
-
-                <div class="cartRoom-basicInfo-content">
-                    <span>沃客商旅正義館 (Walker Hotel ZhengYi)</span>
-                    <div class="cartRoom-basicInfo-content-div2"><div class="cartRoom-basicInfo-content-icon-star"><i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> </div>  <i class="fa-solid fa-earth-americas"></i> <span>台北市</span></div>
-                    <div class="cartRoom-basicInfo-content-div3"> <div class="cartRoom-basicInfo-content-icon"><span class="cartRoom-basicInfo-content-icon-number">7</span></div> <span class="cartRoom-basicInfo-content-icon-comment">很好</span> <span class="cartRoom-basicInfo-content-icon-count">5,688篇評鑑</span></div>
-                </div>
-                <div class="trash-can"><button class="trash-can-btn"><i class="fa-solid fa-lg fa-trash-can"></i></button></div>
-            </div>
-            <div class="cartRoom-bookingInfo">
-                <div class="cartRoom-bookingInfo-div1">
-                    <label for=""><input type="checkbox" name=""><span>1 x 經濟雙人房</span></label>
-                </div>
-                <div class="cartRoom-bookingInfo-div2">
-                    <span>2024年7月18日</span><span>-</span><span>2024年7月19日</span>
-                </div>
-                <div class="cartRoom-bookingInfo-div3">
-                    <i class="fa-solid fa-users"></i> <span>住客人數</span><span>  </span><span>2位大人</span>
-                </div>
-                <div class="cartRoom-bookingInfo-div4">
-                    <span>NT $</span> <span>1,013</span>
-                </div>
-                <div class="cartRoom-bookingInfo-div5">
-                    包含稅金及附加費用
-                </div>
-            </div>
+            <h3 class="cartLists-title-font">您的購物車<span id="allcartsCount"></span></h3>
         </div>
 
-        <div class="cartRoom">
-            <div class="cartRoom-basicInfo">
-                <div class="cartRoom-basicInfo-image">
-                    <img class="cartRoom-basicInfo-image-img" src="https://pix8.agoda.net/hotelImages/445007/-1/9498d2a3865159bceb3899bb59330f5e.jpg?ce=0&s=828x464&ar=16x9" alt="">
-                </div>
-
-                <div class="cartRoom-basicInfo-content">
-                    <span>沃客商旅正義館 (Walker Hotel ZhengYi)</span>
-                    <div class="cartRoom-basicInfo-content-div2"><div class="cartRoom-basicInfo-content-icon-star"><i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> </div>  <i class="fa-solid fa-earth-americas"></i> <span>台北市</span></div>
-                    <div class="cartRoom-basicInfo-content-div3"> <div class="cartRoom-basicInfo-content-icon"><span class="cartRoom-basicInfo-content-icon-number">7</span></div> <span class="cartRoom-basicInfo-content-icon-comment">很好</span> <span class="cartRoom-basicInfo-content-icon-count">5,688篇評鑑</span></div>
-                </div>
-                <div class="trash-can"><button class="trash-can-btn"><i class="fa-solid fa-lg fa-trash-can"></i></button></div>
-            </div>
-            <div class="cartRoom-bookingInfo">
-                <div class="cartRoom-bookingInfo-div1">
-                    <label for=""><input type="checkbox" name=""><span>1 x 經濟雙人房</span></label>
-                </div>
-                <div class="cartRoom-bookingInfo-div2">
-                    <span>2024年7月18日</span><span>-</span><span>2024年7月19日</span>
-                </div>
-                <div class="cartRoom-bookingInfo-div3">
-                    <i class="fa-solid fa-users"></i> <span>住客人數</span><span>  </span><span>2位大人</span>
-                </div>
-                <div class="cartRoom-bookingInfo-div4">
-                    <span>NT $</span> <span>1,013</span>
-                </div>
-                <div class="cartRoom-bookingInfo-div5">
-                    包含稅金及附加費用
-                </div>
-
-            </div>
+        <div id="cartContainer" >
         </div>
 
-        <div class="cartRoom">
-            <div class="cartRoom-basicInfo">
-                <div class="cartRoom-basicInfo-image">
-                    <img class="cartRoom-basicInfo-image-img" src="https://pix8.agoda.net/hotelImages/445007/-1/9498d2a3865159bceb3899bb59330f5e.jpg?ce=0&s=828x464&ar=16x9" alt="">
-                </div>
 
-                <div class="cartRoom-basicInfo-content">
-                    <span>沃客商旅正義館 (Walker Hotel ZhengYi)</span>
-                    <div class="cartRoom-basicInfo-content-div2"><div class="cartRoom-basicInfo-content-icon-star"><i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> </div>  <i class="fa-solid fa-earth-americas"></i> <span>台北市</span></div>
-                    <div class="cartRoom-basicInfo-content-div3"> <div class="cartRoom-basicInfo-content-icon"><span class="cartRoom-basicInfo-content-icon-number">7</span></div> <span class="cartRoom-basicInfo-content-icon-comment">很好</span> <span class="cartRoom-basicInfo-content-icon-count">5,688篇評鑑</span></div>
-                </div>
-                <div class="trash-can"><button class="trash-can-btn"><i class="fa-solid fa-lg fa-trash-can"></i></button></div>
-            </div>
-            <div class="cartRoom-bookingInfo">
-                <div class="cartRoom-bookingInfo-div1">
-                    <label for=""><input type="checkbox" name=""><span>1 x 經濟雙人房</span></label>
-                </div>
-                <div class="cartRoom-bookingInfo-div2">
-                    <span>2024年7月18日</span><span>-</span><span>2024年7月19日</span>
-                </div>
-                <div class="cartRoom-bookingInfo-div3">
-                    <i class="fa-solid fa-users"></i> <span>住客人數</span><span>  </span><span>2位大人</span>
-                </div>
-                <div class="cartRoom-bookingInfo-div4">
-                    <span>NT $</span> <span>1,013</span>
-                </div>
-                <div class="cartRoom-bookingInfo-div5">
-                    包含稅金及附加費用
-                </div>
-
-            </div>
-        </div>
 
     </section>
 
+  
     <section class="totalPrice">
-        <div class="cartCheck-container p-2 border border-1 rounded ">
+        @* 有價格的 *@
+        <div class="cartCheck-container p-2 border border-1 rounded" id="hasprice" style="display: none;">
             <div class="cartCheck-container-div1 d-flex justify-content-between">
                 <div>總價</div>
-                <div class="text-danger fw-bolder fs-5">NT$ 1,784</div>
+                <div class="text-danger fw-bolder fs-5">NT$ 0</div>
             </div>
             <div class="cartCheck-container-div2">
-                <div><span>2項</span>（含稅及其他費用）</div>
+                <div><span>0項</span>（含稅及其他費用）</div>
             </div>
             <div class="d-grid gap-2 mt-3 ">
                 <button class="btn btn-primary rounded-pill" type="button">繼續預定</button>
             </div>
         </div>
 
-        <div class="cartCheck-container-2 p-2 border border-1 rounded ">
+       @*  沒價格的(一開始畫面會呈現) *@
+        <div class="cartCheck-container p-2 border border-1 rounded" id="noprice">
             <div class="cartCheck-container-div1 d-flex justify-content-between">
                 <div>總價</div>
             </div>
@@ -135,15 +48,194 @@
             </div>
         </div>
     </section>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-    <script src="https://kit.fontawesome.com/e5eef540c2.js" crossorigin="anonymous"></script>
+
+
 </main>
 
 @section Styles {
     <link href="~/ou/css/cartItems.css" rel="stylesheet" />
 }
 @section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/e5eef540c2.js" crossorigin="anonymous"></script>
+
+
     <script>
+        const MemberId = @Model;
+
+        $(document).ready(function () {
+
+            fetchCartItems(MemberId);
+
+            $(document).on('click', '.trash-can-btn', async function () {
+                const orderDetailID = $(this).data('id');
+                const confirmed = confirm(`您確定要從購物車中移除此項目嗎？`);
+                if (confirmed) {
+                    try {
+                        const response = await fetch(`https://localhost:7103/api/Cart/${orderDetailID}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        });
+
+                        if (!response.ok) {
+                            throw new Error(response.statusText);
+                        }
+
+                        fetchCartItems(MemberId);
+                        // updateTotalPriceAndItems();
+                    } catch (error) {
+                        console.error(error);
+                    }
+                }
+            });
+
+
+            $(document).on('click', '.cartRoom-bookingInfo', function () {
+                const checkbox = $(this).find('input[type="checkbox"]');
+                checkbox.prop('checked', !checkbox.prop('checked'));
+
+                updateTotalPriceAndItems();
+            });
+        });
+
+        async function fetchCartItems(memberId) {
+            try {
+                const res = await fetch(`https://localhost:7103/api/Cart/${memberId}`);
+                if (!res.ok) {
+                    throw new Error(res.statusText);
+                }
+                const data = await res.json();
+                if (data.success) {
+                    $("#allcartsCount").text(`(${data.orderDetailDtos.length})`);
+                    renderCartItems(data.orderDetailDtos);
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        }
+
+        function renderCartItems(orderDetailDtos) {
+            let cartRoomStr = "";
+            orderDetailDtos.forEach(item => {
+                let stars = "";
+                for (let i = 0; i < item.levelStar; i++) {
+                    stars += `<i class="fa-solid fa-star"></i> `;
+                }
+
+                const days = getDaysBetweenDates(item.checkInDate, item.checkOutDate);
+                const totalPrice = days * item.roomPrice;
+                const checkInDate = formatDate(item.checkInDate);
+                const checkOutDate = formatDate(item.checkOutDate);
+                const imageUrl = getImageUrl(item.roomImage);
+
+                cartRoomStr += `
+                                <div class="cartRoom">
+                                    <div class="cartRoom-basicInfo">
+                                        <div class="cartRoom-basicInfo-image">
+                                            <img class="cartRoom-basicInfo-image-img" src="${imageUrl}" alt="...">
+                                        </div>
+
+                                        <div class="cartRoom-basicInfo-content">
+                                            <span>${item.hotelName}</span>
+                                            <div class="cartRoom-basicInfo-content-div2">
+                                                <div class="cartRoom-basicInfo-content-icon-star">${stars}</div>
+                                                <i class="fa-solid fa-earth-americas"></i> <span>${item.cityName}</span>
+                                            </div>
+                                            <div class="cartRoom-basicInfo-content-div3">
+                                                <div class="cartRoom-basicInfo-content-icon">
+                                                    <span class="cartRoom-basicInfo-content-icon-number">7</span>
+                                                </div>
+                                                <span class="cartRoom-basicInfo-content-icon-comment">很好</span>
+                                                <span class="cartRoom-basicInfo-content-icon-count">${item.allCommentsCount} 篇評論</span>
+                                            </div>
+                                        </div>
+                                        <div class="trash-can">
+                                            <button class="trash-can-btn" data-id="${item.orderDetailID}"><i class="fa-solid fa-lg fa-trash-can"></i></button>
+                                        </div>
+                                    </div>
+                                        <div class="cartRoom-bookingInfo" data-price="${totalPrice}" data-id="${item.orderDetailID}">
+                                        <div class="cartRoom-bookingInfo-div1">
+                                            <label for="">
+                                                <input type="checkbox" name="">
+                                                <span>1 x ${item.roomType}</span>
+                                            </label>
+                                        </div>
+                                        <div class="cartRoom-bookingInfo-div2">
+                                            <span>${checkInDate}</span><span>-</span><span>${checkOutDate}</span>
+                                        </div>
+                                        <div class="cartRoom-bookingInfo-div3">
+                                            <i class="fa-solid fa-users"></i>
+                                            <span>住客人數 : </span><span>${item.maximumOccupancy}位大人</span>
+                                        </div>
+                                        <div class="cartRoom-bookingInfo-div4">
+                                            <span>NT $</span> <span>${totalPrice}</span>
+                                        </div>
+                                        <div class="cartRoom-bookingInfo-div5">
+                                            包含稅金及附加費用
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+            });
+
+            $("#cartContainer").html(cartRoomStr);
+        }
+
+        function getDaysBetweenDates(checkInDate, checkOutDate) {
+            const checkIn = new Date(checkInDate);
+            const checkOut = new Date(checkOutDate);
+            const timeDifference = (checkOut - checkIn) / (1000 * 3600 * 24);
+            return Math.floor(timeDifference);
+        }
+
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const date = new Date(dateString);
+            return date.toLocaleDateString('zh-CN', options);
+        }
+
+        function getImageUrl(imagePath) {
+            if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
+                return imagePath;
+            } else {
+                return window.location.origin + '/image/' + imagePath;
+            }
+        }
+
+        function updateTotalPriceAndItems() {
+            let totalItems = 0;
+            let totalPrice = 0;
+
+            $('.cartRoom-bookingInfo input[type="checkbox"]:checked').each(function () {
+                totalItems++;
+                totalPrice += parseFloat($(this).closest('.cartRoom-bookingInfo').data('price'));
+            });
+
+            if (totalItems > 0) {
+
+                $('#noprice').css('display', 'none');
+                $('#hasprice').css('display', 'block');
+
+      
+                $('#hasprice .cartCheck-container-div1 .text-danger').text(`NT$ ${totalPrice.toLocaleString()}`);
+                $('#hasprice .cartCheck-container-div2 span').text(`${totalItems}項`);
+            } else {
+          
+                $('#hasprice').css('display', 'none');
+                $('#noprice').css('display', 'block');
+                $('.totalPrice .inactive .cartCheck-container-div1 .text-danger').text('NT$ 0');
+                $('.totalPrice .inactive .cartCheck-container-div2 span').text('0項');
+            }
+
+
+
+        }
+
+
 
     </script>
+
+
 }
