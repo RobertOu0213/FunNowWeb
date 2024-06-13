@@ -14,7 +14,7 @@ namespace PrjFunNowWeb.Controllers
             _httpClient = httpClient;
         }
 
-        public async Task<IActionResult> pgHotel(int hotelId=7)//預設
+        public async Task<IActionResult> pgHotel(int hotelId=2)//預設
         {
             // 调用API获取数据
             var response = await _httpClient.GetAsync($"https://localhost:7103/api/pgHotel/{hotelId}");
