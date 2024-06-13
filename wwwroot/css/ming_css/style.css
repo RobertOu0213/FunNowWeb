@@ -110,7 +110,7 @@ button:focus {
 }
 
 .section_gap {
-  padding: 120px 0;
+  padding: 120px 60px 0;
 }
 
 .d_flex {
@@ -131,7 +131,7 @@ button:focus {
 }
 
 .section_title {
-  margin-bottom: 75px;
+  margin-bottom: 25px;
 }
 
 .section_title h2 {
