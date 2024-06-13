@@ -1,0 +1,437 @@
+﻿
+@{
+    ViewData["Title"] = "Mailroom";
+}
+
+<h1>Mailroom</h1>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>飯店客服對話框</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        .header {
+            background-color: #2d3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .chatbox {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+        }
+
+        .chatbox-button {
+            background-color: #0078d4;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease-in-out;
+        }
+
+            .chatbox-button:hover {
+                transform: scale(1.1);
+                box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+            }
+
+        .chatbox-content,
+        .email-chat-content {
+            opacity: 0;
+            transform: translateY(100%);
+            transition: all 0.5s ease-in-out;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 300px;
+            width: 100%;
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+        }
+
+        .chatbox-header {
+            background-color: #0078d4;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .chatbox-body {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            max-height: 200px; /* 設置最大高度 */
+            overflow-y: auto; /* 添加垂直滾動條 */
+            flex: 1; /* 讓 .chat-messages 占據剩餘的垂直空間 */
+        }
+
+        .chatbox-footer {
+            padding: 10px;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .chat-options {
+            background-color: #fff;
+            color: #333;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: row;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+            .chat-options button {
+                background-color: transparent;
+                color: #333;
+                border: none;
+                padding: 10px;
+                cursor: pointer;
+                text-align: left;
+                transition: all 0.2s ease-in-out;
+            }
+
+                .chat-options button:hover {
+                    background-color: #f0f0f0;
+                }
+
+        .chat-header {
+            flex-direction: row;
+            background-color: #8660c7;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .chat-title {
+            font-weight: normal;
+            font-family: "Microsoft JhengHei", Arial, sans-serif;
+        }
+
+        .chat-body {
+            padding: 16px;
+            border-bottom: 1px solid #ccc; /* 添加灰色分隔線 */
+        }
+
+        .chat-header .minimize-chat {
+            background-color: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2em;
+            margin-left: 8px;
+        }
+
+        .message-bubble {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .system-message {
+            font-size: 0.85em;
+            color: #999;
+            background-color: #f5f5f5;
+            padding: 8px;
+            border-radius: 8px;
+        }
+
+        .timestamp {
+            font-size: 0.75em;
+            color: #666;
+            text-align: right;
+            margin-bottom: 5px;
+        }
+
+        .message-content {
+            background-color: #e3f2fd;
+            padding: 8px 12px;
+            border-radius: 16px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            color: #333;
+        }
+
+        .message-container {
+            max-width: 80%;
+            word-wrap: break-word;
+            position: relative;
+            text-align: right;
+        }
+
+        .input-container {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-top: 1px solid #ccc;
+            margin-top: auto; /* 将顶部边距设置为 auto，将容器推到底部 */
+        }
+
+            .input-container input,
+            .input-container textarea {
+                flex: 1;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                padding: 8px;
+                font-family: inherit;
+                margin-right: 8px; /* 與發送按鈕的間距 */
+                height: calc(100% - 20px); /* 使輸入框填滿容器高度 */
+            }
+
+            .input-container button {
+                width: 10px;
+                align-items: center;
+                display: flex;
+                justify-content: center;
+            }
+
+                .input-container button:hover {
+                    background-color: #005bb5;
+                }
+
+        .chatbox-content.show,
+        .email-chat-content.show {
+            opacity: 1;
+            transform: translateY(0);
+            display: flex;
+        }
+
+        button {
+            background-color: #0078d4;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+
+            button:hover {
+                background-color: #005bb5;
+            }
+
+        textarea {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 8px;
+            font-family: inherit;
+            resize: vertical;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="chatbox">
+        <button class="chatbox-button" aria-label="Chat">
+            <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M2 2c-.35 0-.687.06-1 .17A8.013 8.013 0 0 0 8 15.792c.417-.13.82-.292 1.2-.48A7.964 7.964 0 0 0 8 14a8 8 0 1 0 0-12H2z" />
+                <path d="M3 3h8a5 5 0 1 1 0 10 5 5 0 0 1-1-.127 4.992 4.992 0 0 1-4 1.104 4.992 4.992 0 0 1-2-4.004A5 5 0 0 1 3 3z" />
+            </svg>
+        </button>
+
+        <div class="chat-options">
+            <button data-chat="quick-chat">快問快答</button>
+            <button data-chat="email-chat">發電郵給住宿</button>
+        </div>
+
+        <div class="chatbox-content">
+            <div class="chatbox-header">
+                <span id="chatbox-title">快問快答 (測試版)</span>
+                <button class="btn btn-light btn-sm minimize-chat">-</button>
+            </div>
+            <div class="chatbox-body">
+                <div class="system-message" id="chatbox-quick">
+                    本對話由AI生成並將被記錄,可能會出現不準確的情況。請勿輸入任何個人或敏感資訊。有關我們使用生成式AI的詳情,請參閱我們的
+                    <a href="/info/termsofuse.html" target="_blank">使用條款</a>。
+                </div>
+                <div class="chat-messages" id="quick-messages"></div>
+                <div class="input-container">
+                    <textarea id="quick-input" placeholder="輸入訊息..."></textarea>
+                    <button onclick="sendMessage('quick')">發送</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="email-chat-content">
+            <div class="chat-header">
+                <span class="chat-title">有問題想問住宿嗎? </span>
+                <button class="btn btn-light btn-sm minimize-chat">-</button>
+            </div>
+            <div class="chat-body">
+                <div class="system-message">
+                    系統將保留此對話記錄。要瞭解更多資訊,請參閱我們的
+                    <a href="/info/privacypolicy.html" target="_blank">隱私政策</a>。
+                </div>
+                <div class="chat-messages" id="email-messages"><br /><br /><br /></div>
+                <div class="input-container">
+                    <input type="text" id="email-input" placeholder="我要問問題" />
+                    <button onclick="sendMessage('email')" class="fa-brands fa-google-play"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://kit.fontawesome.com/091893cea4.js" crossorigin="anonymous"></script>
+    <script>
+        const chatboxButton = document.querySelector('.chatbox-button');
+        const chatOptions = document.querySelector('.chat-options');
+        const chatboxContent = document.querySelector('.chatbox-content');
+        const emailChatContent = document.querySelector('.email-chat-content');
+
+        chatboxButton.addEventListener('click', function () {
+            if (chatOptions.style.display === 'none' || chatOptions.style.display === '') {
+                chatOptions.style.display = 'flex';
+                chatboxContent.style.display = 'none';
+                emailChatContent.style.display = 'none';
+                chatboxContent.classList.remove('show');
+                emailChatContent.classList.remove('show');
+            } else {
+                chatOptions.style.display = 'none';
+            }
+        });
+
+        document.querySelectorAll('.chat-options button').forEach(function (button) {
+            button.addEventListener('click', function () {
+                const chatType = this.getAttribute('data-chat');
+                if (chatType === 'quick-chat') {
+                    chatOptions.style.display = 'none';
+                    chatboxContent.style.display = 'flex';
+                    emailChatContent.style.display = 'none';
+                    chatboxContent.classList.add('show');
+                    emailChatContent.classList.remove('show');
+                } else if (chatType === 'email-chat') {
+                    chatOptions.style.display = 'none';
+                    chatboxContent.style.display = 'none';
+                    emailChatContent.style.display = 'flex';
+                    emailChatContent.classList.add('show');
+                    chatboxContent.classList.remove('show');
+                }
+            });
+        });
+
+        document.querySelectorAll('.minimize-chat').forEach(function (button) {
+            button.addEventListener('click', function () {
+                const chatboxContent = this.closest('.chatbox-content') || this.closest('.email-chat-content');
+                chatboxContent.classList.remove('show');
+                setTimeout(() => chatboxContent.style.display = 'none', 500);
+            });
+        });
+
+        function sendMessage(type) {
+            let input;
+            let messagesContainer;
+            let memberEmail = "leo10117212000@gmail.com";  // 從session storage獲取房客的郵件地址
+            let housemanEmail = "rubyccww@gmail.com";  // 房東的郵件地址
+            let memberSubject = '您的訊息已發送至房東';
+            let housemanSubject = '有房客向您傳送了訊息';
+
+            if (type === 'quick') {
+                input = document.getElementById('quick-input');
+                messagesContainer = document.getElementById('quick-messages');
+            } else if (type === 'email') {
+                input = document.getElementById('email-input');
+                messagesContainer = document.getElementById('email-messages');
+            }
+
+            const messageText = input.value.trim();
+            if (messageText) {
+                // 創建傳送中訊息
+                const sendingMessage = document.createElement('div');
+                sendingMessage.className = 'system-message';
+                sendingMessage.textContent = '傳送中...';
+                messagesContainer.appendChild(sendingMessage);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+                // 定義發送API請求的函數
+                const sendEmail = (recipientEmail, subject) => {
+                    return fetch('https://localhost:7103/api/Email/SendMessage', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            To: recipientEmail,
+                            Subject: subject,
+                            Body: messageText
+                        })
+                    });
+                };
+
+                // 同時發送兩個API請求
+                Promise.all([
+                    sendEmail(memberEmail, memberSubject),
+                    sendEmail(housemanEmail, housemanSubject)
+                ])
+                    .then(responses => {
+                        if (responses.every(response => response.ok)) {
+                            // 所有請求都成功
+                            // 移除傳送中訊息
+                            messagesContainer.removeChild(sendingMessage);
+
+                            // 顯示成功訊息
+                            const successMessage = document.createElement('div');
+                            successMessage.className = 'system-message';
+                            successMessage.textContent = '訊息傳送成功。';
+                            messagesContainer.appendChild(successMessage);
+                            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+                            // 清空輸入框
+                            input.value = '';
+                        } else {
+                            throw new Error('One or more network responses were not ok');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+
+                        // 移除傳送中訊息
+                        messagesContainer.removeChild(sendingMessage);
+
+                        // 顯示錯誤訊息
+                        const errorMessage = document.createElement('div');
+                        errorMessage.className = 'system-message';
+                        errorMessage.textContent = '訊息傳送失敗，請稍後再試。';
+                        messagesContainer.appendChild(errorMessage);
+                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    });
+            }
+        }
+
+    </script>
+</body>
+</html>
+

@@ -80,8 +80,8 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Chat}/{action=Mailroom}/{id?}");
 
 // 配置路由以支持 Angular 路由
-app.MapFallbackToFile("/dist/fun-now-angular1/index.html");
+//app.MapFallbackToFile("/dist/fun-now-angular1/index.html");
 app.Run();

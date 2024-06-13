@@ -26,8 +26,16 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+    <Content Update="wwwroot\Ting\images\FunNowlogo1.jpg">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\Ting\htmlpage.html" />
+  </ItemGroup>
 
 </Project>

@@ -1,0 +1,312 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <style>
+        /* 全局樣式: 設定整個頁面的字體, 背景顏色等 */
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        /* 頁面頂部標題樣式 */
+        .header {
+            background-color: #2d3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* 對話框樣式: 固定位置, 底部和左側對齊 */
+        .chatbox {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+        }
+
+        /* 對話框按鈕樣式: 藍色圓形按鈕, 帶有過渡效果 */
+        .chatbox-button {
+            background-color: #0078d4;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease-in-out;
+        }
+
+            /* 滑過按鈕時的效果 */
+            .chatbox-button:hover {
+                transform: scale(1.1);
+                box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+            }
+
+        /* 對話框內容樣式: 隱藏, 白色背景, 圓角, 帶有陰影 */
+        .chatbox-content {
+           
+            opacity: 0;
+            transform: translateY(100%);
+            transition: all 0.5s ease-in-out;
+        }
+
+        /* 對話框標題樣式: 藍色背景, 白色字體 */
+        .chatbox-header {
+            background-color: #0078d4;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 8px 8px 0 0;
+        }
+
+        /* 對話框主體樣式: 內容區域, 自動換行, 支持滾動 */
+        .chatbox-body {
+            padding: 10px;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        /* 對話框底部樣式: 灰色背景, 圓角 */
+        .chatbox-footer {
+            padding: 10px;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            border-radius: 0 0 8px 8px;
+        }
+
+        /* 對話選項樣式: 隱藏, 白色背景, 圓角, 帶有陰影 */
+        .chat-options {
+            background-color: #fff;
+            color: #333;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: none;
+            flex-direction: row;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+            /* 對話選項按鈕樣式: 無背景, 左對齊 */
+            .chat-options button {
+                background-color: transparent;
+                color: #333;
+                border: none;
+                padding: 10px;
+                cursor: pointer;
+                text-align: left;
+                width: auto;
+                transition: all 0.2s ease-in-out;
+            }
+
+                /* 對話選項按鈕滑過效果 */
+                .chat-options button:hover {
+                    background-color: #f0f0f0;
+                }
+
+        /* 電子郵件對話框樣式: 隱藏, 白色背景, 圓角, 帶有陰影 */
+        .email-chat-content {
+            bottom: 40px;
+            left: 20px;
+            display: none;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            max-width: 360px;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        .chat-header {
+            background-color: #8660c7;
+            color: #ffffff;
+            padding: 12px 16px;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .chat-title {
+            font-weight: bold;
+        }
+
+        .chat-body {
+            padding: 16px;
+        }
+
+        .message-bubble {
+            background-color: #f0f0f0;
+            padding: 12px 16px;
+            border-radius: 16px;
+            margin-bottom: 16px;
+        }
+
+        .input-container {
+            display: flex;
+            align-items: center;
+        }
+
+            .input-container input {
+                flex: 1;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                padding: 8px;
+                font-family: inherit;
+            }
+
+            .input-container button {
+                background-color: #8660c7;
+                color: #ffffff;
+                border: none;
+                padding: 8px 16px;
+                border-radius: 4px;
+                margin-left: 8px;
+                cursor: pointer;
+            }
+
+            .chatbox-content.show, .email-chat-content.show {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        /* 通用按鈕樣式: 藍色背景, 白色字體, 圓角, 帶有過渡效果 */
+        button {
+            background-color: #0078d4;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+
+            /* 滑過按鈕時的效果 */
+            button:hover {
+                background-color: #005bb5;
+            }
+
+        /* 文本區域樣式: 圓角邊框, 內填充, 支持垂直調整 */
+        textarea {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 8px;
+            font-family: inherit;
+            resize: vertical;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        @RenderBody()
+    </div>
+    <!-- 聊天框 -->
+    <div class="chatbox">
+        <!-- 聊天按鈕 -->
+        <button class="chatbox-button" aria-label="Chat">
+            <!-- 聊天按鈕圖示 -->
+            <svg width="40" height="40" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M2 2c-.35 0-.687.06-1 .17A8.013 8.013 0 0 0 8 15.792c.417-.13.82-.292 1.2-.48A7.964 7.964 0 0 0 8 14a8 8 0 1 0 0-12H2z" />
+                <path d="M3 3h8a5 5 0 1 1 0 10 5 5 0 0 1-1-.127 4.992 4.992 0 0 1-4 1.104 4.992 4.992 0 0 1-2-4.004A5 5 0 0 1 3 3z" />
+            </svg>
+        </button>
+        <!-- 聊天選項 -->
+        <div class="chat-options">
+            <button data-chat="quick-chat">快問快答</button>
+            <button data-chat="email-chat">發電郵給住宿</button>
+        </div>
+        <!-- 聊天內容 -->
+        <div class="chatbox-content">
+            <div class="chatbox-header">
+                <span id="chatbox-title">快問快答 (測試版)</span>
+                <button class="btn btn-light btn-sm minimize-chat">-</button>
+            </div>
+            <div class="chatbox-body">
+                <div id="chatbox-quick">
+                    本對話由AI生成並將被記錄,可能會出現不準確的情況。請勿輸入任何個人或敏感資訊。有關我們使用生成式AI的詳情,請參閱我們的
+                    <a href="/info/termsofuse.html" target="_blank">使用條款</a>。
+                </div>
+            </div>
+        </div>
+        <!-- 電子郵件對話框 -->
+        <div class="email-chat-content">
+            <div class="chat-header">
+                <div class="chat-title">有問題想問住宿嗎?        －</div>
+            </div>
+
+            <div class="chat-body">
+                <div class="message-bubble">
+                    系統將保留此對話記錄。要瞭解更多資訊,請參閱我們的
+                    <a href="/info/privacypolicy.html" target="_blank">隱私政策</a>。
+                </div>
+                <div class="input-container">
+                    <input type="text" placeholder="我要問問題" />
+                    <button>發送</button>
+                </div>
+        </div>
+    </div>
+    <!-- JavaScript 代碼 -->
+    <script>
+        // 選擇所需的DOM元素
+        const chatboxButton = document.querySelector('.chatbox-button');
+        const chatOptions = document.querySelector('.chat-options');
+        const chatboxContent = document.querySelector('.chatbox-content');
+        const emailChatContent = document.querySelector('.email-chat-content');
+
+        // 聊天按鈕點擊事件處理
+        chatboxButton.addEventListener('click', function () {
+            // 切換聊天選項的顯示和隱藏
+            if (chatOptions.style.display === 'none' || chatOptions.style.display === '') {
+                chatOptions.style.display = 'flex';
+                chatboxContent.style.display = 'none';
+                emailChatContent.style.display = 'none';
+                chatboxContent.classList.remove('show');
+                emailChatContent.classList.remove('show');
+            } else {
+                chatOptions.style.display = 'none';
+            }
+        });
+
+        // 對話選項按鈕點擊事件處理
+        document.querySelectorAll('.chat-options button').forEach(function (button) {
+            button.addEventListener('click', function () {
+                const chatType = this.getAttribute('data-chat');
+                const quickChatContent = document.getElementById('chatbox-quick');
+
+                // 根據選擇的對話類型顯示相應的內容
+                if (chatType === 'quick-chat') {
+                    quickChatContent.style.display = 'block';
+                    // emailChatContent.style.display = 'none';
+                    chatboxContent.style.display = 'block';
+                    emailChatContent.classList.remove('show');
+                    setTimeout(() => chatboxContent.classList.add('show'), 10);
+                } else if (chatType === 'email-chat') {
+                    quickChatContent.style.display = 'none';
+                    emailChatContent.style.display = 'block';
+                    // chatboxContent.style.display = 'none';
+                    chatboxContent.classList.remove('show');
+                    setTimeout(() => emailChatContent.classList.add('show'), 10);
+                }
+
+                // 隱藏聊天選項
+                chatOptions.style.display = 'none';
+            });
+        });
+
+        // 最小化聊天框
+        document.querySelector('.minimize-chat').addEventListener('click', function () {
+            chatboxContent.classList.remove('show');
+            setTimeout(() => chatboxContent.style.display = 'none', 500);
+        });
+    </script>
+
+</body>
+</html>

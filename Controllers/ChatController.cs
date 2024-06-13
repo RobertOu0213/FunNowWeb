@@ -8,5 +8,13 @@ namespace PrjFunNowWeb.Controllers
         {
             return View();
         }
+        public IActionResult Chatroom()
+        {
+            return View();
+        }
+        public IActionResult Mailroom()
+        {
+            return View();
+        }
     }
 }
