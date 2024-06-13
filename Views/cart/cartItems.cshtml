@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "cartItems";
     // layout等大家
     // @model PrjFunNowWeb.Controllers.cartController
@@ -12,17 +11,17 @@
             <h3 class="cartLists-title-font">您的購物車<span id="allcartsCount"></span></h3>
         </div>
 
-        <div id="cartContainer" >
+        <div id="cartContainer">
         </div>
 
 
 
     </section>
 
-  
+
     <section class="totalPrice">
         @* 有價格的 *@
-        <div class="cartCheck-container p-2 border border-1 rounded" id="hasprice" style="display: none;">
+        <div class="cartCheck-container p-2 border-1 rounded border" id="hasprice" style="display: none;">
             <div class="cartCheck-container-div1 d-flex justify-content-between">
                 <div>總價</div>
                 <div class="text-danger fw-bolder fs-5">NT$ 0</div>
@@ -30,20 +29,20 @@
             <div class="cartCheck-container-div2">
                 <div><span>0項</span>（含稅及其他費用）</div>
             </div>
-            <div class="d-grid gap-2 mt-3 ">
-                <button class="btn btn-primary rounded-pill" type="button">繼續預定</button>
+            <div class="d-grid gap-2 mt-3">
+                <button class="btn btn-primary rounded-pill" id="GotoPayment" type="button">繼續預定</button>
             </div>
         </div>
 
-       @*  沒價格的(一開始畫面會呈現) *@
-        <div class="cartCheck-container p-2 border border-1 rounded" id="noprice">
+        @*  沒價格的(一開始畫面會呈現) *@
+        <div class="cartCheck-container p-2 border-1 rounded border" id="noprice">
             <div class="cartCheck-container-div1 d-flex justify-content-between">
                 <div>總價</div>
             </div>
             <div class="cartCheck-container-div2">
                 <div>尚未選擇</div>
             </div>
-            <div class="d-grid gap-2 mt-3 ">
+            <div class="d-grid gap-2 mt-3">
                 <button class="btn btn-light rounded-pill" type="button">繼續預定</button>
             </div>
         </div>
@@ -82,9 +81,8 @@
                         if (!response.ok) {
                             throw new Error(response.statusText);
                         }
-
-                        fetchCartItems(MemberId);
-                        // updateTotalPriceAndItems();
+                        const checkedItems = getCheckedItems();
+                        fetchCartItems(MemberId, checkedItems);
                     } catch (error) {
                         console.error(error);
                     }
@@ -98,9 +96,39 @@
 
                 updateTotalPriceAndItems();
             });
+
+            //前往PaymentPage
+            $('#GotoPayment').on('click', async function () {
+                const checkedItems = getCheckedItems();
+                try {
+                    const response = await fetch('/Cart/PreparePayment', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(checkedItems)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(response.statusText);
+                    }
+
+                    const data = await response.json();
+                    if (data.success) {
+                        window.location.href = data.redirectUrl;
+                    }
+
+                } catch (error) {
+                    console.error(error);
+                }
+            });
+
+
+
+
         });
 
-        async function fetchCartItems(memberId) {
+        async function fetchCartItems(memberId, checkedItems = []) {
             try {
                 const res = await fetch(`https://localhost:7103/api/Cart/${memberId}`);
                 if (!res.ok) {
@@ -109,14 +137,14 @@
                 const data = await res.json();
                 if (data.success) {
                     $("#allcartsCount").text(`(${data.orderDetailDtos.length})`);
-                    renderCartItems(data.orderDetailDtos);
+                    renderCartItems(data.orderDetailDtos, checkedItems);
                 }
             } catch (err) {
                 console.log(err);
             }
         }
 
-        function renderCartItems(orderDetailDtos) {
+        function renderCartItems(orderDetailDtos, checkedItems) {
             let cartRoomStr = "";
             orderDetailDtos.forEach(item => {
                 let stars = "";
@@ -131,56 +159,65 @@
                 const imageUrl = getImageUrl(item.roomImage);
 
                 cartRoomStr += `
-                                <div class="cartRoom">
-                                    <div class="cartRoom-basicInfo">
-                                        <div class="cartRoom-basicInfo-image">
-                                            <img class="cartRoom-basicInfo-image-img" src="${imageUrl}" alt="...">
-                                        </div>
-
-                                        <div class="cartRoom-basicInfo-content">
-                                            <span>${item.hotelName}</span>
-                                            <div class="cartRoom-basicInfo-content-div2">
-                                                <div class="cartRoom-basicInfo-content-icon-star">${stars}</div>
-                                                <i class="fa-solid fa-earth-americas"></i> <span>${item.cityName}</span>
-                                            </div>
-                                            <div class="cartRoom-basicInfo-content-div3">
-                                                <div class="cartRoom-basicInfo-content-icon">
-                                                    <span class="cartRoom-basicInfo-content-icon-number">7</span>
+                                        <div class="cartRoom">
+                                            <div class="cartRoom-basicInfo">
+                                                <div class="cartRoom-basicInfo-image">
+                                                    <img class="cartRoom-basicInfo-image-img" src="${imageUrl}" alt="...">
                                                 </div>
-                                                <span class="cartRoom-basicInfo-content-icon-comment">很好</span>
-                                                <span class="cartRoom-basicInfo-content-icon-count">${item.allCommentsCount} 篇評論</span>
+
+                                                <div class="cartRoom-basicInfo-content">
+                                                    <span>${item.hotelName}</span>
+                                                    <div class="cartRoom-basicInfo-content-div2">
+                                                        <div class="cartRoom-basicInfo-content-icon-star">${stars}</div>
+                                                        <i class="fa-solid fa-earth-americas"></i> <span>${item.cityName}</span>
+                                                    </div>
+                                                    <div class="cartRoom-basicInfo-content-div3">
+                                                        <div class="cartRoom-basicInfo-content-icon">
+                                                            <span class="cartRoom-basicInfo-content-icon-number">7</span>
+                                                        </div>
+                                                        <span class="cartRoom-basicInfo-content-icon-comment">很好</span>
+                                                        <span class="cartRoom-basicInfo-content-icon-count">${item.allCommentsCount} 篇評論</span>
+                                                    </div>
+                                                </div>
+                                                <div class="trash-can">
+                                                    <button class="trash-can-btn" data-id="${item.orderDetailID}"><i class="fa-solid fa-lg fa-trash-can"></i></button>
+                                                </div>
+                                            </div>
+                                                <div class="cartRoom-bookingInfo" data-price="${totalPrice}" data-id="${item.orderDetailID}">
+                                                <div class="cartRoom-bookingInfo-div1">
+                                                    <label for="">
+                                                        <input type="checkbox" name="" ${checkedItems.includes(item.orderDetailID) ? 'checked' : ''}>
+                                                        <span>1 x ${item.roomType}</span>
+                                                    </label>
+                                                </div>
+                                                <div class="cartRoom-bookingInfo-div2">
+                                                    <span>${checkInDate}</span><span>-</span><span>${checkOutDate}</span>
+                                                </div>
+                                                <div class="cartRoom-bookingInfo-div3">
+                                                    <i class="fa-solid fa-users"></i>
+                                                    <span>住客人數 : </span><span>${item.maximumOccupancy}位大人</span>
+                                                </div>
+                                                <div class="cartRoom-bookingInfo-div4">
+                                                    <span>NT $</span> <span>${totalPrice}</span>
+                                                </div>
+                                                <div class="cartRoom-bookingInfo-div5">
+                                                    包含稅金及附加費用
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="trash-can">
-                                            <button class="trash-can-btn" data-id="${item.orderDetailID}"><i class="fa-solid fa-lg fa-trash-can"></i></button>
-                                        </div>
-                                    </div>
-                                        <div class="cartRoom-bookingInfo" data-price="${totalPrice}" data-id="${item.orderDetailID}">
-                                        <div class="cartRoom-bookingInfo-div1">
-                                            <label for="">
-                                                <input type="checkbox" name="">
-                                                <span>1 x ${item.roomType}</span>
-                                            </label>
-                                        </div>
-                                        <div class="cartRoom-bookingInfo-div2">
-                                            <span>${checkInDate}</span><span>-</span><span>${checkOutDate}</span>
-                                        </div>
-                                        <div class="cartRoom-bookingInfo-div3">
-                                            <i class="fa-solid fa-users"></i>
-                                            <span>住客人數 : </span><span>${item.maximumOccupancy}位大人</span>
-                                        </div>
-                                        <div class="cartRoom-bookingInfo-div4">
-                                            <span>NT $</span> <span>${totalPrice}</span>
-                                        </div>
-                                        <div class="cartRoom-bookingInfo-div5">
-                                            包含稅金及附加費用
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
+                                    `;
             });
 
             $("#cartContainer").html(cartRoomStr);
+            updateTotalPriceAndItems();
+        }
+
+        function getCheckedItems() {
+            let checkedItems = [];
+            $('.cartRoom-bookingInfo input[type="checkbox"]:checked').each(function () {
+                checkedItems.push($(this).closest('.cartRoom-bookingInfo').data('id'));
+            });
+            return checkedItems;
         }
 
         function getDaysBetweenDates(checkInDate, checkOutDate) {
@@ -218,11 +255,11 @@
                 $('#noprice').css('display', 'none');
                 $('#hasprice').css('display', 'block');
 
-      
+
                 $('#hasprice .cartCheck-container-div1 .text-danger').text(`NT$ ${totalPrice.toLocaleString()}`);
                 $('#hasprice .cartCheck-container-div2 span').text(`${totalItems}項`);
             } else {
-          
+
                 $('#hasprice').css('display', 'none');
                 $('#noprice').css('display', 'block');
                 $('.totalPrice .inactive .cartCheck-container-div1 .text-danger').text('NT$ 0');

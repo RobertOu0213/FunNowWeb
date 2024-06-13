@@ -34,5 +34,9 @@
   {
     "outputFile": "wwwroot/ou/css/cartItems.css",
     "inputFile": "wwwroot/ou/css/cartItems.scss"
+  },
+  {
+    "outputFile": "wwwroot/ou/css/paymentPage.css",
+    "inputFile": "wwwroot/ou/css/paymentPage.scss"
   }
 ]

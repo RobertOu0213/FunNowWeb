@@ -956,7 +956,7 @@
             $(document).on('click', '#ToCartItems', function () {
 
                 var userId = 1;
-                var cartPageUrl = window.location.origin + '/cart/cartItems?userId=' + userId;
+                const cartPageUrl = window.location.origin + '/cart/cartItems?userId=' + userId;
 
                 window.location.href = cartPageUrl;
             });
@@ -987,7 +987,7 @@
                 return window.location.origin + '/image/' + imagePath;
             }
         }
-
+        
         function showCartModal(data) {
 
             const days = getDaysBetweenDates(data.checkInDate, data.checkOutDate);
