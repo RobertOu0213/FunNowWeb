@@ -2,6 +2,9 @@
 using Newtonsoft.Json;
 using PrjFunNowWeb.Models.louie_dto;
 using PrjFunNowWeb.Models.louie_viewmodel;
+using PrjFunNowWeb.Models.louie_helper;
+using System.Threading.Tasks;
+using System.Web;
 
 namespace PrjFunNowWeb.Controllers
 {
@@ -14,33 +17,38 @@ namespace PrjFunNowWeb.Controllers
             _httpClient = httpClient;
         }
 
-        public async Task<IActionResult> pgHotel(int hotelId=7, string checkInDate = null, string checkOutDate = null)//預設
+        public async Task<IActionResult> pgHotel(string hotelId, string checkInDate = null, string checkOutDate = null)
         {
-            // 调用API获取数据
-            var url = $"https://localhost:7103/api/pgHotel/{hotelId}?checkInDate={checkInDate}&checkOutDate={checkOutDate}";
+            var secretKey = "my_secret_key123"; // 确保长度为16字节
+            hotelId = HttpUtility.UrlDecode(hotelId);
+            checkInDate = HttpUtility.UrlDecode(checkInDate);
+            checkOutDate = HttpUtility.UrlDecode(checkOutDate);
+
+            var decryptedHotelId = int.Parse(EncryptionHelper.Decrypt(hotelId, secretKey));
+            var decryptedCheckInDate = EncryptionHelper.Decrypt(checkInDate, secretKey);
+            var decryptedCheckOutDate = EncryptionHelper.Decrypt(checkOutDate, secretKey);
+
+            var url = $"https://localhost:7103/api/pgHotel/{decryptedHotelId}?checkInDate={decryptedCheckInDate}&checkOutDate={decryptedCheckOutDate}";
+
             var response = await _httpClient.GetAsync(url);
             if (!response.IsSuccessStatusCode)
             {
-                // 处理错误情况
                 return NotFound();
             }
 
             var hotelDetailJson = await response.Content.ReadAsStringAsync();
             var hotelDetail = JsonConvert.DeserializeObject<pgHotel_HotelDetailDTO>(hotelDetailJson);
 
-            // 检查 hotelDetail 是否为空
             if (hotelDetail == null)
             {
                 return NotFound();
             }
 
-            // 检查 Rooms 是否为空
             if (hotelDetail.Rooms == null)
             {
                 hotelDetail.Rooms = new List<pgHotel_RoomDTO>();
             }
 
-            // 检查 SimilarHotels 是否为空
             if (hotelDetail.SimilarHotels == null)
             {
                 hotelDetail.SimilarHotels = new List<pgHotel_SimilarHotelsDTO>();
@@ -49,7 +57,6 @@ namespace PrjFunNowWeb.Controllers
             hotelDetail.CheckInDate = checkInDate;
             hotelDetail.CheckOutDate = checkOutDate;
 
-            // 将数据传递给视图
             var viewModel = new pgHotel_HotelDetailViewModel
             {
                 HotelDetail = hotelDetail
@@ -57,5 +64,7 @@ namespace PrjFunNowWeb.Controllers
 
             return View(viewModel);
         }
+
+
     }
 }

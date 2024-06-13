@@ -13,9 +13,9 @@
             <div>
                 <nav>
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="#" style="color:blue;">首頁</a></li>
-                        <li class="breadcrumb-item"><a href="#" style="color:blue;">@Model.HotelDetail.CountryName</a></li>
-                        <li class="breadcrumb-item"><a href="#" style="color:blue;">@Model.HotelDetail.CityName</a></li>
+                        <li class="breadcrumb-item"><a href="https://localhost:7284/home/index" style="color:blue;">首頁</a></li>
+                        <li class="breadcrumb-item"><a href="https://localhost:7284/home/index2?searchValue= @(Model.HotelDetail.CountryName)" style="color:blue;">@Model.HotelDetail.CountryName</a></li>
+                        <li class="breadcrumb-item"><a href="https://localhost:7284/home/index2?searchValue= @(Model.HotelDetail.CityName)" style="color:blue;">@Model.HotelDetail.CityName</a></li>
                         <li class="breadcrumb-item active">@Model.HotelDetail.HotelName</li>
                     </ol>
                 </nav>
@@ -72,6 +72,7 @@
                         {
                             <img src="https://localhost:7284/image/@Model.HotelDetail.HotelImages.First().ImageUrl" class="img-fluid" />
                         }
+                        
                     </div>
                     <div class="col-8">
                         <table data-bs-toggle="modal" data-bs-target="#hotelModal">
@@ -89,10 +90,7 @@
                                                     <img src="https://localhost:7284/image/@images[i + j].ImageUrl" class="img-fluid" />
                                                 </td>
                                             }
-                                            else
-                                            {
-                                                <td></td> <!-- 填补空缺的td -->
-                                            }
+                                            
                                         }
                                     </tr>
                                 }
@@ -266,7 +264,7 @@
                             <div class="col-4">
                                 <table data-bs-toggle="modal" data-bs-target="#roomModal">
                                     <tr>
-                                        <td colspan="3"><img src="https://localhost:7284/image/@(limitedRoomImages.Count > 0 ? limitedRoomImages[0].ImageUrl : "default_image.png")" class="img-fluid" /></td>
+                                        <td colspan="3"><img src="https://localhost:7284/image/@(limitedRoomImages.Count > 0 ? limitedRoomImages[0].ImageUrl:"")" class="img-fluid" /></td>
                                     </tr>
                                     <tr>
                                         @if (limitedRoomImages.Count > 1)

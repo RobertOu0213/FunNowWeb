@@ -310,17 +310,32 @@
             }
         }
 
-        // 从 sessionStorage 获取搜索条件 -------------------------------------------------------------
+
+
+        // 从 sessionStorage 获取搜索条件(by louieee)-------------------------------------------------
         // => 扣louieee Controller, 把session的入駐日跟退訂日以query string傳過去
         function getSearchHotel() {
             const searchHotelForLouieee = JSON.parse(sessionStorage.getItem("searchHotel"));
             return searchHotelForLouieee;
         }
-        //------------------------------------------------------------------------------------------
+        // 在 JavaScript 中加密查询字符串(by louieee)--------------------------------------------------
+        function encryptData(data, key) {
+            //生成密钥和IV：
+            const keyBytes = CryptoJS.enc.Utf8.parse(key);
+            const iv = CryptoJS.lib.WordArray.random(16);
+            //加密数据：
+            const encrypted = CryptoJS.AES.encrypt(data, keyBytes, { iv: iv });
+            //将IV和加密后的数据合并，并转换为Base64编码：
+            const encryptedData = iv.concat(encrypted.ciphertext).toString(CryptoJS.enc.Base64);
+            //确保加密数据URL安全：
+            return encodeURIComponent(encryptedData); 
+        }
 
-        // 加載飯店的函數
+
+
+
+        // 加载饭店的函数
         const loadHotels = async function (searchHotel) {
-            
             const url = "https://localhost:7103/api/HotelSearch/indexsearch";
             const response = await fetch(url, {
                 method: "POST",
@@ -333,58 +348,66 @@
             const divHotels = document.querySelector("#showhotels");
             divHotels.innerHTML = "";
 
-            // 生成並顯示飯店信息
             const searchHotelForLouieee = getSearchHotel();
+            const secretKey = "my_secret_key123"; // 使用一个安全的密钥, 确保长度为16字节(by louieee)
+
             const hotels = data.map(hotel => {
-                const { hotelId, hotelName, hotelAddress, hotelImage, levelStar, hotelEquipmentName, hotelPrice } = hotel;
+                
+                // 將參數轉為string後加密 => 再作為查詢字串以網址傳遞(by louieee)
+                const encryptedHotelId = encryptData(hotel.hotelId.toString(), secretKey);
+                const encryptedCheckInDate = encryptData(searchHotelForLouieee.checkInDate, secretKey);
+                const encryptedCheckOutDate = encryptData(searchHotelForLouieee.checkOutDate, secretKey);
+
+
                 return `
-                            <div class="col-lg-12 hotel-card">
+                    <div class="col-lg-12 hotel-card">
+                        <div class="row">
+                                     <a href="https://localhost:7284/PgHotel/pgHotel?hotelId=${encryptedHotelId}&checkInDate=${encryptedCheckInDate}&checkOutDate=${encryptedCheckOutDate}" class="col-lg-12 hotel-link">
                                 <div class="row">
-                                          <a href="https://localhost:7284/PgHotel/pgHotel?hotelId=${hotel.hotelId}&checkInDate=${searchHotelForLouieee.checkInDate}&checkOutDate=${searchHotelForLouieee.checkOutDate}" class="col-lg-12 hotel-link">
-                                                   <div class="row">
-                                            <div class="col-lg-4 col-sm-8" style="padding:0px">
-                                                <table>
-                                                    <tr>
-                                                        <td colspan="3"><img src='https://localhost:7284/image/${hotelImage}' class="img-fluid" style="width:100%" /></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><img src="/image/ming_img/room1.jpg" class="img-fluid" /></td>
-                                                        <td><img src="/image/ming_img/room3.jpg" class="img-fluid" /></td>
-                                                        <td><img src="/image/ming_img/room4.jpg" class="img-fluid" /></td>
-                                                    </tr>
-                                                </table>
-                                            </div>
-                                            <div class="col-lg-5 col-sm-10 hotel-details">
-                                                <h3>${hotelName}</h3>
-                                                <span>${levelStar}星級飯店 </span><span style="color:blue">${hotelAddress}</span>
-                                                <h6>此住宿提供:</h6>
-                                                <h5 style="border: 1px solid black;display: inline-block;">${hotelEquipmentName}</h5>
-                                                <br>
-                                                <h5 style="border: 1px solid black;display: inline-block;">設施2</h5>
-                                                <br>
-                                                <h5 style="border: 1px solid black;display: inline-block;">設施3</h5>
-                                                <br>
-                                                <h6 style="color:green">${levelStar}星級飯店最優價</h6>
-                                                <h6 style="color:red">昨天起已收到${levelStar}張訂單</h6>
-                                            </div>
-                                            <div class="col-lg-3 col-sm-12 hotel-pricing">
-                                                <h5>很出色</h5>
-                                                <h6 style="color:gray"> 個評分</h6>
-                                                <br>
-                                                <h6 style="border: 1px solid red;display:inline-block;background-color: red;color:white">優惠只剩1間</h6>
-                                                <h6 style="color:gray">每晚價格(不連税及其他费用)</h6>
-                                                <br><br>
-                                                <h3>NT$${hotelPrice}</h3>
-                                            </div>
-                                        </div>
-                                    </a>
+                                    <div class="col-lg-4 col-sm-8" style="padding:0px">
+                                        <table>
+                                            <tr>
+                                                <td colspan="3"><img src='https://localhost:7284/image/${hotel.hotelImage}' class="img-fluid" style="width:100%" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src="/image/ming_img/room1.jpg" class="img-fluid" /></td>
+                                                <td><img src="/image/ming_img/room3.jpg" class="img-fluid" /></td>
+                                                <td><img src="/image/ming_img/room4.jpg" class="img-fluid" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-lg-5 col-sm-10 hotel-details">
+                                        <h3>${hotel.hotelName}</h3>
+                                        <span>${hotel.levelStar}星級飯店 </span><span style="color:blue">${hotel.hotelAddress}</span>
+                                        <h6>此住宿提供:</h6>
+                                        <h5 style="border: 1px solid black;display: inline-block;">${hotel.hotelEquipmentName}</h5>
+                                        <br>
+                                        <h5 style="border: 1px solid black;display: inline-block;">設施2</h5>
+                                        <br>
+                                        <h5 style="border: 1px solid black;display: inline-block;">設施3</h5>
+                                        <br>
+                                        <h6 style="color:green">${hotel.levelStar}星級飯店最優價</h6>
+                                        <h6 style="color:red">昨天起已收到${hotel.levelStar}張訂單</h6>
+                                    </div>
+                                    <div class="col-lg-3 col-sm-12 hotel-pricing">
+                                        <h5>很出色</h5>
+                                        <h6 style="color:gray">個評分</h6>
+                                        <br>
+                                        <h6 style="border: 1px solid red;display:inline-block;background-color: red;color:white">優惠只剩1間</h6>
+                                        <h6 style="color:gray">每晚價格(不連税及其他费用)</h6>
+                                        <br><br>
+                                        <h3>NT$${hotel.hotelPrice}</h3>
+                                    </div>
                                 </div>
-                            </div>
-                        `;
+                            </a>
+                        </div>
+                    </div>
+                `;
             });
 
             divHotels.innerHTML = hotels.join("");
         };
+
 
         // 處理排序的邏輯函數
         async function handleSort(sortBy, sortType) {
@@ -418,6 +441,8 @@
             });
         });
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js">//加密查詢字串用(by louieee)</script>
+    
 
 }
 
