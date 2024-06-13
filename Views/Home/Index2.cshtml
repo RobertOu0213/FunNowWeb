@@ -348,9 +348,8 @@
             divHotels.innerHTML = "";
 
             // 生成並顯示飯店信息
-
             const hotels = data.map(hotel => {
-                const { hotelId, hotelName, hotelAddress, hotelImage, levelStar, hotelEquipmentName, hotelPrice } = hotel;
+                const { hotelId, hotelName, hotelAddress, hotelImage, levelStar, hotelEquipmentNames, hotelPrice } = hotel;
                 return `
                         <div class="col-lg-12 hotel-card" data-hotel-id="${hotelId}">
                             <div class="row">
@@ -361,7 +360,9 @@
                                                 <tr>
                                                     <td colspan="3" style="position: relative;">
                                                         <img src='https://localhost:7284/image/${hotelImage}' class="img-fluid" style="width:100%" />
-                                                        <i class="fa fa-heart favorite-icon" data-hotel-id="${hotelId}" onclick="toggleFavorite(event, ${hotelId})"></i>
+                                                        <div class="favorite-icon-container">
+                                                            <i class="fa fa-heart favorite-icon" data-hotel-id="${hotelId}" onclick="toggleFavorite(event, ${hotelId})"></i>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -375,11 +376,7 @@
                                             <h3>${hotelName}</h3>
                                             <span>${levelStar}星級飯店 </span><span style="color:blue">${hotelAddress}</span>
                                             <h6>此住宿提供:</h6>
-                                            <h5 style="border: 1px solid black;display: inline-block;">${hotelEquipmentName}</h5>
-                                            <br>
-                                            <h5 style="border: 1px solid黑;display: inline-block;">設施2</h5>
-                                            <br>
-                                            <h5 style="border: 1px solid黑;display: inline-block;">設施3</h5>
+                                            ${hotelEquipmentNames.map(name => `<h5 style="border: 1px solid black; display: inline-block;">${name}</h5>`).join('')}
                                             <br>
                                             <h6 style="color:green">${levelStar}星級飯店最優價</h6>
                                             <h6 style="color:red">昨天起已收到${levelStar}張訂單</h6>
@@ -388,8 +385,8 @@
                                             <h5>很出色</h5>
                                             <h6 style="color:gray"> 個評分</h6>
                                             <br>
-                                            <h6 style="border: 1px solid red;display:inline-block;background-color: red;color:white">優惠只剩1間</h6>
-                                            <h6 style="color:gray">每晚價格(不連税及其他费用)</h6>
+                                            <h6 style="border: 1px solid red; display:inline-block; background-color: red; color:white">優惠只剩1間</h6>
+                                            <h6 style="color:gray">每晚價格(不連稅及其他費用)</h6>
                                             <br><br>
                                             <h3>NT$${hotelPrice}</h3>
                                         </div>
@@ -684,10 +681,20 @@
             position: relative;
         }
 
-            .hotel-card .favorite-icon {
+            .hotel-card .favorite-icon-container {
                 position: absolute;
                 top: 10px;
                 right: 10px;
+                width: 36px;
+                height: 36px;
+                background-color: white;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .hotel-card .favorite-icon {
                 font-size: 24px;
                 cursor: pointer;
                 color: grey;
@@ -700,12 +707,6 @@
         .hotel-image-container {
             position: relative;
         }
-
-            .hotel-image-container .favorite-icon {
-                position: absolute;
-                top: 10px;
-                right: 10px;
-            }
 
         .small-images-container {
             padding: 0;
