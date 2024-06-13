@@ -89,7 +89,7 @@
         .search-container {
             position: relative;
             display: flex;
-            width: 100%; /* Adjust width as needed */
+            width: 100%; /* 調整寬度 */
             margin: 20px auto;
         }
 
@@ -109,7 +109,7 @@
             color: #999;
         }
 
-        /* Style the search icon when focused */
+        /* 當焦點在搜尋框時的圖示樣式 */
         #search-input:focus + .search-icon {
             color: #000;
         }
@@ -146,12 +146,12 @@
             padding: 10px 10px 10px 40px;
             border: 2px solid #4285F4;
             border-radius: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 陰影效果 */
             font-size: 16px;
             margin-bottom: 15px;
             background-color: white;
             background-image: url('images/search_icon.png');
-            background-repeat: no-repeat;
+            background-repeat: no-repeat; /* 背景圖片不重複 */
             background-position: 10px center;
             background-size: 20px 20px;
         }
@@ -167,8 +167,8 @@
                 border: 1px solid #ddd;
                 background-color: white;
                 font-size: 16px;
-                cursor: pointer;
-                outline: none;
+                cursor: pointer; /* 滑鼠指標樣式 */
+                outline: none; /* 移除外框 */
             }
 
             .quantity-control span {
@@ -180,11 +180,13 @@
     </style>
 }
 
-@section Scripts{    
+@section Scripts{   
+        @* JavaScript 外部庫的引用，用於提供日期選擇器功能 *@
     <script src="https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.min.js"></script>
 
     @* //兩個搜尋方法 *@
     <script>
+        //當 DOM 內容加載完成時執行
         window.addEventListener('DOMContentLoaded', () => {
             // 單獨的按鈕按下事件監聽器,用於 btnSubmit 按鈕
             const btnSubmit = document.querySelector('#buttonSubmit');
@@ -207,12 +209,13 @@
                     "children": inputchildren
                 };
                 console.log(searchHotel);
-                // 將搜索酒店對象存儲在 sessionStorage 中
+                // 將搜索酒店對象存儲在 sessionStorage 中，使用相同的鍵名
                 sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel));
             });
 
             // 方法2 的按鈕按下事件監聽器
             let btnSubmit2, inputkeyword2, inputDatestart2, inputDateend2, inputrooms2, inputadults2, inputchildren2;
+            //waitForElements 函數是一個等待特定 DOM 元素加載完成後才繼續執行後續操作的 JavaScript 函數
             const waitForElements = () => {
                 btnSubmit2 = document.querySelector('#buttonSubmit2');
                 if (btnSubmit2) {
@@ -234,6 +237,7 @@
                         };
                         console.log(searchHotel2);
                         // 將搜索酒店對象存儲在 sessionStorage 中
+                        // 始終保存的是最後一次操作的數據
                         sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel2));
                     });
                 } else {
@@ -256,7 +260,7 @@
             clear: '清除',
             dateFormat: 'yyyy-MM-dd',
             // timeFormat: 'hh:mm aa',
-            firstDay: 0
+            firstDay: 0 //一週的第一天，設置為星期日（0）。
         };
 
         // 取得今天的日期
@@ -267,14 +271,14 @@
         const datepicker = new AirDatepicker('#myDatepicker', {
             locale: cn1,
             range: true,
-            multipleDatesSeparator: ' - ',
+            multipleDatesSeparator: ' - ', //設置日期範圍分隔符為 -。
             minDate: today, // 設定最小日期為今天
             onSelect({ formattedDate, date }) {
                 document.getElementById('myDatepicker').value = "請確認訂房日期";
-                if (date.length === 2) {
+                if (date.length === 2) { //選擇了兩個日期（即選擇了一個範圍），則更新兩個隱藏的輸入框
                     document.getElementById('myDatepickerstart').value = `${formattedDate[0]}`;
                     document.getElementById('myDatepickerend').value = `${formattedDate[1]}`;
-                } else {
+                } else { //若沒有選擇兩個日期，則清空這兩個輸入框
                     document.getElementById('myDatepickerstart').value = '';
                     document.getElementById('myDatepickerend').value = '';
                 }
@@ -283,27 +287,34 @@
     </script>
 
     <script>
+        //可折疊的下拉選單
         function toggleDropdown() {
             var dropdownMenu = document.getElementById("dropdownMenu");
+            // 檢查當前的顯示狀態
             if (dropdownMenu.style.display === "none" || dropdownMenu.style.display === "") {
+                // 顯示下拉選單
                 dropdownMenu.style.display = "block";
+                // 添加點擊事件監聽器，處理外部點擊
                 document.addEventListener('click', handleOutsideClick);
             } else {
+                // 隱藏下拉選單
                 dropdownMenu.style.display = "none";
+                // 移除點擊事件監聽器
                 document.removeEventListener('click', handleOutsideClick);
             }
         }
 
+        // 改變數量
         function changeQuantity(type, value) {
             var element = document.getElementById(type);
-            var currentValue = parseInt(element.textContent);
-            var newValue = currentValue + value;
-            if (newValue >= 0) {
-                element.textContent = newValue;
+            var currentValue = parseInt(element.textContent); // 取得當前數量
+            var newValue = currentValue + value; // 計算新數量
+            if (newValue >= 0) { // 確保數量不小於0
+                element.textContent = newValue; // 更新數量
             }
-            updateDropdownText();
-        }
+            updateDropdownText(); // 更新下拉選單文本
 
+        // 更新下拉選單的文本
         function updateDropdownText() {
             var rooms = document.getElementById("rooms").textContent;
             var adults = document.getElementById("adults").textContent;
@@ -312,13 +323,14 @@
             dropdownToggle.textContent = rooms + " 客房, " + adults + " 成人, " + children + " 小童";
         }
 
+        // 處理外部點擊
         function handleOutsideClick(event) {
             var dropdownContainer = document.querySelector('.dropdown-container');
             var dropdownMenu = document.getElementById('dropdownMenu');
-
+            // 檢查點擊是否發生在下拉選單之外
             if (dropdownContainer && !dropdownContainer.contains(event.target)) {
-                dropdownMenu.style.display = 'none';
-                document.removeEventListener('click', handleOutsideClick);
+                dropdownMenu.style.display = 'none'; // 隱藏下拉選單
+                document.removeEventListener('click', handleOutsideClick); // 移除點擊事件監聽器
             }
         }
 
