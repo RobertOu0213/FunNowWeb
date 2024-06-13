@@ -269,6 +269,8 @@
             }
         }
 
+        
+
         // 提交按鈕功能的函數
         async function handleSubmitButtonClick() {
             const searchHotel = {
@@ -307,8 +309,18 @@
                 console.log('searchHotel not found in sessionStorage');
             }
         }
+
+        // 从 sessionStorage 获取搜索条件 -------------------------------------------------------------
+        // => 扣louieee Controller, 把session的入駐日跟退訂日以query string傳過去
+        function getSearchHotel() {
+            const searchHotelForLouieee = JSON.parse(sessionStorage.getItem("searchHotel"));
+            return searchHotelForLouieee;
+        }
+        //------------------------------------------------------------------------------------------
+
         // 加載飯店的函數
         const loadHotels = async function (searchHotel) {
+            
             const url = "https://localhost:7103/api/HotelSearch/indexsearch";
             const response = await fetch(url, {
                 method: "POST",
@@ -322,12 +334,13 @@
             divHotels.innerHTML = "";
 
             // 生成並顯示飯店信息
+            const searchHotelForLouieee = getSearchHotel();
             const hotels = data.map(hotel => {
                 const { hotelId, hotelName, hotelAddress, hotelImage, levelStar, hotelEquipmentName, hotelPrice } = hotel;
                 return `
                             <div class="col-lg-12 hotel-card">
                                 <div class="row">
-                                              <a href="https://localhost:7284/PgHotel/pgHotel?hotelId=${hotelId}" class="col-lg-12 hotel-link">
+                                          <a href="https://localhost:7284/PgHotel/pgHotel?hotelId=${hotel.hotelId}&checkInDate=${searchHotelForLouieee.checkInDate}&checkOutDate=${searchHotelForLouieee.checkOutDate}" class="col-lg-12 hotel-link">
                                                    <div class="row">
                                             <div class="col-lg-4 col-sm-8" style="padding:0px">
                                                 <table>

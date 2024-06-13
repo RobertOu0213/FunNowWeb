@@ -478,7 +478,7 @@
                                                     <span style="color:red; font-weight:700;">只剩 @hotel.AvailableRooms 間房!!!</span>
                                                     <div style="display:flex; align-items: center; margin-top: 10px;">
                                                         <h3 class="mb-0 mr-3">TWD @(hotel.AverageRoomPrice.ToString("F2"))</h3>
-                                                        <a class="btn btn-primary" href="/PgHotel/pgHotel?hotelId=@hotel.HotelId">查看房型</a>
+                                                        <a class="btn btn-primary" href="/PgHotel/pgHotel?hotelId=@(hotel.HotelId)&checkInDate=@(Model.HotelDetail.CheckInDate)&checkOutDate=@(Model.HotelDetail.CheckOutDate)">查看房型</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -513,7 +513,7 @@
                                                 @foreach (var index in hotelGroups[i])
                                         {
                                             var hotel = index < Model.HotelDetail.SimilarHotels.Count ? Model.HotelDetail.SimilarHotels[index] : null;
-                                                    <a href="@((hotel != null) ? ("/PgHotel/pgHotel?hotelId=" + hotel.HotelId) : "#")" class="card">
+                                            <a href="@((hotel != null) ? ("/PgHotel/pgHotel?hotelId=" + hotel.HotelId + "&checkInDate=" + @Model.HotelDetail.CheckInDate + "&checkOutDate=" + @Model.HotelDetail.CheckOutDate) : "#")" class="card">
                                                         <div class="card">
                                                     <img src="@(hotel != null && hotel.HotelImage != null ? "https://localhost:7284/image/" + hotel.HotelImage.ImageUrl : "/image/louieee_img/otherHotel01.png")" class="card-img-top" alt="Hotel Image">
                                                             <div class="card-body">
