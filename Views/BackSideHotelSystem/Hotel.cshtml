@@ -2,8 +2,8 @@
     ViewData["Title"] = "Hotel";
 }
 
-@* html
- *@
+@*  html *@
+ 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark gradient-custom">
     <!-- Container wrapper -->
@@ -83,11 +83,11 @@
     <div class="input-group width px-3">
         <select class="form-select" id="inputGroupSelecthotel" aria-label="Example select with button addon">
             <option selected>飯店名稱</option>
-            <option value="1">套資料</option>
-            <option value="2">一樣是套資料</option>
+            <!-- 动态添加的酒店名称将在这里显示 -->
+            <option value="${item.hotelId}">${item.hotelName}</option>
         </select>
     </div>
-    
+
     <div class="input-group width px-1">
         <!--px-1(數字好像可以填1到9越小越寬) -->
         <select class="form-select" id="inputGroupSelectstatus" aria-label="Example select with button addon">
@@ -99,11 +99,11 @@
 
     <div class="ms-5">
         <span>
-            <input type="text" class="form-control dispaly" id="searchBar" aria-label="" placeholder="輸入文字">
+            <input type="text" class="form-control display" id="searchBar" aria-label="" placeholder="輸入文字">
         </span>
     </div>
     <div>
-        <input type="button" class="btn btn-outline-primary dispaly" id="searchBtn" value="搜尋">
+        <input type="button" class="btn btn-outline-primary display" id="searchBtn" value="搜尋" onclick="searchHotels()">
     </div>
 </div>
 
@@ -161,7 +161,7 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <td colspan="3"><img src="~/image/ez/room1.jpg" width="300" height="200"></td>
+                                    <td colspan="3">@* <img src="~/image/ez/room1.jpg" width="300" height="200"> *@</td>
                                     <td style="width: 8%;">飯店編號</td>
                                     <td style="width: 14%;">飯店名稱</td>
                                     <td style="width: 8%;">房間編號</td>
@@ -173,9 +173,9 @@
                                 </tr>
                             </thead>
                             <tr>
-                                <td><img src="~/image/ez/room2.jpg" width="100" height="200"></td>
-                                <td><img src="~/image/ez/room3.jpg" width="100" height="200"></td>
-                                <td><img src="~/image/ez/room4.jpg" width="100" height="200"></td>
+                                <td><img src="~/image/ez/room2.jpg" width="150" height="150"></td>
+                                <td><img src="~/image/ez/room3.jpg" width="150" height="150"></td>
+                                <td><img src="~/image/ez/room4.jpg" width="150" height="150"></td>
                                 <td>1</td>
                                 <td>三景花園飯店</td>
                                 <td>1</td>
@@ -236,55 +236,54 @@
 
 @section Scripts {
     <script>
-        let hotels = []; // 用於存儲從API獲取的所有飯店數據
-        const hotelContainer = document.getElementById('hotelContainer');
-        const statusSelect = document.getElementById('inputGroupSelectStatus');
 
-        // 獲取飯店數據
-        fetch('https://localhost:7103/api/BackSideHotel')
-            .then(response => response.json())
-            .then(data => {
-               
-                hotels = data;
-                console.log('Fetched hotels:', hotels); // 調試信息
-                renderHotels(hotels); // 初次渲染所有飯店
-            })
-            .catch(error => {
-                console.error('Error fetching hotels:', error);
-            });
 
-        // 根據選擇的狀態過濾並渲染飯店清單
-        function renderHotels(hotelList) {
-            let str = "";
+        let allHotels = [];
+
+        function updateHotelDisplay(hotelList) {
+            let tableStr = "";
+            let selectStr = "<option selected>選擇飯店</option>";
+
             hotelList.forEach(item => {
                 let status = item.hotelIsActive ? "已上架" : "待審核";
-                str += `
-                            <tr>
-                                <td>${item.hotelID}</td>
-                                <td>${item.hotelName}</td>
-                                <td>${item.hotelAddress}</td> <!-- 飯店地址 -->
-                                <td>${item.hotelPhone}</td> <!-- 飯店電話 -->
-                                <td>${status}</td> <!-- 飯店審核狀態 -->
-                                <td><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">詳細內容</button></td>
-                            </tr>
-                        `;
-            });
-            hotelContainer.innerHTML = str;
-            console.log('Rendered hotels:', hotelList); // 調試信息
-        }
-        // 將飯店名稱添加到選單
-        function populateHotelSelect(hotelsName) {
-            let str = "";
-            hotelsName.forEach(hotel => {
-                str += `
-                         <select>
-                    <option value="${hotel.hotelID}">${hotel.hotelName}</option>
-                             </select>
+                tableStr += `
+                    <tr>
+                        <td>${item.hotelID}</td>
+                        <td>${item.hotelName}</td>
+                        <td>${item.hotelAddress}</td>
+                        <td>${item.hotelPhone}</td>
+                        <td>${status}</td>
+                        <td><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">詳細內容</button></td>
+                    </tr>
                 `;
+                selectStr += `<option value="${item.hotelId}">${item.hotelName}</option>`;
             });
-            inputGroupSelectHotel.innerHTML = str;
-            console.log('Rendered hotelsName:', hotelsName); // 調試信息
+
+            hotelContainer.innerHTML = tableStr;
+            document.getElementById('inputGroupSelecthotel').innerHTML = selectStr;
         }
+
+        function fetchHotels() {
+            fetch('https://localhost:7103/api/BackSideHotel')
+                .then(response => response.json())
+                .then(data => {
+                    allHotels = data;
+                    updateHotelDisplay(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching hotels:', error);
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchHotels);
+
+        document.getElementById('inputGroupSelecthotel').addEventListener('change', function () {
+            console.log("Selected hotel ID:", this.value);  // 查看選擇的飯店ID
+            const filteredHotels = allHotels.filter(hotel => hotel.hotelId === this.value);
+            console.log("Filtered hotels:", filteredHotels);  // 查看過濾後的飯店列表
+            updateHotelDisplay(filteredHotels);
+        });
+
 
    
     </script>

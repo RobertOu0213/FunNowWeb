@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PrjFunNowWeb.Models.DTO;
 
 namespace PrjFunNowWeb.Controllers
 {
@@ -8,5 +9,13 @@ namespace PrjFunNowWeb.Controllers
         {
             return View();
         }
+
+        [HttpPost]
+        public IActionResult backSideHotelSearch([FromBody] BackSideHotelSearchDTO search)
+        {
+            return Json(search);
+        }
+ 
     }
+   
 }
