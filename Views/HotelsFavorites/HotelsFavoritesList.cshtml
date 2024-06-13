@@ -90,18 +90,19 @@
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
-                const cities = await response.json();
-                console.log(cities);
+                const data = await response.json();
+                console.log(data);
 
-                const citiesHtml = cities.map(city => {
+                const cities = data.map(item => {
+                    const { imageUrl, hotelName, city, country, hotelCount } = item;
                     return( `
-                                            <a href="/HotelsFavorites/HotelsFavoritesListToCity?memberId=${memberId}&city=${city.city}&country=${city.country}">
+                                            <a href="/HotelsFavorites/HotelsFavoritesListToCity?memberId=${memberId}&city=${city}&country=${country}">
                             <div class="col-md-4">
                                 <div class="card">
-                                    <img src="${city.imageUrl}" class="card-img-top" alt="${city.city}">
+                                    <img src="${imageUrl}" class="card-img-top" alt="${city}">
                                     <div class="card-body">
-                                        <h5 class="card-title">${city.city}, ${city.country}</h5>
-                                        <p class="card-text">${city.hotelCount} 間住宿</p>
+                                        <h5 class="card-title">${city}, ${country}</h5>
+                                        <p class="card-text">${hotelCount} 間住宿</p>
                                     </div>
                                 </div>
                             </div>
@@ -109,7 +110,7 @@
                         `)
                 });
 
-                hotelsContainer.innerHTML = citiesHtml.join('');
+                hotelsContainer.innerHTML = cities.join('');
                 totalCitiesLabel.textContent = `${cities.length} 份清單`;
             } catch (error) {
                 console.error('Failed to fetch hotels:', error);

@@ -124,24 +124,28 @@
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
-                const hotels = await response.json();
-                const favoriteHotelsHtml = hotels.map(hotel => {
+                const data = await response.json();
+                console.log(data);
+
+                const hotels = data.map(hotel => {
+                    const { hotelImage, hotelName, city, country, levelStar, minimumPrice } = hotel;
+
                     return (`
                                 <div class="col-md-3">
                                     <div class="card">
-                                             <img src="${hotel.HotelImage}" alt="Image of ${hotel.HotelName}" class="card-img-top">  // 添加图片显示
-                                        <i class="fa-solid fa-heart love-button"></i>  // 愛心按鈕
+                                                     <img src="${hotelImage}" alt="Image of ${hotelName}" class="card-img-top">
+                                        <i class="fa-solid fa-heart love-button"></i> 
                                         <div class="card-body">
-                                            <h5 class="card-title">${hotel.hotelName}</h5>
-                                            <p class="card-text">${hotel.city}, ${hotel.country}</p>
-                                            <p>${generateStars(hotel.levelStar)}</p>
-                                            <p class="price">$${hotel.minimumPrice} / 晚</p>
+                                            <h5 class="card-title">${hotelName}</h5>
+                                            <p class="card-text">${city}, ${country}</p>
+                                            <p>${generateStars(levelStar)}</p>
+                                            <p class="price">$${minimumPrice} / 晚</p>
                                         </div>
                                     </div>
                                 </div>
                             `);
                 });
-                hotelsContainer.innerHTML = favoriteHotelsHtml.join('');
+                hotelsContainer.innerHTML = hotels.join('');
                // cityCountryLabel.textContent = `${cityName}, ${countryName}`;  // 更新標籤顯示正確的城市和國家
                 cityCountryLabel.textContent = `${decodeURIComponent(cityName)}, ${decodeURIComponent(countryName)}`;
 
@@ -161,29 +165,29 @@
 
         loadFavoriteHotels();
 
-        const loveButtons = document.querySelectorAll('.love-button');
-        loveButtons.forEach(button => {
-            button.addEventListener('click', async () => {
-                const hotelId = button.closest('.card').dataset.hotelId;
-                const likeStatus = button.classList.contains('loved') ? false : true;
-                try {
-                    const response = await fetch(`/api/HotelsFavorite/${memberId}/${hotelId}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(likeStatus)
-                    });
-                    if (response.ok) {
-                        button.classList.toggle('loved');
-                    } else {
-                        console.error('Failed to update like status:', response.status);
-                    }
-                } catch (error) {
-                    console.error('Error updating like status:', error);
-                }
-            });
-        });
+        // const loveButtons = document.querySelectorAll('.love-button');
+        // loveButtons.forEach(button => {
+        //     button.addEventListener('click', async () => {
+        //         const hotelId = button.closest('.card').dataset.hotelId;
+        //         const likeStatus = button.classList.contains('loved') ? false : true;
+        //         try {
+        //             const response = await fetch(`/api/HotelsFavorite/${memberId}/${hotelId}`, {
+        //                 method: 'PUT',
+        //                 headers: {
+        //                     'Content-Type': 'application/json'
+        //                 },
+        //                 body: JSON.stringify(likeStatus)
+        //             });
+        //             if (response.ok) {
+        //                 button.classList.toggle('loved');
+        //             } else {
+        //                 console.error('Failed to update like status:', response.status);
+        //             }
+        //         } catch (error) {
+        //             console.error('Error updating like status:', error);
+        //         }
+        //     });
+        // });
 
 
 
