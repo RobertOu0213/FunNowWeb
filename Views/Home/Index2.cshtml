@@ -163,7 +163,8 @@
             if (searchHotelJson) {
                 const searchHotel = JSON.parse(searchHotelJson);
                 console.log(searchHotel);
-                await loadHotels(searchHotel);
+                //解析並加載飯店資訊
+                await loadHotels(searchHotel); 
             } else {
                 console.log("searchHotel not found in sessionStorage");
             }
@@ -184,6 +185,8 @@
                 '.form-check-container-room-equipment'
             ];
 
+            //所有指定容器內的複選框添加 change 事件監聽器，當複選框的狀態改變時，
+            //觸發 updateSearchFilters 函數以更新搜尋條件並重新加載飯店資訊
             containerSelectors.forEach(selector => {
                 document.querySelectorAll(`${selector} input[type="checkbox"]`).forEach(checkbox => {
                     checkbox.addEventListener('change', updateSearchFilters);
@@ -199,7 +202,8 @@
                 nearbyBtn: ["CityName", "asc"],
                 hotDealBtn: ["deal", "desc"],
             };
-
+            //為每個排序按鈕添加點擊事件監聽器，當按鈕被點擊時，
+            // 觸發 handleSort 函數以設定排序方式並重新加載飯店資訊
             Object.keys(sortButtons).forEach(id => {
                 document.querySelector(`#${id}`).addEventListener("click", () => handleSort(...sortButtons[id]));
             });
@@ -296,7 +300,7 @@
             }
         }
 
-        // 提交按鈕功能的函數
+        // 提交按鈕功能的函數 會被觸發
         async function handleSubmitButtonClick() {
             const searchHotel = {
                 keyword: document.querySelector("#search-input3").value,
@@ -335,6 +339,7 @@
             }
         }
         // 加載飯店的函數
+        //異步函數，接受一個包含搜尋條件的 searchHotel 物件作為參數
         async function loadHotels(searchHotel) {
             const url = "https://localhost:7103/api/HotelSearch/indexsearch";
             const response = await fetch(url, {
