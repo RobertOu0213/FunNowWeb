@@ -5,27 +5,25 @@
 }
 @section Styles{
     <style>
-
-
+        /* //房間數及大人小孩下拉選單 */
         .dropdown {
             position: relative;
             display: inline-block;
         }
 
         .dropdown-toggle1 {
-            padding: 15px 20px;
-            font-size: 18px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
+            display: block;
+            padding: 10px;
+            border: 2px solid #4285F4;
+            border-radius: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            font-size: 16px;
+            text-align: center;
+            background-color: white;
+            margin-bottom: 15px;
             width: 300px;
         }
-
             .dropdown-toggle1 i {
                 margin-left: 10px;
             }
@@ -33,15 +31,12 @@
         .dropdown-menu {
             display: none;
             position: absolute;
-            top: 100%;
-            left: 0;
-            z-index: 1000;
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-top: 10px;
             width: 100%;
-            padding: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
         }
 
             .dropdown-menu.active {
@@ -49,10 +44,10 @@
             }
 
         .dropdown-item {
+            padding: 10px;
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            padding: 10px 20px;
+            align-items: center;
         }
 
             .dropdown-item label {
@@ -119,6 +114,65 @@
             color: #000;
         }
 
+        .book_now_btn { /* BOOKING按钮 */
+            display: inline-block;
+            padding: 15px 30px;
+            font-size: 18px;
+            color: white;
+            background-color: #4285F4; /* 按钮的蓝色背景 */
+            border: none;
+            border-radius: 20px; /* 圆角 */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            margin-top: 20px
+        }
+
+            .book_now_btn:hover {
+                background-color: #357ae8; /* 鼠标悬停时的颜色 */
+                box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* 鼠标悬停时的阴影效果 */
+            }
+
+    </style>
+    <style>
+        .input-container {
+            width: 100%;
+            max-width: 700px;
+            padding: 10px 10px 10px 40px;
+            border: 2px solid #4285F4;
+            border-radius: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            font-size: 16px;
+            margin-bottom: 15px;
+            background-color: white;
+            background-image: url('images/search_icon.png');
+            background-repeat: no-repeat;
+            background-position: 10px center;
+            background-size: 20px 20px;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+        }
+
+            .quantity-control button {
+                width: 30px;
+                height: 30px;
+                border: 1px solid #ddd;
+                background-color: white;
+                font-size: 16px;
+                cursor: pointer;
+                outline: none;
+            }
+
+            .quantity-control span {
+                width: 30px;
+                text-align: center;
+            }
+
 
     </style>
 }
@@ -126,68 +180,69 @@
 @section Scripts{    
     <script src="https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.min.js"></script>
 
-@*     <script>
-        const btnSubmit = document.querySelector('#buttonSubmit');
+    @* //兩個搜尋方法 *@
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            // 單獨的按鈕按下事件監聽器,用於 btnSubmit 按鈕
+            const btnSubmit = document.querySelector('#buttonSubmit');
+            btnSubmit.addEventListener('click', async (event) => {
+                // 檢查是哪個按鈕被點擊
+                // 方法1 的按鈕按下事件
+                const inputkeyword = document.querySelector('#search-input').value;
+                const inputDatestart = document.querySelector('#myDatepickerstart').value;
+                const inputDateend = document.querySelector('#myDatepickerend').value;
+                const inputrooms = parseInt(document.querySelector('#rooms').textContent);
+                const inputadults = parseInt(document.querySelector('#adults').textContent);
+                const inputchildren = parseInt(document.querySelector('#children').textContent);
+                // 創建搜索酒店對象
+                const searchHotel = {
+                    "keyword": inputkeyword,
+                    "checkInDate": inputDatestart,
+                    "checkOutDate": inputDateend,
+                    "roomnum": inputrooms,
+                    "adults": inputadults,
+                    "children": inputchildren
+                };
+                console.log(searchHotel);
+                // 將搜索酒店對象存儲在 sessionStorage 中
+                sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel));
+            });
 
-        btnSubmit.addEventListener('click', async () => {
-            const inputkeyword = document.querySelector('#search-input').value;
-            const inputDatestart = document.querySelector('#myDatepickerstart').value;
-            const inputDateend = document.querySelector('#myDatepickerend').value;
-            const inputadults = parseInt(document.querySelector('#adults').textContent);
-            const inputchildren = parseInt(document.querySelector('#children').textContent);
-
-            const searchHotel = {
-                "keyword": inputkeyword,
-                "checkInDate": inputDatestart,
-                "checkOutDate": inputDateend,
-                "adults": inputadults,
-                "children": inputchildren
-            };
-            console.log(searchHotel);
-
-
-            const url = 'https://localhost:7103/api/HotelSearch/indexsearch';
-            const response = await fetch(url, {
-                method: 'POST',
-                body: JSON.stringify(searchHotel),
-                headers: {
-                    'Content-Type': 'application/json'
+            // 方法2 的按鈕按下事件監聽器
+            let btnSubmit2, inputkeyword2, inputDatestart2, inputDateend2, inputrooms2, inputadults2, inputchildren2;
+            const waitForElements = () => {
+                btnSubmit2 = document.querySelector('#buttonSubmit2');
+                if (btnSubmit2) {
+                    btnSubmit2.addEventListener('click', async (event) => {
+                        inputkeyword2 = document.querySelector('#search-input2').value;
+                        inputDatestart2 = document.querySelector('#myDatepickerstart2').value;
+                        inputDateend2 = document.querySelector('#myDatepickerend2').value;
+                        inputadults2 = parseInt(document.querySelector('#adults2').value);
+                        inputrooms2 = parseInt(document.querySelector('#rooms2').value);
+                        inputchildren2 = 0;
+                        // 創建搜索酒店對象
+                        const searchHotel2 = {
+                            "keyword": inputkeyword2,
+                            "checkInDate": inputDatestart2,
+                            "checkOutDate": inputDateend2,
+                            "roomnum": inputrooms2,
+                            "adults": inputadults2,
+                            "children": inputchildren2
+                        };
+                        console.log(searchHotel2);
+                        // 將搜索酒店對象存儲在 sessionStorage 中
+                        sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel2));
+                    });
+                } else {
+                    setTimeout(waitForElements, 100);
                 }
-            }); // 此處添加了右括號
-            const data = await response.json();
-            console.log(data);
-
-
-
-        });
-    </script>
- *@
-    <script>
-        const btnSubmit = document.querySelector('#buttonSubmit');
-
-        btnSubmit.addEventListener('click', async (event) => {
-            const inputkeyword = document.querySelector('#search-input').value;
-            const inputDatestart = document.querySelector('#myDatepickerstart').value;
-            const inputDateend = document.querySelector('#myDatepickerend').value;
-            const inputadults = parseInt(document.querySelector('#adults').textContent);
-            const inputchildren = parseInt(document.querySelector('#children').textContent);
-
-            const searchHotel = {
-                "keyword": inputkeyword,
-                "checkInDate": inputDatestart,
-                "checkOutDate": inputDateend,
-                "adults": inputadults,
-                "children": inputchildren
             };
-            // console.log(searchHotel);
-            // 将 searchHotel 对象存储在 sessionStorage 中
-            sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel));
-
+            waitForElements();
         });
-    </script>
-
+    </script> 
 
     <script>
+        //設定大搜尋欄的方法
         const cn1 = {
             days: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
             daysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
@@ -197,14 +252,20 @@
             today: '今天',
             clear: '清除',
             dateFormat: 'yyyy-MM-dd',
-            timeFormat: 'hh:mm aa',
+            // timeFormat: 'hh:mm aa',
             firstDay: 0
-        }
+        };
+
+        // 取得今天的日期
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // 設定時間為當天的0點0分0秒，避免時間因素影響
+
 
         const datepicker = new AirDatepicker('#myDatepicker', {
             locale: cn1,
             range: true,
             multipleDatesSeparator: ' - ',
+            minDate: today, // 設定最小日期為今天
             onSelect({ formattedDate, date }) {
                 document.getElementById('myDatepicker').value = "請確認訂房日期";
                 if (date.length === 2) {
@@ -261,7 +322,6 @@
     </script>
 
 
-
 }
 
 <!--================Header Area ===================-->
@@ -273,7 +333,7 @@
             <div class="banner_content text-center">
                 <h6></h6>
                 <br /><br /><br /><br /><br />
-                <h2 style="color:darkcyan">FunNow 給你家的感覺</h2>
+                <h2 style="color:#FCFCFC">FunNow 給你家的感覺</h2>
                 <p>
                     <br>
                 </p>
@@ -284,7 +344,7 @@
         <div class="container">
             <div class="hotel_booking_table" style="margin-bottom:-100px;height:300px;border-radius:20px ">
                 <div class="col-md-3">
-                    <h2>
+                    <h2 style="color:dodgerblue">
                         Book
                         <br> Your Room
                     </h2>
@@ -294,7 +354,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="search-container">
-                                    <input type="text" id="search-input" placeholder="Enter your search term" style="width:500px">
+                                    <input type="text" id="search-input" class="input-container" placeholder="今天想去哪裡旅行">
                                 </div>
                             </div>
                          <div class="row">
@@ -310,14 +370,14 @@
                                     <div class="form-group">
                                         <div class='input-group ' >
                                             <!-- Air datepicker Html element -->
-                                            <input id="myDatepickerstart" placeholder="開始日期">
+                                            <input id="myDatepickerstart" placeholder="訂房日期">
                                             <!-- Air datepicker JavaScript-->
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class='input-group ' >
                                             <!-- Air datepicker Html element -->
-                                            <input id="myDatepickerend" placeholder="結束日期">
+                                            <input id="myDatepickerend" placeholder="退房日期">
                                             <!-- Air datepicker JavaScript-->
                                         </div>
                                     </div>
@@ -338,7 +398,7 @@
                                                     <button onclick="changeQuantity('rooms', 1)">+</button>
                                                 </div>
                                             </div>
-                                            <div class="dropdown-item">
+                                                <div class="dropdown-item">
                                                 <label for="adults">成人</label>
                                                 <div class="quantity-control">
                                                     <button onclick="changeQuantity('adults', -1)">-</button>
@@ -346,7 +406,7 @@
                                                     <button onclick="changeQuantity('adults', 1)">+</button>
                                                 </div>
                                             </div>
-                                            <div class="dropdown-item">
+                                                <div class="dropdown-item">
                                                 <label for="children">
                                                     小童
                                                     <span class="children-hint">(12歲以下)</span>
