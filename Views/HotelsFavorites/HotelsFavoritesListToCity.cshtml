@@ -128,17 +128,29 @@
                 console.log(data);
 
                 const hotels = data.map(hotel => {
-                    const { hotelImage, hotelName, city, country, levelStar, minimumPrice } = hotel;
+                    const { hotelId, hotelImage, hotelName, city, country, levelStar, Rating,minimumPrice } = hotel;
 
+                    // 解析rating字符串以获取JSON对象   //rating 欄位是一個JSON字串，你需要使用 JSON.parse() 將這個字串轉換成JavaScript物件。
+                    const ratingObj = JSON.parse(hotel.rating);
+
+                    // 现在可以访问averageScore和totalAverageScore
+                    const totalAverageScore = ratingObj.totalAverageScore;
+                    const averageScore = ratingObj.averageScore;
+
+                    console.log("Total Average Score:", totalAverageScore);
+                    console.log("Average Score Details:", averageScore);
+
+                    /* 在卡片元素上設置一個 data-hotel-id 屬性,用於存儲酒店 ID */
                     return (`
                                 <div class="col-md-3">
-                                    <div class="card">
+                                                    <div class="card" data-hotel-id="${hotelId}">                
                                                      <img src="${hotelImage}" alt="Image of ${hotelName}" class="card-img-top">
                                         <i class="fa-solid fa-heart love-button"></i> 
                                         <div class="card-body">
                                             <h5 class="card-title">${hotelName}</h5>
                                             <p class="card-text">${city}, ${country}</p>
                                             <p>${generateStars(levelStar)}</p>
+                                          <p class="card-text"> Rating: ${totalAverageScore} </p>
                                             <p class="price">$${minimumPrice} / 晚</p>
                                         </div>
                                     </div>
@@ -148,6 +160,16 @@
                 hotelsContainer.innerHTML = hotels.join('');
                // cityCountryLabel.textContent = `${cityName}, ${countryName}`;  // 更新標籤顯示正確的城市和國家
                 cityCountryLabel.textContent = `${decodeURIComponent(cityName)}, ${decodeURIComponent(countryName)}`;
+
+                  //須放在loadFavoriteHotels
+                //獲取所有愛心按鈕元素
+                const loveButtons = document.querySelectorAll('.love-button');
+
+                // 為每個愛心按鈕添加點擊事件監聽器，當愛心按鈕被點擊時,會觸發 handleLoveButtonClick 函數。
+                loveButtons.forEach(button => {
+                    button.addEventListener('click', handleLoveButtonClick);
+                });
+
 
             } catch (error) {
                 console.error('Failed to fetch hotels:', error);
@@ -165,30 +187,44 @@
 
         loadFavoriteHotels();
 
-        // const loveButtons = document.querySelectorAll('.love-button');
-        // loveButtons.forEach(button => {
-        //     button.addEventListener('click', async () => {
-        //         const hotelId = button.closest('.card').dataset.hotelId;
-        //         const likeStatus = button.classList.contains('loved') ? false : true;
-        //         try {
-        //             const response = await fetch(`/api/HotelsFavorite/${memberId}/${hotelId}`, {
-        //                 method: 'PUT',
-        //                 headers: {
-        //                     'Content-Type': 'application/json'
-        //                 },
-        //                 body: JSON.stringify(likeStatus)
-        //             });
-        //             if (response.ok) {
-        //                 button.classList.toggle('loved');
-        //             } else {
-        //                 console.error('Failed to update like status:', response.status);
-        //             }
-        //         } catch (error) {
-        //             console.error('Error updating like status:', error);
-        //         }
-        //     });
-        // });
+     
+        // 處理愛心按鈕點擊事件
+        async function handleLoveButtonClick(event) {
+            const loveButton = event.currentTarget;
+            const card = loveButton.closest('.card');  // 獲取包含該按鈕的卡片元素
+            const hotelId = card ? card.dataset.hotelId : undefined;   // 假設您在卡片元素上設置了 data-hotel-id 屬性
+            const memberId = 5; // 假設會員 ID 為 5，您可以根據實際情況獲取會員 ID
 
+            if (!hotelId) {
+                console.error('Failed to get hotelId from card element');
+                return;
+            }
+            try {
+                console.log(`Sending request to update like status for memberId: ${memberId}, hotelId: ${hotelId}`);
+
+                // 使用 memberId 和 hotelId 變量構建 URL
+                const url = `https://localhost:7103/api/HotelsFavorite/${memberId}/${hotelId}`;
+
+                const response = await fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ LikeStatus: false })
+                });
+                console.log(`按下愛心後的狀態: ${response.status}`);
+
+                if (response.ok) {963
+
+                    // 如果請求成功，則從 DOM 中移除該卡片元素
+                    card.remove();
+                } else {
+                    console.error('Failed to update like status:', response.status);
+                }
+            } catch (error) {
+                console.error('Failed to update like status:', error);
+            }
+        }
 
 
 
