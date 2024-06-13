@@ -65,7 +65,6 @@
                                 </div>
                             </div>
 
-
                             <p></p>
 
                             <div class="d-grid">
@@ -201,6 +200,22 @@
         btnSubmit.addEventListener('click', async (evt) => {
             evt.preventDefault(); //防止預設行為的發生
 
+
+            // 檢查是不是有紅框錯誤
+            const redBorderElements = document.querySelectorAll('.border-danger');
+            if (redBorderElements.length > 0) {
+                alert('有紅框處尚未修改，請再次確認');
+                return;
+            }
+
+            // 檢查checkbox是否打勾
+            const agreeCheckbox = document.querySelector('#agree');
+            if (!agreeCheckbox.checked) {
+                alert('請同意相關條款，並完成勾選');
+                return;
+            }
+
+            // 收集表單資料
             const inpFirstName = document.querySelector('#FirstNameInput').value;
             const inpLastName = document.querySelector('#LastNameInput').value;
             const inpEmail = document.querySelector('#EmailInput').value;
@@ -214,6 +229,7 @@
                 "password": inpPwd,
             };
 
+            //發送API請求
             try {
                 const url = 'https://localhost:7103/api/Members';
                 const response = await fetch(url, {
@@ -226,11 +242,12 @@
 
             if (response.ok) 
             {
-                console.log('註冊成功');
+                alert('註冊成功');
                 window.location.href = '/Member/Login';
             }
-            else {
-                console.log('註冊失敗');
+            else 
+            {
+                    alert('註冊失敗');
             }
             } catch (error) {
                 console.error('Error:', error);
@@ -238,7 +255,7 @@
         });
 
         //【姓名欄位驗證】
-        // 驗證輸入的值是否只包含英文字符
+        // 驗證輸入的值只能包含英文字
         function isValidName(name) {
             var regex = /^[A-Za-z]+$/;
             return regex.test(name);
@@ -260,6 +277,7 @@
                 error.style.display = "none";
                 this.classList.remove("border", "border-danger");
             }
+            
         });
 
         // 驗證 LastNameInput 欄位
@@ -278,6 +296,7 @@
                 error.style.display = "none";
                 this.classList.remove("border", "border-danger");
             }
+           
         });
 
 
@@ -299,6 +318,7 @@
                 error.style.display = "none";
                 this.classList.remove("border", "border-danger");
             }
+            
         });
 
 
@@ -325,6 +345,7 @@
                     this.classList.remove("border", "border-danger");
                 }
             }
+            
         });
 
 
@@ -385,9 +406,10 @@
             } catch (error) {
                 console.error('Error:', error);
             }
+            
         }
 
-
+ 
 
     </script>
 }
