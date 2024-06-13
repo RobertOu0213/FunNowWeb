@@ -24,6 +24,8 @@
                             <div class="mb-3">
                                 <label for="EmailInput" class="form-label" style="font-size:15px">電子信箱</label>
                                 <input type="email" class="form-control" id="EmailInput1" name="EmailInput" placeholder="電子信箱" onchange="queryEmail()">
+                                <p id="resultYes" style="display:none" class="resultY form-text text-success">歡迎回來！趕緊輸入密碼來登入吧！</p>
+                                <p id="resultNo" style="display:none" class="resultN form-text text-danger">Oops！這個Email沒有註冊過欸，請點選「我是新朋友」加入我們!</p>
                             </div>
                             <div id="result"></div>
                             <p></p>
@@ -51,7 +53,7 @@
                             <p id="error" class="alert alert-danger" style="display:none;">登入失敗，請重新確認電子信箱與密碼</p>
                             <div class="row">
                                 <div>
-                                    <a class="col ff1">我是新朋友</a>
+                                    <a class="col ff1" asp-controller="Member" asp-action="Register">我是新朋友</a>
                                     <a class="col" style="font-size:14px"><i class="fa-solid fa-lock" style="color: #0d6efd;"></i> 忘記密碼？別慌，點此找幫手！</a>
                                 </div>
                             </div>
@@ -175,8 +177,7 @@
         const errorElement = document.getElementById("error");
         const loginBtn = document.getElementById("loginBtn");
 
-        // 當正在打信箱密碼時,清除錯誤訊息
-        //如果要即時比對是否有帳號，要在這裡串查詢會員的API!!!!
+        //即時比對是否有該帳號存在
         async function queryEmail() {
             var email = emailInput.value;
 
@@ -190,19 +191,24 @@
                 });
 
                 const data = await response.json();
-                var resultElement = document.getElementById("result");
+                var resultElementY = document.getElementById("resultYes");
+                var resultElementN = document.getElementById("resultNo");
+
+                resultElementY.style.display = "none";
+                resultElementN.style.display = "none";
 
                 if (data.message === "YES") {
-                    resultElement.innerText = "歡迎回來~趕緊輸入密碼來登入吧";
-                    resultElement.style.backgroundColor = "green";
+                    resultElementY.style.display = "block";
+                    emailInput.classList.remove("border", "border-danger");
                 } else {
-                    resultElement.innerText = "這個Email沒有註冊過，請點選「我是新朋友」加入我們!";
-                    resultElement.style.backgroundColor = "red";
+                    resultElementN.style.display = "block";
+                    emailInput.classList.add("border", "border-danger");
                 }
             } catch (error) {
                 console.error('Error:', error);
             }
         }
+
 
        
 
