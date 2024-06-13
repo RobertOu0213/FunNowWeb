@@ -323,13 +323,12 @@
 
             // 生成並顯示飯店信息
             const hotels = data.map(hotel => {
-                const { hotelName, hotelAddress, hotelImage, levelStar, hotelEquipmentName, hotelPrice } = hotel;
-                const hotelInfo = encodeURIComponent(JSON.stringify(hotel)); // 將飯店信息編碼為 URL 參數
+                const { hotelId, hotelName, hotelAddress, hotelImage, levelStar, hotelEquipmentName, hotelPrice } = hotel;
                 return `
                             <div class="col-lg-12 hotel-card">
                                 <div class="row">
-                                    <a href="https://localhost:7284/PgHotel/PgHotel?hotel=${hotelInfo}" class="col-lg-12 hotel-link">
-                                                <div class="row">
+                                      <a href="https://localhost:7284/PgHotel/PgHotel?hotelId=${hotelId}" class="col-lg-12 hotel-link">                                           
+                                           <div class="row">
                                             <div class="col-lg-4 col-sm-8" style="padding:0px">
                                                 <table>
                                                     <tr>

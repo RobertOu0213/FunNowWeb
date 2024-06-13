@@ -512,7 +512,7 @@ button:focus {
   position: absolute;
 }
 
-.booking_table {  
+.booking_table {    /*//調整首頁圖片大小*/
   position: relative;
   overflow: hidden;
   width: 100%;
