@@ -556,7 +556,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body d-flex align-items-center">
-                    <img src="path_to_image.jpg" alt="Room Image">
+                    <img src="path_to_image.jpg" alt="...">
                     <div class="room-info">
                         <p>樓中樓單室套房 (Mezzanine Studio)x1晚已新增至購物車</p>
                         <p>（價格為NT$ 687）</p>
@@ -564,7 +564,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary">前往購物車</button>
-                    <button type="button" class="btn btn-outline-primary">只訂這間</button>
+
                     <div class="note">訂越多，省越多！</div>
                     <p>同時預訂多個項目，還能省更多！</p>
                 </div>
@@ -919,6 +919,7 @@
                     const data = await response.json();
                     if (data.success) {
                         console.log(data);
+                        $('#rightModal').modal('show');
                     }
 
                 } catch (err) {
