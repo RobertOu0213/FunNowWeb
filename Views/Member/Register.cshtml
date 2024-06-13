@@ -70,7 +70,7 @@
                             <div class="d-grid">
                                 <button class="btn btn-secondary btn-login text-uppercase fw-bold"  id="buttonSubmit">加入會員</button>
                             </div>
-                            
+                            <div id="message"></div>
                            <p></p>
                             <p style="margin:40px"></p>
 
@@ -240,17 +240,25 @@
                 }
             });
 
+            const messageElement = document.getElementById('message');
+
             if (response.ok) 
             {
-                alert('註冊成功');
-                window.location.href = '/Member/Login';
+               alert('註冊成功!帳號驗證信已寄至您的信箱，請至信箱查收~');
             }
             else 
             {
-                    alert('註冊失敗');
+               alert('註冊失敗');
+               const errorText = await response.text();
+               messageElement.textContent = "驗證信寄送失敗";
+               messageElement.style.color = 'red';
             }
-            } catch (error) {
+            } catch (error) 
+            {
                 console.error('Error:', error);
+                const messageElement = document.getElementById('message');
+                messageElement.textContent = "錯誤發生，請再試一次!";
+                messageElement.style.color = 'red';
             }
         });
 

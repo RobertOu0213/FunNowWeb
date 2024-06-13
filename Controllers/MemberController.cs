@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 
 namespace PrjFunNowWeb.Controllers
 {
@@ -112,8 +113,8 @@ namespace PrjFunNowWeb.Controllers
             return View();
         }
 
-
-
+       
+        
 
     }
 }
