@@ -377,9 +377,9 @@
                                             <h6>此住宿提供:</h6>
                                             <h5 style="border: 1px solid black;display: inline-block;">${hotelEquipmentName}</h5>
                                             <br>
-                                            <h5 style="border: 1px solid black;display: inline-block;">設施2</h5>
+                                            <h5 style="border: 1px solid黑;display: inline-block;">設施2</h5>
                                             <br>
-                                            <h5 style="border: 1px solid black;display: inline-block;">設施3</h5>
+                                            <h5 style="border: 1px solid黑;display: inline-block;">設施3</h5>
                                             <br>
                                             <h6 style="color:green">${levelStar}星級飯店最優價</h6>
                                             <h6 style="color:red">昨天起已收到${levelStar}張訂單</h6>
@@ -406,15 +406,16 @@
         // 切換最愛狀態的函數
         async function toggleFavorite(event, hotelId) {
             event.stopPropagation();  // 防止點擊事件傳遞到其他元素
+            event.preventDefault();   // 阻止默認的跳轉行為
             const icon = event.currentTarget;
             const isLiked = icon.classList.toggle("liked");
 
-            const url = "https://localhost:7103/api/HotelLike";
+            const url = "https://localhost:7103/api/HotelSearch/hotelLike";
             const response = await fetch(url, {
                 method: "POST",
                 body: JSON.stringify({
                     HotelId: hotelId,
-                    MemberId: 123,  // 這裡應該替換為實際的會員ID
+                    MemberId: 1,  // 這裡應該替換為實際的會員ID
                     LikeStatus: isLiked
                 }),
                 headers: { "Content-Type": "application/json" },
