@@ -4,32 +4,6 @@
     Layout = "_Layout_HotelHome";
 }
 
-<nav>
-    <div class="nav__container">
-        <div class="row">
-            <div class="col ps-5">
-               <img src="~/ou/image/funnow_logo_horizontal_orange.png" class="w-75" />
-            </div>
-          
-            <div class="col-8 pe-5 me-5">
-                 <a href="#"><div class="items"><i class="fa-solid fa-house me-2"></i>物業清單</div></a>
-                <a href="#"><div class="items"><i class="fa-solid fa-square-check me-2"></i>預訂</div></a>
-                <a href="#"><div class="items"><i class="fa-solid fa-comment-dots me-2"></i>訊息</div></a>
-                <a href="#"><div class="items"><i class="fa-solid fa-person me-2"></i>個人資料</div></a>
-            </div>
-          
-            <div class="col-2 ps-5">
-                <a href="#">
-                    <img class="avatar" />
-                    <span>Oliver</span>
-                    <span>Ou</span>
-                    <i class="fa-solid fa-caret-down"></i>
-                </a>
-            </div>
-        </div>
-    </div>
-</nav>
-
 <div class="search__container">
     <div class="search__container__search">
         <form class="d-flex">
@@ -38,109 +12,119 @@
         </form>
     </div>
    <div class="me-3">
-       <button class="uploadButton">新增房源</button>
+        <a href="@Url.Action("HotelInfo", "HotelCreate")" class="uploadButton">新增房源</a>
    </div>
 </div>
 
 <main>
-@*     <ul class="nav nav-tabs">
-        <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Active</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-        </li>
-    </ul> *@
 
     <div class="tab__container">
         <div class="tab__container__content d-flex align-items-center ms-4 mb-4 mt-4">
-            <a href="#">
-                <div>已啟用</div>
+            <a href="#" id="showActive" class="tab__link">
+                <span>已啟用</span>
             </a>
-            <a href="#">
-                <div>審核中</div>
-            </a>
-        </div>
-    </div>
-
-    <div class="hotelCard mb-4">
-        <div class="d-flex align-items-center hotelCard__info">
-            <div>
-                <img src="~/image/ou/001.jpg" alt="..." class="hotelCard__img" />
-            </div>
-            <div>
-                <div class="fw-bold">
-                    <span>[55637200]</span>
-                    <span>士林好所在</span>
-                </div>
-                <div>
-                    <span class="hotelCard__status">已啟用</span>
-                    <span class="city">Taipei,</span>
-                    <span class="country">台灣</span>
-                </div>
-            </div>
-        </div>
-        <div class="d-flex align-items-center ms-3 hotelCard__connect">
-            <a href="#">
-                <div>
-                    編輯物業
-                </div>
-            </a>
-            <a href="#" >
-                <div>
-                    行事曆
-                </div>
-            </a>
-            <a href="#">
-                <div>
-                    訂單&收入
-                </div>
-            </a>        
-        </div>
-    </div>
-
-    <div class="hotelCard">
-        <div class="d-flex align-items-center hotelCard__info">
-            <div>
-                <img src="~/image/ou/001.jpg" alt="..." class="hotelCard__img" />
-            </div>
-            <div>
-                <div class="fw-bold">
-                    <span>[55637200]</span>
-                    <span>士林好所在</span>
-                </div>
-                <div>
-                    <span class="hotelCard__status">已啟用</span>
-                    <span class="city">Taipei,</span>
-                    <span class="country">台灣</span>
-                </div>
-            </div>
-        </div>
-        <div class="d-flex align-items-center ms-3 hotelCard__connect">
-            <a href="#">
-                <div>
-                    編輯物業
-                </div>
-            </a>
-            <a href="#">
-                <div>
-                    行事曆
-                </div>
-            </a>
-            <a href="#">
-                <div>
-                    訂單&收入
-                </div>
+            <a href="#" id="showPending" class="tab__link">
+                <span>審核中</span>
             </a>
         </div>
     </div>
 
+    <div id="hotelContainers">
+    </div>
+ 
 
 </main>
 
 
 @section Scripts {
-    <script>
+    <script defer>
+
+        async function fetchAndDisplayHotels(isActive) {
+            const res = await fetch('https://localhost:7103/api/HostManage');
+            const data = await res.json();
+            const filteredData = data.filter(item => item.isActive === isActive);
+            const baseUrl = window.location.origin + '/HostManage/HostHotelInfo';
+
+            let isReviewStr = "";
+            filteredData.forEach(item => {
+                let hotelInfoUrl = baseUrl + '/' + item.hotelId;
+
+                let imageUrl;
+                if (item.hotelImage.startsWith('http') || item.hotelImage.startsWith('https')) {
+                    imageUrl = item.hotelImage;
+                } else {
+                    imageUrl = window.location.origin + '/' + item.hotelImage;
+                }
+                const statusClass = isActive ? 'active-status' : 'review-status';
+                const statusText = isActive ? '已啟用' : '審核中';
+                const linkClass = isActive ? '' : 'disabled-link';
+                const ariaDisabled = isActive ? 'false' : 'true';
+                isReviewStr += `
+                    <div class="hotelCard mb-4">
+                        <div class="d-flex align-items-center hotelCard__info">
+                            <div>
+                                <img src="${imageUrl}" alt="..." class="hotelCard__img" />
+                            </div>
+                            <div>
+                                <div class="fw-bold">
+                                    <span>[${item.hotelId}]</span>
+                                    <span>${item.hotelName}</span>
+                                </div>
+                                <div>
+                                    <span class="${statusClass}">${statusText}</span>
+                                    <span class="city">${item.cityName},</span>
+                                    <span class="country">${item.countryName}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center ms-3 hotelCard__connect">
+                                <a href="${hotelInfoUrl}" class="${linkClass}" aria-disabled="${ariaDisabled}">
+                                <div>
+                                    編輯物業
+                                </div>
+                            </a>
+                            <a href="#"  class="${linkClass}" aria-disabled="${ariaDisabled}">
+                                <div>
+                                    行事曆
+                                </div>
+                            </a>
+                            <a href="#"  class="${linkClass}" aria-disabled="${ariaDisabled}">
+                                <div>
+                                    訂單&收入
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    `;
+            });
+            $('#hotelContainers').html(isReviewStr);
+        }
+
+
+
+        function setActiveTab(isActive) {
+            if (isActive) {
+                $('#showActive').addClass('active');
+                $('#showPending').removeClass('active');
+            } else {
+                $('#showActive').removeClass('active');
+                $('#showPending').addClass('active');
+            }
+        }
+
+
+        $('#showActive').on('click', () => {
+            fetchAndDisplayHotels(true);
+            setActiveTab(true);
+        })
+
+        $('#showPending').on('click', () => {
+            fetchAndDisplayHotels(false);
+            setActiveTab(false);
+        })
+
+        fetchAndDisplayHotels(false);
+        setActiveTab(false);
 
     </script>
 }
