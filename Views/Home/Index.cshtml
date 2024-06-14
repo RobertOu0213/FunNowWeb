@@ -180,7 +180,7 @@
 
 
     </style>
-
+    @* //日期選單內容 *@
     <style>
         .form-group {
             margin-bottom: 15px;
@@ -218,7 +218,7 @@
         @* JavaScript 外部庫的引用，用於提供日期選擇器功能 *@
     <script src="https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.min.js"></script>
 
-    @* //兩個搜尋方法 *@
+    @* //三個搜尋方法 *@
     <script>
         //當 DOM 內容加載完成時執行
         window.addEventListener('DOMContentLoaded', () => {
@@ -279,8 +279,33 @@
                 }
             };
             waitForElements();
+
+            // 按下圖片後執行
+            const today = new Date().toISOString().split('T')[0];
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const tomorrowFormatted = tomorrow.toISOString().split('T')[0];
+
+            document.querySelectorAll('.city-image').forEach(image => {
+                image.addEventListener('click', (event) => {
+                    const city = event.target.getAttribute('data-city');
+                    const searchHotel = {
+                        "keyword": city,
+                        "checkInDate": today,
+                        "checkOutDate": tomorrowFormatted,
+                        "roomnum": 1,
+                        "adults": 2,
+                        "children": 0
+                    };
+                    console.log(searchHotel);
+                    sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel));
+
+                    // 跳轉到指定的 URL
+                    window.location.href = 'https://localhost:7284/home/index2';
+                });
+            });
         });
-    </script> 
+    </script>
 
     <script>
         //設定大搜尋欄的方法
@@ -488,14 +513,10 @@
         </div>
     </div>
 </section>
-
 <!--================搜尋訂房欄(固定式)  Area =================-->
+<br /><br /><br /><br /><br />
 <!--================ 台灣熱門城市 Area  =================-->
 <section class="accomodation_area section_gap">
-
-    <br /><br /><br /><br />
-
-
     <div class="container">
         <div class="section_title text-center">
             <h2 class="title_color">台灣熱門城市</h2>
@@ -505,10 +526,10 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/台北市.jpg" />
+                        <img src="~/image/ming_img/臺北市.jpg" data-city="臺北市" class="city-image" />
                     </div>
                     <a href="#">
-                        <h4 class="sec_h4">台北市</h4>
+                        <h4 class="sec_h4">臺北市</h4>
                     </a>
                     <h5>
                         共有888間
@@ -519,7 +540,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/台中市.jpg" />
+                        <img src="~/image/ming_img/台中市.jpg" data-city="台中市" class="city-image" />
                     </div>
                     <a href="#">
                         <h4 class="sec_h4">台中市</h4>
@@ -533,7 +554,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/高雄市.jpg" />
+                        <img src="~/image/ming_img/高雄市.jpg" data-city="高雄市" class="city-image" />
                     </div>
                     <a href="#">
                         <h4 class="sec_h4">高雄市</h4>
@@ -547,7 +568,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/台南市.jpg" />
+                        <img src="~/image/ming_img/台南市.jpg" data-city="台南市" class="city-image" />
                     </div>
                     <a href="#">
                         <h4 class="sec_h4">台南市</h4>
@@ -564,17 +585,16 @@
 <!--================ 台灣熱門城市 Area  =================-->
 <!--================ 精選特色 Area  =================-->
 <section class="accomodation_area section_gap">
-
     <div class="container">
         <div class="section_title text-center">
             <h2 class="title_color">精選特色區</h2>
-            <p>你想要的我們都懂 </p>
+            <p>你想要的我們都懂</p>
         </div>
         <div class="row mb_30">
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/海濱度假村區.jpg" />
+                        <img src="~/image/ming_img/海濱度假村區.jpg" data-city="海濱度假村區" class="city-image" />
                     </div>
                     <a href="#">
                         <h4 class="sec_h4">海濱度假村區</h4>
@@ -588,7 +608,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/森林小屋區.jpg" />
+                        <img src="~/image/ming_img/森林小屋區.jpg" data-city="森林小屋區" class="city-image" />
                     </div>
                     <a href="#">
                         <h4 class="sec_h4">森林小屋區</h4>
@@ -602,7 +622,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/山間度假村區.jpg" />
+                        <img src="~/image/ming_img/山間度假村區.jpg" data-city="山間度假村區" class="city-image" />
                     </div>
                     <a href="#">
                         <h4 class="sec_h4">山間度假村區</h4>
@@ -616,7 +636,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/城市精品酒店區.jpg" />
+                        <img src="~/image/ming_img/城市精品酒店區.jpg" data-city="城市精品酒店區" class="city-image" />
                     </div>
                     <a href="#">
                         <h4 class="sec_h4">城市精品酒店區</h4>
@@ -628,12 +648,11 @@
                 </div>
             </div>
         </div>
-        <br />
         <div class="row mb_30">
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/農莊民宿區.jpg" />
+                        <img src="~/image/ming_img/農莊民宿區.jpg" data-city="農莊民宿區" class="city-image" />
                     </div>
                     <a href="#">
                         <h4 class="sec_h4">農莊民宿區</h4>
@@ -647,7 +666,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/湖畔度假村區.jpg" />
+                        <img src="~/image/ming_img/湖畔度假村區.jpg" data-city="湖畔度假村區" class="city-image" />
                     </div>
                     <a href="#">
                         <h4 class="sec_h4">湖畔度假村區</h4>
@@ -661,7 +680,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/沙漠綠洲區.jpg" />
+                        <img src="~/image/ming_img/沙漠綠洲區.jpg" data-city="沙漠綠洲區" class="city-image" />
                     </div>
                     <a href="#">
                         <h4 class="sec_h4">沙漠綠洲區</h4>
@@ -675,7 +694,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/島嶼度假村區.jpg" />
+                        <img src="~/image/ming_img/島嶼度假村區.jpg" data-city="島嶼度假村區" class="city-image" />
                     </div>
                     <a href="#">
                         <h4 class="sec_h4">島嶼度假村區</h4>
@@ -687,11 +706,10 @@
                 </div>
             </div>
         </div>
-
-
     </div>
 </section>
 <!--================ 精選特色 Area  =================-->
+
 
 <!--================ About History Area  =================-->
 <section class="about_history_area section_gap">
