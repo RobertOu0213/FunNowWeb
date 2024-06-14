@@ -6,16 +6,18 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @model PrjFunNowWeb.Models.louie_viewmodel.pgHotel_HotelDetailViewModel
-<div class="mt-5 pt-5 container" id="top">
+<!-- 插入聊天室的Partial View -->
+@Html.Partial("~/Views/Chat/Mailroom.cshtml"))
+<div class="container mt-5 pt-5" id="top">
     <div class="row">
         <div>
             @*麵包屑*@
             <div>
                 <nav>
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="#" style="color:blue;">首頁</a></li>
-                        <li class="breadcrumb-item"><a href="#" style="color:blue;">@Model.HotelDetail.CountryName</a></li>
-                        <li class="breadcrumb-item"><a href="#" style="color:blue;">@Model.HotelDetail.CityName</a></li>
+                        <li class="breadcrumb-item"><a href="https://localhost:7284/home/index" style="color:blue;">首頁</a></li>
+                        <li class="breadcrumb-item"><a href="https://localhost:7284/home/index2?searchValue= @(Model.HotelDetail.CountryName)" style="color:blue;">@Model.HotelDetail.CountryName</a></li>
+                        <li class="breadcrumb-item"><a href="https://localhost:7284/home/index2?searchValue= @(Model.HotelDetail.CityName)" style="color:blue;">@Model.HotelDetail.CityName</a></li>
                         <li class="breadcrumb-item active">@Model.HotelDetail.HotelName</li>
                     </ol>
                 </nav>
@@ -23,136 +25,136 @@
             </div>
 
             @*飯店介紹區*@
+            <div class="round-edge-container">
 
-            @*飯店介紹區-第一層*@
-            <div class="row">
-                <div class="col-8">
-                    <div style="display:flex;">
-                        <h2>@Model.HotelDetail.HotelName</h2>
-                        @for (int i = 0; i < Model.HotelDetail.LevelStar; i++)
+
+                @*飯店介紹區-第一層*@
+                <div class="row">
+                    <div class="col-8">
+                        <div style="display:flex;">
+                            <h2>@Model.HotelDetail.HotelName</h2>
+                            @for (int i = 0; i < Model.HotelDetail.LevelStar; i++)
+                            {
+                                <img src="~/image/louieee_img/star.png" />
+                            }
+                        </div>
+                        <div style="display:flex;">
+                            <i class="fa-solid fa-location-dot">@Model.HotelDetail.HotelAddress</i>
+                            <a class="link-offset-2 link-underline link-underline-opacity-75" href="#hotel-map">在地圖上顯示</a>
+                        </div>
+                        <div style="display:flex;">
+                            <i class="fa-solid fa-hotel"></i>
+                            <p id="description">
+                                @if (!string.IsNullOrEmpty(Model.HotelDetail.HotelDescription) && Model.HotelDetail.HotelDescription.Length > 100)
+                                {
+                                    @(Model.HotelDetail.HotelDescription.Substring(0, 100) + "...")
+                                }
+                                else
+                                {
+                                    @Model.HotelDetail.HotelDescription
+                                }
+                            </p>
+                            <a class="link-offset-2 link-underline link-underline-opacity-75" href="#hotel-equips" id="toggle-description">
+                                @if (!string.IsNullOrEmpty(Model.HotelDetail.HotelDescription) && Model.HotelDetail.HotelDescription.Length > 100)
+                                {
+                                    @("顯示更多")
+                                }
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-4 d-flex justify-content-end align-items-center">
+                        <h2>TWD @Model.HotelDetail.AverageRoomPrice</h2>
+                        <a class="btn btn-primary btn-lg" href="#room-types">查看房型</a>
+                    </div>
+                </div>
+                @*飯店介紹區-第二層*@
+                <div class="row">
+                    <div class="col-4 d-flex align-items-stretch" data-bs-toggle="modal" data-bs-target="#hotelModal">
+                        @if (Model.HotelDetail.HotelImages != null && Model.HotelDetail.HotelImages.Any())
                         {
-                            <img src="~/image/louieee_img/star.png" />
+                            <img src="https://localhost:7284/image/@Model.HotelDetail.HotelImages.First().ImageUrl" class="img-fluid" />
                         }
+                        
                     </div>
-                    <div style="display:flex;">
-                        <i class="fa-solid fa-location-dot">@Model.HotelDetail.HotelAddress</i>
-                        <a class="link-offset-2 link-underline link-underline-opacity-75" href="#hotel-map">在地圖上顯示</a>
-                    </div>
-                    <div style="display:flex;">
-                        <i class="fa-solid fa-hotel"></i>
-                        <p id="description">
-                            @if (!string.IsNullOrEmpty(Model.HotelDetail.HotelDescription) && Model.HotelDetail.HotelDescription.Length > 100)
+                    <div class="col-8">
+                        <table data-bs-toggle="modal" data-bs-target="#hotelModal">
+                            @if (Model.HotelDetail.HotelImages != null && Model.HotelDetail.HotelImages.Count > 1)
                             {
-                                @(Model.HotelDetail.HotelDescription.Substring(0, 100) + "...")
+                                var images = Model.HotelDetail.HotelImages.Skip(1).Take(6).ToList(); // 跳过第一张，获取接下来的6张图片
+                                for (int i = 0; i < images.Count; i += 3)
+                                {
+                                    <tr>
+                                        @for (int j = 0; j < 3; j++)
+                                        {
+                                            if (i + j < images.Count)
+                                            {
+                                                <td>
+                                                    <img src="https://localhost:7284/image/@images[i + j].ImageUrl" class="img-fluid" />
+                                                </td>
+                                            }
+                                            
+                                        }
+                                    </tr>
+                                }
                             }
-                            else
-                            {
-                                @Model.HotelDetail.HotelDescription
-                            }
-                        </p>
-                        <a class="link-offset-2 link-underline link-underline-opacity-75" href="#hotel-equips" id="toggle-description">
-                            @if (!string.IsNullOrEmpty(Model.HotelDetail.HotelDescription) && Model.HotelDetail.HotelDescription.Length > 100)
-                            {
-                                @("顯示更多")
-                            }
-                        </a>
+                        </table>
                     </div>
                 </div>
-                <div class="col-4 d-flex justify-content-end align-items-center">
-                    <h2>TWD @Model.HotelDetail.AverageRoomPrice</h2>
-                    <a class="btn btn-primary btn-lg" href="#room-types">查看房型</a>
-                </div>
-            </div>
-            @*飯店介紹區-第二層*@
-            <div class="row">
-                <div class="col-4 d-flex align-items-stretch" data-bs-toggle="modal" data-bs-target="#hotelModal">
-                    @if (Model.HotelDetail.HotelImages != null && Model.HotelDetail.HotelImages.Any())
-                    {
-                        <img src="https://localhost:7284/image/@Model.HotelDetail.HotelImages.First().ImageUrl" class="img-fluid" />
-                    }
-                </div>
-                <div class="col-8">
-                    <table data-bs-toggle="modal" data-bs-target="#hotelModal">
-                        @if (Model.HotelDetail.HotelImages != null && Model.HotelDetail.HotelImages.Count > 1)
-                        {
-                            var images = Model.HotelDetail.HotelImages.Skip(1).Take(6).ToList(); // 跳过第一张，获取接下来的6张图片
-                            for (int i = 0; i < images.Count; i += 3)
+                @*飯店介紹區-第三層*@
+                @{
+                    var hotelEquipments = Model.HotelDetail.HotelEquipments.Take(8).ToList(); // 取前8个设施
+                    var rows = (int)Math.Ceiling(hotelEquipments.Count / 4.0); // 计算行数，每行4个设施
+                }
+                <div class="row">
+                    <div class="col-5">
+                        <h3>評論</h3>@*亭蓉做*@
+                    </div>
+                    <div class="col-4 d-flex flex-column">
+                        <h3>設施與服務</h3>
+                        <table>
+                            @for (int i = 0; i < rows; i++)
                             {
                                 <tr>
-                                    @for (int j = 0; j < 3; j++)
+                                    @for (int j = 0; j < 4; j++)
                                     {
-                                        if (i + j < images.Count)
+                                        var index = i * 4 + j;
+                                        if (index < hotelEquipments.Count)
                                         {
-                                            <td>
-                                                <img src="https://localhost:7284/image/@images[i + j].ImageUrl" class="img-fluid" />
-                                            </td>
+                                            <td> <i class="fa-regular fa-circle-check">@hotelEquipments[index]</i></td>
                                         }
                                         else
                                         {
-                                            <td></td> <!-- 填补空缺的td -->
+                                            <td></td>
                                         }
                                     }
                                 </tr>
                             }
-                        }
-                    </table>
-                </div>
-            </div>
-            @*飯店介紹區-第三層*@
-            @{
-                var hotelEquipments = Model.HotelDetail.HotelEquipments.Take(8).ToList(); // 取前8个设施
-                var rows = (int)Math.Ceiling(hotelEquipments.Count / 4.0); // 计算行数，每行4个设施
-            }
-            <div class="row">
-                <div class="col-5">
-                    <h3>評論</h3>@*亭蓉做*@
-                </div>
-                <div class="col-4 d-flex flex-column">
-                    <h3>設施與服務</h3>
-                    <table>
-                        @for (int i = 0; i < rows; i++)
-                        {
-                            <tr>
-                                @for (int j = 0; j < 4; j++)
-                                {
-                                    var index = i * 4 + j;
-                                    if (index < hotelEquipments.Count)
-                                    {
-                                        <td> <i class="fa-regular fa-circle-check">@hotelEquipments[index]</i></td>
-                                    }
-                                    else
-                                    {
-                                        <td></td>
-                                    }
-                                }
-                            </tr>
-                        }
-                    </table>
-                    <a class="link-offset-2 link-underline link-underline-opacity-75 align-self-end" href="#hotel-equips">所有設施></a>
-                </div>
-                <div class="col-3">
-                    <h3>飯店周邊</h3>
-                    <div class="row align-items-end">
-                        <div class="col-8">
-                            <table>
-                                <tr>
-                                    <td><i class="fa-solid fa-train">捷運: 劍潭站</i></td>
-                                </tr>
-                                <tr>
-                                    <td><i class="fa-solid fa-train">捷運: 劍潭站</i></td>
-                                </tr>
-                                <tr>
-                                    <td><i class="fa-solid fa-train">捷運: 劍潭站</i></td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="col-4">
-                            <a class="link-offset-2 link-underline link-underline-opacity-75" href="#hotel-map">地圖></a>
+                        </table>
+                        <a class="link-offset-2 link-underline link-underline-opacity-75 align-self-end" href="#hotel-equips">所有設施></a>
+                    </div>
+                    <div class="col-3">
+                        <h3>飯店周邊</h3>
+                        <div class="row align-items-end">
+                            <div class="col-8">
+                                <table>
+                                    <tr>
+                                        <td><i class="fa-solid fa-train">捷運: 劍潭站</i></td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fa-solid fa-train">捷運: 劍潭站</i></td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fa-solid fa-train">捷運: 劍潭站</i></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-4">
+                                <a class="link-offset-2 link-underline link-underline-opacity-75" href="#hotel-map">地圖></a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
 
             @*飯店彈出視窗*@
             <div class="modal fade" id="hotelModal" tabindex="-1" aria-labelledby="hotelModalLabel" aria-hidden="true">
@@ -252,19 +254,19 @@
             </ul>
 
             @*房型區--自動生成*@
-            <div class="mt-5 pt-5 container" id="room-types">
+            <div class="container mt-5 pt-5" id="room-types" data-id="{}">
                 <h2>所有房型</h2>
                 @if (Model.HotelDetail.Rooms != null && Model.HotelDetail.Rooms.Any())
                 {
                     @foreach (var room in Model.HotelDetail.Rooms)
                     {
                         var limitedRoomImages = room.RoomImages?.Take(4).ToList() ?? new List<pgHotel_ImageDTO>();
-                        <div class="row room-item" data-room-name="@room.RoomName" data-room-price="@room.RoomPrice" data-room-equips="@Newtonsoft.Json.JsonConvert.SerializeObject(room.RoomEquipments)" data-room-images="@Newtonsoft.Json.JsonConvert.SerializeObject(room.RoomImages)">
+                        <div class="row room-item round-edge-container" data-room-name="@room.RoomName" data-room-price="@room.RoomPrice" data-room-equips="@Newtonsoft.Json.JsonConvert.SerializeObject(room.RoomEquipments)" data-room-images="@Newtonsoft.Json.JsonConvert.SerializeObject(room.RoomImages)">
                             <h3 data-bs-toggle="modal" data-bs-target="#roomModal">@room.RoomName</h3>
                             <div class="col-4">
                                 <table data-bs-toggle="modal" data-bs-target="#roomModal">
                                     <tr>
-                                        <td colspan="3"><img src="https://localhost:7284/image/@(limitedRoomImages.Count > 0 ? limitedRoomImages[0].ImageUrl : "default_image.png")" class="img-fluid" /></td>
+                                        <td colspan="3"><img src="https://localhost:7284/image/@(limitedRoomImages.Count > 0 ? limitedRoomImages[0].ImageUrl:"")" class="img-fluid" /></td>
                                     </tr>
                                     <tr>
                                         @if (limitedRoomImages.Count > 1)
@@ -369,113 +371,135 @@
             @*設施區*@
             <div id="hotel-equips">
                 <h2>設施與服務</h2>
+                <div class="round-edge-container">
                 @if (Model.HotelDetail.HotelEquipments != null && Model.HotelDetail.HotelEquipments.Any())
                 {
+                    
                     foreach (var equipment in Model.HotelDetail.HotelEquipments)
                     {
                         <div>
                             <i class="fa-regular fa-circle-check">@equipment</i>
                         </div>
                     }
+                    
                 }
                 else
                 {
                     <p>暫無設備資訊</p>
                 }
+                </div>
             </div>
 
             @*周邊區*@
-            <div class="row" id="hotel-map">
+            <div class="hotel-detail-container" id="hotel-map">
                 <h2>飯店周邊</h2>
-                <div class="col-8">
-                    <img src="~/image/louieee_img/map.png" class="img-fluid" />
-                </div>
-
-                <div class="col-4">
-                    <div style="display:flex;">
-                        <h3>@Model.HotelDetail.HotelName</h3>
-                        @for (int i = 0; i < Model.HotelDetail.LevelStar; i++)
-                        {
-                            <img src="~/image/louieee_img/star.png" />
-                        }
+                <div class="row round-edge-container">
+                    <div class="col-8">
+                        <img src="~/image/louieee_img/map.png" class="img-fluid" />
                     </div>
-                    <div>
-                        <i class="fa-solid fa-location-dot">@Model.HotelDetail.HotelAddress</i>
-                    </div>
-                    <div style="display:flex;">
-                        <h2>TWD @Model.HotelDetail.AverageRoomPrice</h2>
-                        <a class="btn btn-primary btn-lg" href="#room-types">查看房型</a>
-                    </div>
-
-                    @* tab *@
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="home-tab" data-toggle="tab" data-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">周邊景點</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="profile-tab" data-toggle="tab" data-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">你可能也喜歡</button>
-                        </li>
-                    </ul>
-                    <div class="tab-content" id="myTabContent">
-                        @*分頁:周邊景點*@
-                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                            <div>
-                                <button type="button" class="btn btn-outline-primary btn-sm">交通</button>
-                                <button type="button" class="btn btn-outline-primary btn-sm">熱門景點</button>
-                                <button type="button" class="btn btn-outline-primary btn-sm">餐廳</button>
-                                <button type="button" class="btn btn-outline-primary btn-sm">購物</button>
+                    <div class="col-4">
+                        <div class="hotel-info">
+                            <div class="hotel-header">
+                                <h3>@Model.HotelDetail.HotelName</h3>
+                                @for (int i = 0; i < Model.HotelDetail.LevelStar; i++)
+                                {
+                                    <img src="~/image/louieee_img/star.png" />
+                                }
                             </div>
-                            <div class="vertical-align">
-                                <i class="fa-solid fa-train">捷運: 劍潭站</i>
-                                <i class="fa-solid fa-train">捷運: 劍潭站</i>
-                                <i class="fa-solid fa-train">捷運: 劍潭站</i>
+                            <div class="hotel-address">
+                                <i class="fa-solid fa-location-dot">@Model.HotelDetail.HotelAddress</i>
+                            </div>
+                            <div class="hotel-price">
+                                <h2>TWD @Model.HotelDetail.AverageRoomPrice</h2>
+                                <a class="btn btn-primary btn-lg" href="#room-types">查看房型</a>
                             </div>
                         </div>
-                        @*分頁:你可能也喜歡*@
-                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                            @if (Model.HotelDetail.SimilarHotels != null && Model.HotelDetail.SimilarHotels.Any())
-                            {
-                                <div class="scrollable-container">
-                                    @foreach (var hotel in Model.HotelDetail.SimilarHotels)
-                                    {
-                                        <div class="row mb-3">
-                                            <div class="col-3">
-                                                <img src="https://localhost:7284/image/@hotel.HotelImage.ImageUrl" class="img-fluid full-height-img" />
-                                            </div>
-                                            <div class="col-9 vertical-align">
-                                                <div style="display:flex;">
-                                                    <h4 class="mb-0">@hotel.HotelName</h4>
-                                                    @for (int i = 0; i < hotel.LevelStar; i++)
-                                                    {
-                                                        <img src="~/image/louieee_img/star.png" class="ml-2" />
-                                                    }
-                                                </div>
-                                                <span style="color:green; font-weight:700;">@hotel.AverageRatingScores /5 很好</span>
-                                                <i class="fa-solid fa-location-dot">@hotel.HotelAddress</i>
-                                                <span style="color:red; font-weight:700;">只剩 @hotel.AvailableRooms 間房</span>
-                                                <div style="display:flex;">
-                                                    <h3 class="mb-0">TWD @(hotel.AverageRoomPrice.ToString("F2"))</h3>
-                                                    <a class="btn btn-primary ml-3" href="/PgHotel/pgHotel?hotelId=@hotel.HotelId">查看房型</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    }
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="home-tab" data-toggle="tab" data-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">周邊景點</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="profile-tab" data-toggle="tab" data-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">你可能也喜歡</button>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+                            <!-- 分頁:周邊景點 -->
+                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                <div>
+                                    <button type="button" class="btn btn-outline-primary btn-sm">交通</button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm">熱門景點</button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm">餐廳</button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm">購物</button>
                                 </div>
-                            }
-                            else
-                            {
-                                <p>暫無推薦資訊</p>
-                            }
+                                <div class="vertical-align">
+                                    <i class="fa-solid fa-train">捷運: 劍潭站</i>
+                                    <i class="fa-solid fa-train">捷運: 劍潭站</i>
+                                    <i class="fa-solid fa-train">捷運: 劍潭站</i>
+                                </div>
+                            </div>
+                            <!-- 分頁:你可能也喜歡 -->
+                            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                @if (Model.HotelDetail.SimilarHotels != null && Model.HotelDetail.SimilarHotels.Any())
+                                {
+                                    <div class="scrollable-container">
+                                        @foreach (var hotel in Model.HotelDetail.SimilarHotels)
+                                        {
+                                            <div class="row mb-3" style="border: 1px solid #ddd; border-radius: 10px; padding: 10px;">
+                                                <div class="col-3 p-0">
+                                                    <img src="https://localhost:7284/image/@hotel.HotelImage.ImageUrl" class="img-fluid full-height-img" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null;this.src='/image/louieee_img/otherHotel01.png';" />
+                                                </div>
+                                                <div class="col-9 vertical-align">
+                                                    <div style="display:flex; align-items: center;">
+                                                        <h4 class="mb-0 mr-2">@hotel.HotelName</h4>
+                                                        <div style="display: flex;">
+                                                            @for (int i = 0; i < hotel.LevelStar; i++)
+                                                            {
+                                                                <img src="~/image/louieee_img/star.png" class="ml-1" style="width: 20px; height: 20px;" />
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                    @{
+                                                        var ratingText = "";
+                                                        if (hotel.AverageRatingScores >= 4)
+                                                        {
+                                                            ratingText = "超讚";
+                                                        }
+                                                        else if (hotel.AverageRatingScores >= 3)
+                                                        {
+                                                            ratingText = "好";
+                                                        }
+                                                        else
+                                                        {
+                                                            ratingText = "尚可";
+                                                        }
+                                                    }
+                                                    <span style="color:green; font-weight:700;">@hotel.AverageRatingScores /5 @ratingText</span>
+                                                    <i class="fa-solid fa-location-dot d-block mt-2">@hotel.HotelAddress</i>
+                                                    <span style="color:red; font-weight:700;">只剩 @hotel.AvailableRooms 間房!!!</span>
+                                                    <div style="display:flex; align-items: center; margin-top: 10px;">
+                                                        <h3 class="mb-0 mr-3">TWD @(hotel.AverageRoomPrice.ToString("F2"))</h3>
+                                                        <a class="btn btn-primary" href="/PgHotel/pgHotel?hotelId=@(hotel.HotelId)&checkInDate=@(Model.HotelDetail.CheckInDate)&checkOutDate=@(Model.HotelDetail.CheckOutDate)">查看房型</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                                else
+                                {
+                                    <p>暫無推薦資訊</p>
+                                }
+                            </div>
                         </div>
-
                     </div>
                 </div>
             </div>
 
+
             @*推薦其他飯店*@
             <div>
-                <h2>你可能也喜歡</h2> 
-                <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                <h2>你可能也喜歡</h2>
+                <div id="carouselExampleControls" class="carousel slide round-edge-container" data-ride="carousel">
                     <div class="carousel-inner">
                         @{
                             var hotelGroups = Enumerable.Range(0, 9).Select(index => new { index })
@@ -489,21 +513,36 @@
                                             @foreach (var index in hotelGroups[i])
                                         {
                                             var hotel = index < Model.HotelDetail.SimilarHotels.Count ? Model.HotelDetail.SimilarHotels[index] : null;
-                                                <a href="@((hotel != null) ? ("/PgHotel/pgHotel?hotelId=" + hotel.HotelId) : "#")" class="card">
-                                                    <div class="card">
-                                                        @* <img src="@(hotel != null && hotel.HotelImage != null ? "https://localhost:7284/image/" + hotel.HotelImage.ImageUrl : "~/image/louieee_img/otherHotel01.png")" class="card-img-top" alt="Hotel Image">*@
-                                                        <div class="card-body">
-                                                            @if (hotel != null)
+                                            <a href="@((hotel != null) ? ("/PgHotel/pgHotel?hotelId=" + hotel.HotelId + "&checkInDate=" + @Model.HotelDetail.CheckInDate + "&checkOutDate=" + @Model.HotelDetail.CheckOutDate) : "#")" class="card">
+                                                        <div class="card">
+                                                    <img src="@(hotel != null && hotel.HotelImage != null ? "https://localhost:7284/image/" + hotel.HotelImage.ImageUrl : "/image/louieee_img/otherHotel01.png")" class="card-img-top" alt="Hotel Image">
+                                                            <div class="card-body">
+                                                                @if (hotel != null)
                                                         {
                                                                 <h5 class="card-title">@hotel.HotelName</h5>
                                                             for (int j = 0; j < hotel.LevelStar; j++)
                                                             {
                                                                     <img src="~/image/louieee_img/star.png" />
                                                             }
-                                                                <p class="card-text">
-                                                                    <span>4.3/5 很好</span>
-                                                                    <i class="fa-solid fa-location-dot">@hotel.HotelAddress</i>
-                                                                </p>
+                                                                    <p class="card-text">
+                                                                @{
+                                                                    var ratingText = "";
+                                                                    if (hotel.AverageRatingScores >= 4)
+                                                                    {
+                                                                        ratingText = "超讚";
+                                                                    }
+                                                                    else if (hotel.AverageRatingScores >= 3)
+                                                                    {
+                                                                        ratingText = "好";
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        ratingText = "尚可";
+                                                                    }
+                                                                }
+                                                                <span>@hotel.AverageRatingScores /5 @ratingText</span>
+                                                                        <i class="fa-solid fa-location-dot">@hotel.HotelAddress</i>
+                                                                    </p>
                                                         }
                                                         else
                                                         {
@@ -513,10 +552,10 @@
                                                                     <i class="fa-solid fa-location-dot">占位符酒店地址</i>
                                                                 </p>
                                                         }
-                                                        </div>
-                                                        <div class="card-footer">
-                                                            <small class="text-body-secondary">只剩 @hotel?.AvailableRooms 間房</small>
-                                                        </div>
+                                                            </div>
+                                                            <div class="card-footer">
+                                                                <small class="text-body-secondary">只剩 @hotel?.AvailableRooms 間房!!!</small>
+                                                            </div>
 
                                                     </div>
                                                 </a>
@@ -617,9 +656,48 @@
         }
 
         #room-images img {
-            max-width: 48%;
-            width: 48%;
-            margin: 1%;
+    max-width: 48%;
+    width: 48%;
+    margin: 1%;
+}
+
+        .scrollable-container {
+            max-height: 400px; /* 设置合适的高度 */
+            overflow-y: auto; /* 仅启用垂直滚动 */
+            overflow-x: hidden; /* 禁用水平滚动 */
+            padding-right: 15px; /* 防止滚动条遮盖内容 */
+        }
+
+        .round-edge-container {
+            border-radius: 15px; /* 圆角 */
+            background-color: #f8f9fa; /* 背景色，与页面背景区分 */
+            padding: 20px; /* 内边距，避免内容紧贴边框 */
+            margin-bottom: 20px; /* 底部外边距，确保与下方内容区分开 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加阴影，增强层次感 */
+        }
+
+        .hotel-info {
+            padding: 20px;
+        }
+
+        .hotel-header {
+            display: flex;
+            align-items: center;
+        }
+
+            .hotel-header h3 {
+                margin-right: 10px;
+            }
+
+        .hotel-address {
+            margin-top: 10px;
+        }
+
+        .hotel-price {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
 

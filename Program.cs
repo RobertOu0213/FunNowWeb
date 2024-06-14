@@ -4,6 +4,7 @@ using PrjFunNowWeb.Models;
 using System.Configuration;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using PrjFunNowWeb.Models.DTO;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,8 @@ builder.Services.AddAuthentication(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddHttpClient(); // 添加HttpClient服務
 
 builder.Services.AddDbContext<FunNowContext>(
     options => options.UseSqlServer(
@@ -49,6 +52,7 @@ builder.Services.AddSession(options =>
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 });
 
+builder.Services.Configure<GoogleCaptchaConfig>(builder.Configuration.GetSection("GoogleReCaptcha"));
 
 // Add SignalR client services if needed for SignalR client side (optional)
 builder.Services.AddSignalR();
@@ -61,8 +65,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 
 var app = builder.Build();
 
-
-// Configure the HTTP request pipeline.
+// 配置HTTP請求管道
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
@@ -88,7 +91,8 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=PgHotel}/{action=pgHotel}/{id?}");
+    //pattern: "{controller=Home}/{action=Index}/{id?}");
+pattern: "{controller=PgHotel}/{action=pgHotel}/{id?}");
 
 // 配置路由以支持 Angular 路由
 //app.MapFallbackToFile("/dist/fun-now-angular1/index.html");

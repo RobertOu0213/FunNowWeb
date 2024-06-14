@@ -6,18 +6,15 @@
 <br />
 <!--================ 台灣熱門城市 Area  =================-->
 <section class="accomodation_area section_gap">
-
     <br /><br /><br /><br />
-
-
     <div class="container">
         <div class="row mb_30">
-            <div class="col-lg-3 col-sm-6" ">
-            @* //畫面靠左 3/12 位置 *@
-                <div class=">
+            <div class="col-lg-3 col-sm-6">
+                <!-- 左側篩選條件區域 -->
+                <div>
                     <a class="book_now_btn button_hover" href="#">
                         <img src="~/image/ming_img/map.png" alt="">
-                    </a> 
+                    </a>
                 </div>
 
                 <div>
@@ -30,458 +27,474 @@
 
                 <!--//價格搜尋拉霸start-->
                 <div class="slider-container" style="margin: 10px">
-                    <div class="range-slider" id="rangeSlider" min="500" max="10000">
+                    <div class="range-slider" id="rangeSlider" min="1" max="10000">
                         <div class="slider-handle lower-handle" id="lowerHandle"></div>
                         <div class="slider-handle upper-handle" id="upperHandle"></div>
                     </div>
                     <div class="label-container">
-                        <span id="lowerLabel">下限：500</span>
+                        <span id="lowerLabel">下限：1</span>
                         <span id="upperLabel">上限：10000</span>
                     </div>
-                    <div class="input-container" ;">
-                        <input type="number" id="lowerInput" value="500" style="margin-right: 10px;">
-                        <input type="number" id="upperInput" value="500">
+                    <div class="input-container">
+                        <input type="number" id="lowerInput" value="1" style="margin-right: 10px;" class="no-spinner">
+                        <input type="number" id="upperInput" value="10000" class="no-spinner">
                     </div>
                 </div>
                 <!--//價格搜尋拉霸end-->
-                <br />
-                <br />
 
-
-                <!--//住宿類型Start-->
-                <div style="margin:20px 10px">
+                <div style="margin:20px 10px" class="form-check-container-hotel-type">
                     <p>住宿類型</p>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
+                    @foreach (var hotelType in Model.HotelTypes)
+                    {
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="@hotelType.HotelTypeId" id="hotelType_@hotelType.HotelTypeId">
+                            <label class="form-check-label" for="hotelType_@hotelType.HotelTypeId">
+                                @hotelType.HotelTypeName
+                            </label>
+                        </div>
+                    }
                 </div>
-                <!--//住宿類型END-->
-                <hr />
 
-                <!--//星級start-->
-                <div style="margin:20px 10px">
-                    <p>星級</p>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
+                <div style="margin:20px 10px" class="form-check-container-hotel-equipment">
+                    <p>住宿設備</p>
+                    @foreach (var hotelEquipment in Model.HotelEquipments)
+                    {
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="@hotelEquipment.HotelEquipmentId" id="hotelEquipment_@hotelEquipment.HotelEquipmentId">
+                            <label class="form-check-label" for="hotelEquipment_@hotelEquipment.HotelEquipmentId">
+                                @hotelEquipment.HotelEquipmentName
+                            </label>
+                        </div>
+                    }
                 </div>
-                <!--//星級End-->
-                <hr />
 
-                <!--//區域start-->
-                <div style="margin:20px 10px">
-                    <p>區域</p>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
+                <div style="margin:20px 10px" class="form-check-container-city">
+                    <p>城市</p>
+                    @foreach (var city in Model.Cities)
+                    {
+                        <div class="form-check city-item">
+                            <input class="form-check-input" type="checkbox" value="@city.CityId" id="city_@city.CityId">
+                            <label class="form-check-label" for="city_@city.CityId">
+                                @city.CityName
+                            </label>
+                        </div>
+                    }
+                    <button id="toggleCityButton" class="toggle-button">顯示更多</button>
                 </div>
-                <!--//區域End-->
-                <hr />
-
-                <!--//房型優惠start-->
-                <div style="margin:20px 10px">
-                    <p>房型優惠</p>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
+                <div style="margin:20px 10px" class="form-check-container-room-equipment">
+                    <p>房間設備</p>
+                    @foreach (var roomEquipment in Model.RoomEquipments)
+                    {
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="@roomEquipment.RoomEquipmentId" id="roomEquipment_@roomEquipment.RoomEquipmentId">
+                            <label class="form-check-label" for="roomEquipment_@roomEquipment.RoomEquipmentId">
+                                @roomEquipment.RoomEquipmentName
+                            </label>
+                        </div>
+                    }
                 </div>
-                <!--//房型優惠End-->
-                <hr />
-
-                <!--//住宿設施start-->
-                <div style="margin:20px 10px">
-                    <p>住宿設施</p>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
-                </div>
-                <!--//住宿設施End-->
-                <hr />
-
-                <!--//熱門景點start-->
-                <div style="margin:20px 10px">
-                    <p>熱門景點</p>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
-                    </div>
-                </div>
-                <!--//熱門景點End-->
-                <hr />
             </div>
 
-
             <div class="col-lg-9 col-sm-12">
+                <!-- 主內容區域，顯示酒店列表 -->
                 <div class="navbar">
-                    <button>排序</button>
-                    <button>最匹配選項</button>
-                    <button>住客評鑑最低</button>
-                    <button>最低價格優先</button>
-                    <button>鄰近交通&景點</button>
-                    <button class="special-button">搶手特惠!</button>
+                    <button id="sortBtn">排序</button>
+                    <button id="bestMatchBtn">最匹配選項</button>
+                    <button id="highestRatedBtn">住客評鑑最高</button>
+                    <button id="lowestPriceBtn">最低價格優先</button>
+                    <button id="nearbyBtn">鄰近交通&景點</button>
+                    <button id="hotDealBtn" class="special-button">搶手特惠!</button>
                 </div>
-            @* //畫面靠右 9/12 位置 *@
-                <div class="col-lg-12" style="border:1px solid gray">
-                    <div class="row" id="showhotels">
-
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12" style="border:1px solid gray">
+                            <div class="container">
+                                <div class="row" id="showhotels">
+                                    <!-- 動態生成旅館 -->
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<!-- 右側動態廣告區域 -->
+<div class="ad-container">
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="~/image/ming_img/排球少年1.jfif" class="d-block w-100" alt="Ad Image 1">
+                <img src="~/image/ming_img/排球少年2.jfif" class="d-block w-100 mt-2" alt="Ad Image 2">
+            </div>
+            <div class="carousel-item">
+                <img src="~/image/ming_img/排球少年3.jfif" class="d-block w-100" alt="Ad Image 3">
+                <img src="~/image/ming_img/排球少年4.jpeg" class="d-block w-100 mt-2" alt="Ad Image 4">
+            </div>
+            <div class="carousel-item">
+                <img src="~/image/ming_img/排球少年5.jpg" class="d-block w-100" alt="Ad Image 5">
+                <img src="~/image/ming_img/排球少年6.jpg" class="d-block w-100 mt-2" alt="Ad Image 6">
+            </div>
+        </div>
+        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+</div>
 <!--================ 台灣熱門城市 Area  =================-->
 @section Scripts {
+
     <script>
-        (async () => {
-            const searchHotelJson = sessionStorage.getItem('searchHotel');
+        document.addEventListener("DOMContentLoaded", async function () {
+            // 網頁加載完成後自動加載儲存在 sessionStorage 的 searchHotel 資訊
+            const searchHotelJson = sessionStorage.getItem("searchHotel");
             if (searchHotelJson) {
                 const searchHotel = JSON.parse(searchHotelJson);
                 console.log(searchHotel);
+                //解析並加載飯店資訊
+                await loadHotels(searchHotel); 
+            } else {
+                console.log("searchHotel not found in sessionStorage");
+            }
 
-                const url = 'https://localhost:7103/api/HotelSearch/indexsearch';
-                const response = await fetch(url, {
-                    method: 'POST',
-                    body: JSON.stringify(searchHotel),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
+            // 監聽提交按鈕，獲取輸入值並發送請求
+            const btnSubmit3 = document.querySelector("#buttonSubmit3");
+            if (btnSubmit3) {
+                btnSubmit3.addEventListener("click", async () => {
+                    handleSubmitButtonClick();
                 });
-                const data = await response.json();
-                console.log(data);
+            }
 
-                const divHotels = document.querySelector('#showhotels');
-                const hotels = data.map(hotel => {
-                    const { hotelName, hotelAddress, hotelPhone, hotelDescription, countryName, hotelEquipmentName, hotelImage, levelStar, hotelMaximumOccupancy, hotelPrice } = hotel;
-                    return (`
-                        <div class="col-lg-4 col-sm-8" style="padding:0px">
-                            <table>
-                                <tr>
-                                    <td colspan="3"><img src="${hotelImage}" class="img-fluid" style="width:100%" /></td>
-                                </tr>
-                                <tr>
-                                    <td><img src="/image/ming_img/room1.jpg" class="img-fluid" /></td>
-                                    <td><img src="/image/ming_img/room3.jpg" class="img-fluid" /></td>
-                                    <td><img src="/image/ming_img/room4.jpg" class="img-fluid" /></td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="col-lg-5 col-sm-10" style="border:1px solid gray">
-                            <h3>${hotelName}</h3>
-                            <span>${levelStar}星级饭店 </span><span style="color:blue">${hotelAddress}</span>
-                            <h6>此住宿提供:</h6>
-                            <h5 style="border: 1px solid black;display: inline-block;">${hotelEquipmentName}</h5>
-                            <br>
-                            <h5 style="border: 1px solid black;display: inline-block;">设施2</h5>
-                            <br>
-                            <h5 style="border: 1px solid black;display: inline-block;">设施3</h5>
-                            <br>
-                            <h6 style="color:green">${levelStar}星级饭店最优价</h6>
-                            <h6 style="color:red">昨天起已收到${levelStar}张订单</h6>
-                        </div>
-                        <div class="col-lg-3 col-sm-12" style="border:1px solid gray;text-align: right">
-                            <h5>很出色</h5>
-                            <h6 style="color:gray"> 个评分</h6>
-                            <br>
-                            <h6 style="border: 1px solid red;display:inline-block;background-color: red;color:white">优惠只剩1间</h6>
-                            <h6 style="color:gray">每晚价格(不连税及其他费用)</h6>
-                            <br><br>
-                            <h3>NT$${hotelPrice}</h3>
-                        </div>
-                    `);
+            // 綁定所有複選框的事件監聽器
+            const containerSelectors = [
+                '.form-check-container-hotel-type',
+                '.form-check-container-hotel-equipment',
+                '.form-check-container-city',
+                '.form-check-container-room-equipment'
+            ];
+
+            //所有指定容器內的複選框添加 change 事件監聽器，當複選框的狀態改變時，
+            //觸發 updateSearchFilters 函數以更新搜尋條件並重新加載飯店資訊
+            containerSelectors.forEach(selector => {
+                document.querySelectorAll(`${selector} input[type="checkbox"]`).forEach(checkbox => {
+                    checkbox.addEventListener('change', updateSearchFilters);
                 });
-                divHotels.innerHTML = hotels.join("");
+            });
+
+            // 綁定排序按鈕的點擊事件
+            const sortButtons = {
+                sortBtn: ["HotelId", "asc"],
+                bestMatchBtn: ["LevelStar", "desc"],
+                highestRatedBtn: ["TotalAverageScore", "desc"], // 修改這裡
+                lowestPriceBtn: ["HotelPrice", "asc"],
+                nearbyBtn: ["CityName", "asc"],
+                hotDealBtn: ["deal", "desc"],
+            };
+
+            //為每個排序按鈕添加點擊事件監聽器，當按鈕被點擊時，
+            // 觸發 handleSort 函數以設定排序方式並重新加載飯店資訊
+            Object.keys(sortButtons).forEach(id => {
+                document.querySelector(`#${id}`).addEventListener("click", () => handleSort(...sortButtons[id]));
+            });
+
+            // 設定 upperHandle 初始位置在滑動條的尾端
+            const rangeSlider = {
+                lowerHandle: document.getElementById('lowerHandle'),
+                upperHandle: document.getElementById('upperHandle'),
+                slider: document.getElementById('rangeSlider'),
+                lowerLabel: document.getElementById('lowerLabel'),
+                upperLabel: document.getElementById('upperLabel'),
+                lowerInput: document.getElementById('lowerInput'),
+                upperInput: document.getElementById('upperInput')
+            };
+
+            const max = parseFloat(rangeSlider.slider.getAttribute('max'));
+            const position = 100; // 百分比位置
+            rangeSlider.upperHandle.style.left = `${position}%`;
+            rangeSlider.upperLabel.textContent = `上限：${max}`;
+            rangeSlider.upperInput.value = max;
+
+            // 初始化 lowerHandle 和 lowerLabel
+            rangeSlider.lowerHandle.style.left = '0%';
+            rangeSlider.lowerLabel.textContent = '下限：1';
+            rangeSlider.lowerInput.value = 1;
+
+            // 綁定滑桿拖動事件
+            [rangeSlider.lowerHandle, rangeSlider.upperHandle].forEach(handle => {
+                handle.addEventListener('mousedown', startDrag);
+            });
+
+            let isDragging = false;
+            let currentHandle = null;
+
+            // 開始拖動的處理函數
+            function startDrag(event) {
+                isDragging = true;
+                currentHandle = event.target;
+                document.addEventListener('mousemove', handleDrag);
+                document.addEventListener('mouseup', stopDrag);
+            }
+
+            // 處理拖動邏輯的函數
+            function handleDrag(event) {
+                if (!isDragging) return;
+
+                const handleType = currentHandle === rangeSlider.lowerHandle ? 'lower' : 'upper';
+                const { handle, label, oppositeLabel, lowerInput, upperInput } = handleType === 'lower' ?
+                    { handle: rangeSlider.lowerHandle, label: rangeSlider.lowerLabel, oppositeLabel: rangeSlider.upperLabel, lowerInput: rangeSlider.lowerInput, upperInput: rangeSlider.upperInput } :
+                    { handle: rangeSlider.upperHandle, label: rangeSlider.upperLabel, oppositeLabel: rangeSlider.lowerLabel, lowerInput: rangeSlider.lowerInput, upperInput: rangeSlider.upperInput };
+
+                const sliderRect = rangeSlider.slider.getBoundingClientRect();
+                const position = Math.min(1, Math.max(0, (event.clientX - sliderRect.left) / sliderRect.width));
+                const value = Math.round(parseFloat(rangeSlider.slider.getAttribute('min')) + position * (parseFloat(rangeSlider.slider.getAttribute('max')) - parseFloat(rangeSlider.slider.getAttribute('min'))));
+
+                // 防止下限超過上限或上限低於下限
+                if (handleType === 'lower' && value >= parseFloat(oppositeLabel.textContent.split('：')[1])) return;
+                if (handleType === 'upper' && value <= parseFloat(oppositeLabel.textContent.split('：')[1])) return;
+
+                handle.style.left = `${position * 100}%`;
+                label.textContent = `${handleType === 'lower' ? '下限' : '上限'}：${value}`;
+                handleType === 'lower' ? lowerInput.value = value : upperInput.value = value;
+                updateHotels(parseFloat(rangeSlider.lowerInput.value), parseFloat(rangeSlider.upperInput.value));
+            }
+
+            // 停止拖動的處理函數
+            function stopDrag() {
+                isDragging = false;
+                currentHandle = null;
+                document.removeEventListener('mousemove', handleDrag);
+                document.removeEventListener('mouseup', stopDrag);
+            }
+        });
+
+        // 檢查所有選中的 checkbox 並返回其值的列表
+        function getSelectedCheckboxes(containerSelector) {
+            const checkboxes = document.querySelectorAll(`${containerSelector} input[type="checkbox"]:checked`);
+            return Array.from(checkboxes).map(checkbox => parseInt(checkbox.value)); // 確保值是數字類型
+        }
+
+        // 更新搜尋篩選條件並加載飯店
+        async function updateSearchFilters() {
+            const searchHotelJson = sessionStorage.getItem('searchHotel');
+            if (searchHotelJson) {
+                const searchHotel = JSON.parse(searchHotelJson);
+                searchHotel.hotelTypes = getSelectedCheckboxes('.form-check-container-hotel-type');
+                searchHotel.hotelEquipments = getSelectedCheckboxes('.form-check-container-hotel-equipment');
+                searchHotel.cities = getSelectedCheckboxes('.form-check-container-city');
+                searchHotel.roomEquipments = getSelectedCheckboxes('.form-check-container-room-equipment');
+                sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel));
+                await loadHotels(searchHotel);
             } else {
                 console.log('searchHotel not found in sessionStorage');
             }
-        })();
+        }
+
+        // 提交按鈕功能的函數 會被觸發
+        async function handleSubmitButtonClick() {
+            const searchHotel = {
+                keyword: document.querySelector("#search-input3").value,
+                checkInDate: document.querySelector("#myDatepickerstart3").value,
+                checkOutDate: document.querySelector("#myDatepickerend3").value,
+                roomnum: parseInt(document.querySelector("#rooms3").value),
+                adults: parseInt(document.querySelector("#adults3").value),
+                children: 0,
+                sortBy: null,
+                sortType: null,
+                lowerPrice: parseInt(document.querySelector("#lowerInput").value),
+                upperPrice: parseInt(document.querySelector("#upperInput").value),
+                hotelTypes: getSelectedCheckboxes('.form-check-container-hotel-type'),
+                hotelEquipments: getSelectedCheckboxes('.form-check-container-hotel-equipment'),
+                cities: getSelectedCheckboxes('.form-check-container-city'),
+                roomEquipments: getSelectedCheckboxes('.form-check-container-room-equipment')
+            };
+
+            // 儲存搜尋條件至 sessionStorage
+            sessionStorage.setItem("searchHotel", JSON.stringify(searchHotel));
+            // 發送請求並更新顯示結果
+            await loadHotels(searchHotel);
+        }
+
+        // 更新飯店列表的函數
+        async function updateHotels(lowerPrice, upperPrice) {
+            const searchHotelJson = sessionStorage.getItem('searchHotel');
+            if (searchHotelJson) {
+                const searchHotel = JSON.parse(searchHotelJson);
+                searchHotel.lowerPrice = lowerPrice;
+                searchHotel.upperPrice = upperPrice;
+                sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel));
+                await loadHotels(searchHotel);
+            } else {
+                console.log('searchHotel not found in sessionStorage');
+            }
+        }
+
+        //取得飯店評分API的函式
+        async function getHotelScore(hotelId) {
+            const url = `https://localhost:7103/api/Comment/${hotelId}/AverageScores`;
+            const response = await fetch(url);
+            if (!response.ok) {
+                console.error(`Failed to fetch hotel scores for hotel ID ${hotelId}`);
+                throw new Error('Failed to fetch hotel scores');
+            }
+            const data = await response.json();
+            console.log(`Hotel ID: ${hotelId}, Score Data: `, data); // 添加日志
+            return data.totalAverageScore.toFixed(1); // 确保这里使用的是 totalAverageScore，并格式化为小数点后一位
+        }
+
+        // 加載飯店的函數
+        //異步函數，接受一個包含搜尋條件的 searchHotel 物件作為參數
+        async function loadHotels(searchHotel) {
+            const url = "https://localhost:7103/api/HotelSearch/indexsearch";
+            const response = await fetch(url, {
+                method: "POST",
+                body: JSON.stringify(searchHotel),
+                headers: { "Content-Type": "application/json" },
+            });
+            const data = await response.json();
+
+            const divHotels = document.querySelector("#showhotels");
+            divHotels.innerHTML = "";
+
+            // 生成並顯示飯店信息
+            const hotels = data.map(hotel => {
+                const { hotelId, hotelName, hotelAddress, hotelImage, levelStar, hotelEquipmentName, hotelPrice } = hotel;
+                return `
+                    <div class="col-lg-12 hotel-card" data-hotel-id="${hotelId}">
+                        <div class="row">
+                            <a href="https://localhost:7284/PgHotel/pgHotel/${hotelId}" class="col-lg-12 hotel-link">
+                                <div class="row">
+                                    <div class="col-lg-4 col-sm-8 hotel-image-container" style="padding:0px">
+                                        <table>
+                                            <tr>
+                                                <td colspan="3" style="position: relative;">
+                                                    <img src='https://localhost:7284/image/${hotelImage}' class="img-fluid" style="width:100%" />
+                                                    <div class="favorite-icon-container">
+                                                        <i class="fa fa-heart favorite-icon" data-hotel-id="${hotelId}" onclick="toggleFavorite(event, ${hotelId})"></i>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src="/image/ming_img/room1.jpg" class="img-fluid" /></td>
+                                                <td><img src="/image/ming_img/room3.jpg" class="img-fluid" /></td>
+                                                <td><img src="/image/ming_img/room4.jpg" class="img-fluid" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-lg-5 col-sm-10 hotel-details">
+                                        <h3>${hotelName}</h3>
+                                        <span>${levelStar}星級飯店 </span><span style="color:blue">${hotelAddress}</span>
+                                        <h6>此住宿提供:</h6>
+                                        ${hotelEquipmentNames.map(name => `<h5 style="border: 1px solid black; display: inline-block;">${name}</h5>`).join('')}
+                                        <br>
+                                        <h6 style="color:green">${levelStar}星級飯店最優價</h6>
+                                        <h6 style="color:red">昨天起已收到${levelStar}張訂單</h6>
+                                    </div>
+
+                                    <div class="col-lg-3 col-sm-12 hotel-pricing">
+                                        <div class="rating">
+                                            <div class="rating-text">
+                                                <span class="rating-count">很出色</span>
+                                                <span class="rating-count">2,446篇評鑑</span>
+                                            </div>
+                                            <span class="rating-score">${totalAverageScore}</span>
+                                        </div>
+                                        <br>
+                                        <h6 style="border: 1px solid red; display:inline-block; background-color: red; color:white">優惠只剩1間</h6>
+                                        <h6 style="color:gray">每晚價格(不連稅及其他費用)</h6>
+                                        <br><br>
+                                        <h3>NT$${hotelPrice}</h3>
+
+                                    </div>
+
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }));
+
+            divHotels.innerHTML = hotels.join("");
+        }
+
+
+
+
+
+        // 切換最愛狀態的函數
+        async function toggleFavorite(event, hotelId) {
+            event.stopPropagation();  // 防止點擊事件傳遞到其他元素
+            event.preventDefault();   // 阻止默認的跳轉行為
+            const icon = event.currentTarget;
+            const isLiked = icon.classList.toggle("liked");
+
+            const url = "https://localhost:7103/api/HotelSearch/hotelLike";
+            const response = await fetch(url, {
+                method: "POST",
+                body: JSON.stringify({
+                    HotelId: hotelId,
+                    MemberId: 1,  // 這裡應該替換為實際的會員ID
+                    LikeStatus: isLiked
+                }),
+                headers: { "Content-Type": "application/json" },
+            });
+
+            if (!response.ok) {
+                // 如果API請求失敗，恢復愛心圖標的狀態
+                icon.classList.toggle("liked");
+                alert("無法更新最愛狀態，請稍後再試");
+            }
+        }
+
+        // 處理排序的邏輯函數
+        async function handleSort(sortBy, sortType) {
+            const searchHotelJson = sessionStorage.getItem('searchHotel');
+            if (searchHotelJson) {
+                const searchHotel = JSON.parse(searchHotelJson);
+                searchHotel.sortBy = sortBy;
+                searchHotel.sortType = sortType;
+                sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel));
+                await loadHotels(searchHotel);
+            } else {
+                console.log('searchHotel not found in sessionStorage');
+            }
+        }
     </script>
 
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const rangeSlider = document.getElementById('rangeSlider');
-            const lowerHandle = document.getElementById('lowerHandle');
-            const upperHandle = document.getElementById('upperHandle');
-            const lowerLabel = document.getElementById('lowerLabel');
-            const upperLabel = document.getElementById('upperLabel');
-            const lowerInput = document.getElementById('lowerInput');
-            const upperInput = document.getElementById('upperInput');
+        // 解決 checkbox 內容太長的問題
+        document.addEventListener("DOMContentLoaded", function () {
+            const toggleButton = document.querySelector("#toggleCityButton");
+            const formCheckContainer = document.querySelector(".form-check-container-city");
 
-            let isLowerDragging = false;
-            let isUpperDragging = false;
-
-            lowerHandle.addEventListener('mousedown', () => {
-                isLowerDragging = true;
-            });
-
-            upperHandle.addEventListener('mousedown', () => {
-                isUpperDragging = true;
-            });
-
-            document.addEventListener('mouseup', () => {
-                isLowerDragging = false;
-                isUpperDragging = false;
-            });
-
-            document.addEventListener('mousemove', (event) => {
-                if (isLowerDragging) {
-                    handleDrag(event, lowerHandle, lowerLabel, upperLabel, lowerInput, upperInput);
-                } else if (isUpperDragging) {
-                    handleDrag(event, upperHandle, upperLabel, lowerLabel, lowerInput, upperInput);
-                }
-            });
-
-            function handleDrag(event, handle, label, oppositeLabel, lowerInput, upperInput) {
-                const sliderRect = rangeSlider.getBoundingClientRect();
-                const sliderWidth = sliderRect.width;
-                const min = parseFloat(rangeSlider.getAttribute('min'));
-                const max = parseFloat(rangeSlider.getAttribute('max'));
-                const range = max - min;
-
-                let position = (event.clientX - sliderRect.left) / sliderWidth;
-                position = Math.min(1, Math.max(0, position)); // Clamp position between 0 and 1
-                const value = Math.round(min + position * range);
-
-                if (handle === lowerHandle) {
-                    if (value >= parseFloat(upperLabel.textContent.split('：')[1])) {
-                        return; // Lower handle cannot exceed upper handle
-                    }
-                    handle.style.left = `${position * 100}%`;
-                    label.textContent = `下限：${value}`;
-                    lowerInput.value = value;
+            toggleButton.addEventListener("click", function () {
+                formCheckContainer.classList.toggle("expanded");
+                if (formCheckContainer.classList.contains("expanded")) {
+                    toggleButton.textContent = "顯示較少";
                 } else {
-                    if (value <= parseFloat(lowerLabel.textContent.split('：')[1])) {
-                        return; // Upper handle cannot be less than lower handle
-                    }
-                    handle.style.left = `${position * 100}%`;
-                    label.textContent = `上限：${value}`;
-                    upperInput.value = value;
+                    toggleButton.textContent = "顯示更多";
                 }
-            }
-
-            lowerInput.addEventListener('input', () => {
-                const value = parseFloat(lowerInput.value);
-                if (value >= parseFloat(upperLabel.textContent.split('：')[1])) {
-                    return; // Lower input cannot exceed upper handle
-                }
-                const position = (value - parseFloat(rangeSlider.getAttribute('min'))) / (parseFloat(rangeSlider.getAttribute('max')) - parseFloat(rangeSlider.getAttribute('min')));
-                lowerHandle.style.left = `${position * 100}%`;
-                lowerLabel.textContent = `下限：${value}`;
-            });
-
-            upperInput.addEventListener('input', () => {
-                const value = parseFloat(upperInput.value);
-                if (value <= parseFloat(lowerLabel.textContent.split('：')[1])) {
-                    return; // Upper input cannot be less than lower handle
-                }
-                const position = (value - parseFloat(rangeSlider.getAttribute('min'))) / (parseFloat(rangeSlider.getAttribute('max')) - parseFloat(rangeSlider.getAttribute('min')));
-                upperHandle.style.left = `${position * 100}%`;
-                upperLabel.textContent = `上限：${value}`;
             });
         });
     </script>
+
 }
 
 @section Styles {
     <style>
+         /* //價格搜尋拉霸設定 */
         .slider-container {
             display: flex;
             flex-direction: column;
@@ -524,6 +537,7 @@
 
     </style>
     <style>
+         /* //主搜尋欄的下拉式選單 */
         .navbar {
             display: flex;
             border: 1px solid #ddd;
@@ -553,7 +567,218 @@
                 .navbar .special-button:hover {
                     background-color: #357ae8;
                 }
+        /* 移除 input 上下箭頭 */
+        .no-spinner::-webkit-outer-spin-button,
+        .no-spinner::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
 
+    </style>
+    <style>
+        /* checkbox設定 */
+        .form-check-container-city .city-item {
+            display: none;
+        }
+
+            .form-check-container-city .city-item:nth-child(-n+10) {
+                display: block;
+            }
+
+        .form-check-container-city.expanded .city-item {
+            display: block;
+        }
+
+        .toggle-button {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+    </style>
+    <style>
+        /* 點擊旅館的效果 */
+        .col-lg-4.col-sm-8 {
+            height: 280px; /* 設置一個固定的高度，可根據需要調整 */
+            padding: 0;
+        }
+
+            .col-lg-4.col-sm-8 table {
+                height: 100%;
+                width: 100%;
+            }
+
+            .col-lg-4.col-sm-8 img {
+                object-fit: cover; /* 讓圖片完整顯示，並填滿容器 */
+                height: 100%;
+                width: 100%;
+            }
+
+        .hotel-card {
+            margin: 10px 0; /* 添加間距 */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            background-color: #fff; /* 設置初始背景為白色 */
+            transition: box-shadow 0.3s ease, background-color 0.3s ease; /* 添加過渡效果 */
+            display: flex; /* 使用 flex 布局 */
+        }
+
+            .hotel-card:hover {
+                box-shadow: 0 8px 16px rgba(0,0,0,0.2); /* 滑鼠滑過時增加陰影 */
+            }
+
+                .hotel-card:hover .hotel-details, .hotel-card:hover .hotel-pricing {
+                    background-color: #f0f8ff; /* 滑鼠滑過時變為淺藍色 */
+                }
+
+            .hotel-card h3 {
+                margin-top: 10px;
+            }
+
+        .hotel-details {
+            border: 1px solid #FCFCFC;
+            border-right: 2px solid #F0F0F0;
+
+            background-color: #fff; /* 初始背景為白色 */
+            padding: 5px; /* 增加內邊距 */
+            flex: 2; /* 設置 flex 屬性 */
+            transition: background-color 0.3s ease; /* 添加過渡效果 */
+        }
+
+        .hotel-pricing {
+            border: 1px solid #FCFCFC;
+            border-left: none; /* 移除左邊框 */
+            text-align: right;
+            background-color: #fff; /* 初始背景為白色 */
+            padding: 10px; /* 增加內邊距 */
+            flex: 1; /* 設置 flex 屬性 */
+            transition: background-color 0.3s ease; /* 添加過渡效果 */
+        }
+
+        .hotel-info {
+            display: flex; /* 使用 flex 布局 */
+            width: 100%;
+        }
+    </style>
+    <style>
+        /* //index2跳轉至PGHotel專用 */
+        a.hotel-link {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        a.hotel-link:hover {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        a.hotel-link:active {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        a.hotel-link:visited {
+            text-decoration: none;
+            color: inherit;
+        }
+    </style>
+    <style>
+        /* 廣告區 */
+        .ad-container {
+            position: fixed;
+            right: 50px;  /* //距離頁面右側的位置 */
+            top: 49%;    /* //圖片位於頁面的高度 */
+            transform: translateY(-50%);
+            width: 320px;
+            z-index: 1000;
+            padding: 10px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+            .ad-container img {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+    </style>
+    <style>
+        /* //我的最愛 */
+        .hotel-card {
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            position: relative;
+        }
+
+            .hotel-card .favorite-icon-container {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                width: 36px;
+                height: 36px;
+                background-color: white;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .hotel-card .favorite-icon {
+                font-size: 24px;
+                cursor: pointer;
+                color: grey;
+            }
+
+                .hotel-card .favorite-icon.liked {
+                    color: red;
+                }
+
+        .hotel-image-container {
+            position: relative;
+        }
+
+        .small-images-container {
+            padding: 0;
+        }
+
+            .small-images-container img {
+                width: 32%;
+                margin: 1%;
+            }
+    </style>
+    <style>
+        /* //評分表 */
+        .rating {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
+
+        .rating-text {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+            margin-right: 10px;
+        }
+
+        .rating-score {
+            background-color: #005eb8;
+            color: white;
+            border-radius: 50%;
+            padding: 5px 10px;
+            font-size: 1em;
+            font-weight: bold;
+        }
+
+        .rating-count {
+            color: gray;
+            line-height: 1.2;
+        }
     </style>
 }
 
