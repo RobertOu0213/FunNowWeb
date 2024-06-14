@@ -116,7 +116,7 @@
         console.log("City: ", cityName);  // 应显示 "大阪"
         console.log("Country: ", decodeURIComponent(countryName));  // 应显示 "日本"
 
-        const url = `https://localhost:7103/api/HotelsFavorite/${memberId}/FavoriteHotels/${encodeURIComponent(cityName)}`;
+        const url = `https://localhost:7103/api/HotelsFavorite/`+`${memberId}/FavoriteHotels/${encodeURIComponent(cityName)}`;
 
         const loadFavoriteHotels = async () => {
             try {
