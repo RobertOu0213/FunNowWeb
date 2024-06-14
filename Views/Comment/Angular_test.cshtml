@@ -3,9 +3,24 @@
     ViewData["Title"] = "Angular_test";
 }
 
+@section Styles {
+    <link href="~/css/joanna_css/styles.b13b175880f4995b.css" rel="stylesheet" />
+}
 <h1>Angular_test</h1>
-
-<app-root>
-    <app-member-comment></app-member-comment>
-</app-root>
+<iframe src="http://localhost:4200" style="width: 100%; height: 800px; border: none;"></iframe>
+@* <button id="navigateButton">Go to Angular App</button>
     
+@section Scripts {
+
+    <script>
+
+        // // 確保Angular應用程序已經加載完畢後進行導航
+        // document.addEventListener('DOMContentLoaded', function () {
+        //     // 使用Angular路由導航到特定組件
+        //     window.location.href = '#/membercomment'; // 注意這裡使用了Hash路由
+        // });
+
+        document.getElementById('navigateButton').addEventListener('click', function () {
+            window.location.href = 'http://localhost:4200/';
+    </script>
+} *@

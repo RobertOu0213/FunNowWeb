@@ -3,23 +3,26 @@
     ViewData["Title"] = "Angular_comment_page";
 }
 
-<h1>Angular_comment_page</h1>
  
 
+@section Styles {
+    <link href="~/css/joanna_css/styles.b13b175880f4995b.css" rel="stylesheet" />
+}
 
 <app-root></app-root>
 @section Scripts {
     @* angular提供 *@
-   @*  <script src="~/node_modules/@@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js"></script>
-    <script src="~/dist/main-client.js"></script> *@
     <script src="~/dist/fun-now-angular1/runtime.48f9e552146618a8.js" type="module"></script>
     <script src="~/dist/fun-now-angular1/polyfills.b6cd8ceb7f42859a.js" type="module"></script>
-    <script src="~/dist/fun-now-angular1/main.f81e503038aad525.js" type="module"></script>
+    <script src="~/dist/fun-now-angular1/main.731c86740198f668.js" type="module"></script>
 
     <script>
-        
-            // 使用 Angular 路由导航到特定组件
-         //window.location.href = '/platformcomment'; // 例如加载 PlatformComment 组件
+
+        // 確保Angular應用程序已經加載完畢後進行導航
+        document.addEventListener('DOMContentLoaded', function () {
+            // 使用Angular路由導航到特定組件
+            window.location.href = '#/membercomment'; // 注意這裡使用了Hash路由
+        });
    
     </script>
 }
