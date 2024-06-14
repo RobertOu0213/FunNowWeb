@@ -1,6 +1,7 @@
 ﻿
 @{
     ViewData["Title"] = "paymentPage";
+    var member = ViewBag.Member as PrjFunNowWeb.Models.Member;
     @model List<PrjFunNowWeb.Models.ViewModel.CReservationSummaryViewModel>
 }
 
@@ -42,36 +43,35 @@
         <form action="" method="post">
             <div class="contact-info p-3">
                 <div class="contact-info-static mb-2">
-                    <div class="text-gray-500 text-xs">針對所有預定</div>
+                    <div class="" style="font-size:12px; color:grey;">針對所有預定</div>
                     <div class="fw-bold">聯絡資訊</div>
                     <div class="pt-1 pb-1 text-sm">您的確認信將寄至此</div>
-                    <div class="text-red-500 text-sm">*必填欄位</div>
                 </div>
                 <div class="contact-info-label">
                     <div class="d-flex">
                         <div class="w-100 m-1">
 
                             <label for="firstname">名字*</label>
-                            <input type="text" id="firstname" name="firstname" value="" class="form-control">
+                            <input type="text" id="firstname" name="firstname" value="@member.FirstName" class="form-control" disabled>
 
                         </div>
                         <div class="w-100 m-1">
 
                             <label for="lastname">姓氏*</label>
-                            <input type="text" id="lastname" name="lastname" value="" class="form-control">
+                            <input type="text" id="lastname" name="lastname" value="@member.LastName" class="form-control" disabled>
                         </div>
                     </div>
                     <div class="d-flex">
                         <div class="w-100 m-1">
 
                             <label for="email">電子郵件地址*</label>
-                            <input type="email" id="email" name="email" value="" class="form-control">
+                            <input type="email" id="email" name="email" value="@member.Email" class="form-control" disabled>
  
                         </div>
                         <div class="w-100 m-1">
 
                             <label for="phone">電話號碼*</label>
-                            <input type="text" id="phone" name="phone" value="" class="form-control">
+                            <input type="text" id="phone" name="phone" value="@member.Phone" class="form-control" disabled>
 
                         </div>
                     </div>

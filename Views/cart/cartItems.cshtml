@@ -14,7 +14,14 @@
         <div id="cartContainer">
         </div>
 
-
+        <div class="emptyCart" id="emptyCartContainer" style="display:none;">
+            <div>
+                <img src="~/ou/image/Cart_empty.png" alt="..." />
+            </div>
+            <div>
+                <h5 class="fw-bold">目前購物車是空的</h5>
+            </div>
+        </div>
 
     </section>
 
@@ -30,7 +37,7 @@
                 <div><span>0項</span>（含稅及其他費用）</div>
             </div>
             <div class="d-grid gap-2 mt-3">
-                <button class="btn btn-primary rounded-pill" id="GotoPayment" type="button">繼續預定</button>
+                <button class="btn btn-primary rounded-pill" id="GotoPayment" type="button">繼續預訂</button>
             </div>
         </div>
 
@@ -145,6 +152,13 @@
         }
 
         function renderCartItems(orderDetailDtos, checkedItems) {
+
+            if (orderDetailDtos.length === 0) {
+                $('#emptyCartContainer').css('display', 'block');
+            } else {
+                $('#emptyCartContainer').css('display', 'none');
+            }
+
             let cartRoomStr = "";
             orderDetailDtos.forEach(item => {
                 let stars = "";
@@ -234,6 +248,9 @@
         }
 
         function getImageUrl(imagePath) {
+            if (imagePath == null) {
+                return null;
+            }
             if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
                 return imagePath;
             } else {
@@ -255,13 +272,13 @@
                 $('#noprice').css('display', 'none');
                 $('#hasprice').css('display', 'block');
 
-
                 $('#hasprice .cartCheck-container-div1 .text-danger').text(`NT$ ${totalPrice.toLocaleString()}`);
                 $('#hasprice .cartCheck-container-div2 span').text(`${totalItems}項`);
             } else {
 
                 $('#hasprice').css('display', 'none');
                 $('#noprice').css('display', 'block');
+
                 $('.totalPrice .inactive .cartCheck-container-div1 .text-danger').text('NT$ 0');
                 $('.totalPrice .inactive .cartCheck-container-div2 span').text('0項');
             }

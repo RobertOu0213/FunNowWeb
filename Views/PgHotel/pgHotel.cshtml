@@ -7,8 +7,8 @@
 }
 @model PrjFunNowWeb.Models.louie_viewmodel.pgHotel_HotelDetailViewModel
 <!-- 插入聊天室的Partial View -->
-@Html.Partial("~/Views/Chat/Mailroom.cshtml"))
-<div class="container mt-5 pt-5" id="top">
+@Html.Partial("~/Views/Chat/Mailroom.cshtml")
+<div class="mt-5 pt-5 container" id="top">
     <div class="row">
         <div>
             @*麵包屑*@
@@ -254,7 +254,7 @@
             </ul>
 
             @*房型區--自動生成*@
-            <div class="container mt-5 pt-5" id="room-types" data-id="{}">
+            <div class="mt-5 pt-5 container" id="room-types" data-id="{}">
                 <h2>所有房型</h2>
                 @if (Model.HotelDetail.Rooms != null && Model.HotelDetail.Rooms.Any())
                 {
@@ -583,13 +583,7 @@
 
 
 <!-- 購物車modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#rightModal">
-    Open Right Side Modal
-</button>
-
-<div class="cartModal">
- 
-</div>
+<div class="cartModal"></div>
 
 @section Styles {
     <style>
@@ -781,7 +775,6 @@
 
             .cartModal .modal-footer .btn:hover {
                 opacity: 0.7; 
-                background-color:green;
             }
 
         .cartModal .modal-footer .note {
@@ -945,8 +938,8 @@
             //購物車
             $('.addCart').on('click', async function () {
                 const roomID = $(this).data('id');
-                // console.log(roomID);
-
+                const searchHotel = JSON.parse(sessionStorage.getItem('searchHotel'));
+           
                 //是否有登入
                 // const memberID = getMemberID();
                 // if (!memberID) {
@@ -954,11 +947,13 @@
                 //     return;
                 // }
 
+                sessionStorage.getItem(searchHotel);
+
                 const orderDetail = {
                     MemberID: 1,
                     RoomID: roomID,
-                    CheckInDate: "2024-06-15", 
-                    CheckOutDate: "2024-06-20",
+                    CheckInDate: searchHotel.checkInDate,
+                    CheckOutDate: searchHotel.checkOutDate
                
                 };
 
@@ -977,7 +972,6 @@
 
                     const data = await response.json();
                     if (data.success) {
-                        // console.log(data);
                         showCartModal(data);
                     }
                 } catch (err) {
@@ -990,7 +984,8 @@
 
             //直接購買
             $('.directBuy').on('click', async function () {
-                // const roomID = $(this).data('roomid');
+                const roomID = $(this).data('roomid');
+                const searchHotel = JSON.parse(sessionStorage.getItem('searchHotel'));
 
                 //是否有登入
                 // const memberID = getMemberID();
@@ -1001,9 +996,9 @@
 
                 const orderDetail = {
                     MemberID: 1,
-                    RoomID: 10,   //寫死roomID,
-                    CheckInDate: "2024-06-15", 
-                    CheckOutDate: "2024-06-20", 
+                    RoomID: roomID,
+                    CheckInDate: searchHotel.checkInDate,
+                    CheckOutDate: searchHotel.checkOutDate
                 };
 
                 try {
@@ -1035,7 +1030,8 @@
             $(document).on('click', '#ToCartItems', function () {
 
                 var userId = 1;
-                const cartPageUrl = window.location.origin + '/cart/cartItems?userId=' + userId;
+                const cartPageUrl = `${window.location.origin}/cart/cartItems/${userId}`;
+
 
                 window.location.href = cartPageUrl;
             });
@@ -1060,13 +1056,15 @@
         }
 
         function getImageUrl(imagePath) {
+            if (imagePath == null) {
+                return null;
+            }
             if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
                 return imagePath;
             } else {
                 return window.location.origin + '/image/' + imagePath;
             }
         }
-        
         function showCartModal(data) {
 
             const days = getDaysBetweenDates(data.checkInDate, data.checkOutDate);
