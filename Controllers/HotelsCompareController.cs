@@ -20,6 +20,12 @@ namespace PrjFunNowWeb.Controllers
             return View();
         }
 
+        public IActionResult Hotelstest()
+        {
+            return View();
+        }
+
+
         public IActionResult HotelsCompareAccordion()
         {
             return View();

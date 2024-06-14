@@ -203,21 +203,16 @@
                 console.log(`Sending request to update like status for memberId: ${memberId}, hotelId: ${hotelId}`);
 
                 // 使用 memberId 和 hotelId 變量構建 URL
-                const url = `https://localhost:7103/api/HotelsFavorite/${memberId}/${hotelId}`;
+                const url = `https://localhost:7103/api/HotelsFavorite/like/${memberId}/${hotelId}`;  
 
-                const response = await fetch(url, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ LikeStatus: false })
-                });
+                const response = await fetch(url);
                 console.log(`按下愛心後的狀態: ${response.status}`);
 
-                if (response.ok) {963
-
+                if (response.ok) 
+                {
                     // 如果請求成功，則從 DOM 中移除該卡片元素
-                    card.remove();
+                  //  card.remove();
+                    loadFavoriteHotels();
                 } else {
                     console.error('Failed to update like status:', response.status);
                 }
