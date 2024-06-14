@@ -8,5 +8,13 @@ namespace PrjFunNowWeb.Controllers
         {
             return View();
         }
+        public IActionResult OrderCallApi()
+        {
+            return View();
+        }
+        public IActionResult OrderDetail()
+        {
+            return View();
+        }
     }
 }
