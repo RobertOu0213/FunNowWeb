@@ -88,7 +88,7 @@
                                         {
                                             if (i + j < images.Count)
                                             {
-                                                <td>
+                                                <td class="imageBox">
                                                     <img src="https://localhost:7284/image/@images[i + j].ImageUrl" class="img-fluid" />
                                                 </td>
                                             }
@@ -166,16 +166,16 @@
                                     <a class="nav-link hotel-modal-nav-link" onclick="smoothScroll('category-0')">所有照片</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link hotel-modal-nav-link" onclick="smoothScroll('category-1')">客房</a>
+                                    <a class="nav-link hotel-modal-nav-link" onclick="smoothScroll('category-24')">客房</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link hotel-modal-nav-link" onclick="smoothScroll('category-2')">住宿</a>
+                                    <a class="nav-link hotel-modal-nav-link" onclick="smoothScroll('category-25')">住宿</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link hotel-modal-nav-link" onclick="smoothScroll('category-3')">設施與服務</a>
+                                    <a class="nav-link hotel-modal-nav-link" onclick="smoothScroll('category-26')">設施與服務</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link hotel-modal-nav-link" onclick="smoothScroll('category-4')">餐飲</a>
+                                    <a class="nav-link hotel-modal-nav-link" onclick="smoothScroll('category-27')">餐飲</a>
                                 </li>
                             </ul>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -203,7 +203,7 @@
                                             {
                                                 <div class="p-2" style="flex: 1 0 50%;">
                                                     <img src="https://localhost:7284/image/@image.ImageUrl" class="img-fluid" alt="Hotel Image"
-                                                    @(isFirstImage ? $"id='category-{image.ImageCategoryID}'" : "") />
+                                                    @(isFirstImage ? $"id=category-{image.ImageCategoryID}" : "") />
                                                     @{
                                                         isFirstImage = false;
                                                     }
@@ -266,20 +266,20 @@
                             <div class="col-4">
                                 <table data-bs-toggle="modal" data-bs-target="#roomModal">
                                     <tr>
-                                        <td colspan="3"><img src="https://localhost:7284/image/@(limitedRoomImages.Count > 0 ? limitedRoomImages[0].ImageUrl:"")" class="img-fluid" /></td>
+                                        <td colspan="3" class="imageBox"><img src="https://localhost:7284/image/@(limitedRoomImages.Count > 0 ? limitedRoomImages[0].ImageUrl:"")" class="img-fluid" /></td>
                                     </tr>
                                     <tr>
                                         @if (limitedRoomImages.Count > 1)
                                         {
-                                            <td><img src="https://localhost:7284/image/@limitedRoomImages[1].ImageUrl" class="img-fluid" /></td>
+                                            <td class="imageBox"><img src="https://localhost:7284/image/@limitedRoomImages[1].ImageUrl" class="img-fluid" /></td>
                                         }
                                         @if (limitedRoomImages.Count > 2)
                                         {
-                                            <td><img src="https://localhost:7284/image/@limitedRoomImages[2].ImageUrl" class="img-fluid" /></td>
+                                            <td class="imageBox"><img src="https://localhost:7284/image/@limitedRoomImages[2].ImageUrl" class="img-fluid" /></td>
                                         }
                                         @if (limitedRoomImages.Count > 3)
                                         {
-                                            <td><img src="https://localhost:7284/image/@limitedRoomImages[3].ImageUrl" class="img-fluid" /></td>
+                                            <td class="imageBox"><img src="https://localhost:7284/image/@limitedRoomImages[3].ImageUrl" class="img-fluid" /></td>
                                         }
                                     </tr>
                                 </table>
@@ -789,6 +789,18 @@
             font-weight: bold;
         }
 
+        /* Img設定 */
+
+        .imageBox {
+            width: 33%;
+        }
+
+        .img-fluid{
+            width: 100%;
+            height:100%;
+            aspect-ratio: 1/1;
+            object-fit:cover;
+        }
     </style>
 }
 @section Scripts {
@@ -1108,9 +1120,11 @@
 
         function smoothScroll(targetId) {
             console.log(targetId);
+            // const targetEle = document.querySelector(`#${targetId}`)
             const targetEle = document.getElementById(targetId)
+            const modal = document.querySelector('.col-10.scrollable-container')
             if (targetEle) {
-                window.scrollTo({
+                modal.scrollTo({
                     top: targetEle.offsetTop,
                     behavior: 'smooth'
                 })
