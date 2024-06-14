@@ -17,18 +17,18 @@ namespace PrjFunNowWeb.Controllers
             _httpClient = httpClient;
         }
 
-        public async Task<IActionResult> pgHotel(string hotelId, string checkInDate = null, string checkOutDate = null)
+        public async Task<IActionResult> pgHotel(int hotelId, string checkInDate, string checkOutDate)
         {
-            var secretKey = "my_secret_key123"; // 确保长度为16字节
-            hotelId = HttpUtility.UrlDecode(hotelId);
-            checkInDate = HttpUtility.UrlDecode(checkInDate);
-            checkOutDate = HttpUtility.UrlDecode(checkOutDate);
+            //var secretKey = "my_secret_key123"; // 确保长度为16字节
+            //hotelId = HttpUtility.UrlDecode(hotelId);
+            //checkInDate = HttpUtility.UrlDecode(checkInDate);
+            //checkOutDate = HttpUtility.UrlDecode(checkOutDate);
 
-            var decryptedHotelId = int.Parse(EncryptionHelper.Decrypt(hotelId, secretKey));
-            var decryptedCheckInDate = EncryptionHelper.Decrypt(checkInDate, secretKey);
-            var decryptedCheckOutDate = EncryptionHelper.Decrypt(checkOutDate, secretKey);
+            //var decryptedHotelId = int.Parse(EncryptionHelper.Decrypt(hotelId, secretKey));
+            //var decryptedCheckInDate = EncryptionHelper.Decrypt(checkInDate, secretKey);
+            //var decryptedCheckOutDate = EncryptionHelper.Decrypt(checkOutDate, secretKey);
 
-            var url = $"https://localhost:7103/api/pgHotel/{decryptedHotelId}?checkInDate={decryptedCheckInDate}&checkOutDate={decryptedCheckOutDate}";
+            var url = $"https://localhost:7103/api/pgHotel/{hotelId}?checkInDate={checkInDate}&checkOutDate={checkOutDate}";
 
             var response = await _httpClient.GetAsync(url);
             if (!response.IsSuccessStatusCode)
