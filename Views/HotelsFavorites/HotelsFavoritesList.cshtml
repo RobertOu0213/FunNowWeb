@@ -1,0 +1,128 @@
+﻿@* // 視圖
+@model int *@
+
+
+@section Styles {
+    <style>
+
+        .container {
+            width: 80%;
+            margin-top: 50px;
+        }
+
+
+
+        /* 調整卡片和圖片的統一大小 */
+        .card {
+            min-width: 300px; /* 设置一个最小宽度 */
+            height: 280px; /* 統一卡片高度 */
+            margin-top: 25px;
+        
+        }
+
+        /* 文字置中 */
+        .card-body {
+            text-align: center; /* 將內部文字置中 */
+        }
+
+        .card img {
+            height: auto; /* 使用自动高度 */
+            max-height: 180px; /* 最大高度限制 */
+            width: 100%;
+            object-fit: cover;
+        }
+
+
+
+        /* 滑鼠懸停時添加陰影效果 */
+        .card:hover {
+            box-shadow: 0 7px 7px rgba(0, 0, 0, 0.4); /* 添加更大的陰影 */
+            /*transform: translateY(1px);*/ /* 輕微提升卡片 */
+            transition: 0.3s; /* 平滑過渡效果 */
+        }
+
+
+
+        /* 覆蓋超連結的預設樣式，使用更具体的选择器和 !important 确保应用 */
+        .card a, .card a:hover, .card a:visited {
+            text-decoration: none !important; /* 移除超連結的下劃線 */
+            color: inherit !important; /* 保持文字顏色與卡片一致 */
+        }
+
+        .card-title, .card-text {
+            color: black !important; /* 直接指定文字顏色，确保覆盖 */
+        }
+
+    </style>
+}
+
+
+<div class="container" id="div1">
+    <div class="container">
+        <h3>口袋清單</h3>
+        <h6 id="totalCities">n個城市清單</h6>
+    </div>
+    <div class="container">
+        <div class=" row row-cols-md-3" id="hotelsContainer">
+            <!-- 卡片會動態插入到這裡 -->
+        </div>
+    </div>
+</div>
+
+ 
+
+@section Scripts {
+    <script>
+        const errorMessageContainer = document.querySelector('#errorMessageContainer');
+        const hotelsContainer = document.querySelector('#hotelsContainer');
+        const totalCitiesLabel = document.querySelector('#totalCities');
+       /*  const memberId = getCurrentUserId(); */ // 獲取當前登入用戶的 ID
+        // const memberId = @Model; // 從視圖模型獲取會員ID
+
+        const memberId = 5;   //先寫死
+
+        const url ='https://localhost:7103/api/HotelsFavorite/5/FavoriteHotels';
+    
+
+        const loadFavoriteHotels = async () => {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+                console.log(data);
+
+                const cities = data.map(item => {
+                    const { imageUrl, hotelName, city, country, hotelCount } = item;
+                    return( `
+                                            <a href="/HotelsFavorites/HotelsFavoritesListToCity?memberId=${memberId}&city=${city}&country=${country}">
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <img src="${imageUrl}" class="card-img-top" alt="${city}">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${city}, ${country}</h5>
+                                        <p class="card-text">${hotelCount} 間住宿</p>
+                                    </div>
+                                </div>
+                            </div>
+                            </a>
+                        `)
+                });
+
+                hotelsContainer.innerHTML = cities.join('');
+                totalCitiesLabel.textContent = `${cities.length} 份清單`;
+            } catch (error) {
+                console.error('Failed to fetch hotels:', error);
+                errorMessageContainer.textContent = '抱歉,加載收藏飯店列表時發生錯誤,請等待維修。';
+            }
+        };
+
+        loadFavoriteHotels();  //调用函数以加载数据
+    </script>
+
+}
+
+
+
+

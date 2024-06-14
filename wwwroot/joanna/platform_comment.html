@@ -1,0 +1,333 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <style>
+        /*navbar*/
+        .btn {
+            padding: .45rem 1.5rem .35rem;
+        }
+
+        .gradient-custom {
+            /* fallback for old browsers*/
+            background: #004B97;
+        }
+        /*navbar*/
+
+        .container {
+            width: 70%;
+        }
+
+        .filterborder {
+            border: 1px solid #0072E3;
+            border-radius: 20px;
+            margin-right: 20px;
+        }
+
+        .width {
+            width: 15%;
+        }
+    </style>
+
+    <!--air datetimepicker-->
+    <link href="
+https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.min.css
+" rel="stylesheet">
+</head>
+<!--air datetimepicker-->
+
+
+<body>
+    <script src="
+https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.min.js
+"></script>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark gradient-custom">
+        <!-- Container wrapper -->
+        <div class="container-fluid">
+            <!-- Navbar brand -->
+            <a class="navbar-brand" href="#">FunNow</a>
+
+            <!-- Toggle button -->
+            <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
+                    data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <i class="fas fa-bars text-light"></i>
+            </button>
+
+            <!-- Collapsible wrapper -->
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <!-- Left links -->
+                <ul class="navbar-nav me-auto d-flex flex-row mt-3 mt-lg-0">
+                    <li class="nav-item text-center mx-2 mx-lg-1">
+                        <a class="nav-link" href="#!">
+                            <div>
+                                <i class="fa-solid fa-user mb-1"></i>
+                                <span class="badge rounded-pill badge-notification bg-dark"></span>
+                            </div>
+                            會員
+                        </a>
+                    </li>
+                    <li class="nav-item text-center mx-2 mx-lg-1">
+                        <a class="nav-link" href="#!">
+                            <div>
+                                <i class="fa-solid fa-house mb-1"></i>
+                                <span class="badge rounded-pill badge-notification bg-dark">2</span>
+                            </div>
+                            房東
+                        </a>
+                    </li>
+                    <li class="nav-item text-center mx-2 mx-lg-1">
+                        <a class="nav-link" href="#!">
+                            <div>
+                                <i class="fa-solid fa-face-smile mb-1"></i>
+                                <span class="badge rounded-pill badge-notification bg-dark">11</span>
+                            </div>
+                            評論
+                        </a>
+                    </li>
+                    <li class="nav-item text-center mx-2 mx-lg-1">
+                        <a class="nav-link" href="#!">
+                            <div>
+                                <i class="fa-solid fa-comment mb-1"></i>
+                                <span class="badge rounded-pill badge-notification bg-dark">1</span>
+                            </div>
+                            訊息
+                        </a>
+                    </li>
+                    <li class="nav-item text-center mx-2 mx-lg-1">
+                        <a class="nav-link" href="#!">
+                            <div>
+                                <i class="fa-solid fa-chart-line mb-1"></i>
+                                <span class="badge rounded-pill badge-notification bg-dark"></span>
+                            </div>
+                            數據分析
+                        </a>
+                    </li>
+                </ul>
+                <!-- Left links -->
+            </div>
+            <!-- Collapsible wrapper -->
+        </div>
+        <!-- Container wrapper -->
+    </nav>
+    <!-- Navbar -->
+
+    <div class="container mt-5">
+        <h3>評論審核</h3>
+    </div>
+
+    <!--篩選選單-->
+
+    <div class="container mt-3 d-flex flex-row ">
+        <div class="input-group width px-3">
+            <select class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
+                <option selected>標題</option>
+                <option value="1">訂單相關</option>
+                <option value="2">訂單相關</option>
+            </select>
+        </div>
+        <div class="input-group width px-3">
+            <select class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
+                <option selected>副標題</option>
+                <option value="1">住客評語</option>
+                <option value="2">住客評語</option>
+            </select>
+        </div>
+        <div class="input-group width px-3 me-5">
+            <!-- Air datepicker Html element -->
+            <input id="myDatepickerstart" placeholder="開始日期">
+            <!-- Air datepicker JavaScript-->
+        </div>
+        <div class="input-group width pe-3">
+            <!-- Air datepicker Html element -->
+            <input id="myDatepickerend" placeholder="結束日期">
+            <!-- Air datepicker JavaScript-->
+        </div>
+        <div class="ms-5">
+            <span>
+                <input type="text" class="form-control dispaly" id="searchBar" aria-label="" placeholder="輸入文字">
+            </span>
+        </div>
+        <div>
+            <input type="button" class="btn btn-outline-primary dispaly" id="searchBtn" value="搜尋">
+        </div>
+    </div>
+
+    <!--篩選標籤-->
+    <div class="container mt-3">
+
+        <div class="d-flex justify-content-start mt-3 ">
+            <div>
+                <a class="d-flex justify-content-center filterborder p-1 text-decoration-none" href="#!">
+                    全部
+                    <div class="ms-1">
+                        <span class="badge rounded-pill badge-notification bg-primary">1</span>
+                    </div>
+                </a>
+            </div>
+            <div>
+                <a class="d-flex justify-content-center filterborder p-1 text-decoration-none" href="#!">
+                    已審核
+                    <div class="ms-1">
+                        <span class="badge rounded-pill badge-notification bg-primary">5</span>
+                    </div>
+                </a>
+            </div>
+            <div>
+                <a class="d-flex justify-content-center filterborder p-1 text-decoration-none" href="#!">
+                    未審核
+                    <div class="ms-1">
+                        <span class="badge rounded-pill badge-notification bg-primary">1</span>
+                    </div>
+                </a>
+            </div>
+            <div>
+                <a class="d-flex justify-content-center filterborder p-1 text-decoration-none" href="#!">
+                    審核中
+                    <div class="ms-1">
+                        <span class="badge rounded-pill badge-notification bg-primary">1</span>
+                    </div>
+                </a>
+            </div>
+            <div>
+                <a class="d-flex justify-content-center filterborder p-1 text-decoration-none" href="#!">
+                    審核不通過
+                    <div class="ms-1">
+                        <span class="badge rounded-pill badge-notification bg-primary">1</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!--資料表格-->
+    <div class="container mt-5">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <td>住宿ID</td>
+                    <td>全名</td>
+                    <td>Email</td>
+                    <td>電話</td>
+                    <td>標題</td>
+                    <td>副標題</td>
+                    <td>訊息</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>100012</td>
+                    <td>Jonh Doe</td>
+                    <td>jonhdoe@gmail.com</td>
+                    <td>+886912345678</td>
+                    <td>評論相關</td>
+                    <td>住客評語</td>
+                    <td><input id="btn1" type="button" value="詳細" /> </td>
+                </tr>
+                <tr>
+                    <td>100015</td>
+                    <td>Jane Doe</td>
+                    <td>janedoe@gmail.com</td>
+                    <td>+886912345679</td>
+                    <td>評論相關</td>
+                    <td>住客評語</td>
+                    <td><input id="btn2" type="button" value="詳細" /></td>
+                </tr>
+                <tr>
+                    <td>100100</td>
+                    <td>Michael</td>
+                    <td>michael@gmail.com</td>
+                    <td>+886912346579</td>
+                    <td>評論相關</td>
+                    <td>住客評語</td>
+                    <td><input id="btn3" type="button" value="詳細" /></td>
+                </tr>
+            </tbody>
+        </table>
+
+
+    </div>
+
+
+
+
+
+
+
+
+    <script>
+        const btn1 = document.getElementById("btn1");
+        btn1.addEventListener("click", () => {
+            Swal.fire({
+                text: "我在您的網站上預訂了一間房間，但抵達後發現房間與描述不符，且有清潔問題。請協助更換房間或退款，謝謝。",
+                icon: "info"
+            });
+
+        })
+
+        /*開始日期*/
+        const cn1 = {
+            days: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+            daysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+            daysMin: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+            months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            today: '今天',
+            clear: '清除',
+            dateFormat: 'yyyy/MM/dd',
+            timeFormat: 'hh:mm aa',
+            firstDay: 0
+        }
+
+        const datepickerstart = new AirDatepicker('#myDatepickerstart', {
+            locale: cn1, // Set language
+            autoClose: true,
+        })
+
+        /*結束日期*/
+        const cn2 = {
+            days: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+            daysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+            daysMin: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+            months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            today: '今天',
+            clear: '清除',
+            dateFormat: 'yyyy/MM/dd',
+            timeFormat: 'hh:mm aa',
+            firstDay: 0
+        }
+
+        const datepickerend = new AirDatepicker('#myDatepickerend', {
+            locale: cn2, // Set language
+            autoClose: true,
+        })
+
+
+
+
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+    <!--sweetalert2 link-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://kit.fontawesome.com/e519665520.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</body>
+</html>

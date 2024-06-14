@@ -1,0 +1,153 @@
+﻿
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <!-- 套版的CSS -->
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="~/image/ming_img/favicon.png" type="image/png">
+    <title>FUNNOW</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="~/css/ming_css/bootstrap.css">
+    <link rel="stylesheet" href="~/ming/vendors/linericon/style.css">
+    <link rel="stylesheet" href="~/css/ming_css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/ming/vendors/owl-carousel/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/ming/vendors/bootstrap-datepicker/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="~/ming/vendors/nice-select/css/nice-select.css">
+    <link rel="stylesheet" href="~/ming/vendors/owl-carousel/owl.carousel.min.css">
+    <!-- main css -->
+    <link rel="stylesheet" href="~/css/ming_css/style.css">
+    <link rel="stylesheet" href="~/css/ming_css/styleparty.css">
+    <link rel="stylesheet" href="~/css/ming_css/responsive.css">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+
+    
+
+
+<style>
+ .navHouseBtn
+{
+            font-size: 0.9rem;
+            letter-spacing: 0.05rem;
+            padding: 0.75rem 1rem;
+            background-color: white;
+            border: solid 1px #ff567d;
+            margin-top: 15%;
+            color: #ff567d;
+            border-radius: 5px;
+}
+
+ .navHouseBtn:hover 
+ {
+                background-color: #ff567d;
+                color: white;
+ }
+
+.navLoginBtn
+{
+            font-size: 0.9rem;
+            letter-spacing: 0.05rem;
+            padding: 0.75rem 1rem;
+            background-color: white;
+            border: none;
+            margin-top: 15%;
+            color: #5392f9;
+           
+}
+
+ .navLoginBtn:hover 
+{
+   background-color: #5392f9;
+   color: white;
+}
+
+        .navRegBtn
+        {
+            font-size: 0.9rem;
+            letter-spacing: 0.05rem;
+            padding: 0.75rem 1rem;
+            background-color: white;
+            border: solid 1px #5392f9;
+            margin-top: 15%;
+            color: #5392f9;
+            border-radius: 5px;
+        
+        
+        }
+
+        .navRegBtn:hover
+        {
+                background-color: #5392f9;
+                color: white;
+        
+        }
+
+</style>
+</head>
+
+<div>
+            <nav class="navbar navbar-expand-lg navbar-light" style="height: 60px;">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <a class="navbar-brand logo_h" href="index.html" style="padding:5px;">
+                    <img src="~/image/ming_img/FunNowlogo.png" style="height: 60px; border-radius: 12px;">
+                </a>
+                <h6>@ViewData["SessionKey"]</h6>
+                <label>現在是登出狀態</label>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
+                    <ul class="nav navbar-nav menu_nav ml-auto">
+                        <li class="nav-item active">
+                            <button class="navHouseBtn">刊登家中空房</button>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="about.html">
+                                <img src="~/image/ming_img/flag.jpg" style="height:50px"/>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link">NT $</a>
+                        </li>
+                        <li class="nav-item">
+                            <button class="navLoginBtn">A咖登入</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="navRegBtn">我是新朋友</button>
+                        </li>
+
+                        <li class="nav-item submenu dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <i class=" fa-solid fa-bars"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="blog.html">會員資料</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="blog-single.html">評論</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="blog-single.html">我的最愛</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                </div>
+            </nav>
+</div>

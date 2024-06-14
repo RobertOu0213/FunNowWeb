@@ -1,0 +1,113 @@
+﻿
+
+.comment-cube {
+    border-radius: 8px;
+    background-color: #3f62ee;
+    color: white;
+    padding: 8px;
+}
+
+.mycontainer {
+    width: 70%;
+    margin-left:15%;
+    margin-right:15%;
+}
+
+.font-sty { 
+    font-weight: bold;
+    font-size:24px;
+}
+.font-sty-s {
+    font-weight: bold;
+    font-size: 18px;
+}
+}
+/*各項評分條*/
+.grid-container {
+    width: 70%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.grid-item {
+    width: calc(33.33% - 10px);
+    margin-bottom: 20px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+/*進度條 http://www.webkaka.com/tutorial/html/2021/1028198/*/
+.progress2 {
+    padding: 2px;
+    border-radius: 30px;
+    background: #D0D0D0;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25), 0 1px rgba(255, 255, 255, 0.08);
+    width: 90%;
+}
+
+.progress-bar2 {
+    height: 10px;
+    border-radius: 30px;
+    background-image: linear-gradient(to bottom, #005AB5, #0066CC));
+    transition: 0.4s linear;
+    transition-property: width, background-color;
+}
+
+.progress-moved .progress-bar2 {
+    width: 80%;
+    background-color: #0072E3;
+    animation: progressAnimation 1s;
+}
+
+
+
+@keyframes progressAnimation {
+    0% {
+        width: 5%;
+        background-color: #0072E3;
+    }
+
+    100% {
+        width: 80%;
+        background-color: #0072E3;
+    }
+}
+
+.commentList-right {
+    background-color: #ECF5FF;
+    border-radius: 10px;
+}
+
+.commentList-left-score {
+    font-family: Bahnschrift;
+    color: #0080FF;
+    font-size: 30px;
+}
+
+.commentList-left-scoretxt {
+    font-family: Bahnschrift;
+    color: #0080FF;
+}
+
+.comment-left-fontsty {
+    font-size: 14px;
+}
+
+.comment-font-color {
+    color: #8E8E8E;
+    font-size: 14px;
+}
+
+.dispaly {
+    display: none;
+}
+
+.link {
+    text-decoration: none;
+    font-family: 微軟正黑體;
+    color: #2894FF;
+}
+
+    .link:hover {
+        color: #dc3545;
+    }

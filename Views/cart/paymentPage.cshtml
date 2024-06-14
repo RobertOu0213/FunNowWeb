@@ -1,0 +1,193 @@
+﻿
+@{
+    ViewData["Title"] = "paymentPage";
+    @model List<PrjFunNowWeb.Models.ViewModel.CReservationSummaryViewModel>
+}
+
+
+<nav>
+    <div class="logo">
+        <img src="~/ou/image/FunNow_Logo_Horizontal_Orange.png" alt="LOGO">
+    </div>
+    <div class="md-stepper-horizontal orange">
+        <div class="md-step active">
+            <div class="md-step-circle"><span>1</span></div>
+            <div class="md-step-title">填寫住客資料</div>
+            <div class="md-step-bar-left"></div>
+            <div class="md-step-bar-right"></div>
+        </div>
+        <div class="md-step">
+            <div class="md-step-circle"><span>2</span></div>
+            <div class="md-step-title">選擇付款方式</div>
+            <div class="md-step-bar-left"></div>
+            <div class="md-step-bar-right"></div>
+        </div>
+        <div class="md-step">
+            <div class="md-step-circle"><span>3</span></div>
+            <div class="md-step-title">預訂已確認！</div>
+            <div class="md-step-bar-left"></div>
+            <div class="md-step-bar-right"></div>
+        </div>
+    </div>
+    <div class="user-container">
+        <button type="button">
+            <img src="" alt="...">
+            <span>Oliver</span>
+            <i class="fa-solid fa-caret-down"></i>
+        </button>
+    </div>
+</nav>
+<main>
+    <section class="left-section">
+        <form action="" method="post">
+            <div class="contact-info p-3">
+                <div class="contact-info-static mb-2">
+                    <div class="text-gray-500 text-xs">針對所有預定</div>
+                    <div class="fw-bold">聯絡資訊</div>
+                    <div class="pt-1 pb-1 text-sm">您的確認信將寄至此</div>
+                    <div class="text-red-500 text-sm">*必填欄位</div>
+                </div>
+                <div class="contact-info-label">
+                    <div class="d-flex">
+                        <div class="w-100 m-1">
+
+                            <label for="firstname">名字*</label>
+                            <input type="text" id="firstname" name="firstname" value="" class="form-control">
+
+                        </div>
+                        <div class="w-100 m-1">
+
+                            <label for="lastname">姓氏*</label>
+                            <input type="text" id="lastname" name="lastname" value="" class="form-control">
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="w-100 m-1">
+
+                            <label for="email">電子郵件地址*</label>
+                            <input type="email" id="email" name="email" value="" class="form-control">
+ 
+                        </div>
+                        <div class="w-100 m-1">
+
+                            <label for="phone">電話號碼*</label>
+                            <input type="text" id="phone" name="phone" value="" class="form-control">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="user-info">
+                <div>住客資料</div>
+                <hr>
+                <div class="contact-info-label">
+                    <div class="d-flex">
+                        <div class="w-100 m-1">
+                            <label for="firstname">名字</label>
+                            <input type="text" id="firstname" name="firstname" value="" class="form-control">
+                        </div>
+                        <div class="w-100 m-1">
+                            <label for="lastname">姓氏</label>
+                            <input type="text" id="lastname" name="lastname" value="" class="form-control">
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="w-100 m-1">
+                            <label for="email">電子郵件地址*</label>
+                            <input type="email" id="email" name="email" value="" class="form-control w-50">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-end mt-3">
+                <button type="submit" class="btn btn-primary col-4 rounded-pill fw-bold">前往付款頁面</button>
+            </div>
+        </form>
+    </section>
+
+
+
+
+
+    <section class="right-section">
+        <div class="reservation-container mb-3">
+            <div class="reservation-container-title">預訂摘要</div>
+            @foreach (var item in Model)
+            {
+                <div class="reservation-container-info">
+                    <div class="mb-3">
+                        <i class="fa-solid fa-city fa-xs"></i>
+                        <span>住宿</span>
+                        <span class="text-neutral-400 text-xs">@item.CityName</span>
+                    </div>
+                    <div class="d-flex mb-4">
+                        <div><img class="reservation-container-info-img" src="@item.RoomImage" alt="..." /></div>
+                        <div class="ms-2">
+                            <div class="fw-bolder">@item.HotelName</div>
+                            <div>
+                                @for (int i = 0; i < item.LevelStar; i++)
+                                {
+                                    <i class="fa-solid fa-star fa-xs"></i>
+                                }
+                            </div>
+                            <div class="d-flex">
+                                <div class="reservation-container-info-score">7</div>
+                                <div class="d-flex flex-column mt-2">
+                                    <span class="text-xs">滿意</span>
+                                    <span class="text-neutral-500 text-xs">得分自 @item.AllCommentsCount 篇評鑑</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <i class="fa-solid fa-calendar-days me-2"></i>
+                        <span>@item.CheckInDate.ToString("yyyy年MM月dd日")</span>
+                        <span>-</span>
+                        <span>@item.CheckOutDate.ToString("yyyy年MM月dd日")</span>
+                        <span>|</span>
+                        <span>@item.NumberOfNights 晚</span>
+                    </div>
+                    <div>
+                        <i class="fa-solid fa-bed me-1"></i>
+                        <span>1 x @item.RoomType</span>
+                    </div>
+                    <div class="mb-2">
+                        <span>入住人數限制：</span>
+                        <span>@item.MaximumOccupancy 位大人</span>
+                    </div>
+                    <div class="mb-4">
+                        <span>旅客：</span>
+                        <span>@item.MaximumOccupancy 位大人</span>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="payment-detail">
+            <div class="fs-5">收費明細</div>
+            <div class="d-flex justify-content-between">
+                <div>總價</div>
+                <div>NT @Model.Sum(m => m.RoomPrice * m.NumberOfNights)</div>
+            </div>
+            <div class="text-slate-400 text-xs">
+                含稅與附加費用
+            </div>
+        </div>
+    </section>
+
+</main>
+
+
+@section Styles {
+    <link rel="stylesheet" href="~/ou/css/paymentPage.css" />
+}
+@section Scripts {
+    <script>
+
+        $(document).ready(async function() {
+
+            await fetch('')
+
+        })
+
+    </script>
+}

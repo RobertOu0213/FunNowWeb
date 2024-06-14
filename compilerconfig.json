@@ -26,5 +26,17 @@
   {
     "outputFile": "wwwroot/ou/css/UploadImage.css",
     "inputFile": "wwwroot/ou/css/UploadImage.scss"
+  },
+  {
+    "outputFile": "wwwroot/ou/css/HostHotelInfo.css",
+    "inputFile": "wwwroot/ou/css/HostHotelInfo.scss"
+  },
+  {
+    "outputFile": "wwwroot/ou/css/cartItems.css",
+    "inputFile": "wwwroot/ou/css/cartItems.scss"
+  },
+  {
+    "outputFile": "wwwroot/ou/css/paymentPage.css",
+    "inputFile": "wwwroot/ou/css/paymentPage.scss"
   }
 ]

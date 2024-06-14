@@ -78,11 +78,6 @@ main {
             color: white;
             font-size: 12px;
 
-
-            .active & {
-                background-color: #2196F3;
-            }
-
             &::after {
                 /*    position: absolute;*/
                 /*top: 8%;*/
@@ -119,7 +114,7 @@ main {
         width: 85%;
         margin: 0 auto;
         /*padding:20px;*/
-        
+
         .panel {
             background-color: #fff;
             border: 1px solid grey;
@@ -165,6 +160,11 @@ main {
             transform: translate(-50%, -50%);
         }
 
+        .alertMessage {
+            color: red;
+            font-size: 12px;
+        
+        }
     }
 }
 
@@ -180,6 +180,8 @@ main {
     font-size: 14px;
     border-radius: 3px;
     padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
 }
 
 .btn_previous:hover {

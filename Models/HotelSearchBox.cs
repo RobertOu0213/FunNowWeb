@@ -27,15 +27,29 @@ public partial class HotelSearchBox
 
     public int MemberId { get; set; }
 
+    public int CityId { get; set; }
+
+    public string CityName { get; set; }
+
     public string CommentTitle { get; set; }
 
     public string CommentText { get; set; }
 
     public string CountryName { get; set; }
 
-    public string HotelEquipmentName { get; set; }
+    public int HotelEquipmentId { get; set; }
+
+    public string HotelEquipmentNames { get; set; }
 
     public string HotelImage { get; set; }
+
+    public int HotelTypeId { get; set; }
+
+    public string HotelTypeName { get; set; }
+
+    public int RoomEquipmentId { get; set; }
+
+    public string RoomEquipmentNames { get; set; }
 
     public decimal? HotelPrice { get; set; }
 
