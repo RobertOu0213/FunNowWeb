@@ -81,8 +81,8 @@
 
         const memberId = 1;   //先寫死
 
-        // const url = `https://localhost:7103/api/HotelsFavorite/`+`${memberId}/FavoriteHotels`;
-        const url = `https://localhost:7103/api/HotelsFavorite/1/FavoriteHotels`;
+          const url = `https://localhost:7103/api/HotelsFavorite/`+`${memberId}/FavoriteHotels`;
+       // const url = `https://localhost:7103/api/HotelsFavorite/1/FavoriteHotels`;
 
     
 
@@ -98,7 +98,7 @@
                 const cities = data.map(item => {
                     const { imageUrl, hotelName, city, country, hotelCount } = item;
                     return( `
-                                            <a href="/HotelsFavorites/HotelsFavoritesListToCity?memberId=${memberId}&city=${city}&country=${country}">
+                    <a href="/HotelsFavorites/HotelsFavoritesListToCity?memberId=${memberId}&city=${city}&country=${country}">  /* 點擊卡片會轉向到這個Controller/Action  =>   HotelsFavorites/HotelsFavoritesListToCity*/
                             <div class="col-md-4">
                                 <div class="card">
                                     <img src="${imageUrl}" class="card-img-top" alt="${city}">
