@@ -23,8 +23,6 @@ public partial class FunNowContext : DbContext
 
     public virtual DbSet<CommentTravelerType> CommentTravelerTypes { get; set; }
 
-    public virtual DbSet<CommentWithInfo> CommentWithInfos { get; set; }
-
     public virtual DbSet<Country> Countries { get; set; }
 
     public virtual DbSet<Coupon> Coupons { get; set; }
@@ -142,24 +140,6 @@ public partial class FunNowContext : DbContext
                 .HasForeignKey(d => d.TravelerTypeId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_CommentTravelerType_TravelerTypes");
-        });
-
-        modelBuilder.Entity<CommentWithInfo>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToView("CommentWithInfo");
-
-            entity.Property(e => e.CommentId).HasColumnName("CommentID");
-            entity.Property(e => e.FirstName)
-                .IsRequired()
-                .HasMaxLength(100);
-            entity.Property(e => e.HotelId).HasColumnName("HotelID");
-            entity.Property(e => e.RoomId).HasColumnName("RoomID");
-            entity.Property(e => e.RoomTypeName).IsRequired();
-            entity.Property(e => e.TravelerType)
-                .IsRequired()
-                .HasMaxLength(50);
         });
 
         modelBuilder.Entity<Country>(entity =>
