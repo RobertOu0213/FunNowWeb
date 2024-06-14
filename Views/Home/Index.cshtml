@@ -4,8 +4,9 @@
     Layout = "_Layout";
 }
 @section Styles{
+
+    @* //房間數及大人小孩下拉選單 *@
     <style>
-        /* //房間數及大人小孩下拉選單 */
         .dropdown {
             position: relative;
             display: inline-block;
@@ -139,6 +140,7 @@
             }
 
     </style>
+    @* //下拉選單內容 *@
     <style>
         .input-container {
             width: 100%;
@@ -178,6 +180,38 @@
 
 
     </style>
+
+    <style>
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        input[type="text"], input[type="date"] {
+            width: 60%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+            input[type="text"]::placeholder, input[type="date"]::placeholder {
+                color: #aaa;
+            }
+
+            input[type="text"]:focus, input[type="date"]:focus {
+                border-color: #66afe9;
+                box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+                outline: none;
+            }
+    </style>
+
 }
 
 @section Scripts{   
@@ -424,7 +458,7 @@
                                             </div>
                                                 <div class="dropdown-item">
                                                 <label for="children">
-                                                    小童
+                                                    孩童
                                                     <span class="children-hint">(12歲以下)</span>
                                                 </label>
                                                 <div class="quantity-control">
