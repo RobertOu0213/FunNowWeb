@@ -6,6 +6,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @model PrjFunNowWeb.Models.louie_viewmodel.pgHotel_HotelDetailViewModel
+<!-- 插入聊天室的Partial View -->
+@Html.Partial("~/Views/Chat/Mailroom.cshtml"))
 <div class="container mt-5 pt-5" id="top">
     <div class="row">
         <div>
@@ -283,7 +285,7 @@
                                 </table>
                             </div>
                             <div class="col-8">
-                                <table class="table w-100">
+                                <table class="w-100 table">
                                     <tr>
                                         <th class="col-5">設備</th>
                                         <th class="col-2">可住人數</th>
@@ -310,8 +312,8 @@
                                         <td class="align-bottom">
                                             <h3>TWD @room.RoomPrice</h3>
                                             <div style="margin-left: auto;">
-                                                <button class="btn btn-outline-primary btn-lg">加入購物車</button>
-                                                <button class="btn btn-primary btn-lg">立即下訂</button>
+                                                <button class="btn btn-outline-primary btn-lg addCart" data-id="@room.RoomId">加入購物車</button>
+                                                <button class="btn btn-primary btn-lg directBuy" data-roomid="">立即下訂</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -506,9 +508,9 @@
                             .ToList();
                             for (int i = 0; i < hotelGroups.Count; i++)
                             {
-                                        <div class="carousel-item @(i == 0 ? "active" : "")">
-                                            <div class="card-deck mb-5">
-                                                @foreach (var index in hotelGroups[i])
+                                    <div class="carousel-item @(i == 0 ? "active" : "")">
+                                        <div class="card-deck mb-5">
+                                            @foreach (var index in hotelGroups[i])
                                         {
                                             var hotel = index < Model.HotelDetail.SimilarHotels.Count ? Model.HotelDetail.SimilarHotels[index] : null;
                                             <a href="@((hotel != null) ? ("/PgHotel/pgHotel?hotelId=" + hotel.HotelId + "&checkInDate=" + @Model.HotelDetail.CheckInDate + "&checkOutDate=" + @Model.HotelDetail.CheckOutDate) : "#")" class="card">
@@ -517,10 +519,10 @@
                                                             <div class="card-body">
                                                                 @if (hotel != null)
                                                         {
-                                                                    <h5 class="card-title">@hotel.HotelName</h5>
+                                                                <h5 class="card-title">@hotel.HotelName</h5>
                                                             for (int j = 0; j < hotel.LevelStar; j++)
                                                             {
-                                                                        <img src="~/image/louieee_img/star.png" />
+                                                                    <img src="~/image/louieee_img/star.png" />
                                                             }
                                                                     <p class="card-text">
                                                                 @{
@@ -544,22 +546,22 @@
                                                         }
                                                         else
                                                         {
-                                                                    <h5 class="card-title">占位符酒店名稱</h5>
-                                                                    <p class="card-text">
-                                                                        <span>占位符評論</span>
-                                                                        <i class="fa-solid fa-location-dot">占位符酒店地址</i>
-                                                                    </p>
+                                                                <h5 class="card-title">占位符酒店名稱</h5>
+                                                                <p class="card-text">
+                                                                    <span>占位符評論</span>
+                                                                    <i class="fa-solid fa-location-dot">占位符酒店地址</i>
+                                                                </p>
                                                         }
                                                             </div>
                                                             <div class="card-footer">
                                                                 <small class="text-body-secondary">只剩 @hotel?.AvailableRooms 間房!!!</small>
                                                             </div>
 
-                                                        </div>
-                                                    </a>
+                                                    </div>
+                                                </a>
                                         }
-                                            </div>
                                         </div>
+                                    </div>
                             }
                         }
                     </div>
@@ -576,6 +578,16 @@
 
         </div>
     </div>
+</div>
+
+
+<!-- 購物車modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#rightModal">
+    Open Right Side Modal
+</button>
+
+<div class="cartModal">
+ 
 </div>
 
 @section Styles {
@@ -642,6 +654,7 @@
             max-height: 400px;
             overflow-y: auto;
         }
+
         #room-images img {
     max-width: 48%;
     width: 48%;
@@ -688,6 +701,92 @@
         }
 
 
+       /*  購物車modal */
+        .cartModal .modal.right .modal-dialog {
+            position: fixed;
+            top: 0;
+            right: 0;
+            margin: 0;
+            height: 100%;
+            max-height: 100%;
+            width: 375px; 
+            transform: translateX(100%);
+            transition: transform 0.3s ease-out;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cartModal .modal.right.show .modal-dialog {
+            transform: translateX(0);
+        }
+
+        .cartModal .modal-content {
+            height: 100%;
+            border-radius: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cartModal .modal-header {
+            flex-shrink: 0;
+        }
+
+        .cartModal .modal-body {
+            flex-grow: 1;
+
+            height: 200px; 
+        }
+
+        .cartModal .modal-footer {
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: start;
+            height: 500px; 
+        }
+
+        .cartModal .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .cartModal .modal-open {
+            overflow: hidden;
+        }
+
+            .cartModal .modal-open .modal-backdrop {
+                opacity: 0.5;
+            }
+
+        .cartModal .modal-header h5 {
+            font-size: 1.25rem;
+        }
+
+        .cartModal .modal-body img {
+            border-radius: 5px;
+            width: 56px;
+            height: 56px;
+        }
+
+        .cartModal .modal-body .room-info {
+            margin-left: 10px;
+        }
+
+        .cartModal .modal-footer .btn {
+            width: 80%;
+            margin-bottom: 10px;
+            transition: opacity 0.3s ease;
+        }
+
+            .cartModal .modal-footer .btn:hover {
+                opacity: 0.7; 
+                background-color:green;
+            }
+
+        .cartModal .modal-footer .note {
+            color: red;
+            font-weight: bold;
+        }
 
     </style>
 }
@@ -841,12 +940,173 @@
                         }
                     });
                 });
-            
+
+            //購物車
+            $('.addCart').on('click', async function () {
+                const roomID = $(this).data('id');
+                // console.log(roomID);
+
+                //是否有登入
+                // const memberID = getMemberID();
+                // if (!memberID) {
+                //     window.location.href = '/login'; 
+                //     return;
+                // }
+
+                const orderDetail = {
+                    MemberID: 1,
+                    RoomID: roomID,
+                    CheckInDate: "2024-06-15", 
+                    CheckOutDate: "2024-06-20",
+               
+                };
+
+                try {
+                    const response = await fetch('https://localhost:7103/api/Cart', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(orderDetail)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(response.statusText);
+                    }
+
+                    const data = await response.json();
+                    if (data.success) {
+                        // console.log(data);
+                        showCartModal(data);
+                    }
+                } catch (err) {
+                    console.error(err);
+ 
+                }
+            });
+
+           
+
+            //直接購買
+            $('.directBuy').on('click', async function () {
+                // const roomID = $(this).data('roomid');
+
+                //是否有登入
+                // const memberID = getMemberID();
+                // if (!memberID) {
+                //     window.location.href = '/login';
+                //     return;
+                // }
+
+                const orderDetail = {
+                    MemberID: 1,
+                    RoomID: 10,   //寫死roomID,
+                    CheckInDate: "2024-06-15", 
+                    CheckOutDate: "2024-06-20", 
+                };
+
+                try {
+                    const response = await fetch('https://localhost:7103/api/Cart', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(orderDetail)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(response.statusText);
+                    }
+
+                    const data = await response.json();
+                    if (data.success) {
+                        console.log(data);
+                        // window.location.href = "";
+                    }
+                   
+                } catch (err) {
+                    console.error(err);
+
+                }
+            });
+
+            //前往購物車
+            $(document).on('click', '#ToCartItems', function () {
+
+                var userId = 1;
+                const cartPageUrl = window.location.origin + '/cart/cartItems?userId=' + userId;
+
+                window.location.href = cartPageUrl;
+            });
+
+            $('#rightModal').on('show.bs.modal', function (e) {
+                $('body').addClass('modal-open');
+            });
+
+            $('#rightModal').on('hidden.bs.modal', function (e) {
+                $('body').removeClass('modal-open');
+            });
 
         });
 
+
+        function getDaysBetweenDates(checkInDate, checkOutDate) {
+            const checkIn = new Date(checkInDate);
+            const checkOut = new Date(checkOutDate);
+            const timeDifference = checkOut - checkIn;
+            const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24)); // 轉換為天數
+            return daysDifference;
+        }
+
+        function getImageUrl(imagePath) {
+            if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
+                return imagePath;
+            } else {
+                return window.location.origin + '/image/' + imagePath;
+            }
+        }
+        
+        function showCartModal(data) {
+
+            const days = getDaysBetweenDates(data.checkInDate, data.checkOutDate);
+            const totalPrice = days * data.roomPrice;
+            const imageUrl = getImageUrl(data.roomImage);
+
+            let cartString = `
+
+                            <div class="modal right fade" id="rightModal" tabindex="-1" aria-labelledby="rightModalLabel" aria-hidden="true">
+                             <div class="modal-dialog">
+                                 <div class="modal-content">
+                                     <div class="modal-header">
+                                         <h5 class="modal-title" id="rightModalLabel">已加入購物車</h5>
+                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                     </div>
+                                     <div class="modal-body d-flex align-items-center">
+                                          <img src="${imageUrl}" alt="...">
+                                              <div class="room-info d-flex flex-column">
+                                             <p>${data.roomName} x ${days}晚已新增至購物車</p>
+                                             <p>（價格為NT$ ${totalPrice}）</p>
+                                         </div>
+                                     </div>
+                                     <div class="modal-footer">
+                                         <button type="button" class="btn btn-primary" id="ToCartItems">前往購物車</button>
+
+                                         <div class="note">訂越多，省越多！</div>
+                                         <p>同時預訂多個項目，還能省更多！</p>
+                                     </div>
+                                 </div>
+                             </div>
+                           </div>
+
+                        `
+
+            $('.cartModal').html(cartString);
+            $('#rightModal').modal('show');
+        }
+
+
         function smoothScroll(targetId) {
-            console.log(targetId)
+            console.log(targetId);
             const targetEle = document.getElementById(targetId)
             if (targetEle) {
                 window.scrollTo({
@@ -855,6 +1115,8 @@
                 })
             }
         }
+
+      
 
     </script>
 

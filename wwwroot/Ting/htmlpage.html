@@ -1,0 +1,257 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* 全局樣式 */
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        /* 對話框樣式 */
+        .chatbox {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            z-index: 1000;
+        }
+
+        .chatbox-button {
+            background-color: #007AFF;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease-in-out;
+        }
+
+        .chatbox-content {
+            background-color: #FFFFFF;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            max-width: 360px;
+            margin-bottom: 16px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease-in-out;
+        }
+
+            .chatbox-content.show {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        .chatbox-header {
+            background-color: #007AFF;
+            color: #FFFFFF;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .close-button {
+            background-color: transparent;
+            border: none;
+            color: #FFFFFF;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 50%;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+            .close-button:hover {
+                background-color: rgba(255, 255, 255, 0.2);
+            }
+
+        .chatbox-body {
+            padding: 16px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        #chatbox-quick {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+            #chatbox-quick a {
+                color: #007AFF;
+                text-decoration: none;
+            }
+
+        /* 對話選項樣式 */
+        .chat-options {
+            background-color: #fff;
+            color: #333;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: none;
+            flex-direction: row;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+            .chat-options button {
+                background-color: transparent;
+                color: #333;
+                border: none;
+                padding: 10px;
+                cursor: pointer;
+                text-align: left;
+                width: auto;
+                transition: all 0.2s ease-in-out;
+            }
+
+                .chat-options button:hover {
+                    background-color: #f0f0f0;
+                }
+
+        /* 電子郵件對話框樣式 */
+        .email-chat-content {
+            opacity: 0;
+            transform: translateY(100%);
+            transition: all 0.5s ease-in-out;
+        }
+
+            .email-chat-content.show {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        /* 通用按鈕樣式 */
+        button {
+            background-color: #0078d4;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+
+            button:hover {
+                background-color: #005bb5;
+            }
+
+        /* 文本區域樣式 */
+        textarea {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 8px;
+            font-family: inherit;
+            resize: vertical;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- 聊天框 -->
+    <div class="chatbox">
+        <!-- 聊天按鈕 -->
+        <button class="chatbox-button" aria-label="Chat">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2ZM20 16H5.17L4 17.17V4H20V16ZM11 12H13V14H11V12ZM11 7H13V10H11V7Z" fill="#FFFFFF" />
+            </svg>
+        </button>
+
+        <!-- 聊天選項 -->
+        <div class="chat-options">
+            <button data-chat="quick-chat">快問快答</button>
+            <button data-chat="email-chat">發電郵給住宿</button>
+        </div>
+
+        <!-- 聊天內容 -->
+        <div class="chatbox-content">
+            <div class="chatbox-header">
+                <span id="chatbox-title">快問快答 (測試版)</span>
+                <button class="close-button" aria-label="Close">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z" fill="#FFFFFF" />
+                    </svg>
+                </button>
+            </div>
+            <div class="chatbox-body">
+                <div id="chatbox-quick">
+                    本對話由AI生成並將被記錄,可能會出現不準確的情況。請勿輸入任何個人或敏感資訊。有關我們使用生成式AI的詳情,請參閱我們的<a href="/info/termsofuse.html" target="_blank">使用條款</a>。
+                </div>
+            </div>
+        </div>
+
+        <!-- 電子郵件對話框 -->
+        <div class="email-chat-content">
+            請在此輸入您的電子郵件內容:<br><textarea rows="5"></textarea><br>
+            <button>發送</button>
+            <p>
+                系統將保留此對話記錄。要瞭解更多資訊,請參閱我們的
+                <a href="/info/privacypolicy.html" target="_blank">隱私政策</a>。
+            </p>
+        </div>
+    </div>
+
+    <!-- JavaScript 代碼 -->
+    <script>
+        // 選擇所需的DOM元素
+        const chatboxButton = document.querySelector('.chatbox-button');
+        const chatOptions = document.querySelector('.chat-options');
+        const chatboxContent = document.querySelector('.chatbox-content');
+        const emailChatContent = document.querySelector('.email-chat-content');
+        const closeButton = document.querySelector('.close-button');
+
+        // 聊天按鈕點擊事件處理
+        chatboxButton.addEventListener('click', function () {
+            // 切換聊天選項的顯示和隱藏
+            if (chatOptions.style.display === 'none' || chatOptions.style.display === '') {
+                chatOptions.style.display = 'flex';
+                chatboxContent.classList.remove('show');
+                emailChatContent.classList.remove('show');
+            } else {
+                chatOptions.style.display = 'none';
+            }
+        });
+
+        // 對話選項按鈕點擊事件處理
+        document.querySelectorAll('.chat-options button').forEach(function (button) {
+            button.addEventListener('click', function () {
+                const chatType = this.getAttribute('data-chat');
+                const quickChatContent = document.getElementById('chatbox-quick');
+
+                // 根據選擇的對話類型顯示相應的內容
+                if (chatType === 'quick-chat') {
+                    quickChatContent.style.display = 'block';
+                    emailChatContent.style.display = 'none';
+                    chatboxContent.classList.add('show');
+                    emailChatContent.classList.remove('show');
+                } else if (chatType === 'email-chat') {
+                    quickChatContent.style.display = 'none';
+                    emailChatContent.style.display = 'block';
+                    chatboxContent.classList.remove('show');
+                    emailChatContent.classList.add('show');
+                }
+
+                // 隱藏聊天選項
+                chatOptions.style.display = 'none';
+            });
+        });
+
+        // 關閉聊天框
+        closeButton.addEventListener('click', function () {
+            chatboxContent.classList.remove('show');
+            emailChatContent.classList.remove('show');
+        });
+    </script>
+</body>
+</html>

@@ -9,8 +9,8 @@
             <div class="content">
                 <div id="step-control" class="stepper-panel">
                     <div class="stepper-container container">
-                        <div class="step active">
-                            <div class="circle-container"></div>
+                        <div class="step">
+                            <img src="~/ou/image/circle_round.png" alt="..." style="display:block; margin-right:20px;" />
                             <span class="connect-line"></span>
                             <div class="label-container">住宿基本資料</div>
                         </div>
@@ -183,7 +183,6 @@
         //下一步
         $('#btnNext').on('click', function () {
 
-
             let isFormValid = true;
 
             // 驗證住宿名稱
@@ -242,15 +241,7 @@
                 event.preventDefault();
             }
          
-          
-      
-          
-
-           
-
-      
-
-
+         
             const selectedHotelTypeID = $('input[name="TypeID"]:checked').val(); // 獲取選中的 HotelTypeID
 
             let selectedEquipments = [];

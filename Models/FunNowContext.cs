@@ -151,9 +151,7 @@ public partial class FunNowContext : DbContext
                 .ToView("CommentWithInfo");
 
             entity.Property(e => e.CommentId).HasColumnName("CommentID");
-            entity.Property(e => e.FirstName)
-                .IsRequired()
-                .HasMaxLength(100);
+            entity.Property(e => e.FirstName).IsRequired();
             entity.Property(e => e.HotelId).HasColumnName("HotelID");
             entity.Property(e => e.RoomId).HasColumnName("RoomID");
             entity.Property(e => e.RoomTypeName).IsRequired();

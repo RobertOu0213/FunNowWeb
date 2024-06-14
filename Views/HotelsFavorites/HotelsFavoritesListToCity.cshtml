@@ -1,0 +1,233 @@
+﻿@model IEnumerable<PrjFunNowWeb.ViewModels.OrderViewModel>
+
+
+@section Styles {
+    <style>
+
+        /* 爱心按钮样式 */
+        .love-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+            color: red; /* 默认颜色 */
+            cursor: pointer;
+            z-index: 10; /* 确保在卡片顶部 */
+        }
+
+
+
+        .container {
+            width: 80%;
+            margin-top: 50px;
+        }
+
+
+
+        /* 调整卡片和图片的统一大小 */
+        .card {
+            height: auto; /* 根据内容自动调整卡片高度 */
+            overflow: hidden; /* 防止内容溢出 */
+            margin-top: 25px;
+            position: relative; /* 为爱心按钮定位 */
+            display: flex; /* 设置卡片为 Flexbox 容器 */
+            flex-direction: column; /* 垂直排列卡片内容 */
+        }
+
+        /* 文字置中 */
+        /*.card-body {
+                            text-align: left;*/ /* 將內部文字置中 */
+        /*font-size: 0.9rem;*/ /* 缩小字体大小，您可以根据需要调整这个值 */
+        /*padding: 10px;*/ /* 添加内边距以确保美观 */
+        /*}*/
+
+        /* 文字左对齐，设置统一高度 */
+        .card-body {
+            text-align: left; /* 将内部文字左对齐 */
+            flex: 1; /* Flexbox 使内容填充剩余空间 */
+            display: flex; /* 将 .card-body 设置为 Flexbox 容器 */
+            flex-direction: column; /* 垂直排列内容 */
+            justify-content: space-between; /* 在各元素间分配空间 */
+        }
+
+        /* 特别为评分和价格的文本设定大小 */
+        .card-text, .price {
+            font-size: 0.85rem; /* 可以适当调整以满足页面设计 */
+        }
+
+        .card img {
+            height: 180px; /* 統一圖片高度 */
+            width: 100%; /* 圖片寬度全滿 */
+            object-fit: cover; /* 圖片覆蓋整個區域，避免失真 */
+        }
+
+
+
+        /* 滑鼠懸停時添加陰影效果 */
+        .card:hover {
+            box-shadow: 0 7px 7px rgba(0, 0, 0, 0.4); /* 添加更大的陰影 */
+            /*transform: translateY(1px);*/ /* 輕微提升卡片 */
+            transition: 0.3s; /* 平滑過渡效果 */
+        }
+
+        /* 定價顯示在右側 */
+        .price {
+            text-align: right; /* 文字靠右 */
+            font-size: 1.0rem; /* 設定字體大小 */
+            font-weight: bold; /* 粗體字 */
+            margin-top: 8px; /* 上邊距 */
+            color: red;
+        }
+
+        /* 星星图标颜色 */
+        .fa-star {
+            color: orange; /* 设置为金色，您也可以使用任何您喜欢的颜色 */
+        }
+
+    </style>
+}
+
+
+<div class="container">
+    <div class="container">
+        <a href="/HotelsFavorites/HotelsFavoritesList">口袋清單</a>
+        <span>/</span>
+        <h3 id="cityandCountry">花蓮縣,台灣</h3>
+    </div>
+
+<div class="container">
+    <div class="row" id="hotelsContainer">
+    </div>
+</div>
+</div>
+
+@section Scripts {
+
+    
+        <script>
+                const hotelsContainer = document.querySelector('#hotelsContainer');
+        const cityCountryLabel = document.querySelector('#cityandCountry');
+
+        // 使用 URLSearchParams 解析 URL 中的參數
+        const urlParams = new URLSearchParams(window.location.search);
+        const memberId = urlParams.get('memberId') || 5;  // 從 URL 參數獲取 memberId，如果無，默認為 5
+        const cityName = urlParams.get('city');  // 從 URL 參數獲取城市名稱
+        const countryName = urlParams.get('country');  // 從 URL 參數獲取國家名稱
+        console.log("City: ", cityName);  // 应显示 "大阪"
+        console.log("Country: ", decodeURIComponent(countryName));  // 应显示 "日本"
+
+        const url = `https://localhost:7103/api/HotelsFavorite/${memberId}/FavoriteHotels/${encodeURIComponent(cityName)}`;
+
+        const loadFavoriteHotels = async () => {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+                console.log(data);
+
+                const hotels = data.map(hotel => {
+                    const { hotelId, hotelImage, hotelName, city, country, levelStar, Rating,minimumPrice } = hotel;
+
+                    // 解析rating字符串以获取JSON对象   //rating 欄位是一個JSON字串，你需要使用 JSON.parse() 將這個字串轉換成JavaScript物件。
+                    const ratingObj = JSON.parse(hotel.rating);
+
+                    // 现在可以访问averageScore和totalAverageScore
+                    const totalAverageScore = ratingObj.totalAverageScore;
+                    const averageScore = ratingObj.averageScore;
+
+                    console.log("Total Average Score:", totalAverageScore);
+                    console.log("Average Score Details:", averageScore);
+
+                    /* 在卡片元素上設置一個 data-hotel-id 屬性,用於存儲酒店 ID */
+                    return (`
+                                <div class="col-md-3">
+                                                    <div class="card" data-hotel-id="${hotelId}">                
+                                                     <img src="${hotelImage}" alt="Image of ${hotelName}" class="card-img-top">
+                                        <i class="fa-solid fa-heart love-button"></i> 
+                                        <div class="card-body">
+                                            <h5 class="card-title">${hotelName}</h5>
+                                            <p class="card-text">${city}, ${country}</p>
+                                            <p>${generateStars(levelStar)}</p>
+                                          <p class="card-text"> Rating: ${totalAverageScore} </p>
+                                            <p class="price">$${minimumPrice} / 晚</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            `);
+                });
+                hotelsContainer.innerHTML = hotels.join('');
+               // cityCountryLabel.textContent = `${cityName}, ${countryName}`;  // 更新標籤顯示正確的城市和國家
+                cityCountryLabel.textContent = `${decodeURIComponent(cityName)}, ${decodeURIComponent(countryName)}`;
+
+                  //須放在loadFavoriteHotels
+                //獲取所有愛心按鈕元素
+                const loveButtons = document.querySelectorAll('.love-button');
+
+                // 為每個愛心按鈕添加點擊事件監聽器，當愛心按鈕被點擊時,會觸發 handleLoveButtonClick 函數。
+                loveButtons.forEach(button => {
+                    button.addEventListener('click', handleLoveButtonClick);
+                });
+
+
+            } catch (error) {
+                console.error('Failed to fetch hotels:', error);
+                errorMessageContainer.textContent = '抱歉,加載收藏飯店列表時發生錯誤,請等待維修。';
+            }
+        };
+
+        const generateStars = (stars) => {
+            let starsHtml = '';
+            for (let i = 0; i < stars; i++) {
+                starsHtml += '<i class="fa-solid fa-star"></i>';
+            }
+            return starsHtml;
+        };
+
+        loadFavoriteHotels();
+
+     
+        // 處理愛心按鈕點擊事件
+        async function handleLoveButtonClick(event) {
+            const loveButton = event.currentTarget;
+            const card = loveButton.closest('.card');  // 獲取包含該按鈕的卡片元素
+            const hotelId = card ? card.dataset.hotelId : undefined;   // 假設您在卡片元素上設置了 data-hotel-id 屬性
+            const memberId = 5; // 假設會員 ID 為 5，您可以根據實際情況獲取會員 ID
+
+            if (!hotelId) {
+                console.error('Failed to get hotelId from card element');
+                return;
+            }
+            try {
+                console.log(`Sending request to update like status for memberId: ${memberId}, hotelId: ${hotelId}`);
+
+                // 使用 memberId 和 hotelId 變量構建 URL
+                const url = `https://localhost:7103/api/HotelsFavorite/like/${memberId}/${hotelId}`;  
+
+                const response = await fetch(url);
+                console.log(`按下愛心後的狀態: ${response.status}`);
+
+                if (response.ok) 
+                {
+                    // 如果請求成功，則從 DOM 中移除該卡片元素
+                  //  card.remove();
+                    loadFavoriteHotels();
+                } else {
+                    console.error('Failed to update like status:', response.status);
+                }
+            } catch (error) {
+                console.error('Failed to update like status:', error);
+            }
+        }
+
+
+
+    </script>
+}
+
+
+
+
+
+

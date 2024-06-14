@@ -57,6 +57,12 @@ builder.Services.Configure<GoogleCaptchaConfig>(builder.Configuration.GetSection
 // Add SignalR client services if needed for SignalR client side (optional)
 builder.Services.AddSignalR();
 
+
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+});
+
 var app = builder.Build();
 
 // 配置HTTP請求管道
@@ -85,8 +91,8 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-//pattern: "{controller=PgHotel}/{action=pgHotel}/{id?}");
+    //pattern: "{controller=Home}/{action=Index}/{id?}");
+pattern: "{controller=Home}/{action=test}/{id?}");
 
 //// 配置路由以支持 Angular 路由
 //app.MapFallbackToFile("/dist/fun-now-angular1/index.html");
