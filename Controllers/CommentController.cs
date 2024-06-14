@@ -29,5 +29,10 @@ namespace PrjFunNowWeb.Controllers
         {
             return View();
         }
+
+        public IActionResult Angular_plaform()
+        {
+            return View();
+        }
     }
 }
