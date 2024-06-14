@@ -400,7 +400,7 @@
 
             // 生成並顯示飯店信息
             const hotels = await Promise.all(data.map(async hotel => {
-                const { hotelId, hotelName, hotelAddress, hotelImage, levelStar, hotelEquipmentNames, hotelPrice } = hotel;
+                const { hotelId, hotelName, hotelAddress, hotelImages, levelStar, hotelEquipmentNames, hotelPrice } = hotel;
                 let totalAverageScore;
                 try {
                     totalAverageScore = await getHotelScore(hotelId);
@@ -410,26 +410,28 @@
                 }
 
                 console.log(`Hotel ID: ${hotelId}, Total Average Score: ${totalAverageScore}`); // 添加日志
+                console.log(`Hotel Images: ${hotelImages}`); // 調試輸出圖片 URL
+
+                const mainImage = hotelImages[0] ? `https://localhost:7284/image/${hotelImages[0]}` : '';
+                const smallImages = hotelImages.slice(1, 4).map(img => img ? `https://localhost:7284/image/${img}` : '');
 
                 return `
-                    <div class="col-lg-12 hotel-card" data-hotel-id="${hotelId}">
-                        <div class="row">
-                                   <a href="https://localhost:7284/PgHotel/pgHotel/?hotelId=${hotel.hotelId}&checkInDate=${searchHotelForLouieee.checkInDate}&checkOutDate=${searchHotelForLouieee.checkOutDate}" class="col-lg-12 hotel-link">
-                                          <div class="row">
+                            <div class="col-lg-12 hotel-card" data-hotel-id="${hotelId}">
+                                <div class="row">
+                                    <a href="https://localhost:7284/PgHotel/pgHotel/?hotelId=${hotel.hotelId}&checkInDate=${searchHotelForLouieee.checkInDate}&checkOutDate=${searchHotelForLouieee.checkOutDate}" class="col-lg-12 hotel-link">
+                                        <div class="row">
                                             <div class="col-lg-4 col-sm-8 hotel-image-container" style="padding:0px">
                                                 <table>
                                                     <tr>
                                                         <td colspan="3" style="position: relative;">
-                                                            <img src='https://localhost:7284/image/${hotelImage}' class="img-fluid" style="width:100%" />
+                                                            <img src="${mainImage}" class="img-fluid" style="width:100%" />
                                                             <div class="favorite-icon-container">
                                                                 <i class="fa fa-heart favorite-icon" data-hotel-id="${hotelId}" onclick="toggleFavorite(event, ${hotelId})"></i>
                                                             </div>
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td><img src="/image/ming_img/room1.jpg" class="img-fluid" /></td>
-                                                        <td><img src="/image/ming_img/room3.jpg" class="img-fluid" /></td>
-                                                        <td><img src="/image/ming_img/room4.jpg" class="img-fluid" /></td>
+                                                        ${smallImages.map(img => `<td><img src="${img}" class="img-fluid" /></td>`).join('')}
                                                     </tr>
                                                 </table>
                                             </div>
@@ -456,9 +458,7 @@
                                                 <h6 style="color:gray">每晚價格(不連稅及其他費用)</h6>
                                                 <br><br>
                                                 <h3>NT$${hotelPrice}</h3>
-
                                             </div>
-
                                         </div>
                                     </a>
                                 </div>
