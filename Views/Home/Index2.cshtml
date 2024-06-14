@@ -386,15 +386,23 @@
                                             <h6 style="color:green">${levelStar}星級飯店最優價</h6>
                                             <h6 style="color:red">昨天起已收到${levelStar}張訂單</h6>
                                         </div>
+
                                         <div class="col-lg-3 col-sm-12 hotel-pricing">
-                                            <h5>很出色</h5>
-                                            <h6 style="color:gray"> 個評分</h6>
+                                            <div class="rating">
+                                                <div class="rating-text">
+                                                    <span class="rating-count">很出色</span>
+                                                    <span class="rating-count">2,446篇評鑑</span>
+                                                </div>
+                                                <span class="rating-score">8.1</span>
+                                            </div>
                                             <br>
                                             <h6 style="border: 1px solid red; display:inline-block; background-color: red; color:white">優惠只剩1間</h6>
                                             <h6 style="color:gray">每晚價格(不連稅及其他費用)</h6>
                                             <br><br>
                                             <h3>NT$${hotelPrice}</h3>
+
                                         </div>
+
                                     </div>
                                 </a>
                             </div>
@@ -722,6 +730,36 @@
                 width: 32%;
                 margin: 1%;
             }
+    </style>
+    <style>
+        /* //評分表 */
+        .rating {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
+
+        .rating-text {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+            margin-right: 10px;
+        }
+
+        .rating-score {
+            background-color: #005eb8;
+            color: white;
+            border-radius: 50%;
+            padding: 5px 10px;
+            font-size: 1em;
+            font-weight: bold;
+        }
+
+        .rating-count {
+            color: gray;
+            line-height: 1.2;
+        }
     </style>
 }
 
