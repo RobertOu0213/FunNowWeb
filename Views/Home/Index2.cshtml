@@ -197,11 +197,12 @@
             const sortButtons = {
                 sortBtn: ["HotelId", "asc"],
                 bestMatchBtn: ["LevelStar", "desc"],
-                highestRatedBtn: ["LevelStar", "desc"],
+                highestRatedBtn: ["TotalAverageScore", "desc"], // 修改這裡
                 lowestPriceBtn: ["HotelPrice", "asc"],
                 nearbyBtn: ["CityName", "asc"],
                 hotDealBtn: ["deal", "desc"],
             };
+
             //為每個排序按鈕添加點擊事件監聽器，當按鈕被點擊時，
             // 觸發 handleSort 函數以設定排序方式並重新加載飯店資訊
             Object.keys(sortButtons).forEach(id => {
