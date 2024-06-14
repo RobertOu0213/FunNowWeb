@@ -30,7 +30,7 @@
                                 <input type="email" class="form-control" id="EmailInput1" name="EmailInput" placeholder="電子信箱" onchange="queryEmail()">
                                 <p id="resultYes" style="display:none" class="resultY form-text text-success">歡迎回來！趕緊輸入密碼來登入吧！</p>
                                 <p id="resultNo" style="display:none" class="resultN form-text text-danger">Oops！這個Email沒有註冊過欸，請點選「我是新朋友」加入我們!</p>
-                                <p id="resultNoEmail" style="display:none" class="resultN form-text text-danger">Oops！你的Email註冊過了，但還沒驗證啟用喔!快去信箱確認吧!</p>
+                                <p id="resultNoEmail" style="display:none" class="resultN form-text text-danger">Oops！你的Email註冊過了，但還沒驗證啟用！<a id="reSent" href="/Member/Register">點我重寄驗證信</a></p>
                             </div>
                             <div id="result"></div>
                             <p></p>
@@ -181,7 +181,7 @@
         const errorElement = document.getElementById("error");
         const loginBtn = document.getElementById("loginBtn");
 
-        //即時比對是否有該帳號存在
+        //比對Email帳號狀態:已註冊or未註冊or尚未驗證
         async function queryEmail() {
             var email = emailInput.value;
 
@@ -203,16 +203,16 @@
                 resultElementN.style.display = "none";
                 resultElementNoEmail.style.display = "none";
 
-                if (data.message === "YES") 
+                if (data.message === "YES") //該Email存在
                 {
                     resultElementY.style.display = "block";
                     emailInput.classList.remove("border", "border-danger");
-                } else if (data.message === "NO") 
+                } else if (data.message === "NO") //該Email不存在，請註冊
                 {
                     resultElementN.style.display = "block";
                     emailInput.classList.add("border", "border-danger");
                 }
-                else if (data.message === "NoVerify") 
+                else if (data.message === "NoVerify") //該Email存在，但沒驗證過
                 {
                     resultElementNoEmail.style.display = "block";
                     emailInput.classList.add("border", "border-danger");
@@ -330,7 +330,7 @@
                         return originalFetch(resource, newConfig);
                     };
 
-                    //通過攔截器後重新導向首頁
+                    //通過攔截器
                     console.log("攔截器通過");
                 } 
                 else 
@@ -358,7 +358,7 @@
             sessionStorage.removeItem("MemberRoleID");
         }
 
-        // 監聽登入按鈕點擊事件，先驗證reCaptcha再驗證JWT
+        // 【監聽登入按鈕點擊事件】，先驗證reCaptcha再驗證JWT
         document.getElementById("loginBtn").addEventListener("click", async function (event) {
             event.preventDefault();
             await verifyCaptchaAndLogin();
@@ -377,7 +377,6 @@
     </script>
 
 
-    
     <script>
         //Google驗證失敗時跳出的錯誤訊息
         document.addEventListener("DOMContentLoaded", function () {
@@ -387,6 +386,58 @@
             }
 
         });
+
+    </script>
+
+    <script>
+    //【重寄驗證信】
+        document.getElementById("reSent").addEventListener("click", async function (event) {
+            event.preventDefault();
+
+            var email = document.getElementById("EmailInput1").value;
+
+            try {
+                const response = await fetch("https://localhost:7103/api/Members/reSent", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ email })
+                });
+
+                const data = await response.json();
+
+                //如果成功串接API
+                if (response.ok) 
+                {
+                    if (data.message === "Done") 
+                    {   //這個帳號早就註冊過了，來亂的
+                        alert("你的Email已經驗證過囉！ 不必再重新驗證～");
+                    } 
+                    else if (data.message === "NOMember") 
+                    {   //這個帳號根本就沒註冊過，來亂的
+                        alert("你的Email尚沒註冊過，請點選加入新朋友進行註冊！");
+                    } 
+                    else 
+                    {   //該Email存在，但沒驗證過
+                        alert("驗證信已經重新寄發至您的信箱，快去收信開通帳號！");
+                    }
+                } 
+                else 
+                {
+                    alert(`發生錯誤: ${data.message || "無法重寄驗證信"}`);
+                }
+            } 
+            catch (error) 
+            {
+                console.error("Error:", error);
+                alert("發生錯誤，請稍後再試！");
+            }
+        });
+
+
+
+
 
     </script>
    

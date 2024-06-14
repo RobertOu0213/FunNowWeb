@@ -85,7 +85,7 @@
                             </div>
                             <div class="row">
                                 <div class="col d-grid">
-                                    <button class="btn btn-outline-primary fw-bold py-2 btn-zoom" type="submit">
+                                    <button class="btn btn-outline-primary fw-bold py-2 btn-zoom " type="submit">
                                         <i class="fab fa-facebook-f me-2"></i> Facebook
                                     </button>
                                 </div>
@@ -97,7 +97,7 @@
                             </div>
                             <hr />
                             <div class="d-grid mb-2">
-                                <button class="btn btn-outline-primary fw-bold py-2 " type="submit">已經是會員?登入</button>
+                                <a class="btn btn-outline-primary fw-bold py-2" href="/Member/Login" role="button">已經是會員?登入</a>
                             </div>
                             <p style="margin:30px"></p>
                             <p style="text-align: center; font-size:13px;">點擊登錄即代表我同意FunNow的<a class="col">服務條款</a>和<a class="col">隱私權政策</a>。</p>
@@ -136,7 +136,8 @@
             color: #87b3fb;
         }
 
-        .btn-google {
+        .btn-google 
+        {
             color: white !important;
             background-color: #ea4335;
         }
@@ -146,12 +147,15 @@
             background-color: #3b5998;
         }
 
-        .btn-zoom {
+        .btn-zoom 
+        {
             transition: transform 0.3s ease; /* 添加过渡效果 */
         }
 
-            .btn-zoom:hover {
+            .btn-zoom:hover 
+            {
                 transform: scale(1.02); /* 鼠标悬停时放大 1.1 倍 */
+                
             }
 
         h3 {
@@ -215,7 +219,7 @@
                 return;
             }
 
-            // 收集表單資料
+            // 收集使用者填寫的資料
             const inpFirstName = document.querySelector('#FirstNameInput').value;
             const inpLastName = document.querySelector('#LastNameInput').value;
             const inpEmail = document.querySelector('#EmailInput').value;
@@ -245,6 +249,7 @@
             if (response.ok) 
             {
                alert('註冊成功!帳號驗證信已寄至您的信箱，請至信箱查收~');
+               window.location.href = "/Member/Login";
             }
             else 
             {
