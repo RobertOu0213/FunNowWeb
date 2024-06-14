@@ -353,6 +353,28 @@
             return data.totalAverageScore.toFixed(1); // 确保这里使用的是 totalAverageScore，并格式化为小数点后一位
         }
 
+
+        // 从 sessionStorage 获取搜索条件(by louieee)-------------------------------------------------
+        // => 扣louieee Controller, 把session的入駐日跟退訂日以query string傳過去
+        function getSearchHotel() {
+            const searchHotelForLouieee = JSON.parse(sessionStorage.getItem("searchHotel"));
+            return searchHotelForLouieee;
+        }
+        // // 在 JavaScript 中加密查询字符串(by louieee)--------------------------------------------------
+        // function encryptData(data, key) {
+        //     //生成密钥和IV：
+        //     const keyBytes = CryptoJS.enc.Utf8.parse(key);
+        //     const iv = CryptoJS.lib.WordArray.random(16);
+        //     //加密数据：
+        //     const encrypted = CryptoJS.AES.encrypt(data, keyBytes, { iv: iv });
+        //     //将IV和加密后的数据合并，并转换为Base64编码：
+        //     const encryptedData = iv.concat(encrypted.ciphertext).toString(CryptoJS.enc.Base64);
+        //     //确保加密数据URL安全：
+        //     return encodeURIComponent(encryptedData);
+        // }
+
+
+
         // 加載飯店的函數
         //異步函數，接受一個包含搜尋條件的 searchHotel 物件作為參數
         async function loadHotels(searchHotel) {
@@ -367,13 +389,22 @@
             const divHotels = document.querySelector("#showhotels");
             divHotels.innerHTML = "";
 
+            const searchHotelForLouieee = getSearchHotel();
+            /* const secretKey = "my_secret_key123";  */// 使用一个安全的密钥, 确保长度为16字节(by louieee)
+
+            // 將參數轉為string後加密 => 再作為查詢字串以網址傳遞(by louieee)
+            // const encryptedHotelId = encryptData(hotel.hotelId.toString(), secretKey);
+            // const encryptedCheckInDate = encryptData(searchHotelForLouieee.checkInDate, secretKey);
+            // const encryptedCheckOutDate = encryptData(searchHotelForLouieee.checkOutDate, secretKey);
+
+
             // 生成並顯示飯店信息
             const hotels = data.map(hotel => {
                 const { hotelId, hotelName, hotelAddress, hotelImage, levelStar, hotelEquipmentName, hotelPrice } = hotel;
                 return `
                     <div class="col-lg-12 hotel-card" data-hotel-id="${hotelId}">
                         <div class="row">
-                            <a href="https://localhost:7284/PgHotel/pgHotel/${hotelId}" class="col-lg-12 hotel-link">
+                                   <a href="https://localhost:7284/PgHotel/pgHotel/?hotelId=${hotel.hotelId}&checkInDate=${searchHotelForLouieee.checkInDate}&checkOutDate=${searchHotelForLouieee.checkOutDate}" class="col-lg-12 hotel-link">
                                 <div class="row">
                                     <div class="col-lg-4 col-sm-8 hotel-image-container" style="padding:0px">
                                         <table>
