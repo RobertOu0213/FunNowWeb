@@ -2,8 +2,6 @@
     ViewData["Title"] = "Hotel";
 }
 
-@*  html *@
- 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark gradient-custom">
     <!-- Container wrapper -->
@@ -79,22 +77,21 @@
     <h3 class="m-3">飯店審核管理</h3>
 </div>
 
-<div class="container mt-3 d-flex flex-row ">
+<div class="container mt-3 d-flex flex-row">
     <div class="input-group width px-3">
         <select class="form-select" id="inputGroupSelecthotel" aria-label="Example select with button addon">
-            <option selected>飯店名稱</option>
-            <!-- 动态添加的酒店名称将在这里显示 -->
-            <option value="${item.hotelId}">${item.hotelName}</option>
+            <option selected>所有飯店類型</option>
+            <!-- 動態添加的酒店名稱將在這裡顯示 -->
         </select>
     </div>
 
     <div class="input-group width px-1">
         <!--px-1(數字好像可以填1到9越小越寬) -->
         <select class="form-select" id="inputGroupSelectstatus" aria-label="Example select with button addon">
-        <option value="all" selected>飯店審核狀態</option>
-        <option value="pending">待審核</option>
-        <option value="active">已上架</option>
-    </select>
+            <option selected>所有審核狀態</option>
+            <option value="true">已上架</option>
+            <option value="false">待審核</option>
+        </select>
     </div>
 
     <div class="ms-5">
@@ -107,38 +104,21 @@
     </div>
 </div>
 
-
-
 <div>
-    <table class="container table table-hover">
+    <table class="container table table-hover hotelList">
         <thead>
             <tr>
                 <td>編號</td>
                 <td>飯店名稱</td>
+                <td>飯店類型</td>
                 <td>地址</td>
                 <td>電話</td>
                 <td>飯店狀態</td>
-
             </tr>
         </thead>
         <tbody id="hotelContainer">
-            <tr>
-                <td>1</td>
-                <td>三景花園飯店</td>
-                <td>雙人房</td>
-                <td>忠孝東路三段30號1樓 </td>
-                <td>(02)2781-1131</td>
-                <td>
-                    <select>
-                        <option>待審核</option>
-                        <option>已上架</option>
-                       
-                    </select>
-                </td>
-                <td><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">詳細內容</button></td>
-            </tr>
+            <!-- 飯店資料將在這裡顯示 -->
         </tbody>
-
     </table>
 
     <!-- Modal -->
@@ -152,57 +132,34 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">房間內容</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">飯店房間內容</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body">
-                    <div>
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <td colspan="3">@* <img src="~/image/ez/room1.jpg" width="300" height="200"> *@</td>
-                                    <td style="width: 8%;">飯店編號</td>
-                                    <td style="width: 14%;">飯店名稱</td>
-                                    <td style="width: 8%;">房間編號</td>
-                                    <td style="width: 10%;">房型</td>
-                                    <td style="width: 10%;">房間價格</td>
-                                    <td style="width: 10%;">房間大小</td>
-                                    <td style="width: 40%;">房間描述</td>
-                                    <td></td>
-                                </tr>
-                            </thead>
+                    <table class="table table-hover">
+                        <thead>
                             <tr>
-                                <td><img src="~/image/ez/room2.jpg" width="150" height="150"></td>
-                                <td><img src="~/image/ez/room3.jpg" width="150" height="150"></td>
-                                <td><img src="~/image/ez/room4.jpg" width="150" height="150"></td>
-                                <td>1</td>
-                                <td>三景花園飯店</td>
-                                <td>1</td>
-                                <td>雙人房</td>
-                                <td>3000</td>
-                                <td>21 平方公尺</td>
-                                <td>這間雙人房提供空調、茶／咖啡沖泡設備和露臺，可欣賞市景，私人衛浴內附淋浴間。此住宿空間配有 1 張床。</td>
-                                <td></td>
+                                <td>房間編號</td>
+                                <td>房型</td>
+                                <td>房間價格</td>
+                                <td>房間大小</td>
+                                <td>房間描述</td>
+                                <td>操作</td>
                             </tr>
-
-                        </table>
+                        </thead>
+                        <tbody id="roomContainer">
+                            <!-- 房間資料將在這裡顯示 -->
+                        </tbody>
+                    </table>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
                     </div>
-                </div>
-
-
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
-                    <button type="button" class="btn btn-primary">加入購物車</button>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
-
-
 
 @section Styles {
     <style>
@@ -231,61 +188,136 @@
             width: 15%;
         }
 
+        .hotelList .btn {
+            font-size: 14px;
+        }
     </style>
 }
 
 @section Scripts {
     <script>
-
-
         let allHotels = [];
 
         function updateHotelDisplay(hotelList) {
             let tableStr = "";
-            let selectStr = "<option selected>選擇飯店</option>";
-
             hotelList.forEach(item => {
                 let status = item.hotelIsActive ? "已上架" : "待審核";
+                let actionButton = item.hotelIsActive
+                    ? '<td><button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="loadRooms(' + item.hotelID + ')">下架飯店</button></td>'
+                    : '<td><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="loadRooms(' + item.hotelID + ')">上架飯店</button></td>';
+
                 tableStr += `
-                    <tr>
-                        <td>${item.hotelID}</td>
-                        <td>${item.hotelName}</td>
-                        <td>${item.hotelAddress}</td>
-                        <td>${item.hotelPhone}</td>
-                        <td>${status}</td>
-                        <td><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">詳細內容</button></td>
-                    </tr>
-                `;
-                selectStr += `<option value="${item.hotelId}">${item.hotelName}</option>`;
+                            <tr data-hotel-id="${item.hotelID}">
+                                <td>${item.hotelID}</td>
+                                <td>${item.hotelName}</td>
+                                <td>${item.hotelTypeName}</td>
+                                <td>${item.hotelAddress}</td>
+                                <td>${item.hotelPhone}</td>
+                                <td>${status}</td>
+                                <td><button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="loadRooms(${item.hotelID})">詳細內容</button></td>
+                                ${actionButton}
+                            </tr>
+                        `;
             });
 
-            hotelContainer.innerHTML = tableStr;
-            document.getElementById('inputGroupSelecthotel').innerHTML = selectStr;
+            document.getElementById('hotelContainer').innerHTML = tableStr;
+        }
+
+        function updateRoomDisplay(roomList) {
+            let roomTableStr = "";
+            roomList.forEach(item => {
+                let roomStatus = item.roomStatus ? "可預訂" : "已滿";
+                let actionButton = item.roomStatus
+                    ? '<td><button class="btn btn-danger" onclick="deactivateRoom()">下架房間</button></td>'
+                    : '<td><button class="btn btn-primary" onclick="activateRoom()">上架房間</button></td>';
+
+                roomTableStr += `
+                            <tr>
+                                <td>${item.roomID}</td>
+                                <td>${item.roomType}</td>
+                                <td>${item.roomPrice}</td>
+                                <td>${item.roomSize} 平方公尺</td>
+                                <td>${item.description}</td>
+                                ${actionButton}
+                            </tr>
+                        `;
+            });
+
+            document.getElementById('roomContainer').innerHTML = roomTableStr;
+        }
+
+        function updateSelectOptions() {
+            let selecthoteltypeStr = "<option selected>所有飯店類型</option>";
+            let hotelTypeSet = new Set();  // 使用Set來記錄已經添加過的飯店類型
+
+            allHotels.forEach(item => {
+                // 只有當該飯店類型尚未添加到Set中時，才添加到select元素中
+                if (!hotelTypeSet.has(item.hotelTypeName)) {
+                    selecthoteltypeStr += `<option value="${item.hotelTypeName}">${item.hotelTypeName}</option>`;
+                    hotelTypeSet.add(item.hotelTypeName);   // 記錄已添加的飯店類型
+                }
+            });
+
+            document.getElementById('inputGroupSelecthotel').innerHTML = selecthoteltypeStr;
         }
 
         function fetchHotels() {
-            fetch('https://localhost:7103/api/BackSideHotel')
+            fetch('https://localhost:7103/api/BackSideHotel/details')
                 .then(response => response.json())
                 .then(data => {
                     allHotels = data;
                     updateHotelDisplay(data);
+                    updateSelectOptions();
                 })
                 .catch(error => {
                     console.error('Error fetching hotels:', error);
                 });
         }
 
-        document.addEventListener('DOMContentLoaded', fetchHotels);
+        function fetchRoomsByHotelId(hotelID) {
+            console.log(`Fetching rooms for hotelID: ${hotelID}`);
+            // 確保 hotelID 為數字類型
+            const numericHotelID = Number(hotelID);
+            const hotel = allHotels.find(hotel => hotel.HotelID === numericHotelID);
+            if (hotel) {
+                console.log(`Rooms data for hotelID ${numericHotelID}:`, hotel.Rooms);
+                updateRoomDisplay(hotel.Rooms);
+            } else {
+                console.error(`Hotel with ID ${numericHotelID} not found.`);
+            }
+        }
 
-        document.getElementById('inputGroupSelecthotel').addEventListener('change', function () {
-            console.log("Selected hotel ID:", this.value);  // 查看選擇的飯店ID
-            const filteredHotels = allHotels.filter(hotel => hotel.hotelId === this.value);
-            console.log("Filtered hotels:", filteredHotels);  // 查看過濾後的飯店列表
+        function loadRooms(hotelID) {
+            fetchRoomsByHotelId(hotelID);
+        }
+
+        function filterHotels(hotelTypeName, hotelStatus) {
+            let filteredHotels = allHotels.filter(item => {
+                let matchesType = hotelTypeName === "所有飯店類型" || item.hotelTypeName === hotelTypeName;
+                let matchesStatus = hotelStatus === "所有審核狀態" || item.hotelIsActive.toString() === hotelStatus;
+                return matchesType && matchesStatus;
+            });
             updateHotelDisplay(filteredHotels);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchHotels();
+
+            document.getElementById('inputGroupSelecthotel').addEventListener('change', () => {
+                let selectedHotelTypeName = document.getElementById('inputGroupSelecthotel').value;
+                let selectedHotelStatus = document.getElementById('inputGroupSelectstatus').value;
+                filterHotels(selectedHotelTypeName, selectedHotelStatus);
+            });
+
+            document.getElementById('inputGroupSelectstatus').addEventListener('change', () => {
+                let selectedHotelTypeName = document.getElementById('inputGroupSelecthotel').value;
+                let selectedHotelStatus = document.getElementById('inputGroupSelectstatus').value;
+                filterHotels(selectedHotelTypeName, selectedHotelStatus);
+            });
         });
-
-
-   
     </script>
 }
-}
+
+
+
+
