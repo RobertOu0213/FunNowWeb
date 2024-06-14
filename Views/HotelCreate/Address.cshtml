@@ -41,7 +41,8 @@
     </section>
     <section class="rightSection">
         <div class="content__container pt-5">
-            <form action="@Url.Action("RoomInfo", "HotelCreate")" method="post">
+        
+            <form method="post" action="@Url.Action("RoomInfo", "HotelCreate")">
                 @*  地址 *@
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="mb-4">
@@ -56,7 +57,8 @@
                 <div class="panel">
                     <div class="address mb-4">
                         <div class="fw-bold mb-2">街道地址</div>
-                        <input type="text" class="form-control" placeholder="請在此輸入..." />
+                        <input type="text" class="form-control" placeholder="請在此輸入..." id="iptAddress" name="HotelAddress" />
+                        <span class="alertMessage" id="descMessage"></span>
                     </div>
                     <div class="row">
                         <div class="col-md-4">
@@ -79,8 +81,8 @@
 
                 @* button *@
                 <div class="d-flex justify-content-end my-5">
-                    <button type="button" class="btn_previous">上一步</button>
-                    <button type="submit" class="btn_next">下一步</button>
+                    <a href="@Url.Action("HotelInfo", "HotelCreate")" class="btn_previous" id="btnPrevious">上一步</a>
+                    <button type="submit" class="btn_next" id="btnNext">下一步</button>
                 </div>
 
             </form>
@@ -101,6 +103,12 @@
         let selectCountryStr = ""
        
         $(document).ready(async function() {
+            //顯示session 在畫面上
+            const tHotel = JSON.parse(sessionStorage.getItem('tHotel')) || {};
+            if (tHotel) {
+                $('#iptAddress').val(tHotel.HotelAddress || '');
+            }
+
 
             //國家
             try {
@@ -119,10 +127,19 @@
                 $('#selectCountry').html(selectCountryStr);
 
           
-                // 加載第一個國家的城市作為默認值
-                if (data.length > 0) {
+       
+                // 找到包含 tHotel.CityId 的國家
+                const countryWithSelectedCity = data.find(country => country.cities.some(city => city.cityId == tHotel.CityId));
+
+                // 如果找到了國家，則為該國家加載城市並設置該國家為選中
+                if (countryWithSelectedCity) {
+                    $('#selectCountry').val(countryWithSelectedCity.countryId);
+                    loadCities(countryWithSelectedCity);
+                } else if (data.length > 0) {
+                    // 否則，加載第一個國家的城市作為默認值
                     loadCities(data[0]);
                 }
+
                 //城市
                 $('#selectCountry').on('change', function () {
                     const selectedCountry = data.find(country => country.countryId == $(this).val());
@@ -133,13 +150,12 @@
             catch(err) {
                 console.log(err)
             }
-
             function loadCities(country) {
 
                 let selectCityStr = '';
                 if (country && country.cities.length > 0) {
                     country.cities.forEach(city => {
-                        selectCityStr += `<option value="${city.cityId}">${city.cityName}</option>`;
+                        selectCityStr += `<option value="${city.cityId}" name="CityId" id="CityId${city.cityId}" ${tHotel.CityId == city.cityId ? 'selected' : ''}>${city.cityName}</option>`;
                     });
                     $('#selectCity').prop('disabled', false);
                 } else {
@@ -149,7 +165,49 @@
             }
 
 
+            //下一步
+            $('#btnNext').on('click', async function () {
+
+                let isFormValid = true;
+                if ($('#iptAddress').val().trim() === "") {
+                    $('#descMessage').html('請輸入完整地址，包括街道名稱和號碼');
+                    isFormValid = false;
+                } else {
+                    $('#descMessage').html('');
+                }
+
+                if (!isFormValid) {
+                    event.preventDefault();
+                }
+
+                
+
+                const selectedCityID = $('#selectCity').val();
+                const existingHotelData = JSON.parse(sessionStorage.getItem('tHotel')) || {};
+                const updatedHotelData = {
+                    ...existingHotelData,
+                    HotelAddress: $('#iptAddress').val(),
+                    CityId: selectedCityID
+                  
+                };           
+                sessionStorage.setItem('tHotel', JSON.stringify(updatedHotelData));
+
+                
+            })
+
+
+            //上一步
+            $('#btnPrevious').on('click', async function () {
+                const selectedCityID = $('#selectCity').val();
+                const hotelAddress = $('#iptAddress').val();
+                const tHotel = JSON.parse(sessionStorage.getItem('tHotel')) || {};
+                tHotel.HotelAddress = hotelAddress;
+                tHotel.CityId = selectedCityID;
+                sessionStorage.setItem('tHotel', JSON.stringify(tHotel));
+            })
+            
         });
+
 
     </script>
 }

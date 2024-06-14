@@ -791,8 +791,8 @@ button:focus {
 }
 
 .facilities_area .bg-parallax {
-  background: url("../image/facilites_bg.jpg") no-repeat scroll center 0/cover;
-  opacity: 0.15;
+/*  background: url("../image/facilites_bg.jpg") no-repeat scroll center 0/cover;
+*/  opacity: 0.15;
 }
 
 .facilities_item {

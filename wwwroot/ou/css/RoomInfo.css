@@ -115,6 +115,10 @@ main {
   width: 100%;
   padding: 15px 15px 30px 15px;
 }
+.rightSection .content__container .alert-message {
+  color: red;
+  font-size: 12px;
+}
 
 .btn_previous {
   min-width: 180px;
@@ -127,6 +131,8 @@ main {
   font-size: 14px;
   border-radius: 3px;
   padding: 10px 15px;
+  text-align: center;
+  text-decoration: none;
 }
 
 .btn_previous:hover {

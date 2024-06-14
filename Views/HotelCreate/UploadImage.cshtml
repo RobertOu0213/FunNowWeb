@@ -41,62 +41,50 @@
     </section>
     <section class="rightSection">
         <div class="content__container pt-5">
-     
-            @* 圖片 *@
-            <div class="content__container__image">
-                <div class="d-flex align-items-center">
-                    <div class="mb-4">
-                        <h4 class="fw-bold mt-5">向房客們展示物業的特色</h4>
-                        <div class="content__container__image__text">對於旅客來說，現場實景照片往往成為影響是否訂房的重要參考。因此，建議你上傳完整的高畫質實景照片，吸引旅客下訂，當然也可以晚點再增加照片囉。想獲得更多小撇步嗎？</div>
-                    </div>
-                    <div class="mt-2 me-5">
-                        <img class="equip_image w-100" src="~/image/ou/create_hotel_image.png" alt="..." />
-                    </div>
-                </div>
-
-                <div class="reminder__background">
-                    <div class="reminder__background__text">小提醒：房源上架後仍可管理照片。您可以先從最簡單的開始，並隨時更改或新增內容。</div>
-                </div>
-
-                <div class="mb-5">
-                    <h4 class="fw-bold mt-5">飯店照片</h4>
-                    <p>建築外觀、停車位、入口，以及任何其他開放使用的設施</p>
-
-                    <div class="file__upload">
-                        <div id="uploadSection">
-                            <img src="~/image/ou/upload.png" alt="..." />
-                            <div class="fw-bold">請將照片拖放至此</div>
-                            <p>僅限JPG和PNG格式（上限5 MB）</p>
-                            <input type="file" id="fileInput" accept=".jpg,.png" multiple style="display: none;" />
-                            <button id="uploadButton">選擇照片</button>
+                @* 圖片 *@
+                <div class="content__container__image">
+                    <div class="d-flex align-items-center">
+                        <div class="mb-4">
+                            <h4 class="fw-bold mt-5">向房客們展示物業的特色</h4>
+                            <div class="content__container__image__text">對於旅客來說，現場實景照片往往成為影響是否訂房的重要參考。因此，建議你上傳完整的高畫質實景照片，吸引旅客下訂，當然也可以晚點再增加照片囉。想獲得更多小撇步嗎？</div>
+                        </div>
+                        <div class="mt-2 me-5">
+                            <img class="equip_image w-100" src="~/image/ou/create_hotel_image.png" alt="..." />
                         </div>
                     </div>
-                    <div class="container" id="preview"></div>
-                </div>
 
-                <div class="mb-5">
-                    <h4 class="fw-bold mt-5">名字</h4>
-                    <p>住宿單位裡的臥室、浴室、廚房、用餐區域和起居空間。</p>
-                    <div class="file__upload">
-                        <div id="uploadSection">
-                            <img src="~/image/ou/upload.png" alt="..." />
-                            <div class="fw-bold">請將照片拖放至此</div>
-                            <p>僅限JPG和PNG格式（上限5 MB）</p>
-                            <input type="file" id="fileInput" accept=".jpg,.png" multiple style="display: none;" />
-                            <button id="uploadButton">選擇照片</button>
-                        </div>
+                    <div class="reminder__background">
+                        <div class="reminder__background__text">小提醒：房源上架後仍可管理照片。您可以先從最簡單的開始，並隨時更改或新增內容。</div>
                     </div>
-                    <div class="container" id="preview"></div>
+
+                    <div class="mb-5 hotelImageBox">
+                        <h4 class="fw-bold mt-5">飯店照片</h4>
+                        <p>建築外觀、停車位、入口，以及任何其他開放使用的設施</p>
+                        <span class="alert-message"></span>
+                        <div class="file__upload">
+                            <div id="uploadSection">
+                                <img src="~/image/ou/upload.png" alt="..." />
+                                <div class="fw-bold">請將照片拖放至此</div>
+                                <p>僅限JPG和PNG格式（上限5 MB）</p>
+                                <input type="file" id="fileInput" accept=".jpg,.png" multiple style="display: none;" />
+                                <button id="uploadButton">選擇照片</button>
+                            </div>
+                        </div>
+                        <div class="container" id="preview"></div>
+                    </div>
+
+                    <div id="roomImagesContainer"></div>
+
+
                 </div>
 
-            </div>
-
-            @*   button *@
-            <div class="d-flex justify-content-end my-5">
-                <button type="button" class="btn_previous">上一步</button>
-                <button type="button" class="btn_next">開始上線銷售！</button>
-            </div>
-
+                @*   button *@
+                <div class="d-flex justify-content-end my-5">
+                    <a href="@Url.Action("RoomInfo", "HotelCreate")" class="btn_previous">上一步</a>
+                  @*   <a href="@Url.Action("Home", "HostManage")" type="button" class="btn_next" id="btnFinish">開始上線銷售！</a> *@
+                    <button type="button" class="btn_next" id="btnFinish">開始上線銷售！</button>
+                </div>
+         
         </div>
     </section>
 </main>
@@ -111,7 +99,7 @@
 @section Scripts {
     <script>
        
-        $(document).ready(async() => {
+        $(document).ready(async () => {
 
             const maxTotalSize = 5 * 1024 * 1024; // 5MB
             let totalSize = 0;
@@ -119,16 +107,18 @@
             const uploadSection = $('.file__upload');
             let imageCategoryStr = '';
 
+            //let newSize = 0; 這也要改
+
             //Image Category
             const res = await fetch('https://localhost:7103/api/ImageCategory')
             const data = await res.json();
-            console.log(data);
+
             imageCategoryStr += `<option selected disabled> 請選擇標題 </option>`;
             data.forEach(item => {
                 imageCategoryStr +=
                     `
-                        <option value = "${item.imageCategoryId}">${item.imageCategoryName}</option>
-                    `
+                                <option value = "${item.imageCategoryId}">${item.imageCategoryName}</option>
+                            `
             })
 
 
@@ -137,7 +127,7 @@
                 $('#fileInput').trigger('click');
             });
 
-
+            //飯店照片區域
             $('#fileInput').on('change', async function (e) {
 
                 const allowedTypes = ['image/jpeg', 'image/png'];
@@ -170,19 +160,19 @@
                     reader.onload = function (e) {
 
                         const string = `
-                                    <div class="card">
-                                                <img src="${e.target.result}" class="card-img-top h-100" alt="..." data-file-name="${file.name}" data-file-size="${file.size}">
-                                        <div class="card-body">
-                                            <select class="form-select" aria-label="Default select example" id="selectImageCategory">
+                                                 <div class="card hotelCard">
+                                                        <img src="${e.target.result}" class="card-img-top h-100" alt="..." data-file-name="${file.name}" data-file-size="${file.size}">
+                                                <div class="card-body">
+                                                    <select class="form-select" aria-label="Default select example" id="selectImageCategory">
 
 
-                                                      ${imageCategoryStr}
-                                             
-                                            </select>
-                                        </div>
-                                        <button class="btn btn-danger delete-button" style="display: none;">刪除照片</button>
-                                    </div>
-                                `;
+                                                              ${imageCategoryStr}
+        
+                                                    </select>
+                                                </div>
+                                                <button class="btn btn-danger delete-button" style="display: none;">刪除照片</button>
+                                            </div>
+                                        `;
 
                         $('#preview').append(string);
                         // 當所有文件都讀取完畢後，改變樣式、儲存fileName到set及計算儲存的容量
@@ -222,6 +212,14 @@
 
                 if (confirm('確定要刪除這張圖片嗎？')) {
                     card.remove();
+
+                    let hotelData = JSON.parse(sessionStorage.getItem('tHotel')) || {};
+
+                    // 創建一個新的數組，該數組不包含被刪除的物件
+                    hotelData.HotelImage = hotelData.HotelImage.filter(item => item.FileName !== fileName);
+
+
+                    sessionStorage.setItem('tHotel', JSON.stringify(hotelData));
                 }
 
                 if (filenames.size === 0) {
@@ -229,8 +227,280 @@
                 }
 
             });
-             
-        });
 
+
+
+            // 從 sessionStorage 中讀取所有的客房資訊
+            const roomInfo = JSON.parse(sessionStorage.getItem('tRoom'));
+
+            // 根據客房資訊生成 HTML 代碼
+            let roomContainerStr = '';
+            let rootUrl = '@Url.Content("~")';
+            roomInfo.forEach((room, index) => {
+                roomContainerStr += `
+                                      <div class="mb-5 roomBoxes" id=roomBoxes${index}>
+                                        <h4 class="fw-bold mt-5">客房${index + 1}照片</h4>
+                                        <p>建築外觀、停車位、入口，以及任何其他開放使用的設施</p>
+                                          <span class="alert-message"></span>
+                                          <div class="file__upload" id="file__upload${index}">
+                                            <div id="uploadSection${index}">
+                                                   <img src="${rootUrl}/image/ou/upload.png" alt="..." />
+                                                <div class="fw-bold">請將照片拖放至此</div>
+                                                <p>僅限JPG和PNG格式（上限5 MB）</p>
+                                                <input type="file" id="fileInput${index}" accept=".jpg,.png" multiple style="display: none;" />
+                                                <button id="uploadButton${index}">選擇照片</button>
+                                            </div>
+                                        </div>
+                                        <div class="container" id="preview${index}"></div>
+                                    </div>
+                                `;
+
+            });
+
+            $('#roomImagesContainer').html(roomContainerStr);
+
+            roomInfo.forEach((room, index) => {
+
+                $(`#uploadButton${index}`).on('click', function () {
+                    $(`#fileInput${index}`).trigger('click');
+                });
+
+                // 為每個檔案輸入元素添加變更事件處理器
+                $(`#fileInput${index}`).on('change', async function (e) {
+
+                    const allowedTypes = ['image/jpeg', 'image/png'];
+                    const files = Array.from(e.target.files);
+
+                    const fileInput = $(`#fileInput${index}`);
+                    let newSize = 0;
+
+                    files.forEach((file, fileIndex) => {
+
+                        if (!allowedTypes.includes(file.type)) {
+                            alert('只允許上傳 JPG 和 PNG 格式的圖片');
+                            return;
+                        }
+
+                        if (filenames.has(file.name)) {
+                            alert(`檔名 ${file.name} 已存在，請選擇不同的檔案。`);
+                            return;
+                        }
+
+                        newSize += file.size;
+                        if (totalSize + newSize > maxTotalSize) {
+                            alert('所有照片加起來不能超過 5MB。');
+                            return;
+                        }
+
+                        const reader = new FileReader();
+
+                        reader.onload = function (e) {
+
+                            const string = `
+                                            <div class="card">
+                                                        <img src="${e.target.result}" class="card-img-top h-100" alt="..." data-file-name="${file.name}" data-file-size="${file.size}">
+                                                <div class="card-body">
+                                                    <select class="form-select" aria-label="Default select example" id="selectImageCategory">
+
+
+                                                              ${imageCategoryStr}
+
+                                                    </select>
+                                                </div>
+                                                <button class="btn btn-danger delete-button" style="display: none;">刪除照片</button>
+                                            </div>
+                                        `;
+
+                            $(`#preview${index}`).append(string);
+
+                            // 當所有文件都讀取完畢後，改變樣式、儲存fileName到set及計算儲存的容量
+                            if (fileIndex === files.length - 1) {
+
+
+                                //晚點改
+                                // $(`#uploadSection${index}`).removeClass('file__upload${index}').addClass('uploaded');
+
+                                files.forEach(f => filenames.add(f.name));
+                                totalSize += newSize;
+
+                                fileInput.val('');
+                            }
+                        };
+
+                        reader.readAsDataURL(file);
+                    });
+
+                });
+
+
+
+                $(`#preview${index}`).on('mouseover', '.card', function () {
+                    $(this).find('.delete-button').css('display', 'block');
+                });
+
+                $(`#preview${index}`).on('mouseout', '.card', function () {
+                    $(this).find('.delete-button').css('display', 'none');
+                });
+
+                $(`#preview${index}`).on('click', '.delete-button', function () {
+                    const card = $(this).closest('.card');
+                    const imgElement = card.find('img');
+                    const fileName = imgElement.data('file-name');
+                    const fileSize = parseInt(imgElement.data('file-size'), 10);
+
+                    filenames.delete(fileName);
+                    totalSize -= fileSize;
+
+                    if (confirm('確定要刪除這張圖片嗎？')) {
+                        card.remove();
+                        let roomData = JSON.parse(sessionStorage.getItem('tRoom')) || {};
+
+                        roomData.forEach(room => {
+                            // 創建一個新的數組，該數組不包含被刪除的物件
+                            room.RoomImages = room.RoomImages.filter(item => item.FileName !== fileName);
+                        });
+
+                        sessionStorage.setItem('tRoom', JSON.stringify(roomData));
+                    }
+
+                    if (filenames.size === 0) {
+
+                        // uploadSection.removeClass('uploaded').addClass('file__upload');
+                    }
+
+                });
+
+
+
+            });
+
+
+            //使用所有button並改變樣式樣式
+            $("[id^='uploadButton']").addClass('uploadButton');
+
+            //click Btnfinish
+            $('#btnFinish').on('click', async function () {
+
+                // event.preventDefault();
+                let isValid = true;
+                // 驗證飯店的照片
+                if ($('#preview').find('img').length === 0) {
+                    $('.hotelImageBox').find('.alert-message').html('請上傳至少一張飯店照片');
+                    isValid = false;
+                    
+                } else {
+                    $('.hotelImageBox').find('.alert-message').html('');
+                }
+
+
+                // 驗證每個客房的照片
+                roomInfo.forEach((room, index) => {
+                    if ($(`#preview${index}`).find('img').length === 0) {
+                        $(`#file__upload${index}`).closest('.roomBoxes').find('.alert-message').html('請上傳至少一張客房照片');
+                        isValid = false;
+                    } else {
+                        $(`#file__upload${index}`).closest('.roomBoxes').find('.alert-message').html('');                      
+                    }
+
+                });
+
+
+                let allCategoriesSelected = true;
+                $('.card').each(function () {
+                    const selectElement = $(this).find('select');
+                    if (selectElement.val() === null) {
+                        allCategoriesSelected = false;
+                        return false; // 結束遍歷
+                    }
+                });
+
+                if (!allCategoriesSelected) {
+                    alert('請為所有圖片選擇類別');
+                    isValid = false;
+                }
+
+
+                if (!isValid) {
+                    return;
+                }
+            
+                // 從 sessionStorage 中獲取已有的數據
+                let hotelData = JSON.parse(sessionStorage.getItem('tHotel')) || {};
+                let roomData = JSON.parse(sessionStorage.getItem('tRoom')) || [];
+
+                //Hotel session 儲存
+                hotelData.HotelImage = [];
+                $('.hotelCard').each(function () {
+                    const imgElement = $(this).find('img');
+                    const selectElement = $(this).find('select');
+
+                    // 獲取照片的 base64 數據、類別 ID 和檔案名稱
+                    const base64 = imgElement.attr('src');
+                    const id = selectElement.val();
+                    const fileName = imgElement.data('file-name');
+
+                    hotelData.HotelImage.push({ HotelImage: base64, ImageCategoryID: id, FileName: fileName });
+                });
+                sessionStorage.setItem('tHotel', JSON.stringify(hotelData));
+
+                //Room session 儲存
+                roomData.forEach((room, index) => {
+                    room.RoomImages = [];
+
+                    $(`#preview${index} .card`).each(function () {
+                        const imgElement = $(this).find('img');
+                        const selectElement = $(this).find('select');
+
+                        // 獲取照片的 base64 數據、類別 ID 和檔案名稱
+                        const base64 = imgElement.attr('src');
+                        const id = selectElement.val();
+                        const fileName = imgElement.data('file-name');
+
+                        room.RoomImages.push({ RoomImage: base64, ImageCategoryID: id, FileName: fileName });
+                    });
+                });
+
+                sessionStorage.setItem('tRoom', JSON.stringify(roomData));
+
+
+
+                //API
+                try {
+                    const hotelData = JSON.parse(sessionStorage.getItem('tHotel')) || {};
+                    const roomData = JSON.parse(sessionStorage.getItem('tRoom')) || [];
+
+                    const formData = new FormData();
+                    formData.append('hotelData', JSON.stringify(hotelData));
+                    formData.append('roomData', JSON.stringify(roomData));
+
+                    const url = "https://localhost:7103/api/HotelCreate";
+                    const res = await fetch(url, {
+                        method: "POST",
+                        body: formData
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        console.log(data);
+                        alert('飯店已成功上線！');
+                        sessionStorage.clear();
+                        window.location.href = '/HostManage/Home';
+                    } else {
+                      
+                        console.error('Error:', res.statusText);
+                    }
+                }
+                catch (err) {
+                    console.log(err)
+                    alert('飯店未成功，返回首頁');
+                    sessionStorage.clear();
+                    window.location.href = '/HostManage/Home';
+                }
+
+
+
+
+
+            });
+        });
     </script>
 }

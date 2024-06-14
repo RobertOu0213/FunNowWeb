@@ -82,6 +82,8 @@ nav .nav__container .avatar {
   padding: 10px 40px;
   font-size: 14px;
   font-weight: 600;
+  text-decoration: none;
+  text-align: center;
 }
 .search__container .uploadButton:hover {
   background-color: #0C5478;
@@ -102,7 +104,7 @@ nav .nav__container .avatar {
   border-radius: 3px;
   margin: 5px;
 }
-.hotelCard__status {
+.hotelCard .active-status, .hotelCard .review-status {
   border: 1px solid #E7F9F0;
   padding: 2px 6px;
   background-color: #E7F9F0;
@@ -110,6 +112,10 @@ nav .nav__container .avatar {
   font-weight: 800;
   font-size: 14px;
   border-radius: 3px;
+}
+.hotelCard .review-status {
+  background-color: #F9F1E7;
+  color: red;
 }
 .hotelCard__info {
   border-bottom: 1px solid #E5E6E8;
@@ -137,6 +143,11 @@ nav .nav__container .avatar {
   height: 2px;
   background-color: #1174A6;
 }
+.hotelCard .disabled-link[aria-disabled=true] {
+  pointer-events: none;
+  cursor: default;
+  color: grey;
+}
 
 .tab__container {
   width: 100%;
@@ -160,4 +171,8 @@ nav .nav__container .avatar {
   width: 100%;
   height: 2px;
   background-color: #1174A6;
+}
+.tab__container .tab__link.active span {
+  font-weight: 900;
+  color: #1174A6;
 }

@@ -1,4 +1,4 @@
-/*----------------------------------------------------
+﻿/*----------------------------------------------------
 @File: Default Styles
 @Author: Rocky
 @URL: http://wethemez.com
@@ -110,7 +110,7 @@ button:focus {
 }
 
 .section_gap {
-  padding: 120px 0;
+  padding: 120px 60px 0;
 }
 
 .d_flex {
@@ -131,7 +131,7 @@ button:focus {
 }
 
 .section_title {
-  margin-bottom: 75px;
+  margin-bottom: 25px;
 }
 
 .section_title h2 {
@@ -494,14 +494,15 @@ button:focus {
 /*----------------------------------------------------*/
 /*============= Start banner_area css =============*/
 .banner_area {
-  background: #04091e;
-  position: relative;
-  z-index: 1;
+    background: #FCFCFC;
+    position: relative;
+    z-index: 1;
 }
 
-    .banner_area .bg-parallax { /*//�����Ϥ�*/
-        background: url("~/image/ming_img/feature-img2") no-repeat scroll center 0/cover;
-        opacity: 0.50;
+    .banner_area .bg-parallax {
+        background: url('../../image/777.jpg') no-repeat center center;
+        /*background-size: contain;*/ /* 确保图片完整显示 */
+        opacity: 1;
     }
 
 .banner_area .position {
@@ -511,11 +512,11 @@ button:focus {
   position: absolute;
 }
 
-.booking_table {
+.booking_table {    /*//調整首頁圖片大小*/
   position: relative;
   overflow: hidden;
   width: 100%;
-  min-height: 800px;
+  min-height: 500px;
 }
 
 .overlay {
@@ -555,16 +556,21 @@ button:focus {
 }
 
 /*============= End banner_area css =============*/
-.hotel_booking_table {
-  background: #04091e;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  padding: 40px 50px 30px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
+.hotel_booking_table { /*//主訂房搜尋介面*/
+    /* 主訂房搜尋介面 */
+    background-color: #FCFCFC;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: 40px 40px 30px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    min-height: 260px; /* 調整最小高度值 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1); /* 外框陰影效果 */
+    transition: all 0.3s ease; /* 添加過渡效果 */
 }
+
 
 .hotel_booking_table h2 {
   font-size: 24px;
@@ -575,6 +581,7 @@ button:focus {
 
 .boking_table {
   margin-left: -50px;
+
 }
 
 .book_tabel_item .form-group {
@@ -829,8 +836,8 @@ button:focus {
 }
 
 .facilities_area .bg-parallax {
-  background: url("../image/facilites_bg.jpg") no-repeat scroll center 0/cover;
-  opacity: 0.15;
+/*  background: url("../image/facilites_bg.jpg") no-repeat scroll center 0/cover;
+*/  opacity: 0.15;
 }
 
 .facilities_item {
