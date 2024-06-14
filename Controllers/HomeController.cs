@@ -40,7 +40,7 @@ namespace PrjFunNowWeb.Controllers
 
         }
 
-        public IActionResult Index2()
+        public IActionResult Index2(string searchValue = null)// 将搜索值放入ViewBag(by louieee)
         {
             var viewModel = new HotelViewModel
             {
@@ -49,6 +49,10 @@ namespace PrjFunNowWeb.Controllers
                 Cities = _context.Cities.ToList(),
                 RoomEquipments = _context.RoomEquipments.ToList()
             };
+
+            // 将搜索值放入ViewBag(by louieee)
+            ViewBag.SearchValue = searchValue;
+
             return View(viewModel);
         }
 

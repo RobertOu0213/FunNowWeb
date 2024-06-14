@@ -13,9 +13,9 @@
             <div>
                 <nav>
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="#" style="color:blue;">首頁</a></li>
-                        <li class="breadcrumb-item"><a href="#" style="color:blue;">@Model.HotelDetail.CountryName</a></li>
-                        <li class="breadcrumb-item"><a href="#" style="color:blue;">@Model.HotelDetail.CityName</a></li>
+                        <li class="breadcrumb-item"><a href="https://localhost:7284/home/index" style="color:blue;">首頁</a></li>
+                        <li class="breadcrumb-item"><a href="https://localhost:7284/home/index2?searchValue= @(Model.HotelDetail.CountryName)" style="color:blue;">@Model.HotelDetail.CountryName</a></li>
+                        <li class="breadcrumb-item"><a href="https://localhost:7284/home/index2?searchValue= @(Model.HotelDetail.CityName)" style="color:blue;">@Model.HotelDetail.CityName</a></li>
                         <li class="breadcrumb-item active">@Model.HotelDetail.HotelName</li>
                     </ol>
                 </nav>
@@ -72,6 +72,7 @@
                         {
                             <img src="https://localhost:7284/image/@Model.HotelDetail.HotelImages.First().ImageUrl" class="img-fluid" />
                         }
+                        
                     </div>
                     <div class="col-8">
                         <table data-bs-toggle="modal" data-bs-target="#hotelModal">
@@ -89,10 +90,7 @@
                                                     <img src="https://localhost:7284/image/@images[i + j].ImageUrl" class="img-fluid" />
                                                 </td>
                                             }
-                                            else
-                                            {
-                                                <td></td> <!-- 填补空缺的td -->
-                                            }
+                                            
                                         }
                                     </tr>
                                 }
@@ -266,7 +264,7 @@
                             <div class="col-4">
                                 <table data-bs-toggle="modal" data-bs-target="#roomModal">
                                     <tr>
-                                        <td colspan="3"><img src="https://localhost:7284/image/@(limitedRoomImages.Count > 0 ? limitedRoomImages[0].ImageUrl : "default_image.png")" class="img-fluid" /></td>
+                                        <td colspan="3"><img src="https://localhost:7284/image/@(limitedRoomImages.Count > 0 ? limitedRoomImages[0].ImageUrl:"")" class="img-fluid" /></td>
                                     </tr>
                                     <tr>
                                         @if (limitedRoomImages.Count > 1)
@@ -478,7 +476,7 @@
                                                     <span style="color:red; font-weight:700;">只剩 @hotel.AvailableRooms 間房!!!</span>
                                                     <div style="display:flex; align-items: center; margin-top: 10px;">
                                                         <h3 class="mb-0 mr-3">TWD @(hotel.AverageRoomPrice.ToString("F2"))</h3>
-                                                        <a class="btn btn-primary" href="/PgHotel/pgHotel?hotelId=@hotel.HotelId">查看房型</a>
+                                                        <a class="btn btn-primary" href="/PgHotel/pgHotel?hotelId=@(hotel.HotelId)&checkInDate=@(Model.HotelDetail.CheckInDate)&checkOutDate=@(Model.HotelDetail.CheckOutDate)">查看房型</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -513,7 +511,7 @@
                                                 @foreach (var index in hotelGroups[i])
                                         {
                                             var hotel = index < Model.HotelDetail.SimilarHotels.Count ? Model.HotelDetail.SimilarHotels[index] : null;
-                                                    <a href="@((hotel != null) ? ("/PgHotel/pgHotel?hotelId=" + hotel.HotelId) : "#")" class="card">
+                                            <a href="@((hotel != null) ? ("/PgHotel/pgHotel?hotelId=" + hotel.HotelId + "&checkInDate=" + @Model.HotelDetail.CheckInDate + "&checkOutDate=" + @Model.HotelDetail.CheckOutDate) : "#")" class="card">
                                                         <div class="card">
                                                     <img src="@(hotel != null && hotel.HotelImage != null ? "https://localhost:7284/image/" + hotel.HotelImage.ImageUrl : "/image/louieee_img/otherHotel01.png")" class="card-img-top" alt="Hotel Image">
                                                             <div class="card-body">
