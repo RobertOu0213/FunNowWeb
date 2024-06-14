@@ -52,12 +52,12 @@ body {
 }
 
 .sidebar {
-    width: 250px;
+    width: 200px;
     background-color: #fff;
     box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-    height: 800px;
+    height: 635px;
     padding-top: 20px;
-    position: fixed;
+    position: absolute;
     border-radius: 10px;
 }
 
@@ -148,6 +148,21 @@ body {
             border-bottom: 2px solid #007bff;
             color: #007bff;
         }
+
+.tab__link {
+    color: #000;
+    padding: 10px 20px;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-block;
+}
+
+    .tab__link.active {
+        font-weight: bold;
+        border-bottom: 2px solid #007bff;
+        color: #007bff;
+    }
+
 
 .main-content {
     text-align: center;
