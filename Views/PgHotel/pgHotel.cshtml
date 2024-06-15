@@ -8,6 +8,8 @@
 @model PrjFunNowWeb.Models.louie_viewmodel.pgHotel_HotelDetailViewModel
 <!-- 插入聊天室的Partial View -->
 @Html.Partial("~/Views/Chat/Mailroom.cshtml"))
+
+
 <div class="container mt-5 pt-5" id="top">
     <div class="row">
         <div>
@@ -21,13 +23,10 @@
                         <li class="breadcrumb-item active">@Model.HotelDetail.HotelName</li>
                     </ol>
                 </nav>
-
             </div>
 
             @*飯店介紹區*@
             <div class="round-edge-container">
-
-
                 @*飯店介紹區-第一層*@
                 <div class="row">
                     <div class="col-8">
@@ -70,29 +69,58 @@
                 @*飯店介紹區-第二層*@
                 <div class="row">
                     <div class="col-4 d-flex align-items-stretch" data-bs-toggle="modal" data-bs-target="#hotelModal">
-                        @if (Model.HotelDetail.HotelImages != null && Model.HotelDetail.HotelImages.Any())
+                        @if (Model.HotelDetail.HotelImages != null && Model.HotelDetail.HotelImages.Any())//第1張大圖
                         {
-                            <img src="https://localhost:7284/image/@Model.HotelDetail.HotelImages.First().ImageUrl" class="img-fluid" />
+                            var ImageUrl = Model.HotelDetail.HotelImages.First().ImageUrl;
+                            bool isExternalUrl = ImageUrl.StartsWith("http");
+
+                            <img src="@(isExternalUrl ? ImageUrl : "https://localhost:7284/image/" + ImageUrl)" class="img-fluid" />
                         }
-                        
+                        else
+                        {
+                            <img src="~/image/louieee_img/default-picture.jpg" class="img-fluid" />
+                        }
                     </div>
                     <div class="col-8">
                         <table data-bs-toggle="modal" data-bs-target="#hotelModal">
                             @if (Model.HotelDetail.HotelImages != null && Model.HotelDetail.HotelImages.Count > 1)
                             {
-                                var images = Model.HotelDetail.HotelImages.Skip(1).Take(6).ToList(); // 跳过第一张，获取接下来的6张图片
-                                for (int i = 0; i < images.Count; i += 3)
+                                var images = Model.HotelDetail.HotelImages.Skip(1).Take(6).ToList(); // 第2-7張圖, 少幾張就補幾張預設
+                                int imageCount = images.Count;
+                                for (int i = 0; i < 6; i += 3)
                                 {
                                     <tr>
                                         @for (int j = 0; j < 3; j++)
                                         {
-                                            if (i + j < images.Count)
+                                            if (i + j < imageCount)
                                             {
+                                                var imageUrl = images[i + j].ImageUrl;
+                                                bool isExternalUrl = imageUrl.StartsWith("http");
+
                                                 <td class="imageBox">
-                                                    <img src="https://localhost:7284/image/@images[i + j].ImageUrl" class="img-fluid" />
+                                                    <img src="@(isExternalUrl ? imageUrl : "https://localhost:7284/image/" + imageUrl)" class="img-fluid" />
                                                 </td>
                                             }
-                                            
+                                            else
+                                            {
+                                                <td class="imageBox">
+                                                    <img src="~/image/louieee_img/default-picture.jpg" class="img-fluid" />
+                                                </td>
+                                            }
+                                        }
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                for (int i = 0; i < 6; i += 3)
+                                {
+                                    <tr>
+                                        @for (int j = 0; j < 3; j++)
+                                        {
+                                            <td class="imageBox">
+                                                <img src="~/image/louieee_img/default-picture.jpg" class="img-fluid" />
+                                            </td>
                                         }
                                     </tr>
                                 }
@@ -101,10 +129,6 @@
                     </div>
                 </div>
                 @*飯店介紹區-第三層*@
-                @{
-                    var hotelEquipments = Model.HotelDetail.HotelEquipments.Take(8).ToList(); // 取前8个设施
-                    var rows = (int)Math.Ceiling(hotelEquipments.Count / 4.0); // 计算行数，每行4个设施
-                }
                 <div class="row">
                     <div class="col-5">
                         <h3>評論</h3>@*亭蓉做*@
@@ -112,12 +136,16 @@
                     <div class="col-4 d-flex flex-column">
                         <h3>設施與服務</h3>
                         <table>
+                            @{
+                                var hotelEquipments = Model.HotelDetail.HotelEquipments.Take(6).ToList();
+                                var rows = (int)Math.Ceiling(hotelEquipments.Count / 3.0);
+                            }
                             @for (int i = 0; i < rows; i++)
                             {
                                 <tr>
-                                    @for (int j = 0; j < 4; j++)
+                                    @for (int j = 0; j < 3; j++)
                                     {
-                                        var index = i * 4 + j;
+                                        var index = i * 3 + j;
                                         if (index < hotelEquipments.Count)
                                         {
                                             <td> <i class="fa-regular fa-circle-check">@hotelEquipments[index]</i></td>
@@ -155,64 +183,82 @@
                     </div>
                 </div>
             </div>
-
             @*飯店彈出視窗*@
             <div class="modal fade" id="hotelModal" tabindex="-1" aria-labelledby="hotelModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
                             <ul class="nav nav-underline">
-                                <li class="nav-item">
-                                    <a class="nav-link hotel-modal-nav-link" onclick="smoothScroll('category-0')">所有照片</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link hotel-modal-nav-link" onclick="smoothScroll('category-24')">客房</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link hotel-modal-nav-link" onclick="smoothScroll('category-25')">住宿</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link hotel-modal-nav-link" onclick="smoothScroll('category-26')">設施與服務</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link hotel-modal-nav-link" onclick="smoothScroll('category-27')">餐飲</a>
-                                </li>
+                                @{
+                                    var hotelImages = Model.HotelDetail.HotelImages ?? new List<pgHotel_ImageDTO>();
+                                    var roomImages = Model.HotelDetail.Rooms?.SelectMany(r => r.RoomImages) ?? new List<pgHotel_ImageDTO>();
+                                    var allImages = hotelImages.Concat(roomImages);
+
+                                    var categories = allImages
+                                    .GroupBy(img => img.ImageCategoryID)
+                                    .OrderBy(g => g.Key)
+                                    .ToList();
+
+                                    foreach (var category in categories)
+                                    {
+                                        var categoryName = category.First().ImageCategoryName;
+                                        <li class="nav-item">
+                                            <a class="nav-link hotel-modal-nav-link" onclick="smoothScroll('category-@category.Key')">@categoryName</a>
+                                        </li>
+                                    }
+                                }
                             </ul>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-
                         <div class="modal-body">
                             <div class="row">
-                                <div class="col-10 scrollable-container">
+                                <div class="col-9 scrollable-container">
                                     <div class="d-flex flex-wrap">
                                         @{
-                                            var hotelImages = Model.HotelDetail.HotelImages ?? new List<pgHotel_ImageDTO>();
-                                            var roomImages = Model.HotelDetail.Rooms?.SelectMany(r => r.RoomImages) ?? new List<pgHotel_ImageDTO>();
-                                            var allImages = hotelImages.Concat(roomImages);
-
-                                            var categories = allImages
-                                            .GroupBy(img => img.ImageCategoryID)
-                                            .OrderBy(g => g.Key)
-                                            .ToList();
-                                        }
-
-                                        @foreach (var category in categories)
-                                        {
-                                            var isFirstImage = true;
-                                            foreach (var image in category)
+                                            foreach (var category in categories)
                                             {
-                                                <div class="p-2" style="flex: 1 0 50%;">
-                                                    <img src="https://localhost:7284/image/@image.ImageUrl" class="img-fluid" alt="Hotel Image"
-                                                    @(isFirstImage ? $"id=category-{image.ImageCategoryID}" : "") />
-                                                    @{
-                                                        isFirstImage = false;
+                                                var isFirstImage = true;
+                                                var imageIndex = 0;
+                                                var imageCount = category.Count();
+                                                foreach (var image in category)
+                                                {
+                                                    var imageUrl = image.ImageUrl;
+                                                    if (!imageUrl.StartsWith("http"))
+                                                    {
+                                                        imageUrl = $"https://localhost:7284/image/{imageUrl}";
                                                     }
-                                                </div>
+
+                                                    // Determine if this is the start of a new row
+                                                    bool isNewRow = imageIndex % 2 == 0;
+
+                                                    // Check if it's the last image in the category and if it should move to the next line
+                                                    bool isLastImage = imageIndex == imageCount - 1;
+
+                                                    if (isNewRow && !isFirstImage)
+                                                    {
+                                                        <div class="w-100"></div> <!-- Move to the next line -->
+                                                    }
+
+                                                    <div class="p-2" style="flex: 0 0 50%;">
+                                                        <img src="@imageUrl" class="img-fluid" alt="Hotel Image"
+                                                        @(isFirstImage ? $"id=category-{image.ImageCategoryID}" : "") />
+                                                        @{
+                                                            isFirstImage = false;
+                                                        }
+                                                    </div>
+
+                                                    if (isLastImage && (imageIndex + 1) % 2 == 1)
+                                                    {
+                                                        <div class="w-50"></div> <!-- Empty div to ensure the last image does not stretch -->
+                                                    }
+
+                                                    imageIndex++;
+                                                }
                                             }
                                         }
                                     </div>
                                 </div>
-                                <div class="col-2 fixed-sidebar">
+                                <div class="col-3 fixed-sidebar">
                                     <h3>@Model.HotelDetail.HotelName</h3>
                                     <h4>設施與服務</h4>
                                     <div class="d-flex flex-column">
@@ -231,8 +277,6 @@
                     </div>
                 </div>
             </div>
-
-
 
             @*飯店導覽列*@
             <ul class="nav nav-underline fixed-nav">
@@ -261,25 +305,36 @@
                     @foreach (var room in Model.HotelDetail.Rooms)
                     {
                         var limitedRoomImages = room.RoomImages?.Take(4).ToList() ?? new List<pgHotel_ImageDTO>();
+                        int imageCount = limitedRoomImages.Count;
                         <div class="row room-item round-edge-container" data-room-name="@room.RoomName" data-room-price="@room.RoomPrice" data-room-equips="@Newtonsoft.Json.JsonConvert.SerializeObject(room.RoomEquipments)" data-room-images="@Newtonsoft.Json.JsonConvert.SerializeObject(room.RoomImages)">
                             <h3 data-bs-toggle="modal" data-bs-target="#roomModal">@room.RoomName</h3>
                             <div class="col-4">
                                 <table data-bs-toggle="modal" data-bs-target="#roomModal">
                                     <tr>
-                                        <td colspan="3" class="imageBox"><img src="https://localhost:7284/image/@(limitedRoomImages.Count > 0 ? limitedRoomImages[0].ImageUrl:"")" class="img-fluid" /></td>
+                                        @if (imageCount > 0)
+                                        {
+                                            var imageUrl = limitedRoomImages[0].ImageUrl;
+                                            bool isExternalUrl = imageUrl.StartsWith("http");
+                                            <td colspan="3" class="imageBox"><img src="@(isExternalUrl ? imageUrl : "https://localhost:7284/image/" + imageUrl)" class="img-fluid" /></td>
+                                        }
+                                        else
+                                        {
+                                            <td colspan="3" class="imageBox"><img src="~/image/louieee_img/default-picture.jpg" class="img-fluid" /></td>
+                                        }
                                     </tr>
                                     <tr>
-                                        @if (limitedRoomImages.Count > 1)
+                                        @for (int i = 1; i < 4; i++)
                                         {
-                                            <td class="imageBox"><img src="https://localhost:7284/image/@limitedRoomImages[1].ImageUrl" class="img-fluid" /></td>
-                                        }
-                                        @if (limitedRoomImages.Count > 2)
-                                        {
-                                            <td class="imageBox"><img src="https://localhost:7284/image/@limitedRoomImages[2].ImageUrl" class="img-fluid" /></td>
-                                        }
-                                        @if (limitedRoomImages.Count > 3)
-                                        {
-                                            <td class="imageBox"><img src="https://localhost:7284/image/@limitedRoomImages[3].ImageUrl" class="img-fluid" /></td>
+                                            if (i < imageCount)
+                                            {
+                                                var imageUrl = limitedRoomImages[i].ImageUrl;
+                                                bool isExternalUrl = imageUrl.StartsWith("http");
+                                                <td class="imageBox"><img src="@(isExternalUrl ? imageUrl : "https://localhost:7284/image/" + imageUrl)" class="img-fluid" /></td>
+                                            }
+                                            else
+                                            {
+                                                <td class="imageBox"><img src="~/image/louieee_img/default-picture.jpg" class="img-fluid" /></td>
+                                            }
                                         }
                                     </tr>
                                 </table>
@@ -368,25 +423,26 @@
             <div id="hotel-reviews">
                 <h2>評論</h2>
             </div>
+
             @*設施區*@
             <div id="hotel-equips">
                 <h2>設施與服務</h2>
                 <div class="round-edge-container">
-                @if (Model.HotelDetail.HotelEquipments != null && Model.HotelDetail.HotelEquipments.Any())
-                {
-                    
-                    foreach (var equipment in Model.HotelDetail.HotelEquipments)
+                    @if (Model.HotelDetail.HotelEquipments != null && Model.HotelDetail.HotelEquipments.Any())
                     {
-                        <div>
-                            <i class="fa-regular fa-circle-check">@equipment</i>
-                        </div>
+
+                        foreach (var equipment in Model.HotelDetail.HotelEquipments)
+                        {
+                            <div>
+                                <i class="fa-regular fa-circle-check">@equipment</i>
+                            </div>
+                        }
+
                     }
-                    
-                }
-                else
-                {
-                    <p>暫無設備資訊</p>
-                }
+                    else
+                    {
+                        <p>暫無設備資訊</p>
+                    }
                 </div>
             </div>
 
@@ -438,7 +494,7 @@
                                 </div>
                             </div>
                             <!-- 分頁:你可能也喜歡 -->
-                           @*  <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                                 @if (Model.HotelDetail.SimilarHotels != null && Model.HotelDetail.SimilarHotels.Any())
                                 {
                                     <div class="scrollable-container">
@@ -446,7 +502,14 @@
                                         {
                                             <div class="row mb-3" style="border: 1px solid #ddd; border-radius: 10px; padding: 10px;">
                                                 <div class="col-3 p-0">
-                                                    <img src="https://localhost:7284/image/@hotel.HotelImage.ImageUrl" class="img-fluid full-height-img" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null;this.src='/image/louieee_img/otherHotel01.png';" />
+                                                    @{
+                                                        var imageUrl = hotel.HotelImage?.ImageUrl ?? "/image/louieee_img/default-picture.jpg";
+                                                        if (!imageUrl.StartsWith("http") && imageUrl != "/image/louieee_img/default-picture.jpg")
+                                                        {
+                                                            imageUrl = $"https://localhost:7284/image/{imageUrl}";
+                                                        }
+                                                    }
+                                                    <img src="@imageUrl" class="img-fluid full-height-img" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null;this.src='/image/louieee_img/otherHotel01.png';" />
                                                 </div>
                                                 <div class="col-9 vertical-align">
                                                     <div style="display:flex; align-items: center;">
@@ -458,22 +521,7 @@
                                                             }
                                                         </div>
                                                     </div>
-                                                    @{
-                                                        var ratingText = "";
-                                                        if (hotel.AverageRatingScores >= 4)
-                                                        {
-                                                            ratingText = "超讚";
-                                                        }
-                                                        else if (hotel.AverageRatingScores >= 3)
-                                                        {
-                                                            ratingText = "好";
-                                                        }
-                                                        else
-                                                        {
-                                                            ratingText = "尚可";
-                                                        }
-                                                    }
-                                                    <span style="color:green; font-weight:700;">@hotel.AverageRatingScores /5 @ratingText</span>
+                                                    <span style="color:green; font-weight:700;">@hotel.AverageRatingScores /10 </span>
                                                     <i class="fa-solid fa-location-dot d-block mt-2">@hotel.HotelAddress</i>
                                                     <span style="color:red; font-weight:700;">只剩 @hotel.AvailableRooms 間房!!!</span>
                                                     <div style="display:flex; align-items: center; margin-top: 10px;">
@@ -490,15 +538,13 @@
                                     <p>暫無推薦資訊</p>
                                 }
                             </div>
-                         *@
                         </div>
                     </div>
                 </div>
             </div>
-            @* h測試 *@
 
             @*推薦其他飯店*@
-            @* <div>
+            <div>
                 <h2>你可能也喜歡</h2>
                 <div id="carouselExampleControls" class="carousel slide round-edge-container" data-ride="carousel">
                     <div class="carousel-inner">
@@ -509,60 +555,49 @@
                             .ToList();
                             for (int i = 0; i < hotelGroups.Count; i++)
                             {
-                                    <div class="carousel-item @(i == 0 ? "active" : "")">
-                                        <div class="card-deck mb-5">
-                                            @foreach (var index in hotelGroups[i])
+                                <div class="carousel-item @(i == 0 ? "active" : "")">
+                                    <div class="card-deck mb-5">
+                                        @foreach (var index in hotelGroups[i])
                                         {
                                             var hotel = index < Model.HotelDetail.SimilarHotels.Count ? Model.HotelDetail.SimilarHotels[index] : null;
+                                            var imageUrl = hotel?.HotelImage?.ImageUrl ?? "/image/louieee_img/default-picture.jpg";
+                                            if (!imageUrl.StartsWith("http") && imageUrl != "/image/louieee_img/default-picture.jpg")
+                                            {
+                                                imageUrl = $"https://localhost:7284/image/{imageUrl}";
+                                            }
                                             <a href="@((hotel != null) ? ("/PgHotel/pgHotel?hotelId=" + hotel.HotelId + "&checkInDate=" + @Model.HotelDetail.CheckInDate + "&checkOutDate=" + @Model.HotelDetail.CheckOutDate) : "#")" class="card">
-                                                        <div class="card">
-                                                    <img src="@(hotel != null && hotel.HotelImage != null ? "https://localhost:7284/image/" + hotel.HotelImage.ImageUrl : "/image/louieee_img/otherHotel01.png")" class="card-img-top" alt="Hotel Image">
-                                                            <div class="card-body">
-                                                                @if (hotel != null)
+                                                <div class="card">
+                                                    <img src="@imageUrl" class="card-img-top" alt="Hotel Image">
+                                                    <div class="card-body">
+                                                        @if (hotel != null)
                                                         {
-                                                                <h5 class="card-title">@hotel.HotelName</h5>
+                                                            <h5 class="card-title">@hotel.HotelName</h5>
                                                             for (int j = 0; j < hotel.LevelStar; j++)
                                                             {
-                                                                    <img src="~/image/louieee_img/star.png" />
+                                                                <img src="~/image/louieee_img/star.png" />
                                                             }
-                                                                    <p class="card-text">
-                                                                @{
-                                                                    var ratingText = "";
-                                                                    if (hotel.AverageRatingScores >= 4)
-                                                                    {
-                                                                        ratingText = "超讚";
-                                                                    }
-                                                                    else if (hotel.AverageRatingScores >= 3)
-                                                                    {
-                                                                        ratingText = "好";
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        ratingText = "尚可";
-                                                                    }
-                                                                }
-                                                                <span>@hotel.AverageRatingScores /5 @ratingText</span>
-                                                                        <i class="fa-solid fa-location-dot">@hotel.HotelAddress</i>
-                                                                    </p>
+                                                            <p class="card-text">
+                                                                <span>@hotel.AverageRatingScores /10</span>
+                                                                <i class="fa-solid fa-location-dot">@hotel.HotelAddress</i>
+                                                            </p>
                                                         }
                                                         else
                                                         {
-                                                                <h5 class="card-title">占位符酒店名稱</h5>
-                                                                <p class="card-text">
-                                                                    <span>占位符評論</span>
-                                                                    <i class="fa-solid fa-location-dot">占位符酒店地址</i>
-                                                                </p>
+                                                            <h5 class="card-title">飯店名稱</h5>
+                                                            <p class="card-text">
+                                                                <span>評分</span>
+                                                                <i class="fa-solid fa-location-dot">飯店地址</i>
+                                                            </p>
                                                         }
-                                                            </div>
-                                                            <div class="card-footer">
-                                                                <small class="text-body-secondary">只剩 @hotel?.AvailableRooms 間房!!!</small>
-                                                            </div>
-
                                                     </div>
-                                                </a>
+                                                    <div class="card-footer">
+                                                        <small class="text-body-secondary">只剩 @(hotel?.AvailableRooms) 間房!!!</small>
+                                                    </div>
+                                                </div>
+                                            </a>
                                         }
-                                        </div>
                                     </div>
+                                </div>
                             }
                         }
                     </div>
@@ -576,7 +611,6 @@
                     </a>
                 </div>
             </div>
- *@
         </div>
     </div>
 </div>
@@ -588,7 +622,6 @@
 </button>
 
 <div class="cartModal">
- 
 </div>
 
 @section Styles {
@@ -657,10 +690,10 @@
         }
 
         #room-images img {
-    max-width: 48%;
-    width: 48%;
-    margin: 1%;
-}
+            max-width: 48%;
+            width: 48%;
+            margin: 1%;
+        }
 
         .scrollable-container {
             max-height: 400px; /* 设置合适的高度 */
@@ -702,7 +735,7 @@
         }
 
 
-       /*  購物車modal */
+        /*  購物車modal */
         .cartModal .modal.right .modal-dialog {
             position: fixed;
             top: 0;
@@ -710,7 +743,7 @@
             margin: 0;
             height: 100%;
             max-height: 100%;
-            width: 375px; 
+            width: 375px;
             transform: translateX(100%);
             transition: transform 0.3s ease-out;
             display: flex;
@@ -734,8 +767,7 @@
 
         .cartModal .modal-body {
             flex-grow: 1;
-
-            height: 200px; 
+            height: 200px;
         }
 
         .cartModal .modal-footer {
@@ -744,7 +776,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: start;
-            height: 500px; 
+            height: 500px;
         }
 
         .cartModal .modal-backdrop {
@@ -780,8 +812,8 @@
         }
 
             .cartModal .modal-footer .btn:hover {
-                opacity: 0.7; 
-                background-color:green;
+                opacity: 0.7;
+                background-color: green;
             }
 
         .cartModal .modal-footer .note {
@@ -795,11 +827,11 @@
             width: 33%;
         }
 
-        .img-fluid{
+        .img-fluid {
             width: 100%;
-            height:100%;
+            height: 100%;
             aspect-ratio: 1/1;
-            object-fit:cover;
+            object-fit: cover;
         }
     </style>
 }
@@ -808,7 +840,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             //痊癒--------------------------------------------------------
-            
+
 
 
 
@@ -861,7 +893,7 @@
                 });
             });
 
-            
+
 
             //飯店彈出視窗-查看房型
             window.scrollToRoomTypes = function () {
@@ -882,9 +914,9 @@
                 }
             };
 
-            
 
-            
+
+
 
             //導覽列-避免被遮住
             const links = document.querySelectorAll('.this-page-nav-link');
@@ -909,50 +941,54 @@
             });
 
             //房間彈出視窗
-            
-                var roomModal = document.getElementById('roomModal');
-                var roomNameElement = document.getElementById('room-name');
-                var roomEquipmentsElement = document.getElementById('room-equipments');
-                var roomPriceElement = document.getElementById('room-price');
-                var roomImagesElement = document.getElementById('room-images');
 
-                var roomItems = document.querySelectorAll('.room-item');
-                roomItems.forEach(function (roomItem) {
-                    roomItem.addEventListener('click', function () {
-                        var roomName = roomItem.getAttribute('data-room-name');
-                        var roomPrice = roomItem.getAttribute('data-room-price');
-                        var roomEquipments = JSON.parse(roomItem.getAttribute('data-room-equips'));
-                        var roomImages = JSON.parse(roomItem.getAttribute('data-room-images'));
+            var roomModal = document.getElementById('roomModal');
+            var roomNameElement = document.getElementById('room-name');
+            var roomEquipmentsElement = document.getElementById('room-equipments');
+            var roomPriceElement = document.getElementById('room-price');
+            var roomImagesElement = document.getElementById('room-images');
 
-                        roomNameElement.textContent = roomName;
-                        roomPriceElement.textContent = 'TWD ' + parseFloat(roomPrice).toFixed(2);
+            var roomItems = document.querySelectorAll('.room-item');
+            roomItems.forEach(function (roomItem) {
+                roomItem.addEventListener('click', function () {
+                    var roomName = roomItem.getAttribute('data-room-name');
+                    var roomPrice = roomItem.getAttribute('data-room-price');
+                    var roomEquipments = JSON.parse(roomItem.getAttribute('data-room-equips'));
+                    var roomImages = JSON.parse(roomItem.getAttribute('data-room-images'));
 
-                        roomEquipmentsElement.innerHTML = '';
-                        roomEquipments.forEach(function (equip) {
-                            var equipElement = document.createElement('div');
-                            equipElement.classList.add('d-flex', 'align-items-center');
-                            equipElement.innerHTML = '<i class="fa-regular fa-thumbs-up"></i> ' + equip;
-                            roomEquipmentsElement.appendChild(equipElement);
-                        });
+                    roomNameElement.textContent = roomName;
+                    roomPriceElement.textContent = 'TWD ' + parseFloat(roomPrice).toFixed(2);
 
-                        roomImagesElement.innerHTML = '';
-                        for (var i = 0; i < roomImages.length; i += 2) {
-                            var rowElement = document.createElement('div');
-                            rowElement.classList.add('d-flex', 'flex-row', 'mb-2');
-
-                            for (var j = 0; j < 2; j++) {
-                                if (i + j < roomImages.length) {
-                                    var imgElement = document.createElement('img');
-                                    imgElement.src = 'https://localhost:7284/image/' + roomImages[i + j].ImageUrl;
-                                    imgElement.classList.add('img-fluid', 'p-2');
-                                    rowElement.appendChild(imgElement);
-                                }
-                            }
-
-                            roomImagesElement.appendChild(rowElement);
-                        }
+                    roomEquipmentsElement.innerHTML = '';
+                    roomEquipments.forEach(function (equip) {
+                        var equipElement = document.createElement('div');
+                        equipElement.classList.add('d-flex', 'align-items-center');
+                        equipElement.innerHTML = '<i class="fa-regular fa-thumbs-up"></i> ' + equip;
+                        roomEquipmentsElement.appendChild(equipElement);
                     });
+
+                    roomImagesElement.innerHTML = '';
+                    for (var i = 0; i < roomImages.length; i += 2) {
+                        var rowElement = document.createElement('div');
+                        rowElement.classList.add('d-flex', 'flex-row', 'mb-2');
+
+                        for (var j = 0; j < 2; j++) {
+                            if (i + j < roomImages.length) {
+                                var imgElement = document.createElement('img');
+                                var imageUrl = roomImages[i + j].ImageUrl;
+                                if (!imageUrl.startsWith("http")) {
+                                    imageUrl = 'https://localhost:7284/image/' + imageUrl;
+                                }
+                                imgElement.src = imageUrl;
+                                imgElement.classList.add('img-fluid', 'p-2');
+                                rowElement.appendChild(imgElement);
+                            }
+                        }
+
+                        roomImagesElement.appendChild(rowElement);
+                    }
                 });
+            });
 
             //購物車
             $('.addCart').on('click', async function () {
@@ -962,16 +998,16 @@
                 //是否有登入
                 // const memberID = getMemberID();
                 // if (!memberID) {
-                //     window.location.href = '/login'; 
+                //     window.location.href = '/login';
                 //     return;
                 // }
 
                 const orderDetail = {
                     MemberID: 1,
                     RoomID: roomID,
-                    CheckInDate: "2024-06-15", 
+                    CheckInDate: "2024-06-15",
                     CheckOutDate: "2024-06-20",
-               
+
                 };
 
                 try {
@@ -994,11 +1030,11 @@
                     }
                 } catch (err) {
                     console.error(err);
- 
+
                 }
             });
 
-           
+
 
             //直接購買
             $('.directBuy').on('click', async function () {
@@ -1014,8 +1050,8 @@
                 const orderDetail = {
                     MemberID: 1,
                     RoomID: 10,   //寫死roomID,
-                    CheckInDate: "2024-06-15", 
-                    CheckOutDate: "2024-06-20", 
+                    CheckInDate: "2024-06-15",
+                    CheckOutDate: "2024-06-20",
                 };
 
                 try {
@@ -1036,7 +1072,7 @@
                         console.log(data);
                         // window.location.href = "";
                     }
-                   
+
                 } catch (err) {
                     console.error(err);
 
@@ -1078,7 +1114,7 @@
                 return window.location.origin + '/image/' + imagePath;
             }
         }
-        
+
         function showCartModal(data) {
 
             const days = getDaysBetweenDates(data.checkInDate, data.checkOutDate);
@@ -1087,31 +1123,31 @@
 
             let cartString = `
 
-                            <div class="modal right fade" id="rightModal" tabindex="-1" aria-labelledby="rightModalLabel" aria-hidden="true">
-                             <div class="modal-dialog">
-                                 <div class="modal-content">
-                                     <div class="modal-header">
-                                         <h5 class="modal-title" id="rightModalLabel">已加入購物車</h5>
-                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                     </div>
-                                     <div class="modal-body d-flex align-items-center">
-                                          <img src="${imageUrl}" alt="...">
-                                              <div class="room-info d-flex flex-column">
-                                             <p>${data.roomName} x ${days}晚已新增至購物車</p>
-                                             <p>（價格為NT$ ${totalPrice}）</p>
+                                    <div class="modal right fade" id="rightModal" tabindex="-1" aria-labelledby="rightModalLabel" aria-hidden="true">
+                                     <div class="modal-dialog">
+                                         <div class="modal-content">
+                                             <div class="modal-header">
+                                                 <h5 class="modal-title" id="rightModalLabel">已加入購物車</h5>
+                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                             </div>
+                                             <div class="modal-body d-flex align-items-center">
+                                                  <img src="${imageUrl}" alt="...">
+                                                      <div class="room-info d-flex flex-column">
+                                                     <p>${data.roomName} x ${days}晚已新增至購物車</p>
+                                                     <p>（價格為NT$ ${totalPrice}）</p>
+                                                 </div>
+                                             </div>
+                                             <div class="modal-footer">
+                                                 <button type="button" class="btn btn-primary" id="ToCartItems">前往購物車</button>
+
+                                                 <div class="note">訂越多，省越多！</div>
+                                                 <p>同時預訂多個項目，還能省更多！</p>
+                                             </div>
                                          </div>
                                      </div>
-                                     <div class="modal-footer">
-                                         <button type="button" class="btn btn-primary" id="ToCartItems">前往購物車</button>
+                                   </div>
 
-                                         <div class="note">訂越多，省越多！</div>
-                                         <p>同時預訂多個項目，還能省更多！</p>
-                                     </div>
-                                 </div>
-                             </div>
-                           </div>
-
-                        `
+                                `
 
             $('.cartModal').html(cartString);
             $('#rightModal').modal('show');
@@ -1120,18 +1156,19 @@
 
         function smoothScroll(targetId) {
             console.log(targetId);
-            // const targetEle = document.querySelector(`#${targetId}`)
-            const targetEle = document.getElementById(targetId)
-            const modal = document.querySelector('.col-10.scrollable-container')
+            const targetEle = document.getElementById(targetId);
+            const modal = document.querySelector('.col-9.scrollable-container');
             if (targetEle) {
                 modal.scrollTo({
                     top: targetEle.offsetTop,
                     behavior: 'smooth'
-                })
+                });
             }
         }
 
-      
+
+
+
 
     </script>
 

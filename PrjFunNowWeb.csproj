@@ -9,6 +9,7 @@
   <ItemGroup>
     <_ContentIncludedByDefault Remove="wwwroot\image\hotel_test_01.png" />
     <_ContentIncludedByDefault Remove="wwwroot\image\hotel_test_021.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\image\louieee_img\default-picture.jpg" />
   </ItemGroup>
 
   <ItemGroup>
