@@ -282,7 +282,7 @@
                 <div class="chat-messages" id="quick-messages"></div>
                 <div class="input-container">
                     <textarea id="quick-input" placeholder="輸入訊息..."></textarea>
-                    <button onclick="sendMessage('quick')">發送</button>
+                    <button onclick="">發送</button>
                 </div>
             </div>
         </div>
@@ -354,8 +354,8 @@
         function sendMessage(type) {
             let input;
             let messagesContainer;
-            let memberEmail = "leo10117212000@gmail.com";  // 從session storage獲取房客的郵件地址
-            let housemanEmail = "rubyccww@gmail.com";  // 房東的郵件地址
+            let memberEmail = "";  // 從session storage獲取房客的郵件地址
+            let housemanEmail = "";  // 房東的郵件地址
             let memberSubject = '您的訊息已發送至房東';
             let housemanSubject = '有房客向您傳送了訊息';
 
@@ -369,6 +369,19 @@
 
             const messageText = input.value.trim();
             if (messageText) {
+                // 創建用戶消息泡泡
+                const messageBubble = document.createElement('div');
+                messageBubble.className = 'message-bubble';
+
+                const messageContent = document.createElement('div');
+                messageContent.className = 'message-content';
+                messageContent.textContent = messageText;
+
+                messageBubble.appendChild(messageContent);
+                messagesContainer.appendChild(messageBubble);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+
                 // 創建傳送中訊息
                 const sendingMessage = document.createElement('div');
                 sendingMessage.className = 'system-message';
@@ -430,6 +443,7 @@
                     });
             }
         }
+
 
     </script>
 </body>

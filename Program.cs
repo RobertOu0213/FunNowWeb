@@ -54,6 +54,15 @@ builder.Services.AddSession(options =>
 
 builder.Services.Configure<GoogleCaptchaConfig>(builder.Configuration.GetSection("GoogleReCaptcha"));
 
+builder.Services.AddCors(options =>
+{
+    // 定義允許特定來源的策略
+    options.AddPolicy("AllowSpecificOrigin",
+        builder => builder.WithOrigins("https://localhost:7103") // 替換為你的前端域名
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials());
+});
 // Add SignalR client services if needed for SignalR client side (optional)
 builder.Services.AddSignalR();
 
