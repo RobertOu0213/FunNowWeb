@@ -110,22 +110,27 @@
 
         // 使用 URLSearchParams 解析 URL 中的參數
         const urlParams = new URLSearchParams(window.location.search);
-        const memberId = urlParams.get('memberId') || 5;  // 從 URL 參數獲取 memberId，如果無，默認為 5
+        const memberId = urlParams.get('memberId') || 1;  // 從 URL 參數獲取 memberId，如果無，默認為 5
         const cityName = urlParams.get('city');  // 從 URL 參數獲取城市名稱
         const countryName = urlParams.get('country');  // 從 URL 參數獲取國家名稱
         console.log("City: ", cityName);  // 应显示 "大阪"
         console.log("Country: ", decodeURIComponent(countryName));  // 应显示 "日本"
 
-        const url = `https://localhost:7103/api/HotelsFavorite/${memberId}/FavoriteHotels/${encodeURIComponent(cityName)}`;
+        // const url = `https://localhost:7103/api/HotelsFavorite/`+`${memberId}/FavoriteHotels/encodeURIComponent${cityName}`;
+        const url = `https://localhost:7103/api/HotelsFavorite/`+`1/FavoriteHotels/${cityName}`;
+
+        console.log(url);
 
         const loadFavoriteHotels = async () => {
             try {
                 const response = await fetch(url);
+                console.log(response);
                 if (!response.ok) {
+                    console.log('test');
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 const data = await response.json();
-                console.log(data);
+                console.log("======"+data);
 
                 const hotels = data.map(hotel => {
                     const { hotelId, hotelImage, hotelName, city, country, levelStar, Rating,minimumPrice } = hotel;

@@ -79,9 +79,11 @@
        /*  const memberId = getCurrentUserId(); */ // 獲取當前登入用戶的 ID
         // const memberId = @Model; // 從視圖模型獲取會員ID
 
-        const memberId = 5;   //先寫死
+        const memberId = 1;   //先寫死
 
-        const url ='https://localhost:7103/api/HotelsFavorite/5/FavoriteHotels';
+        // const url = `https://localhost:7103/api/HotelsFavorite/`+`${memberId}/FavoriteHotels`;
+        const url = `https://localhost:7103/api/HotelsFavorite/1/FavoriteHotels`;
+
     
 
         const loadFavoriteHotels = async () => {

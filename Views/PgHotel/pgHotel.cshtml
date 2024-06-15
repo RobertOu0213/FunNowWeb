@@ -438,7 +438,7 @@
                                 </div>
                             </div>
                             <!-- 分頁:你可能也喜歡 -->
-                            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                           @*  <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                                 @if (Model.HotelDetail.SimilarHotels != null && Model.HotelDetail.SimilarHotels.Any())
                                 {
                                     <div class="scrollable-container">
@@ -490,14 +490,15 @@
                                     <p>暫無推薦資訊</p>
                                 }
                             </div>
+                         *@
                         </div>
                     </div>
                 </div>
             </div>
-
+            @* h測試 *@
 
             @*推薦其他飯店*@
-            <div>
+            @* <div>
                 <h2>你可能也喜歡</h2>
                 <div id="carouselExampleControls" class="carousel slide round-edge-container" data-ride="carousel">
                     <div class="carousel-inner">
@@ -575,7 +576,7 @@
                     </a>
                 </div>
             </div>
-
+ *@
         </div>
     </div>
 </div>
