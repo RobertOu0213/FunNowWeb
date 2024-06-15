@@ -22,21 +22,21 @@ builder.Services.AddAuthentication(options =>
    });
 
 
-//builder.Services.AddCors(options =>
-//{
-//    // 定義允許所有來源的策略
-//    options.AddPolicy("AllowAll",
-//        builder => builder.AllowAnyOrigin()
-//                          .AllowAnyHeader()
-//                          .AllowAnyMethod());
+builder.Services.AddCors(options =>
+{
+    // 定義允許所有來源的策略
+    options.AddPolicy("AllowAll",
+        builder => builder.AllowAnyOrigin()
+                          .AllowAnyHeader()
+                          .AllowAnyMethod());
 
-//    // 定義允許特定來源的策略
-//    options.AddPolicy("AllowSpecificOrigin",
-//        builder => builder.WithOrigins("http://localhost:4200/")
-//                          .AllowAnyHeader()
-//                          .AllowAnyMethod()
-//                          .AllowCredentials());
-//});
+    // 定義允許特定來源的策略
+    //options.AddPolicy("AllowSpecificOrigin",
+    //    builder => builder.WithOrigins("http://localhost:4200/")
+    //                      .AllowAnyHeader()
+    //                      .AllowAnyMethod()
+    //                      .AllowCredentials());
+});
 
 
 
@@ -104,11 +104,14 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
-//app.UseCors("AllowAll");
+
+app.UseCors("AllowAll");
+
 app.MapControllerRoute(
     name: "default",
     //pattern: "{controller=Home}/{action=Index}/{id?}");
-pattern: "{controller=Comment}/{action=Angular_platform}/{id?}");
+pattern: "{controller=Home}/{action=Index}/{id?}");
+
 
 //// 配置路由以支持 Angular 路由
 //app.MapFallbackToFile("/dist/fun-now-angular1/index.html");

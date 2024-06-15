@@ -367,6 +367,10 @@
             @*評論區(亭蓉做)*@
             <div id="hotel-reviews">
                 <h2>評論</h2>
+                <div class="round-edge-container">
+                    <a href="#" class="btn btn-outline-primary" id="searchBtn">查看所有評論</a>
+
+                </div>
             </div>
             @*設施區*@
             <div id="hotel-equips">
@@ -437,7 +441,7 @@
                                     <i class="fa-solid fa-train">捷運: 劍潭站</i>
                                 </div>
                             </div>
-                            <!-- 分頁:你可能也喜歡 -->
+                           @*  <!-- 分頁:你可能也喜歡 -->
                             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                                 @if (Model.HotelDetail.SimilarHotels != null && Model.HotelDetail.SimilarHotels.Any())
                                 {
@@ -490,14 +494,15 @@
                                     <p>暫無推薦資訊</p>
                                 }
                             </div>
+ *@
                         </div>
                     </div>
                 </div>
             </div>
 
 
-            @*推薦其他飯店*@
-            <div>
+            @* 推薦其他飯店 *@
+           @*  <div>
                 <h2>你可能也喜歡</h2>
                 <div id="carouselExampleControls" class="carousel slide round-edge-container" data-ride="carousel">
                     <div class="carousel-inner">
@@ -575,7 +580,7 @@
                     </a>
                 </div>
             </div>
-
+ *@
         </div>
     </div>
 </div>
@@ -794,7 +799,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            //痊癒--------------------------------------------------------
+            //全域--------------------------------------------------------
             
 
 
@@ -1116,6 +1121,21 @@
             }
         }
 
+
+        //往angular評論頁面
+        document.getElementById('searchBtn').addEventListener('click', function (event) {
+            event.preventDefault(); 
+
+           //TODO 先寫死，之後抓變數
+            var hotelId = 2;
+            var checkInDate = '2024-06-29';
+            var checkOutDate = '2024-06-30';
+
+            
+            var url = `http://localhost:4200/comment/${hotelId}?checkInDate=${checkInDate}&checkOutDate=${checkOutDate}`;
+
+            window.location.href = url;
+        });
       
 
     </script>
