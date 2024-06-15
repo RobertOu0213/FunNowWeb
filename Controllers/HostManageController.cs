@@ -5,6 +5,7 @@ using PrjFunNowWeb.Models.DTO;
 using PrjFunNowWeb.Models.ViewModel;
 using System;
 using System.Linq;
+using DotNetEnv;
 
 namespace PrjFunNowWeb.Controllers
 {
@@ -20,15 +21,24 @@ namespace PrjFunNowWeb.Controllers
         }
         public IActionResult Home()
         {
+           
             return View();
         }
 
         public IActionResult HostHotelInfo(int? id)
         {
+            //Env.Load();
+            //string databaseUrl = Environment.GetEnvironmentVariable("API_KEY");
+            //if (databaseUrl != null)
+            //{
+            //    Console.WriteLine(databaseUrl);
+            //}
+
             if (id == null)
             {
                 return RedirectToAction("Home");
             }
+      
 
             var hotel = (from h in _context.Hotels
                          where h.HotelId == id
