@@ -27,12 +27,13 @@ namespace PrjFunNowWeb.Controllers
 
         public IActionResult HostHotelInfo(int? id)
         {
-            //Env.Load();
-            //string databaseUrl = Environment.GetEnvironmentVariable("API_KEY");
-            //if (databaseUrl != null)
-            //{
-            //    Console.WriteLine(databaseUrl);
-            //}
+            Env.Load();
+            string databaseUrl = Environment.GetEnvironmentVariable("API_KEY");
+
+            if (databaseUrl != null)
+            {
+                Console.WriteLine(databaseUrl);
+            }
 
             if (id == null)
             {
