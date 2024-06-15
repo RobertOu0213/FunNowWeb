@@ -42,6 +42,7 @@
                 </div>
                 <!--//價格搜尋拉霸end-->
 
+                <!-- 住宿類型 -->
                 <div style="margin:20px 10px" class="form-check-container-hotel-type">
                     <p>住宿類型</p>
                     @foreach (var hotelType in Model.HotelTypes)
@@ -55,6 +56,7 @@
                     }
                 </div>
 
+                <!-- 住宿設備 -->
                 <div style="margin:20px 10px" class="form-check-container-hotel-equipment">
                     <p>住宿設備</p>
                     @foreach (var hotelEquipment in Model.HotelEquipments)
@@ -68,6 +70,7 @@
                     }
                 </div>
 
+                <!-- 城市 -->
                 <div style="margin:20px 10px" class="form-check-container-city">
                     <p>城市</p>
                     @foreach (var city in Model.Cities)
@@ -81,6 +84,8 @@
                     }
                     <button id="toggleCityButton" class="toggle-button">顯示更多</button>
                 </div>
+
+                <!-- 房間設備 -->
                 <div style="margin:20px 10px" class="form-check-container-room-equipment">
                     <p>房間設備</p>
                     @foreach (var roomEquipment in Model.RoomEquipments)
@@ -93,6 +98,9 @@
                         </div>
                     }
                 </div>
+
+
+
             </div>
 
             <div class="col-lg-9 col-sm-12">
@@ -619,6 +627,60 @@
     </style>
     @* checkbox設定 *@
     <style>
+        /* 設定 checkbox 和標籤的樣式 */
+        .form-check-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+            margin-left: -20px; /* 調整這個數值以讓 checkbox 與標題對齊 */
+        }
+
+        /* 隱藏原本的 checkbox */
+        .form-check-input {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            width: 0;
+            height: 0;
+            position: absolute;
+            opacity: 0;
+        }
+
+            /* 自定義的 checkbox 樣式 */
+            .form-check-input + .form-check-label::before {
+                content: '';
+                display: inline-block;
+                width: 16px;
+                height: 16px;
+                border: 1px solid #ccc;
+                border-radius: 2px;
+                margin-right: 10px;
+                vertical-align: middle;
+                background-color: #fff;
+            }
+
+            /* 當 checkbox 被選中時的樣式 */
+            .form-check-input:checked + .form-check-label::before {
+                content: '\2713';
+                display: inline-block;
+                width: 16px;
+                height: 16px;
+                border: 1px solid #007bff;
+                border-radius: 2px;
+                margin-right: 10px;
+                vertical-align: middle;
+                background-color: #007bff;
+                color: #fff;
+                text-align: center;
+                line-height: 16px;
+            }
+
+            .form-check-input:hover + .form-check-label::before {
+                border-color: #007bff;
+            }
+
+        /* 城市選單樣式 */
         .form-check-container-city .city-item {
             display: none;
         }
@@ -631,6 +693,7 @@
             display: block;
         }
 
+        /* 顯示更多按鈕樣式 */
         .toggle-button {
             margin-top: 10px;
             padding: 5px 10px;
@@ -639,6 +702,16 @@
             border: none;
             cursor: pointer;
             border-radius: 5px;
+        }
+
+        /* 標題樣式 */
+        .form-check-container-hotel-type > p,
+        .form-check-container-hotel-equipment > p,
+        .form-check-container-city > p,
+        .form-check-container-room-equipment > p {
+            font-size: 18px; /* 調整字體大小 */
+            font-weight: bold; /* 調整字體粗細 */
+            margin-bottom: 10px;
         }
 
     </style>
