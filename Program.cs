@@ -22,6 +22,22 @@ builder.Services.AddAuthentication(options =>
    });
 
 
+builder.Services.AddCors(options =>
+{
+    // 定義允許所有來源的策略
+    options.AddPolicy("AllowAll",
+        builder => builder.AllowAnyOrigin()
+                          .AllowAnyHeader()
+                          .AllowAnyMethod());
+
+    // 定義允許特定來源的策略
+    //options.AddPolicy("AllowSpecificOrigin",
+    //    builder => builder.WithOrigins("http://localhost:4200/")
+    //                      .AllowAnyHeader()
+    //                      .AllowAnyMethod()
+    //                      .AllowCredentials());
+});
+
 
 
 // Add services to the container.
@@ -89,11 +105,14 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+app.UseCors("AllowAll");
+
 app.MapControllerRoute(
     name: "default",
     //pattern: "{controller=Home}/{action=Index}/{id?}");
-pattern: "{controller=Home}/{action=index}/{id?}");
+pattern: "{controller=Home}/{action=Index}/{id?}");
 
-// 配置路由以支持 Angular 路由
+
+//// 配置路由以支持 Angular 路由
 //app.MapFallbackToFile("/dist/fun-now-angular1/index.html");
 app.Run();
