@@ -6,10 +6,10 @@ using PrjFunNowWeb.Models.ViewModel;
 using System.Text.Json;
 namespace PrjFunNowWeb.Controllers
 {
-    public class Cart : Controller
+    public class CartController : Controller
     {
         private readonly FunNowContext _context;
-        public Cart(FunNowContext context)
+        public CartController(FunNowContext context)
         {
             _context = context;
         }

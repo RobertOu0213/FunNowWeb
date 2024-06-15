@@ -3,44 +3,17 @@
     ViewData["Title"] = "paymentPage";
     var member = ViewBag.Member as PrjFunNowWeb.Models.Member;
     @model List<PrjFunNowWeb.Models.ViewModel.CReservationSummaryViewModel>
+    Layout = "_Layout_Order";
 }
 
-
-<nav>
-    <div class="logo">
-        <img src="~/ou/image/FunNow_Logo_Horizontal_Orange.png" alt="LOGO">
-    </div>
-    <div class="md-stepper-horizontal orange">
-        <div class="md-step active">
-            <div class="md-step-circle"><span>1</span></div>
-            <div class="md-step-title">填寫住客資料</div>
-            <div class="md-step-bar-left"></div>
-            <div class="md-step-bar-right"></div>
-        </div>
-        <div class="md-step">
-            <div class="md-step-circle"><span>2</span></div>
-            <div class="md-step-title">選擇付款方式</div>
-            <div class="md-step-bar-left"></div>
-            <div class="md-step-bar-right"></div>
-        </div>
-        <div class="md-step">
-            <div class="md-step-circle"><span>3</span></div>
-            <div class="md-step-title">預訂已確認！</div>
-            <div class="md-step-bar-left"></div>
-            <div class="md-step-bar-right"></div>
-        </div>
-    </div>
-    <div class="user-container">
-        <button type="button">
-            <img src="" alt="...">
-            <span>Oliver</span>
-            <i class="fa-solid fa-caret-down"></i>
-        </button>
-    </div>
-</nav>
 <main>
     <section class="left-section">
-        <form action="" method="post">
+        <form action='@Url.Content("~/Payment/thankyou")' method="post">
+            <input type="hidden" name="TotalPrice" value="@Model.Sum(m => m.RoomPrice * m.NumberOfNights)" />
+            @foreach(var item in Model)
+            {
+                <input type="hidden" name="OrderDetailsID" value="@item.OrderDetailID" />
+            }
             <div class="contact-info p-3">
                 <div class="contact-info-static mb-2">
                     <div class="" style="font-size:12px; color:grey;">針對所有預定</div>
@@ -84,17 +57,17 @@
                     <div class="d-flex">
                         <div class="w-100 m-1">
                             <label for="firstname">名字</label>
-                            <input type="text" id="firstname" name="firstname" value="" class="form-control">
+                            <input type="text" id="firstname" name="GuestFirstName"  class="form-control">
                         </div>
                         <div class="w-100 m-1">
                             <label for="lastname">姓氏</label>
-                            <input type="text" id="lastname" name="lastname" value="" class="form-control">
+                            <input type="text" id="lastname" name="GuestLastName"  class="form-control">
                         </div>
                     </div>
                     <div class="d-flex">
                         <div class="w-100 m-1">
-                            <label for="email">電子郵件地址*</label>
-                            <input type="email" id="email" name="email" value="" class="form-control w-50">
+                            <label for="email">電子郵件地址</label>
+                            <input type="email" id="email" name="GuestEmail"  class="form-control w-50">
                         </div>
                     </div>
                 </div>
@@ -182,12 +155,6 @@
 }
 @section Scripts {
     <script>
-
-        $(document).ready(async function() {
-
-            await fetch('')
-
-        })
 
     </script>
 }
