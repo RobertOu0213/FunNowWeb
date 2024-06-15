@@ -370,15 +370,15 @@
                 return;
             }
            //全部都驗證完，就導向到首頁
-            window.location.href = "/Home/Index";
+            window.location.href = "/home/index";
         });
 
  
     </script>
 
-
+     @* //Google驗證失敗時跳出的錯誤訊息 *@
     <script>
-        //Google驗證失敗時跳出的錯誤訊息
+        
         document.addEventListener("DOMContentLoaded", function () {
             var errorMessage = '@TempData["ErrorMessage"]';
             if (errorMessage) {
@@ -389,8 +389,9 @@
 
     </script>
 
+    @*  //【重寄驗證信】 *@
     <script>
-    //【重寄驗證信】
+    
         document.getElementById("reSent").addEventListener("click", async function (event) {
             event.preventDefault();
 

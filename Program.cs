@@ -91,7 +91,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    //pattern: "{controller=Home}/{action=Index}/{id?}");
+    
 pattern: "{controller=Home}/{action=index}/{id?}");
 
 // 配置路由以支持 Angular 路由
