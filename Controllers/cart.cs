@@ -14,14 +14,15 @@ namespace PrjFunNowWeb.Controllers
             _context = context;
         }
 
-        public IActionResult cartItems(int? userId)
+        //[Route("cart/cartItems/{userId}")]
+        public IActionResult cartItems(int? id)
         {
-            if (userId <= 0)
+            if (id <= 0 || id == null)
             {
                 return BadRequest("UserID is required");
             }
 
-            var MemberID = _context.Members.Where(x => x.MemberId == userId).Select(x => x.MemberId).FirstOrDefault();
+            var MemberID = _context.Members.Where(x => x.MemberId == id).Select(x => x.MemberId).FirstOrDefault();
 
             if (MemberID <= 0)
             {
@@ -106,6 +107,8 @@ namespace PrjFunNowWeb.Controllers
                     Email = member?.Email,
                     Phone = member?.Phone
                 }).ToList();
+
+                ViewBag.Member = member;
 
                 return View(viewModel);
             }
