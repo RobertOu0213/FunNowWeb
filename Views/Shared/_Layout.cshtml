@@ -35,6 +35,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.min.css">
 
+
     <style>
         .booking-area {
             background-color: #20274d;
@@ -345,11 +346,11 @@
                 });
             });
     </script>
-    
-    
-    
-    
-    
+
+
+
+
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // 監聽滾動事件
@@ -361,13 +362,14 @@
                 }
                 var scrollPosition = window.scrollY || window.pageYOffset;
 
-            // 如果滾動至頁面中間，顯示浮動容器，否則隱藏
-            if (scrollPosition > (window.innerHeight / 2)) {
-                floatingContainer.style.display = 'block';
-            }
-            // else {
-            //     floatingContainer.style.display = 'none';
-            // }
+                // 如果滾動至頁面中間，顯示浮動容器，否則隱藏
+                if (scrollPosition > (window.innerHeight / 2)) {
+                    floatingContainer.style.display = 'block';
+                }
+                // else {
+                //     floatingContainer.style.display = 'none';
+                // }
+            });
         });
     </script>
 

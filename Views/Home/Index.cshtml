@@ -104,7 +104,7 @@
         .search-icon {
             position: absolute;
             top: 40%;
-            left: 5px;
+            left: -28px;
             transform: translateY(-50%);
             font-size: 25px;
             color: #E0E0E0;
@@ -190,8 +190,8 @@
             position: relative;
         }
 
-        input[type="text"], input[type="date"] {
-            width: 60%;
+        input[type="date"] {
+            width: 85%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -212,6 +212,15 @@
             }
     </style>
 
+    <style>
+        #autocomplete-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+    </style>
 }
 
 @section Scripts{   
@@ -219,6 +228,68 @@
     <script src="https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.min.js"></script>
 
     @* //三個搜尋方法 *@
+    @* autocomplete方法 *@
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('search-input');
+            const autocompleteList = document.getElementById('autocomplete-list');
+
+            searchInput.addEventListener('input', async function () {
+                const query = searchInput.value.trim();
+                if (query.length > 0) {
+                    const suggestions = await fetchSuggestions(query);
+                    displaySuggestions(suggestions);
+                } else {
+                    clearSuggestions();
+                }
+            });
+
+            function clearSuggestions() {
+                autocompleteList.innerHTML = '';
+            }
+
+            async function fetchSuggestions(query) {
+                try {
+                    const response = await fetch(`https://localhost:7103/api/HotelSearch/suggestions?keyword=${encodeURIComponent(query)}`);
+                    if (response.ok) {
+                        return await response.json();
+                    } else {
+                        console.error('Failed to fetch suggestions:', response.status, response.statusText);
+                        return [];
+                    }
+                } catch (error) {
+                    console.error('Error fetching suggestions:', error);
+                    return [];
+                }
+            }
+
+            function displaySuggestions(suggestions) {
+                clearSuggestions();
+                suggestions.forEach(suggestion => {
+                    const item = document.createElement('button');
+                    item.type = 'button';
+                    item.classList.add('list-group-item', 'list-group-item-action');
+                    item.textContent = `${suggestion.hotelName}, ${suggestion.cityName}`;
+                    item.addEventListener('click', () => {
+                        searchInput.value = `${suggestion.hotelName}, ${suggestion.cityName}`;
+                        clearSuggestions();
+                    });
+                    autocompleteList.appendChild(item);
+                });
+            }
+
+            document.addEventListener('click', function (event) {
+                if (!searchInput.contains(event.target) && !autocompleteList.contains(event.target)) {
+                    clearSuggestions();
+                }
+            });
+        });
+
+    </script>
+
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+
     <script>
         //當 DOM 內容加載完成時執行
         window.addEventListener('DOMContentLoaded', () => {
@@ -430,7 +501,8 @@
                             <div class="col-md-12">
                                 <div class="search-container">
                                     <i class="fas fa-search search-icon"></i>
-                                    <input type="text" id="search-input" class="input-container" placeholder="      今天想去哪裡旅行">
+                                    <input type="text" id="search-input" class="form-control" placeholder="今天想去哪裡旅行">
+                                    <div id="autocomplete-list" class="list-group"></div>
                                 </div>
                             </div>
                          <div class="row">
@@ -439,7 +511,7 @@
                                     <div class="form-group">
                                         <div class='input-group '>
                                             <!-- Air datepicker Html element -->
-                                            <input type="text" id="myDatepicker" placeholder="選擇日期範圍">
+                                            <input type="text" id="myDatepicker" placeholder="選擇日期範圍" style="padding:5px">
                                             <!-- Air datepicker JavaScript-->
                                         </div>
                                     </div>
