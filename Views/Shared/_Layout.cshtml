@@ -1,5 +1,14 @@
-﻿@using PrjFunNowWebApi.Models
-@model MemberInfo﻿
+﻿@using System.Text.Json
+
+@{
+    var memberInfo = Context.Session.GetString("MemberInfo");
+    var memberInfoJson = memberInfo != null ? JsonSerializer.Serialize(memberInfo) : "null";
+    var token = Context.Session.GetString("Token");
+
+    var googleMemberId = Context.Session.GetString("GoogleMemberID");
+    var googleMemberFirstName = Context.Session.GetString("GoogleMemberFirstName");
+    
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -288,36 +297,47 @@
     <script src="~/ming/vendors/lightbox/simpleLightbox.min.js"></script>
     <script src="~/js/ming_js/custom.js"></script>
 
+  
 
-    <script>
+    <script type="text/javascript">
         //決定會員資訊是否顯示
         document.addEventListener("DOMContentLoaded", function () {
+           
+            var memberInformation = @Html.Raw(memberInfoJson);
+            var googleMemberId = '@googleMemberId';
+            var googleMemberFirstName = '@googleMemberFirstName';
+            var token = '@token';
+            
+            console.log("Google Member ID: " + googleMemberId);
+            console.log("Google Member First Name: " + googleMemberFirstName);
 
-            // 儲存在Session中的資訊(自己輸入帳號密碼的登入者)
-            var memberId = '@Model.MemberId';
-            var memberFirstName = '@Model.FirstName';
-            const token = '@ViewBag.Token';
+            // 自己輸入帳號密碼的登入者
+            if (memberInformation !== null && token) {
+                
+                var memberData = JSON.parse(memberInformation);
+                var memberId = memberData.MemberId;
+                var memberFirstName = memberData.FirstName;
+                
 
-            // 儲存在Session中的資訊(用Google的登入者)
-            var sessionMemberId = '@Context.Session.GetString("MemberID")';
-            var sessionMemberFirstName = '@Context.Session.GetString("MemberFirstName")';
+                if (memberId && memberFirstName) 
+                {
+                    document.getElementById("memberContent").style.display = "block";
+                    document.getElementById("memberId").innerText = memberId;
+                    document.getElementById("memberFirstName").innerText = memberFirstName;
+                }
 
-            // 檢查Session中的資料(自己輸入帳號密碼的登入者)
-            if (token && memberId && memberFirstName) {
-                document.getElementById("memberContent").style.display = "block";
-                document.getElementById("memberId").innerText = memberId;
-                document.getElementById("memberFirstName").innerText = memberFirstName;
             }
-            // 檢查Session中的資料(用Google的登入者)
-            else if (sessionMemberId && sessionMemberFirstName) {
+            // Google登入者
+            else if (googleMemberId && googleMemberFirstName) 
+            {
                 document.getElementById("memberContent").style.display = "block";
-                document.getElementById("memberId").innerText = sessionMemberId;
-                document.getElementById("memberFirstName").innerText = sessionMemberFirstName;
+                document.getElementById("memberId").innerText = googleMemberId;
+                document.getElementById("memberFirstName").innerText = googleMemberFirstName;
             }
-
-            // 如果兩個地方都沒有資料，顯示訪客內容
-            else {
-                document.getElementById("guestContent").style.display = "block";
+             // 如果兩個地方都沒有資料，顯示訪客內容
+            else 
+            {
+               document.getElementById("guestContent").style.display = "block";
             }
 
 

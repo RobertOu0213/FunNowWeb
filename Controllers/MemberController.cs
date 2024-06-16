@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Identity.Data;
 using Newtonsoft.Json;
 using NuGet.Protocol;
 using PrjFunNowWebApi.Models;
+using NuGet.Common;
 
 namespace PrjFunNowWeb.Controllers
 {
@@ -54,35 +55,17 @@ namespace PrjFunNowWeb.Controllers
                 var responseData = await response.Content.ReadAsStringAsync();
                 var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseData);
 
+
+
                 // 將memberInfo和token存在Session中
                 HttpContext.Session.SetString("MemberInfo", JsonConvert.SerializeObject(loginResponse.memberInfo));
-                HttpContext.Session.SetString("Token", loginResponse.token); 
+                HttpContext.Session.SetString("Token", loginResponse.token);
 
                 return Ok(loginResponse);
             }
         }
 
-        //把Session存在View Bag可以給其他Razor頁面使用
-        public IActionResult Profile()
-        {
-            var memberInfoJson = HttpContext.Session.GetString("MemberInfo");
-            MemberInfo memberInfo = null;
-
-            if (!string.IsNullOrEmpty(memberInfoJson))
-            {
-                memberInfo = JsonConvert.DeserializeObject<MemberInfo>(memberInfoJson);
-            }
-
-            var token = HttpContext.Session.GetString("Token");
-
-            // 將 MemberInfo 和 Token 傳遞給 View
-            ViewBag.MemberInfo = memberInfo;
-            ViewBag.Token = token;
-
-            return View(memberInfo);
-        }
-
-
+     
         //第三方登入的頁面
         //*參考影片:https://reurl.cc/VzqpKR */
         public async Task LoginByGoogle() //返回類型為Task
