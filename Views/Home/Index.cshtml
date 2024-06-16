@@ -539,12 +539,10 @@
                 console.log('已選擇文件:', file.name);
                 imageLabel.textContent = `選擇的圖片: ${file.name}`;
 
-                // 將圖片轉換為base64格式
                 const reader = new FileReader();
                 reader.onloadend = async function () {
                     const base64String = reader.result.replace('data:', '').replace(/^.+,/, '');
 
-                    // 使用Google Cloud Vision API識別地標名稱
                     const response = await fetch(`https://vision.googleapis.com/v1/images:annotate?key=${apiKey}`, {
                         method: 'POST',
                         body: JSON.stringify({
@@ -572,42 +570,26 @@
 
                     if (result.responses && result.responses[0].landmarkAnnotations) {
                         const landmarks = result.responses[0].landmarkAnnotations;
-                        landmarkName.innerHTML = ''; // 清空之前的地標內容
+                        landmarkName.innerHTML = '';
 
                         for (const landmark of landmarks) {
                             let landmarkInfo = `地標: ${landmark.description}`;
 
-                            // 如果存在地理位置信息，則使用經緯度來獲取地標的地理位置信息
                             if (landmark.locations && landmark.locations.length > 0) {
                                 const latitude = landmark.locations[0].latLng.latitude;
                                 const longitude = landmark.locations[0].latLng.longitude;
-                                const geocodeResponse = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`);
-                                const geocodeResult = await geocodeResponse.json();
 
-                                if (geocodeResult.results && geocodeResult.results.length > 0) {
-                                    const addressComponents = geocodeResult.results[0].address_components;
-                                    let city = '';
-                                    let country = '';
-
-                                    for (const component of addressComponents) {
-                                        if (component.types.includes('locality')) {
-                                            city = component.long_name;
-                                        } else if (component.types.includes('country')) {
-                                            country = component.long_name;
-                                        }
-                                    }
-
-                                    landmarkInfo += city ? `，城市: ${city}` : '';
-                                    landmarkInfo += country ? `，國家: ${country}` : '';
-                                } else {
-                                    landmarkInfo += '，無法獲取城市信息';
+                                try {
+                                    const location = await getCityAndCountry(latitude, longitude);
+                                    landmarkInfo += location.city ? `，城市: ${location.city}` : '，無法獲取城市信息';
+                                    landmarkInfo += location.country ? `，國家: ${location.country}` : '，無法獲取國家信息';
+                                } catch (error) {
+                                    landmarkInfo += `，錯誤信息: ${error.message}`;
                                 }
                             } else {
-                                // 如果不存在地理位置信息，顯示無法獲取地理位置信息
                                 landmarkInfo += '，無法獲取地理位置信息';
                             }
 
-                            // 顯示每個地標信息
                             const landmarkElement = document.createElement('div');
                             landmarkElement.textContent = landmarkInfo;
                             landmarkName.appendChild(landmarkElement);
@@ -620,6 +602,41 @@
             } else {
                 imageLabel.textContent = '尚未選擇圖片';
                 landmarkName.textContent = '';
+            }
+        }
+
+        async function getCityAndCountry(latitude, longitude) {
+            try {
+                const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`);
+                const result = await response.json();
+
+                if (result.results && result.results.length > 0) {
+                    const addressComponents = result.results[0].address_components;
+                    let city = '';
+                    let country = '';
+
+                    for (const component of addressComponents) {
+                        if (component.types.includes('administrative_area_level_2') || component.types.includes('locality') || component.types.includes('sublocality_level_1')) {
+                            city = component.long_name;
+                        } else if (component.types.includes('country')) {
+                            country = component.long_name;
+                        }
+                    }
+
+                    if (!city && !country) {
+                        throw new Error('無法獲取城市和國家信息');
+                    }
+
+                    return {
+                        city: city || '未知城市',
+                        country: country || '未知國家'
+                    };
+                } else {
+                    throw new Error('無法獲取地址信息');
+                }
+            } catch (error) {
+                console.error(`錯誤: ${error.message}`);
+                throw new Error('無法通過Google Maps Geocoding API獲取地址信息');
             }
         }
     </script>
