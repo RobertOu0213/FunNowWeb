@@ -17,6 +17,11 @@ namespace PrjFunNowWeb.Controllers
         //[Route("cart/cartItems/{userId}")]
         public IActionResult cartItems(int? id)
         {
+            //登入controller 判斷
+
+
+
+
             if (id <= 0 || id == null)
             {
                 return BadRequest("UserID is required");

@@ -51,7 +51,7 @@ namespace PrjFunNowWeb.Controllers
                     }
                 }
                 _context.SaveChanges();
-                //transaction.Commit();
+                transaction.Commit();
 
                 var orderDetails = _context.OrderDetails
                 .Where(od => orderIn.OrderDetailsID.Contains(od.OrderDetailId))
