@@ -164,17 +164,7 @@
                         <h3>飯店周邊</h3>
                         <div class="row align-items-end">
                             <div class="col-8">
-                                <table>
-                                    <tr>
-                                        <td><i class="fa-solid fa-train">捷運: 劍潭站</i></td>
-                                    </tr>
-                                    <tr>
-                                        <td><i class="fa-solid fa-train">捷運: 劍潭站</i></td>
-                                    </tr>
-                                    <tr>
-                                        <td><i class="fa-solid fa-train">捷運: 劍潭站</i></td>
-                                    </tr>
-                                </table>
+                                <img src="~/image/louieee_img/map.png" class="img-fluid" />
                             </div>
                             <div class="col-4">
                                 <a class="link-offset-2 link-underline link-underline-opacity-75" href="#hotel-map">地圖></a>
@@ -451,7 +441,9 @@
                 <h2>飯店周邊</h2>
                 <div class="row round-edge-container">
                     <div class="col-8">
-                        <img src="~/image/louieee_img/map.png" class="img-fluid" />
+                        <div class="embed-responsive embed-responsive-16by9" style="height: 100%;">
+                            <iframe class="embed-responsive-item" src="https://www.google.com/maps/embed?pb=@(Model.HotelDetail.Latitude)" style="border:0; width: 100%; height: 100%;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
                     </div>
                     <div class="col-4">
                         <div class="hotel-info">
@@ -470,78 +462,55 @@
                                 <a class="btn btn-primary btn-lg" href="#room-types">查看房型</a>
                             </div>
                         </div>
-                        <ul class="nav nav-tabs" id="myTab" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="home-tab" data-toggle="tab" data-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">周邊景點</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="profile-tab" data-toggle="tab" data-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">你可能也喜歡</button>
-                            </li>
-                        </ul>
-                        <div class="tab-content" id="myTabContent">
-                            <!-- 分頁:周邊景點 -->
-                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                <div>
-                                    <button type="button" class="btn btn-outline-primary btn-sm">交通</button>
-                                    <button type="button" class="btn btn-outline-primary btn-sm">熱門景點</button>
-                                    <button type="button" class="btn btn-outline-primary btn-sm">餐廳</button>
-                                    <button type="button" class="btn btn-outline-primary btn-sm">購物</button>
-                                </div>
-                                <div class="vertical-align">
-                                    <i class="fa-solid fa-train">捷運: 劍潭站</i>
-                                    <i class="fa-solid fa-train">捷運: 劍潭站</i>
-                                    <i class="fa-solid fa-train">捷運: 劍潭站</i>
-                                </div>
-                            </div>
-                            <!-- 分頁:你可能也喜歡 -->
-                            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                @if (Model.HotelDetail.SimilarHotels != null && Model.HotelDetail.SimilarHotels.Any())
-                                {
-                                    <div class="scrollable-container">
-                                        @foreach (var hotel in Model.HotelDetail.SimilarHotels)
-                                        {
-                                            <div class="row mb-3" style="border: 1px solid #ddd; border-radius: 10px; padding: 10px;">
-                                                <div class="col-3 p-0">
-                                                    @{
-                                                        var imageUrl = hotel.HotelImage?.ImageUrl ?? "/image/louieee_img/default-picture.jpg";
-                                                        if (!imageUrl.StartsWith("http") && imageUrl != "/image/louieee_img/default-picture.jpg")
-                                                        {
-                                                            imageUrl = $"https://localhost:7284/image/{imageUrl}";
-                                                        }
+                        <div>
+                            <h4>你可能也喜歡</h4>
+                            @if (Model.HotelDetail.SimilarHotels != null && Model.HotelDetail.SimilarHotels.Any())
+                            {
+                                <div class="scrollable-container">
+                                    @foreach (var hotel in Model.HotelDetail.SimilarHotels)
+                                    {
+                                        <div class="row mb-3" style="border: 1px solid #ddd; border-radius: 10px; padding: 10px;">
+                                            <div class="col-3 p-0">
+                                                @{
+                                                    var imageUrl = hotel.HotelImage?.ImageUrl ?? "/image/louieee_img/default-picture.jpg";
+                                                    if (!imageUrl.StartsWith("http") && imageUrl != "/image/louieee_img/default-picture.jpg")
+                                                    {
+                                                        imageUrl = $"https://localhost:7284/image/{imageUrl}";
                                                     }
-                                                    <img src="@imageUrl" class="img-fluid full-height-img" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null;this.src='/image/louieee_img/otherHotel01.png';" />
+                                                }
+                                                <img src="@imageUrl" class="img-fluid full-height-img" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null;this.src='/image/louieee_img/otherHotel01.png';" />
+                                            </div>
+                                            <div class="col-9 vertical-align">
+                                                <div style="display:flex; align-items: center;">
+                                                    <h4 class="mb-0 mr-2">@hotel.HotelName</h4>
+                                                    <div style="display: flex;">
+                                                        @for (int i = 0; i < hotel.LevelStar; i++)
+                                                        {
+                                                            <img src="~/image/louieee_img/star.png" class="ml-1" style="width: 20px; height: 20px;" />
+                                                        }
+                                                    </div>
                                                 </div>
-                                                <div class="col-9 vertical-align">
-                                                    <div style="display:flex; align-items: center;">
-                                                        <h4 class="mb-0 mr-2">@hotel.HotelName</h4>
-                                                        <div style="display: flex;">
-                                                            @for (int i = 0; i < hotel.LevelStar; i++)
-                                                            {
-                                                                <img src="~/image/louieee_img/star.png" class="ml-1" style="width: 20px; height: 20px;" />
-                                                            }
-                                                        </div>
-                                                    </div>
-                                                    <span style="color:green; font-weight:700;">@hotel.AverageRatingScores /10 </span>
-                                                    <i class="fa-solid fa-location-dot d-block mt-2">@hotel.HotelAddress</i>
-                                                    <span style="color:red; font-weight:700;">只剩 @hotel.AvailableRooms 間房!!!</span>
-                                                    <div style="display:flex; align-items: center; margin-top: 10px;">
-                                                        <h3 class="mb-0 mr-3">TWD @(hotel.AverageRoomPrice.ToString("F2"))</h3>
-                                                        <a class="btn btn-primary" href="/PgHotel/pgHotel?hotelId=@(hotel.HotelId)&checkInDate=@(Model.HotelDetail.CheckInDate)&checkOutDate=@(Model.HotelDetail.CheckOutDate)">查看房型</a>
-                                                    </div>
+                                                <span style="color:green; font-weight:700;">@hotel.AverageRatingScores /10 </span>
+                                                <i class="fa-solid fa-location-dot d-block mt-2">@hotel.HotelAddress</i>
+                                                <span style="color:red; font-weight:700;">只剩 @hotel.AvailableRooms 間房!!!</span>
+                                                <div style="display:flex; align-items: center; margin-top: 10px;">
+                                                    <h3 class="mb-0 mr-3">TWD @(hotel.AverageRoomPrice.ToString("F2"))</h3>
+                                                    <a class="btn btn-primary" href="/PgHotel/pgHotel?hotelId=@(hotel.HotelId)&checkInDate=@(Model.HotelDetail.CheckInDate)&checkOutDate=@(Model.HotelDetail.CheckOutDate)">查看房型</a>
                                                 </div>
                                             </div>
-                                        }
-                                    </div>
-                                }
-                                else
-                                {
-                                    <p>暫無推薦資訊</p>
-                                }
-                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            else
+                            {
+                                <p>暫無推薦資訊</p>
+                            }
                         </div>
                     </div>
                 </div>
             </div>
+
 
             @*推薦其他飯店*@
             <div>
