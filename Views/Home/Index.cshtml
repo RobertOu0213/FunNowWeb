@@ -224,6 +224,37 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* 陰影效果 */
         }
     </style>
+    @* AI圖片搜尋CSS *@
+    <style>
+        .upload_image_item {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+            .upload_image_item label {
+                margin-right: 10px;
+            }
+
+        #imageLabel {
+            margin-left: 10px;
+            vertical-align: middle;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 300px; /* 你可以根据需要调整这个宽度 */
+            display: inline-block;
+        }
+
+        #landmarkName {
+            margin-top: 10px;
+            color: green;
+        }
+
+        .hidden-input {
+            display: none;
+        }
+    </style>
 }
 
 @section Scripts{   
@@ -535,6 +566,8 @@
             const file = event.target.files[0];
             const imageLabel = document.getElementById('imageLabel');
             const landmarkName = document.getElementById('landmarkName');
+            const searchInput = document.getElementById('search-input');
+
             if (file) {
                 console.log('已選擇文件:', file.name);
                 imageLabel.textContent = `選擇的圖片: ${file.name}`;
@@ -578,8 +611,11 @@
 
                             try {
                                 const location = await getCityAndCountry(latitude, longitude);
-                                landmarkInfo += location.city ? `，城市: ${location.city}` : '，無法獲取縣市信息';
+                                landmarkInfo += location.city ? `，縣市: ${location.city}` : '，無法獲取縣市信息';
                                 landmarkInfo += location.country ? `，國家: ${location.country}` : '，無法獲取國家信息';
+
+                                // 將縣市名稱設置到 search-input
+                                searchInput.value = location.city;
                             } catch (error) {
                                 landmarkInfo += `，錯誤信息: ${error.message}`;
                             }
@@ -612,7 +648,7 @@
                     let country = '';
 
                     for (const component of addressComponents) {
-                        if (component.types.includes('administrative_area_level_1') || component.types.includes('administrative_area_level_2')) {
+                        if (component.types.includes('administrative_area_level_1') || component.types.includes('administrative_area_level_2') || component.types.includes('locality')) {
                             city = component.long_name;
                         } else if (component.types.includes('country')) {
                             country = component.long_name;
@@ -738,12 +774,14 @@
                                             </div>
                                         </div>
                                         <!-- 新增的上傳圖片按鈕和說明文字 -->
-                                        <div class="upload_image_item" style="margin-top: 20px;">
+                                        <!-- 新增的上傳圖片按鈕和說明文字 -->
+                                        <div class="upload_image_item">
                                             <label for="uploadImage" class="btn btn-primary">上傳圖片</label>
-                                            <input type="file" id="uploadImage" style="display: none;" onchange="handleImageUpload(event)">
-                                            <span id="imageLabel" style="margin-left: 10px; vertical-align: middle;">尚未選擇圖片</span>
+                                            <input type="file" id="uploadImage" class="hidden-input" onchange="handleImageUpload(event)">
+                                            <span id="imageLabel">尚未選擇圖片</span>
                                         </div>
-                                        <div id="landmarkName" style="margin-top: 10px; color: green;"></div>
+                                        <div id="landmarkName"></div>
+
                                     </div>
 
                                 </div>
