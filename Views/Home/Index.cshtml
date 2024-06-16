@@ -737,14 +737,15 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <!-- 新增的上傳圖片按鈕和說明文字 -->
+                                        <div class="upload_image_item" style="margin-top: 20px;">
+                                            <label for="uploadImage" class="btn btn-primary">上傳圖片</label>
+                                            <input type="file" id="uploadImage" style="display: none;" onchange="handleImageUpload(event)">
+                                            <span id="imageLabel" style="margin-left: 10px; vertical-align: middle;">尚未選擇圖片</span>
+                                        </div>
+                                        <div id="landmarkName" style="margin-top: 10px; color: green;"></div>
                                     </div>
-                                    <!-- 新增的上傳圖片按鈕和說明文字 -->
-                                    <div class="upload_image_item" style="margin-top: 20px;">
-                                        <label for="uploadImage" class="btn btn-primary">上傳圖片</label>
-                                        <input type="file" id="uploadImage" style="display: none;" onchange="handleImageUpload(event)">
-                                        <span id="imageLabel" style="margin-left: 10px; vertical-align: middle;">尚未選擇圖片</span>
-                                    </div>
-                                    <div id="landmarkName" style="margin-top: 10px; color: green;"></div>
+
                                 </div>
                             </div>
                         </div>
