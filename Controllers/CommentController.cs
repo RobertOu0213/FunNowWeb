@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PrjFunNowWeb.Models;
 
 namespace PrjFunNowWeb.Controllers
 {
@@ -33,6 +34,14 @@ namespace PrjFunNowWeb.Controllers
         public IActionResult Angular_plaform()
         {
             return View();
+        }
+
+        public IActionResult GetComments(int hotelId)
+        {
+            // 從資料庫獲取數據
+           var comments = new List<Comment>();
+           
+            return Json(comments);
         }
     }
 }

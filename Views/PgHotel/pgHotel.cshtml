@@ -132,6 +132,7 @@
                 <div class="row">
                     <div class="col-5">
                         <h3>評論</h3>@*亭蓉做*@
+                        
                     </div>
                     <div class="col-4 d-flex flex-column">
                         <h3>設施與服務</h3>
@@ -412,7 +413,12 @@
             @*評論區(亭蓉做)*@
             <div id="hotel-reviews">
                 <h2>評論</h2>
+                <div class="round-edge-container">
+                    <iframe src="http://localhost:4200/hotel_comment" style="width: 100%; height: auto; border: none;"></iframe>
+                </div>
             </div>
+
+
 
             @*設施區*@
             <div id="hotel-equips">
@@ -802,6 +808,10 @@
             aspect-ratio: 1/1;
             object-fit: cover;
         }
+       /*  亭蓉Angular樣式 */
+        <link href="~/css/joanna_css/styles.b13b175880f4995b.css" rel="stylesheet"  />
+
+
     </style>
 }
 @section Scripts {
