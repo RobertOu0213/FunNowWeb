@@ -554,7 +554,7 @@
                                     features: [
                                         {
                                             type: 'LANDMARK_DETECTION',
-                                            maxResults: 5
+                                            maxResults: 1
                                         }
                                     ]
                                 }
@@ -569,31 +569,25 @@
                     console.log(result);
 
                     if (result.responses && result.responses[0].landmarkAnnotations) {
-                        const landmarks = result.responses[0].landmarkAnnotations;
-                        landmarkName.innerHTML = '';
+                        const landmark = result.responses[0].landmarkAnnotations[0];
+                        let landmarkInfo = `地標: ${landmark.description}`;
 
-                        for (const landmark of landmarks) {
-                            let landmarkInfo = `地標: ${landmark.description}`;
+                        if (landmark.locations && landmark.locations.length > 0) {
+                            const latitude = landmark.locations[0].latLng.latitude;
+                            const longitude = landmark.locations[0].latLng.longitude;
 
-                            if (landmark.locations && landmark.locations.length > 0) {
-                                const latitude = landmark.locations[0].latLng.latitude;
-                                const longitude = landmark.locations[0].latLng.longitude;
-
-                                try {
-                                    const location = await getCityAndCountry(latitude, longitude);
-                                    landmarkInfo += location.city ? `，城市: ${location.city}` : '，無法獲取城市信息';
-                                    landmarkInfo += location.country ? `，國家: ${location.country}` : '，無法獲取國家信息';
-                                } catch (error) {
-                                    landmarkInfo += `，錯誤信息: ${error.message}`;
-                                }
-                            } else {
-                                landmarkInfo += '，無法獲取地理位置信息';
+                            try {
+                                const location = await getCityAndCountry(latitude, longitude);
+                                landmarkInfo += location.city ? `，城市: ${location.city}` : '，無法獲取縣市信息';
+                                landmarkInfo += location.country ? `，國家: ${location.country}` : '，無法獲取國家信息';
+                            } catch (error) {
+                                landmarkInfo += `，錯誤信息: ${error.message}`;
                             }
-
-                            const landmarkElement = document.createElement('div');
-                            landmarkElement.textContent = landmarkInfo;
-                            landmarkName.appendChild(landmarkElement);
+                        } else {
+                            landmarkInfo += '，無法獲取地理位置信息';
                         }
+
+                        landmarkName.innerHTML = landmarkInfo;
                     } else {
                         landmarkName.textContent = '無法識別地標';
                     }
@@ -606,9 +600,11 @@
         }
 
         async function getCityAndCountry(latitude, longitude) {
+            console.log(`獲取地址信息，經度: ${longitude}，緯度: ${latitude}`);
             try {
                 const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`);
                 const result = await response.json();
+                console.log('Geocoding API 回應: ', result);
 
                 if (result.results && result.results.length > 0) {
                     const addressComponents = result.results[0].address_components;
@@ -616,7 +612,7 @@
                     let country = '';
 
                     for (const component of addressComponents) {
-                        if (component.types.includes('administrative_area_level_2') || component.types.includes('locality') || component.types.includes('sublocality_level_1')) {
+                        if (component.types.includes('administrative_area_level_1') || component.types.includes('administrative_area_level_2')) {
                             city = component.long_name;
                         } else if (component.types.includes('country')) {
                             country = component.long_name;
@@ -624,11 +620,11 @@
                     }
 
                     if (!city && !country) {
-                        throw new Error('無法獲取城市和國家信息');
+                        throw new Error('無法獲取縣市和國家信息');
                     }
 
                     return {
-                        city: city || '未知城市',
+                        city: city || '未知縣市',
                         country: country || '未知國家'
                     };
                 } else {
