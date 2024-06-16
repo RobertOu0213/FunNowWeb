@@ -24,5 +24,10 @@
         public string LastName { get; set; }    
         public string Email { get; set; }
         public string Phone { get; set; }
+
+        public int HotelID { get; set; }  
+        public double AverageScore { get; set; }  
+        public string RatingText { get; set; }  
+
     }
 }

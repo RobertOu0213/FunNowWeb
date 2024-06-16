@@ -91,8 +91,8 @@ namespace PrjFunNowWeb.Controllers
                         RoomID = od.RoomId,
                         MaximumOccupancy = od.Room?.MaximumOccupancy ?? 0,
                         AllOrderDetailsCount = orderDetails.Count,
-                        RoomImage = GetImageUrl(od.Room?.RoomImages?.FirstOrDefault()?.RoomImage1)   
-                  
+                        RoomImage = GetImageUrl(od.Room?.RoomImages?.FirstOrDefault()?.RoomImage1),
+                        HotelID= (int)od.Room?.Hotel?.HotelId
                     }).ToList()
                 };
 

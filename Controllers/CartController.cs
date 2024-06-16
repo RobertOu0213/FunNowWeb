@@ -90,6 +90,7 @@ namespace PrjFunNowWeb.Controllers
 
                 var member = firstOrderDetail.Member;
 
+
                 var viewModel = orderDetails.Select(od => new CReservationSummaryViewModel
                 {
                     OrderDetailID = od.OrderDetailId,
@@ -110,7 +111,8 @@ namespace PrjFunNowWeb.Controllers
                     FirstName = member?.FirstName,
                     LastName = member?.LastName,
                     Email = member?.Email,
-                    Phone = member?.Phone
+                    Phone = member?.Phone,
+                    HotelID = (int)od.Room?.Hotel?.HotelId
                 }).ToList();
 
                 ViewBag.Member = member;
