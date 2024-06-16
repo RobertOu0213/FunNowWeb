@@ -527,7 +527,7 @@
         });
     </script>
 
-    <!-- 放置JavaScript代碼來處理圖片上傳 -->
+    <!-- 放置JavaScript代碼來處理AI圖片上傳 -->
     <script>
         const apiKey = 'AIzaSyAyKcSGzZi4LQsJEvbJOw3Kh8q_9uhtRvw';
 
@@ -571,30 +571,46 @@
                     console.log(result);
 
                     if (result.responses && result.responses[0].landmarkAnnotations) {
-                        const landmark = result.responses[0].landmarkAnnotations[0];
-                        landmarkName.textContent = `地標: ${landmark.description}`;
+                        const landmarks = result.responses[0].landmarkAnnotations;
+                        landmarkName.innerHTML = ''; // 清空之前的地標內容
 
-                        // 使用後端代理來獲取地標的地理位置信息
-                        const placeResponse = await fetch('http://localhost:3000/findplace', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({ landmark: landmark.description })
-                        });
-                        const placeResult = await placeResponse.json();
+                        for (const landmark of landmarks) {
+                            let landmarkInfo = `地標: ${landmark.description}`;
 
-                        if (placeResult.candidates && placeResult.candidates.length > 0) {
-                            const addressComponents = placeResult.candidates[0].formatted_address.split(',');
-                            let city = '';
+                            // 如果存在地理位置信息，則使用經緯度來獲取地標的地理位置信息
+                            if (landmark.locations && landmark.locations.length > 0) {
+                                const latitude = landmark.locations[0].latLng.latitude;
+                                const longitude = landmark.locations[0].latLng.longitude;
+                                const geocodeResponse = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`);
+                                const geocodeResult = await geocodeResponse.json();
 
-                            if (addressComponents.length > 1) {
-                                city = addressComponents[addressComponents.length - 2].trim();
+                                if (geocodeResult.results && geocodeResult.results.length > 0) {
+                                    const addressComponents = geocodeResult.results[0].address_components;
+                                    let city = '';
+                                    let country = '';
+
+                                    for (const component of addressComponents) {
+                                        if (component.types.includes('locality')) {
+                                            city = component.long_name;
+                                        } else if (component.types.includes('country')) {
+                                            country = component.long_name;
+                                        }
+                                    }
+
+                                    landmarkInfo += city ? `，城市: ${city}` : '';
+                                    landmarkInfo += country ? `，國家: ${country}` : '';
+                                } else {
+                                    landmarkInfo += '，無法獲取城市信息';
+                                }
+                            } else {
+                                // 如果不存在地理位置信息，顯示無法獲取地理位置信息
+                                landmarkInfo += '，無法獲取地理位置信息';
                             }
 
-                            landmarkName.textContent += `，城市: ${city}`;
-                        } else {
-                            landmarkName.textContent += '，無法獲取城市信息';
+                            // 顯示每個地標信息
+                            const landmarkElement = document.createElement('div');
+                            landmarkElement.textContent = landmarkInfo;
+                            landmarkName.appendChild(landmarkElement);
                         }
                     } else {
                         landmarkName.textContent = '無法識別地標';
@@ -607,6 +623,7 @@
             }
         }
     </script>
+
 
 }
 
