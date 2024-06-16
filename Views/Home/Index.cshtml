@@ -8,8 +8,8 @@
     @* //房間數及大人小孩下拉選單 *@
     <style>
         .dropdown {
-            position: relative;
-            display: inline-block;
+            position: relative; /* 設定相對定位，方便子元素絕對定位 */
+            display: inline-block; /* 內聯塊狀顯示 */
         }
 
         .dropdown-toggle1 {
@@ -17,8 +17,8 @@
             padding: 10px;
             border: 2px solid #4285F4;
             border-radius: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 陰影效果 */
+            cursor: pointer; /* 游標指標變成手形 */
             font-size: 16px;
             text-align: center;
             background-color: white;
@@ -41,14 +41,14 @@
         }
 
             .dropdown-menu.active {
-                display: block;
+                display: block; /* 當active時顯示 */
             }
 
         .dropdown-item {
             padding: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            display: flex; /* 彈性布局 */
+            justify-content: space-between; /* 子元素兩端對齊 */
+            align-items: center; /* 子元素垂直置中 */
         }
 
             .dropdown-item label {
@@ -67,7 +67,7 @@
                     font-size: 18px;
                     padding: 5px;
                     cursor: pointer;
-                    outline: none;
+                    outline: none; /* 無外框 */
                 }
 
                 .dropdown-item .quantity-control span {
@@ -95,7 +95,7 @@
         }
 
         #search-input {
-            flex: 1;
+            flex: 1; /* 佔滿剩餘空間 */
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -105,7 +105,7 @@
             position: absolute;
             top: 40%;
             left: -28px;
-            transform: translateY(-50%);
+            transform: translateY(-50%); /* 垂直居中 */
             font-size: 25px;
             color: #E0E0E0;
         }
@@ -124,10 +124,10 @@
             border: none;
             border-radius: 20px; /* 圆角 */
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 阴影效果 */
-            text-align: center;
+            text-align: center; /* 文字置中 */
             text-decoration: none;
             cursor: pointer;
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease; /* 過渡效果 */
             margin-top: 40px;
             margin-bottom: -38px ;
             text-decoration: none; /* 移除底線 */
@@ -197,28 +197,31 @@
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             font-size: 16px;
-            font-family: Arial, sans-serif;
-            transition: border-color 0.3s, box-shadow 0.3s;
+            font-family: Arial, sans-serif; /* 字體為Arial */
+            transition: border-color 0.3s, box-shadow 0.3s; /* 邊框顏色和陰影效果的過渡效果 */
         }
 
             input[type="text"]::placeholder, input[type="date"]::placeholder {
-                color: #aaa;
+                color: #aaa; /* 佔位符顏色灰色 */
             }
 
             input[type="text"]:focus, input[type="date"]:focus {
-                border-color: #66afe9;
-                box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+                border-color: #66afe9; /* 聚焦時的邊框顏色 */
+                box-shadow: 0 0 8px rgba(102, 175, 233, 0.6); /* 聚焦時的陰影效果 */
                 outline: none;
             }
     </style>
-
+    @* autocomplete方法CSS *@
     <style>
         #autocomplete-list {
             position: absolute;
             top: 100%;
             left: 0;
             right: 0;
-            z-index: 1000;
+            z-index: 1000; /* 層級1000，確保在其他元素之上 */
+            background-color: white; /* 背景顏色為白色 */
+            border-radius: 5px; /* 圓角5px */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* 陰影效果 */
         }
     </style>
 }
