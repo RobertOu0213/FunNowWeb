@@ -27,7 +27,8 @@
 
         public int HotelID { get; set; }  
         public double AverageScore { get; set; }  
-        public string RatingText { get; set; }  
+        public string RatingText { get; set; }
+        public Dictionary<string, string> EcpayParameters { get; set; }
 
     }
 }
