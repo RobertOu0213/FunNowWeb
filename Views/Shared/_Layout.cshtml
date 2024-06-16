@@ -1,6 +1,5 @@
-﻿ @* @{
-   ViewBag.Title = "Index";
-}  *@
+﻿@using PrjFunNowWebApi.Models
+@model MemberInfo﻿
 
 <!DOCTYPE html>
 <html lang="en">
@@ -10,8 +9,8 @@
     <title>@ViewData["Title"] - testModel</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-@*     <link rel="stylesheet" href="~/testModel.styles.css" asp-append-version="true" />
- *@
+    @*     <link rel="stylesheet" href="~/testModel.styles.css" asp-append-version="true" />
+    *@
     <!-- 套版的CSS -->
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -73,13 +72,13 @@
                     <img src="~/image/ming_img/FunNowlogo.png" style="height: 60px; border-radius: 12px;">
                 </a>
                 <div id="guestContent" style="display: none;">
-                    <label>歡迎路過客～哎呀~我發現你還沒登入！！！ 趕緊 <a class="btn btn-danger"  href="/Member/Login">登入</a>來探索更多精彩內容!!!</label>
+                    <label>歡迎路過客～哎呀~我發現你還沒登入！！！ 趕緊 <a class="btn btn-danger" href="/Member/Login">登入</a>來探索更多精彩內容!!!</label>
                 </div>
                 <div id="memberContent" style="display: none;">
                     <label>歡迎我們尊貴的會員ID是<span id="memberId"></span>號的<span id="memberFirstName"></span>完成登入</label>
                     <button id="logoutButton" class="btn btn-primary">登出</button>
                 </div>
-                
+
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -93,7 +92,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="about.html">
-                                <img src="~/image/ming_img/flag.jpg" style="height:50px"/>
+                                <img src="~/image/ming_img/flag.jpg" style="height:50px" />
                             </a>
                         </li>
                         <li class="nav-item">
@@ -124,7 +123,7 @@
                         <li></li>
                     </ul>
                 </div>
-            </nav> 
+            </nav>
         </div>
         <!-- Date picker and booking button 浮動訂房欄 -->
         <div class="container-fluid booking-area" style="background-color: #20274d; padding: 20px;">
@@ -147,13 +146,13 @@
                     <input class="form-control mb-2 mr-sm-2" type="number" id="rooms2" name="rooms2" min="1" max="100" value="1">
                 </div>
                 <div class="col-md-1">
-                    <a class="btn btn-outline-success my-2 my-sm-0" href="/home/index2" type="submit" id="buttonSubmit2">Book Now</a>
+                    <a class="btn btn-outline-success my-2 my-sm-0" href="home/index2" type="submit" id="buttonSubmit2">Book Now</a>
                 </div>
             </div>
         </div>
     </header>
     <div>
-            @RenderBody()    
+        @RenderBody()
     </div>
 
     <footer class="footer-area section_gap">
@@ -289,68 +288,51 @@
     <script src="~/ming/vendors/lightbox/simpleLightbox.min.js"></script>
     <script src="~/js/ming_js/custom.js"></script>
 
-    
+
     <script>
         //決定會員資訊是否顯示
-        document.addEventListener("DOMContentLoaded", function () 
-        {
+        document.addEventListener("DOMContentLoaded", function () {
 
-            // 儲存在Session storage中的資訊(自己輸入帳號密碼的登入者)
-            var memberId = sessionStorage.getItem("MemberID");
-            var memberFirstName = sessionStorage.getItem("MemberFisrtName");
-            const token = sessionStorage.getItem("JWToken");
+            // 儲存在Session中的資訊(自己輸入帳號密碼的登入者)
+            var memberId = '@Model.MemberId';
+            var memberFirstName = '@Model.FirstName';
+            const token = '@ViewBag.Token';
 
-            // 儲存在Session中的資訊（從後端傳遞到前端的變數）(用Google的登入者)
+            // 儲存在Session中的資訊(用Google的登入者)
             var sessionMemberId = '@Context.Session.GetString("MemberID")';
             var sessionMemberFirstName = '@Context.Session.GetString("MemberFirstName")';
-            
-            // 檢查Session storage中的資料
-            if (token && memberId && memberFirstName) 
-            {
+
+            // 檢查Session中的資料(自己輸入帳號密碼的登入者)
+            if (token && memberId && memberFirstName) {
                 document.getElementById("memberContent").style.display = "block";
                 document.getElementById("memberId").innerText = memberId;
                 document.getElementById("memberFirstName").innerText = memberFirstName;
             }
-            // 檢查Session中的資料
-            else if (sessionMemberId && sessionMemberFirstName) 
-            {
+            // 檢查Session中的資料(用Google的登入者)
+            else if (sessionMemberId && sessionMemberFirstName) {
                 document.getElementById("memberContent").style.display = "block";
                 document.getElementById("memberId").innerText = sessionMemberId;
                 document.getElementById("memberFirstName").innerText = sessionMemberFirstName;
-                sessionStorage.setItem("MemberID", sessionMemberId);
-                sessionStorage.setItem("MemberFisrtName", sessionMemberFirstName);
             }
 
             // 如果兩個地方都沒有資料，顯示訪客內容
-            else 
-            {
+            else {
                 document.getElementById("guestContent").style.display = "block";
             }
 
-            
-            //點下登出按鈕，把session storage的資料清空，也把google登入的session清空
-            document.getElementById("logoutButton").addEventListener("click", function () 
-             {
-                sessionStorage.removeItem("JWToken");
-                sessionStorage.removeItem("MemberID");
-                sessionStorage.removeItem("MemberFisrtName");
-                sessionStorage.removeItem("MemberLastName");
-                sessionStorage.removeItem("MemberEmail");
-                sessionStorage.removeItem("MemberPhone");
-                sessionStorage.removeItem("MemberBirthday");
-                sessionStorage.removeItem("MemberRoleID");
 
-                    // 重定向到登出操作方法
-                    window.location.href = "@Url.Action("Logout", "Member")";
-                });
+            //點下登出按鈕，把session storage的資料清空，也把google登入的session清空
+            document.getElementById("logoutButton").addEventListener("click", function () {
+               
+                // 重定向到登出操作方法
+                window.location.href = "@Url.Action("Logout", "Member")";
             });
+        });
     </script>
-    
-    
-    
-    
-    
+
+
     <script>
+        //如果莫名出錯應該是這一段有錯
         document.addEventListener('DOMContentLoaded', function () {
             // 監聽滾動事件
             window.addEventListener('scroll', function () {
@@ -360,19 +342,18 @@
                     return; // 如果沒有找到 floating-container 元素，直接返回
                 }
                 var scrollPosition = window.scrollY || window.pageYOffset;
-
-            // 如果滾動至頁面中間，顯示浮動容器，否則隱藏
-            if (scrollPosition > (window.innerHeight / 2)) {
-                floatingContainer.style.display = 'block';
-            }
-            // else {
-            //     floatingContainer.style.display = 'none';
-            // }
+                // 如果滾動至頁面中間，顯示浮動容器，否則隱藏
+                if (scrollPosition > (window.innerHeight / 2)) {
+                    floatingContainer.style.display = 'block';
+                } else {
+                    floatingContainer.style.display = 'none';
+                }
+            });
         });
     </script>
 
 
-    
+
     <script>
         $(document).ready(function () {
             // 頁面剛載入時隱藏訂房欄，顯示導航欄

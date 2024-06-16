@@ -7,6 +7,14 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using System.Net.Http;
+using Microsoft.AspNetCore.Http;
+using NuGet.Protocol.Plugins;
+using System.Text;
+using Microsoft.AspNetCore.Identity.Data;
+using Newtonsoft.Json;
+using NuGet.Protocol;
+using PrjFunNowWebApi.Models;
 
 namespace PrjFunNowWeb.Controllers
 {
@@ -25,6 +33,55 @@ namespace PrjFunNowWeb.Controllers
         {
             return View();
         }
+
+        //這個是接收LoginAPI傳回來的資料，存在Session的過程
+        [HttpPost]
+        public async Task<IActionResult> LoginWithAPI([FromBody] LoginRequestt loginRequest)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.BaseAddress = new Uri("https://localhost:7103"); 
+                var content = new StringContent(JsonConvert.SerializeObject(loginRequest), Encoding.UTF8, "application/json");
+                var response = await httpClient.PostAsync("/api/Login/", content);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    // 顯示錯誤訊息用的
+                    var errorMessage = await response.Content.ReadAsStringAsync();
+                    return StatusCode((int)response.StatusCode, errorMessage);
+                }
+
+                var responseData = await response.Content.ReadAsStringAsync();
+                var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseData);
+
+                // 將memberInfo和token存在Session中
+                HttpContext.Session.SetString("MemberInfo", JsonConvert.SerializeObject(loginResponse.memberInfo));
+                HttpContext.Session.SetString("Token", loginResponse.token); 
+
+                return Ok(loginResponse);
+            }
+        }
+
+        //把Session存在View Bag可以給其他Razor頁面使用
+        public IActionResult Profile()
+        {
+            var memberInfoJson = HttpContext.Session.GetString("MemberInfo");
+            MemberInfo memberInfo = null;
+
+            if (!string.IsNullOrEmpty(memberInfoJson))
+            {
+                memberInfo = JsonConvert.DeserializeObject<MemberInfo>(memberInfoJson);
+            }
+
+            var token = HttpContext.Session.GetString("Token");
+
+            // 將 MemberInfo 和 Token 傳遞給 View
+            ViewBag.MemberInfo = memberInfo;
+            ViewBag.Token = token;
+
+            return View(memberInfo);
+        }
+
 
         //第三方登入的頁面
         //*參考影片:https://reurl.cc/VzqpKR */
@@ -79,19 +136,22 @@ namespace PrjFunNowWeb.Controllers
             }
 
             // 在Session中儲存會員ID
-            HttpContext.Session.SetString("MemberID", existingMember.MemberId.ToString());
-            HttpContext.Session.SetString("MemberEmail", existingMember.Email);
-            HttpContext.Session.SetString("MemberFirstName", existingMember.FirstName);
+            HttpContext.Session.SetString("GoogleMemberID", existingMember.MemberId.ToString());
+            HttpContext.Session.SetString("GoogleMemberEmail", existingMember.Email);
+            HttpContext.Session.SetString("GoogleMemberFirstName", existingMember.FirstName);
             return RedirectToAction("Index", "Home");
         }
 
-        
+       //處理登出 
         public IActionResult Logout()
         {
             // 清除 Session 資料
-            HttpContext.Session.Remove("MemberID");
-            HttpContext.Session.Remove("MemberFirstName");
-            
+            HttpContext.Session.Remove("GoogleMemberID");
+            HttpContext.Session.Remove("GoogleMemberEmail");
+            HttpContext.Session.Remove("GoogleMemberFirstName");
+            HttpContext.Session.Remove("MemberInfo");
+            HttpContext.Session.Remove("Token");
+
             // 重定向到首頁
             return RedirectToAction("Index", "Home");
         }
