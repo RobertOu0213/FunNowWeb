@@ -270,7 +270,7 @@
                     item.classList.add('list-group-item', 'list-group-item-action');
                     item.textContent = `${suggestion.hotelName}, ${suggestion.cityName}`;
                     item.addEventListener('click', () => {
-                        searchInput.value = `${suggestion.hotelName}, ${suggestion.cityName}`;
+                        searchInput.value = suggestion.hotelName;
                         clearSuggestions();
                     });
                     autocompleteList.appendChild(item);
@@ -285,6 +285,7 @@
         });
 
     </script>
+
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 
     @* //三個搜尋方法 *@
