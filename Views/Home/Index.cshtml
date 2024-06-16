@@ -421,7 +421,7 @@
 
     @* //可折疊的下拉選單 *@
     <script>
-        //可折疊的下拉選單
+        // 可折疊的下拉選單
         function toggleDropdown() {
             var dropdownMenu = document.getElementById("dropdownMenu");
             // 檢查當前的顯示狀態
@@ -435,6 +435,7 @@
                 dropdownMenu.style.display = "none";
                 // 移除點擊事件監聽器
                 document.removeEventListener('click', handleOutsideClick);
+                resetDropdownValuesIfUnchanged();
             }
         }
 
@@ -445,9 +446,10 @@
             var newValue = currentValue + value; // 計算新數量
             if (newValue >= 0) { // 確保數量不小於0
                 element.textContent = newValue; // 更新數量
+                element.setAttribute('data-changed', 'true'); // 標記為已更改
             }
             updateDropdownText(); // 更新下拉選單文本
-        } 
+        }
 
         // 更新下拉選單的文本
         function updateDropdownText() {
@@ -460,16 +462,52 @@
 
         // 處理外部點擊
         function handleOutsideClick(event) {
-            var dropdownContainer = document.querySelector('.dropdown-container');
             var dropdownMenu = document.getElementById('dropdownMenu');
-            // 檢查點擊是否發生在下拉選單之外
-            if (dropdownContainer && !dropdownContainer.contains(event.target)) {
+            var dropdownToggle = document.querySelector(".dropdown-toggle1");
+            // 檢查點擊是否發生在下拉選單或觸發按鈕之外
+            if (!dropdownToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
                 dropdownMenu.style.display = 'none'; // 隱藏下拉選單
                 document.removeEventListener('click', handleOutsideClick); // 移除點擊事件監聽器
+                resetDropdownValuesIfUnchanged();
             }
         }
 
+        // 重置下拉選單的數值為預設值
+        function resetDropdownValuesIfUnchanged() {
+            var rooms = document.getElementById("rooms");
+            var adults = document.getElementById("adults");
+            var children = document.getElementById("children");
+
+            // 檢查是否有更改標記，沒有則重置為預設值
+            if (!rooms.hasAttribute('data-changed')) {
+                rooms.textContent = "1";
+            }
+            if (!adults.hasAttribute('data-changed')) {
+                adults.textContent = "2";
+            }
+            if (!children.hasAttribute('data-changed')) {
+                children.textContent = "0";
+            }
+
+            // 更新顯示的文本
+            updateDropdownText();
+        }
+
+        // 添加全局點擊事件監聽器
+        document.addEventListener('click', function (event) {
+            var dropdownMenu = document.getElementById("dropdownMenu");
+            var dropdownToggle = document.querySelector(".dropdown-toggle1");
+
+            // 如果點擊發生在下拉選單和觸發按鈕之外
+            if (!dropdownToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                dropdownMenu.style.display = 'none';
+                document.removeEventListener('click', handleOutsideClick); // 移除點擊事件監聽器
+                resetDropdownValuesIfUnchanged();
+            }
+        });
     </script>
+
+
 }
 
 <!--================Header Area ===================-->
