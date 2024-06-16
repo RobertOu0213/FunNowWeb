@@ -18,9 +18,7 @@
                 </div>
 
                 <div>
-                    <a class="book_now_btn button_hover" href="#" style="border-radius: 20px;background: #F0F0F0; text-align:left">
-                        <img src="~/image/ming_img/search.png" alt="">搜尋關鍵字
-                    </a>
+                    <input type="text" id="search-input4" class="form-control" placeholder="搜尋關鍵字" onkeydown="handleKeyDownIndex2(event)">
                 </div>
                 <br />
                 <p style="margin:0px 10px">每晚預算</p>
@@ -185,6 +183,16 @@
                 });
             }
 
+            // 綁定搜索輸入框的按鍵事件
+            const searchInput4 = document.querySelector("#search-input4");
+            if (searchInput4) {
+                searchInput4.addEventListener("keydown", async (event) => {
+                    if (event.key === "Enter") {
+                        handleSearchKeywordEnter();
+                    }
+                });
+            }
+
             // 綁定所有複選框的事件監聽器
             const containerSelectors = [
                 '.form-check-container-hotel-type',
@@ -237,8 +245,8 @@
             // 初始化 lowerHandle 和 lowerLabel
             rangeSlider.lowerHandle.style.left = '0%';
             rangeSlider.lowerLabel.textContent = '下限：1';
-            rangeSlider.lowerInput.value = 1;
-
+            rangeSlider.lowerInput.value = 1;        
+                        
             // 綁定滑桿拖動事件
             [rangeSlider.lowerHandle, rangeSlider.upperHandle].forEach(handle => {
                 handle.addEventListener('mousedown', startDrag);
@@ -329,6 +337,31 @@
             };
 
             // 儲存搜尋條件至 sessionStorage
+            sessionStorage.setItem("searchHotel", JSON.stringify(searchHotel));
+            // 發送請求並更新顯示結果
+            await loadHotels(searchHotel);
+        }
+
+        // 處理搜索關鍵字的函數，會被觸發
+        async function handleSearchKeywordEnter() {
+            const searchHotel = {
+                keyword: document.querySelector("#search-input4").value, // 獲取搜索關鍵字
+                checkInDate: document.querySelector("#myDatepickerstart3").value, // 獲取入住日期
+                checkOutDate: document.querySelector("#myDatepickerend3").value, // 獲取退房日期
+                roomnum: parseInt(document.querySelector("#rooms3").value), // 獲取房間數量並轉換為整數
+                adults: parseInt(document.querySelector("#adults3").value), // 獲取成人數量並轉換為整數
+                children: 0, // 固定值，設為0
+                sortBy: null, // 排序方式，暫時設為空
+                sortType: null, // 排序類型，暫時設為空
+                lowerPrice: parseInt(document.querySelector("#lowerInput").value), // 獲取最低價格並轉換為整數
+                upperPrice: parseInt(document.querySelector("#upperInput").value), // 獲取最高價格並轉換為整數
+                hotelTypes: getSelectedCheckboxes('.form-check-container-hotel-type'), // 獲取選中的酒店類型
+                hotelEquipments: getSelectedCheckboxes('.form-check-container-hotel-equipment'), // 獲取選中的酒店設備
+                cities: getSelectedCheckboxes('.form-check-container-city'), // 獲取選中的城市
+                roomEquipments: getSelectedCheckboxes('.form-check-container-room-equipment') // 獲取選中的房間設備
+            };
+
+            // 將搜索條件存儲到 sessionStorage 中
             sessionStorage.setItem("searchHotel", JSON.stringify(searchHotel));
             // 發送請求並更新顯示結果
             await loadHotels(searchHotel);
