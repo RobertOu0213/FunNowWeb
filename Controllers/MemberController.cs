@@ -16,6 +16,7 @@ using Newtonsoft.Json;
 using NuGet.Protocol;
 using PrjFunNowWebApi.Models;
 using NuGet.Common;
+using System.Net.Http;
 
 namespace PrjFunNowWeb.Controllers
 {
@@ -23,10 +24,12 @@ namespace PrjFunNowWeb.Controllers
     {
         //串接資料庫
         private readonly FunNowContext _context;
+        private readonly HttpClient _httpClient;
 
-        public MemberController(FunNowContext context)
+        public MemberController(FunNowContext context, HttpClient httpClient)
         {
                 _context = context;
+            _httpClient = httpClient;
         }
 
         //這個只是呈現登入的頁面
@@ -65,7 +68,24 @@ namespace PrjFunNowWeb.Controllers
             }
         }
 
-     
+
+        //把帳號密碼的資訊存在Session
+        //[HttpPost]
+        //public async Task<IActionResult> GetLoginMember()
+        //{
+        //    var response = await _httpClient.PostAsJsonAsync("",);
+        //    if (response.IsSuccessStatusCode)
+        //    {
+        //        TempData["Email"] = model.Email;
+        //        return RedirectToAction("VerifyOtp");
+        //    }
+
+        //    ModelState.AddModelError(string.Empty, "Failed to send OTP");
+        //    return View("ForgotPassword");
+        //}
+
+
+
         //第三方登入的頁面
         //*參考影片:https://reurl.cc/VzqpKR */
         public async Task LoginByGoogle() //返回類型為Task
