@@ -246,7 +246,7 @@ button:focus {
 .book_now_btn {
   width: 100%;
   display: block;
-  background: #f3c300;
+  /*background: #f3c300;*/
   color: #222222;
   text-transform: uppercase;
   font-size: 14px;
