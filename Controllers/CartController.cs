@@ -96,7 +96,7 @@ namespace PrjFunNowWeb.Controllers
 
                 //綠界金流
                 var orderId = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20);
-                var website = $"https://localhost:7284/";
+                var website = $"https://localhost:7284";
                 var ecpayParameters = new Dictionary<string, string>
                      {
                          { "MerchantTradeNo",  orderId },
@@ -108,9 +108,8 @@ namespace PrjFunNowWeb.Controllers
                          { "CustomField1",  "" },
                          { "CustomField2",  "" },
                          { "ReturnURL",  $"{website}/Payment/thankyou" },
-                         //{ "OrderResultURL", $"{website}/Home/PayInfo/{orderId}" },
-                         //{ "PaymentInfoURL",  $"{website}/api/Ecpay/AddAccountInfo" },
-                         //{ "ClientRedirectURL",  $"{website}/Home/AccountInfo/{orderId}" },
+                         //{ "OrderResultURL", $"{website}/Home/Index" },
+                         { "ClientBackURL",  $"{website}/Payment/thankyou2" },
                          { "MerchantID",  "3002607" },
                          //{ "IgnorePayment",  "GooglePay#WebATM#CVS#BARCODE" },
                          { "PaymentType",  "aio" },

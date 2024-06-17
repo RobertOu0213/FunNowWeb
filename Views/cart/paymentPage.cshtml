@@ -8,23 +8,20 @@
 
 <main>
     <section class="left-section">
-        <form id="form" name="form" method="POST" action="https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5">
-            @foreach (var key in @Model.FirstOrDefault()?.EcpayParameters.Keys.ToList())
-            {
-                <label>@key</label>
-                <input type="text" name="@key" value="@Model.FirstOrDefault()?.EcpayParameters[key]" />
 
-                <br />
-            }
-            <button type="submit" id="checkoutBtn">送出</button>
+        <form id="paymentForm" name="form" method="POST" action="https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5">
+            <div style="display:none">
+                @foreach (var key in @Model.FirstOrDefault()?.EcpayParameters.Keys.ToList())
+                {
+                    @*     <label style="visibility: hidden;">@key</label> *@
+                    <input type="hidden" name="@key" value="@Model.FirstOrDefault()?.EcpayParameters[key]" />
+                    <br />
+                }
+            </div>
         </form>
 
-
-
-
-
-      @*   <form action='@Url.Content("~/Payment/thankyou")' method="post">
-            <input type="hidden" name="TotalPrice" value="@Model.Sum(m => m.RoomPrice * m.NumberOfNights)" />
+        <form id="reservationForm" method="POST">
+            <input type="hidden" id="totalPrice" value="@Model.Sum(m => m.RoomPrice * m.NumberOfNights)" />
             @foreach(var item in Model)
             {
                 <input type="hidden" name="OrderDetailsID" value="@item.OrderDetailID" />
@@ -38,29 +35,22 @@
                 <div class="contact-info-label">
                     <div class="d-flex">
                         <div class="w-100 m-1">
-
                             <label for="firstname">名字*</label>
-                            <input type="text" id="firstname" name="firstname" value="@member.FirstName" class="form-control" disabled>
-
+                            <input type="text" id="firstname"  value="@member.FirstName" class="form-control" disabled>
                         </div>
                         <div class="w-100 m-1">
-
                             <label for="lastname">姓氏*</label>
-                            <input type="text" id="lastname" name="lastname" value="@member.LastName" class="form-control" disabled>
+                            <input type="text" id="lastname"  value="@member.LastName" class="form-control" disabled>
                         </div>
                     </div>
                     <div class="d-flex">
                         <div class="w-100 m-1">
-
                             <label for="email">電子郵件地址*</label>
-                            <input type="email" id="email" name="email" value="@member.Email" class="form-control" disabled>
- 
+                            <input type="email" id="email"  value="@member.Email" class="form-control" disabled> 
                         </div>
                         <div class="w-100 m-1">
-
                             <label for="phone">電話號碼*</label>
-                            <input type="text" id="phone" name="phone" value="@member.Phone" class="form-control" disabled>
-
+                            <input type="text" id="phone"  value="@member.Phone" class="form-control" disabled>
                         </div>
                     </div>
                 </div>
@@ -71,18 +61,18 @@
                 <div class="contact-info-label">
                     <div class="d-flex">
                         <div class="w-100 m-1">
-                            <label for="firstname">名字</label>
-                            <input type="text" id="firstname" name="GuestFirstName"  class="form-control">
+                            <label for="GuestFirstName">名字</label>
+                            <input type="text" id="GuestFirstName" name="GuestFirstName" class="form-control">
                         </div>
                         <div class="w-100 m-1">
-                            <label for="lastname">姓氏</label>
-                            <input type="text" id="lastname" name="GuestLastName"  class="form-control">
+                            <label for="GuestLastName">姓氏</label>
+                            <input type="text" id="GuestLastName" name="GuestLastName" class="form-control">
                         </div>
                     </div>
                     <div class="d-flex">
                         <div class="w-100 m-1">
-                            <label for="email">電子郵件地址</label>
-                            <input type="email" id="email" name="GuestEmail"  class="form-control w-50">
+                            <label for="GuestEmail">電子郵件地址</label>
+                            <input type="email" id="GuestEmail" name="GuestEmail" class="form-control w-50">
                         </div>
                     </div>
                 </div>
@@ -90,12 +80,9 @@
             <div class="d-flex justify-content-end mt-3">
                 <button type="submit" class="btn btn-primary col-4 rounded-pill fw-bold">前往付款頁面</button>
             </div>
-        </form> *@
+        </form>
+
     </section>
-
-
-
-
 
     <section class="right-section">
         <div class="reservation-container mb-3">
@@ -172,6 +159,7 @@
     <script>
 
         $(document).ready(function () {
+            //Rating API
             async function fetchRatings() {
                 const elements = $('.hotelContainer');
                 const promises = elements.map(async function () {
@@ -192,8 +180,51 @@
 
                 await Promise.all(promises);
             }
-
             fetchRatings();
+
+
+            $('#reservationForm').on('submit', async function (event) {
+                event.preventDefault();
+                let formData = {
+                    OrderDetailsID: [],
+                    GuestFirstName: $('#GuestFirstName').val(),
+                    GuestLastName: $('#GuestLastName').val(),
+                    GuestEmail: $('#GuestEmail').val(),
+                    TotalPrice: $('#totalPrice').val()
+                };
+
+
+                $('input[name="OrderDetailsID"]').each(function () {
+                    formData.OrderDetailsID.push($(this).val());
+                });
+
+                try {
+                    let response = await fetch('@Url.Action("thankyou", "Payment")', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(formData)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(response.statusText);
+                    }
+
+                    if (response.ok) {
+                        console.log("success");
+                        $('#paymentForm').submit();
+                    } 
+
+                } catch (error) {
+                    console.error('Error:', error);
+
+                }
+            });
+
+
+
+
         });
 
 

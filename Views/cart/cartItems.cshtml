@@ -150,7 +150,7 @@
                             throw new Error(ratingRes.statusText);
                         }
                         const ratingData = await ratingRes.json();
-                        console.log(item);
+                        // console.log(item);
                         item.averageScore = Math.round(ratingData.averageScore);
                         item.ratingText = ratingData.ratingText;
                     }));
