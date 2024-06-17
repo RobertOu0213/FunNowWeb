@@ -35,10 +35,17 @@
                             </div>
                             <div id="result"></div>
                             <p></p>
+
                             <div class="mb-3">
                                 <label for="PasswordInput" class="form-label" style="font-size:15px">密碼</label>
-                                <input type="password" class="form-control" id="PasswordInput1" name="PasswordInput" placeholder="密碼">
+                                <div class="input-group">
+                                    <input type="password" class="form-control" id="PasswordInput1" name="Password" placeholder="密碼" style="border-right:none;">
+                                    <span class="input-group-text" id="togglePasswordIcon" style="background-color:white; border-left:none;">
+                                        <i class="fa-solid fa-eye-slash"></i>
+                                    </span>
+                                </div>
                             </div>
+
                             <div class="mb-3">
                                 <div class="g-recaptcha"
                                      data-sitekey="6Ld5o_cpAAAAAG_63ZgwisKvy1y6H_RHfCVKPiZ4"
@@ -165,7 +172,6 @@
         {
            padding:0px;
         }
-
 
     </style>
 }
@@ -311,11 +317,9 @@
         });
 
  
-    </script>
-
+  
      @* //Google驗證失敗時跳出的錯誤訊息 *@
-    <script>
-        
+  
         document.addEventListener("DOMContentLoaded", function () {
             var errorMessage = '@TempData["ErrorMessage"]';
             if (errorMessage) {
@@ -324,10 +328,9 @@
 
         });
 
-    </script>
+
 
     @*  //【重寄驗證信】 *@
-    <script>
     
         document.getElementById("reSent").addEventListener("click", async function (event) {
             event.preventDefault();
@@ -374,8 +377,18 @@
         });
 
 
+        @*  【密碼小眼睛】 *@
+        const togglePasswordIcon = document.getElementById('togglePasswordIcon');
 
+        togglePasswordIcon.addEventListener('click', function () {
+            // 切換密碼輸入欄位的 type 屬性
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
 
+            // 切換 icon
+            this.querySelector('i').classList.toggle('fa-eye');
+            this.querySelector('i').classList.toggle('fa-eye-slash');
+        });
 
     </script>
    
