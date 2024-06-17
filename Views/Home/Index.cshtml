@@ -211,6 +211,7 @@
                 console.log(searchHotel);
                 // 將搜索酒店對象存儲在 sessionStorage 中，使用相同的鍵名
                 sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel));
+               
             });
 
             // 方法2 的按鈕按下事件監聽器
@@ -444,7 +445,7 @@
                         <div>
                             <div class='col-md-6 offset-md-1 text-center'>
                                 <div>
-                                    <a class="book_now_btn button_hover" href="home/index2" style="border-radius:20px;" id="buttonSubmit">Book Now</a>
+                                    <a class="book_now_btn button_hover" style="border-radius:20px;" href="@Url.Action("index2", "Home")" id="buttonSubmit">Book Now</a>
                                 </div>
                             </div>
                         </div>

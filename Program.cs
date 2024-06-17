@@ -50,6 +50,8 @@ builder.Services.AddSession(options =>
 
     // 設置 cookie 的安全等級
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+
+    options.Cookie.IsEssential = true;
 });
 
 builder.Services.Configure<GoogleCaptchaConfig>(builder.Configuration.GetSection("GoogleReCaptcha"));
@@ -61,6 +63,17 @@ builder.Services.AddSignalR();
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+});
+
+// 配置 CORS 策略
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
 });
 
 var app = builder.Build();
@@ -87,12 +100,15 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
+// 使用 CORS
+app.UseCors("AllowAllOrigins");
+
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    //pattern: "{controller=Home}/{action=Index}/{id?}");
-pattern: "{controller=cart}/{action=cartItems}/{id?}");
+    
+pattern: "{controller=Home}/{action=index}/{id?}");
 
 // 配置路由以支持 Angular 路由
 //app.MapFallbackToFile("/dist/fun-now-angular1/index.html");

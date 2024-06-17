@@ -1,6 +1,9 @@
-﻿@{
+﻿@using System.Text.Json
+@{
     ViewData["Title"] = "Home Page2";
     Layout = "_Layout_index2";
+    var memberInfo = Context.Session.GetString("MemberInfo");
+    var memberInfoJson = memberInfo != null ? JsonSerializer.Serialize(memberInfo) : "null";
 }
 
 <br />
@@ -529,6 +532,15 @@
                 }
             });
         });
+    </script>
+    <script type="text/javascript">
+
+        var memberInformation = @Html.Raw(memberInfoJson);
+        var memberData = JSON.parse(memberInformation);
+        var memberId = memberData.MemberId;
+        var memberFirstName = memberData.FirstName;
+        console.log(memberId);
+        console.log(memberFirstName);
     </script>
 
 }
