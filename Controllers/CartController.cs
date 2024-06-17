@@ -26,11 +26,10 @@ namespace PrjFunNowWeb.Controllers
         {
             //登入controller 判斷
             var user = HttpContext.Session.GetString("MemberInfo");
-            //if (string.IsNullOrEmpty(user))
-            //{
-
-            //    return RedirectToAction("Login", "Member");
-            //}
+            if (string.IsNullOrEmpty(user))
+            {
+                return RedirectToAction("Login", "Member");
+            }
 
             var userId = JsonSerializer.Deserialize<MemberInfo>(user).MemberId;
 

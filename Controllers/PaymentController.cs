@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using PrjFunNowWeb.Models;
 using PrjFunNowWeb.Models.ViewModel;
+using PrjFunNowWebApi.Models;
+using System.Text.Json;
 
 namespace PrjFunNowWeb.Controllers
 {
@@ -23,10 +25,18 @@ namespace PrjFunNowWeb.Controllers
                 {
                     return BadRequest("OrderDetailsId is required");
                 }
-         
+
+                var user = HttpContext.Session.GetString("MemberInfo");
+                if (string.IsNullOrEmpty(user))
+                {
+                    return RedirectToAction("Login", "Member");
+                }
+
+                var userId = JsonSerializer.Deserialize<MemberInfo>(user).MemberId;
+
                 var order = new Order
                 {
-                    MemberId = 1,
+                    MemberId = userId,
                     OrderStatusId = 1,    //未付款
                     PaymentStatusId = 1,  //到時可以註解掉
                     TotalPrice = orderIn.TotalPrice,
@@ -131,5 +141,6 @@ namespace PrjFunNowWeb.Controllers
                 return $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/image/{imagePath}";
             }
         }
+
     }
 }
