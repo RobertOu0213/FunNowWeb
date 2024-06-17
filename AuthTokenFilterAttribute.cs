@@ -31,7 +31,7 @@ namespace PrjFunNowWeb
                         ? context.HttpContext.Request.QueryString.Value
                         : string.Empty;
 
-                    var url = $"{context.HttpContext.Request.Path.Value}?token={token}{queryString}";
+                    var url = $"{context.HttpContext.Request.Path.Value}?tk={token}{queryString}";
                     context.Result = new RedirectResult(url);
                 }
             }
