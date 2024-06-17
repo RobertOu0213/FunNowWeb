@@ -11,25 +11,40 @@
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
+
+    @{
+        var controller = string.Empty;
+        var action = string.Empty;
+        if (ViewContext.RouteData != null && ViewContext.RouteData.Values != null)
+        {
+            var controllerValue = ViewContext.RouteData.Values["controller"];
+            controller = controllerValue != null ? controllerValue.ToString() : string.Empty;
+
+            var actionValue = ViewContext.RouteData.Values["action"];
+            action = actionValue != null ? actionValue.ToString() : string.Empty;
+        }
+
+        bool isActiveStep3 = controller == "Payment" && action == "thankyou2";
+    }
     <nav>
         <div class="logo">
             <img src="~/ou/image/FunNow_Logo_Horizontal_Orange.png" alt="LOGO">
         </div>
         <div class="md-stepper-horizontal orange">
-            <div class="md-step active">
+            <div class="md-step active @(isActiveStep3 ? "active-step" : "")">
                 <div class="md-step-circle"><span>1</span></div>
                 <div class="md-step-title">填寫住客資料</div>
                 <div class="md-step-bar-left"></div>
                 <div class="md-step-bar-right"></div>
             </div>
-            <div class="md-step">
+            <div class="md-step @(isActiveStep3 ? "active-step" : "") @(isActiveStep3 ? "active" : "")">
                 <div class="md-step-circle"><span>2</span></div>
                 <div class="md-step-title">選擇付款方式</div>
                 <div class="md-step-bar-left"></div>
                 <div class="md-step-bar-right"></div>
             </div>
-            <div class="md-step">
-                <div class="md-step-circle"><span>3</span></div>
+            <div class="md-step @(isActiveStep3 ? "active-step" : "") @(isActiveStep3 ? "active" : "")">
+                <div class="md-step-circle "><span>3</span></div>
                 <div class="md-step-title">預訂已確認！</div>
                 <div class="md-step-bar-left"></div>
                 <div class="md-step-bar-right"></div>

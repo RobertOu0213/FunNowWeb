@@ -125,6 +125,12 @@ nav {
     margin-right: 20px;
 }
 
+.md-stepper-horizontal .md-step.active-step .md-step-bar-left,
+.md-stepper-horizontal .md-step.active-step .md-step-bar-right {
+    border-top: 4px solid #5392F9;
+}
+
+
 .logo img {
     width: 7vw;
 }
