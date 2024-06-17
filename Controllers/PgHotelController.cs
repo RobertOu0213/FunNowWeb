@@ -56,6 +56,7 @@ namespace PrjFunNowWeb.Controllers
 
             hotelDetail.CheckInDate = checkInDate;
             hotelDetail.CheckOutDate = checkOutDate;
+            hotelDetail.HotelID = hotelId;
 
             var viewModel = new pgHotel_HotelDetailViewModel
             {
