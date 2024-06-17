@@ -227,13 +227,13 @@
     @* AI圖片搜尋CSS *@
     <style>
         .upload_image_item {
-            margin-top: 20px;
             display: flex;
             align-items: center;
         }
 
             .upload_image_item label {
-                margin-right: 10px;
+                margin-right: 5px;
+                margin-bottom:0px;
             }
 
         #imageLabel {
@@ -570,7 +570,7 @@
 
             if (file) {
                 console.log('已選擇文件:', file.name);
-                imageLabel.textContent = `選擇的圖片: ${file.name}`;
+                imageLabel.textContent = `照片: ${file.name}`;
 
                 const reader = new FileReader();
                 reader.onloadend = async function () {
@@ -630,7 +630,7 @@
                 };
                 reader.readAsDataURL(file);
             } else {
-                imageLabel.textContent = '尚未選擇圖片';
+                imageLabel.textContent = '尚未選擇照片';
                 landmarkName.textContent = '';
             }
         }
@@ -776,9 +776,9 @@
                                         <!-- 新增的上傳圖片按鈕和說明文字 -->
                                         <!-- 新增的上傳圖片按鈕和說明文字 -->
                                         <div class="upload_image_item">
-                                            <label for="uploadImage" class="btn btn-primary">上傳圖片</label>
+                                            <label for="uploadImage" class="btn btn-primary">上傳景點照片</label>
                                             <input type="file" id="uploadImage" class="hidden-input" onchange="handleImageUpload(event)">
-                                            <span id="imageLabel">尚未選擇圖片</span>
+                                            <span id="imageLabel">尚未選擇照片</span>
                                         </div>
                                         <div id="landmarkName"></div>
 
