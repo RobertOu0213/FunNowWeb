@@ -937,24 +937,35 @@
 
             //購物車
             $('.addCart').on('click', async function () {
+                let memberID;
+                //判定是否有登入
+                try {
+                    const getMemberIdUrl = '@Url.Content("~/GetMember/GetMemberId")';
+                    const memberResponse = await fetch(getMemberIdUrl);
+
+                    if (!memberResponse.ok) {
+                        throw new Error('未登入或獲取 MemberID 失敗');
+                    }
+
+                    const memberData = await memberResponse.json();
+                    memberID = memberData.memberID;
+                  
+                } catch (error) {
+                    console.log(error);
+                    alert(`尚未登入~~`);
+                    const loginURL = `${window.location.origin}/Member/Login`;
+                    window.location.href = loginURL;
+                }
+
+
                 const roomID = $(this).data('id');
                 const searchHotel = JSON.parse(sessionStorage.getItem('searchHotel'));
-           
-                //是否有登入
-                // const memberID = getMemberID();
-                // if (!memberID) {
-                //     window.location.href = '/login'; 
-                //     return;
-                // }
-
-                sessionStorage.getItem(searchHotel);
-
                 const orderDetail = {
-                    MemberID: 1,
+                    MemberID: memberID,
                     RoomID: roomID,
                     CheckInDate: searchHotel.checkInDate,
                     CheckOutDate: searchHotel.checkOutDate
-               
+
                 };
 
                 try {
@@ -975,8 +986,7 @@
                         showCartModal(data);
                     }
                 } catch (err) {
-                    console.error(err);
- 
+                    console.log(err);
                 }
             });
 
@@ -1021,18 +1031,14 @@
                     }
                    
                 } catch (err) {
-                    console.error(err);
-
+                    console.log(err);
                 }
             });
 
             //前往購物車
             $(document).on('click', '#ToCartItems', function () {
 
-                var userId = 1;
-                const cartPageUrl = `${window.location.origin}/cart/cartItems/${userId}`;
-
-
+                const cartPageUrl = `${window.location.origin}/cart/cartItems`;
                 window.location.href = cartPageUrl;
             });
 

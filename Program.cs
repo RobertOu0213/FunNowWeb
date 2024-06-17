@@ -5,6 +5,7 @@ using System.Configuration;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using PrjFunNowWeb.Models.DTO;
+using PrjFunNowWeb.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -99,15 +100,14 @@ app.UseSession(); //註冊Session 服務
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+//app.UseMiddleware<AuthenticationMiddleware>();
 
 // 使用 CORS
 app.UseCors("AllowAllOrigins");
-
 app.UseAuthorization();
 
 app.MapControllerRoute(
-    name: "default",
-    
+    name: "default",   
 pattern: "{controller=Home}/{action=index}/{id?}");
 
 // 配置路由以支持 Angular 路由

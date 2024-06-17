@@ -1,6 +1,17 @@
-﻿@{
+﻿@using System.Web
+@{
     
     Layout = "_Layout_login";
+    var alertMessage = Context.Session.GetString("AlertMessage");
+    if (!string.IsNullOrEmpty(alertMessage))
+    {
+        <script>
+            alert(decodeURIComponent("@Html.Raw(HttpUtility.UrlDecode(alertMessage))"));     
+        </script>
+        // 清除伺服器端的 Session 消息
+        Context.Session.Remove("AlertMessage");
+    }
+
     
 }
 

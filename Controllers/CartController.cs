@@ -7,8 +7,11 @@ using System.Text;
 using System.Text.Json;
 using System.Web;
 using System.Security.Cryptography;
+using Microsoft.AspNetCore.Authorization;
+using PrjFunNowWebApi.Models;
 namespace PrjFunNowWeb.Controllers
 {
+
     public class CartController : Controller
     {
         private readonly FunNowContext _context;
@@ -17,20 +20,26 @@ namespace PrjFunNowWeb.Controllers
             _context = context;
         }
 
-        //[Route("cart/cartItems/{userId}")]
-        public IActionResult cartItems(int? id)
+
+        //[Authorize]
+        public IActionResult cartItems()
         {
             //登入controller 判斷
+            var user = HttpContext.Session.GetString("MemberInfo");
+            //if (string.IsNullOrEmpty(user))
+            //{
 
+            //    return RedirectToAction("Login", "Member");
+            //}
 
+            var userId = JsonSerializer.Deserialize<MemberInfo>(user).MemberId;
 
-
-            if (id <= 0 || id == null)
+            if (userId <= 0 || userId == null)
             {
                 return BadRequest("UserID is required");
             }
 
-            var MemberID = _context.Members.Where(x => x.MemberId == id).Select(x => x.MemberId).FirstOrDefault();
+            var MemberID = _context.Members.Where(x => x.MemberId == userId).Select(x => x.MemberId).FirstOrDefault();
 
             if (MemberID <= 0)
             {
