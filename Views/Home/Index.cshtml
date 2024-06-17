@@ -154,7 +154,7 @@
             background-color: white;
             background-image: url('images/search_icon.png');
             background-repeat: no-repeat; /* 背景圖片不重複 */
-            background-position: 10px center;
+            background-position: 10px center; /* 背景圖片位置：距離左邊10px，垂直居中 */
             background-size: 20px 20px;
         }
 
@@ -228,7 +228,7 @@
     <style>
         .upload_image_item {
             display: flex;
-            align-items: center;
+            align-items: center; /* 子元素垂直置中對齊 */
         }
 
             .upload_image_item label {
@@ -238,10 +238,10 @@
 
         #imageLabel {
             margin-left: 10px;
-            vertical-align: middle;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            vertical-align: middle; /* 垂直對齊中間 */
+            white-space: nowrap; /* 禁止換行 */
+            overflow: hidden; /* 溢出隱藏 */
+            text-overflow: ellipsis; /* 文字溢出時顯示省略號 */
             max-width: 300px; /* 你可以根据需要调整这个宽度 */
             display: inline-block;
         }
@@ -268,7 +268,8 @@
             const autocompleteList = document.getElementById('autocomplete-list');
 
             searchInput.addEventListener('input', async function () {
-                const query = searchInput.value.trim();
+                // 當輸入框的內容改變時執行此函數
+                const query = searchInput.value.trim();// 獲取並修剪輸入的值
                 if (query.length > 0) {
                     const suggestions = await fetchSuggestions(query);
                     displaySuggestions(suggestions);
@@ -296,15 +297,15 @@
                 }
             }
 
-            function displaySuggestions(suggestions) {
-                clearSuggestions();
+            function displaySuggestions(suggestions) {// 顯示建議
+                clearSuggestions();// 清空現有建議
                 suggestions.forEach(suggestion => {
                     const item = document.createElement('button');
                     item.type = 'button';
                     item.classList.add('list-group-item', 'list-group-item-action');
-                    item.textContent = `${suggestion.hotelName}, ${suggestion.cityName}`;
+                    item.textContent = `${suggestion.hotelName}, ${suggestion.cityName}`;// 設置按鈕文本
                     item.addEventListener('click', () => {
-                        searchInput.value = suggestion.hotelName;
+                        searchInput.value = suggestion.hotelName;// 將輸入框的值設置為所選建議hotelName
                         clearSuggestions();
                     });
                     autocompleteList.appendChild(item);
@@ -312,7 +313,9 @@
             }
 
             document.addEventListener('click', function (event) {
+                // 當點擊事件發生時執行此函數
                 if (!searchInput.contains(event.target) && !autocompleteList.contains(event.target)) {
+                 // 如果點擊的目標不在輸入框和自動完成列表內
                     clearSuggestions();
                 }
             });
@@ -329,7 +332,7 @@
             // 單獨的按鈕按下事件監聽器,用於 btnSubmit 按鈕
             const btnSubmit = document.querySelector('#buttonSubmit');
             btnSubmit.addEventListener('click', async (event) => {
-                // 檢查是哪個按鈕被點擊
+                // 檢查是哪個按鈕被點擊 方法1 or 方法2
                 // 方法1 的按鈕按下事件
                 const inputkeyword = document.querySelector('#search-input').value;
                 const inputDatestart = document.querySelector('#myDatepickerstart').value;
@@ -386,6 +389,7 @@
 
             // 按下圖片後執行
             const today = new Date().toISOString().split('T')[0];
+            // 獲取今天的日期，格式為 YYYY-MM-DD
             const tomorrow = new Date();
             tomorrow.setDate(tomorrow.getDate() + 1);
             const tomorrowFormatted = tomorrow.toISOString().split('T')[0];
@@ -462,7 +466,7 @@
             const startDateInput = document.getElementById('myDatepickerstart');
             const endDateInput = document.getElementById('myDatepickerend');
             if (!startDateInput.value) {
-                startDateInput.value = formatDate(today);
+                startDateInput.value = formatDate(today);// 如果起始日期輸入框為空，設置為今天
             }
             if (!endDateInput.value) {
                 endDateInput.value = formatDate(tomorrow);
@@ -563,20 +567,21 @@
         const apiKey = 'AIzaSyAyKcSGzZi4LQsJEvbJOw3Kh8q_9uhtRvw';
 
         async function handleImageUpload(event) {
-            const file = event.target.files[0];
+            const file = event.target.files[0]; //獲取上傳的第一個文件
             const imageLabel = document.getElementById('imageLabel');
             const landmarkName = document.getElementById('landmarkName');
             const searchInput = document.getElementById('search-input');
 
             if (file) {
                 console.log('已選擇文件:', file.name);
-                imageLabel.textContent = `照片: ${file.name}`;
+                imageLabel.textContent = `照片: ${file.name}`; // 在界面上顯示選擇的文件名稱
 
-                const reader = new FileReader();
+                const reader = new FileReader();// 創建文件讀取器
                 reader.onloadend = async function () {
-                    const base64String = reader.result.replace('data:', '').replace(/^.+,/, '');
+                    const base64String = reader.result.replace('data:', '').replace(/^.+,/, '');// 獲取文件的 base64 字符串
 
                     const response = await fetch(`https://vision.googleapis.com/v1/images:annotate?key=${apiKey}`, {
+                        //向 Google Vision API 發送請求
                         method: 'POST',
                         body: JSON.stringify({
                             requests: [
@@ -587,7 +592,7 @@
                                     features: [
                                         {
                                             type: 'LANDMARK_DETECTION',
-                                            maxResults: 1
+                                            maxResults: 1//指定返回的結果數量最多為 1 個
                                         }
                                     ]
                                 }
@@ -598,20 +603,21 @@
                         }
                     });
 
-                    const result = await response.json();
+                    const result = await response.json();//獲取 Vision API 的回應
                     console.log('Vision API 回應: ', result);
 
                     if (result.responses && result.responses[0].landmarkAnnotations) {
+                        //如果 API 回應包含地標註釋，則執行以下代碼
                         const landmark = result.responses[0].landmarkAnnotations[0];
-                        let landmarkInfo = `地標: ${landmark.description}`;
+                        let landmarkInfo = `地標: ${landmark.description}`; //設置地標描述信息
 
                         if (landmark.locations && landmark.locations.length > 0) {
-                            const latitude = landmark.locations[0].latLng.latitude;
-                            const longitude = landmark.locations[0].latLng.longitude;
+                            const latitude = landmark.locations[0].latLng.latitude;//緯度
+                            const longitude = landmark.locations[0].latLng.longitude;//經度
 
                             try {
-                                const location = await getCityAndCountry(latitude, longitude);
-                                const translatedCity = await translateText(location.city, 'zh-TW');
+                                const location = await getCityAndCountry(latitude, longitude);//獲取地標的城市和國家信息
+                                const translatedCity = await translateText(location.city, 'zh-TW');//翻譯成繁體中文
                                 const translatedCountry = await translateText(location.country, 'zh-TW');
                                 const translatedLandmark = await translateText(landmark.description, 'zh-TW');
 
@@ -642,7 +648,7 @@
 
         async function getCityAndCountry(latitude, longitude) {
             console.log(`獲取地址信息，經度: ${longitude}，緯度: ${latitude}`);
-            try {
+            try {//向 Google Geocoding API 發送請求
                 const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`);
                 const result = await response.json();
                 console.log('Geocoding API 回應: ', result);
@@ -679,7 +685,7 @@
 
         async function translateText(text, targetLang) {
             console.log(`翻譯文本: ${text} 到語言: ${targetLang}`);
-            try {
+            try {//用 fetch 發送 HTTP 請求到 Google Cloud Translation API
                 const response = await fetch(`https://translation.googleapis.com/language/translate/v2?key=${apiKey}`, {
                     method: 'POST',
                     body: JSON.stringify({
@@ -707,15 +713,11 @@
     </script>
 
 
-
-
-
-
-
 }
 
 <!--================Header Area ===================-->
 <!--================搜尋訂房欄(固定式) Area =================-->
+<!-- 橫幅區域 -->
 <section class="banner_area">
     <div class="booking_table d_flex align-items-center">
         <div class="overlay bg-parallax" data-stellar-ratio="0.9" data-stellar-vertical-offset="0" data-background=""></div>
