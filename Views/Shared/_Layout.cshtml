@@ -303,7 +303,7 @@
         //決定會員資訊是否顯示
         document.addEventListener("DOMContentLoaded", function () {
            
-            var memberInformation = @Html.Raw(memberInfoJson);
+            var memberInformation = @Html.Raw(memberInfoJson) || '{}';
             var googleMemberId = '@googleMemberId';
             var googleMemberFirstName = '@googleMemberFirstName';
             var token = '@token';
