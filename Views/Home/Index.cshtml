@@ -599,7 +599,7 @@
                     });
 
                     const result = await response.json();
-                    console.log(result);
+                    console.log('Vision API 回應: ', result);
 
                     if (result.responses && result.responses[0].landmarkAnnotations) {
                         const landmark = result.responses[0].landmarkAnnotations[0];
@@ -611,11 +611,16 @@
 
                             try {
                                 const location = await getCityAndCountry(latitude, longitude);
-                                landmarkInfo += location.city ? `，縣市: ${location.city}` : '，無法獲取縣市信息';
-                                landmarkInfo += location.country ? `，國家: ${location.country}` : '，無法獲取國家信息';
+                                const translatedCity = await translateText(location.city, 'zh-TW');
+                                const translatedCountry = await translateText(location.country, 'zh-TW');
+                                const translatedLandmark = await translateText(landmark.description, 'zh-TW');
+
+                                landmarkInfo = `地標: ${translatedLandmark}`;
+                                landmarkInfo += translatedCity ? `，縣市: ${translatedCity}` : '，無法獲取縣市信息';
+                                landmarkInfo += translatedCountry ? `，國家: ${translatedCountry}` : '，無法獲取國家信息';
 
                                 // 將縣市名稱設置到 search-input
-                                searchInput.value = location.city;
+                                searchInput.value = translatedCity;
                             } catch (error) {
                                 landmarkInfo += `，錯誤信息: ${error.message}`;
                             }
@@ -671,7 +676,40 @@
                 throw new Error('無法通過Google Maps Geocoding API獲取地址信息');
             }
         }
+
+        async function translateText(text, targetLang) {
+            console.log(`翻譯文本: ${text} 到語言: ${targetLang}`);
+            try {
+                const response = await fetch(`https://translation.googleapis.com/language/translate/v2?key=${apiKey}`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        q: text,
+                        target: targetLang,
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const result = await response.json();
+                console.log('Translation API 回應: ', result);
+
+                if (result.data && result.data.translations && result.data.translations.length > 0) {
+                    return result.data.translations[0].translatedText;
+                } else {
+                    throw new Error('翻譯失敗');
+                }
+            } catch (error) {
+                console.error(`錯誤: ${error.message}`);
+                throw new Error('無法通過Google Cloud Translation API進行翻譯');
+            }
+        }
     </script>
+
+
+
+
+
 
 
 }
