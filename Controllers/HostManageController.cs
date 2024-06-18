@@ -8,7 +8,7 @@ using System.Linq;
 using DotNetEnv;
 using System.Text.Json;
 using PrjFunNowWebApi.Models;
-//using PrjFunNowWeb.Models;
+
 
 namespace PrjFunNowWeb.Controllers
 {
@@ -24,19 +24,28 @@ namespace PrjFunNowWeb.Controllers
         }
         public IActionResult Home()
         {
-           
-            return View();
+            var user = HttpContext.Session.GetString("MemberInfo");
+            if (string.IsNullOrEmpty(user))
+            {
+
+                return RedirectToAction("Login", "Member");
+            }
+
+            var userId = JsonSerializer.Deserialize<MemberInfo>(user).MemberId;
+
+            return View(userId);
         }
 
         public IActionResult HostHotelInfo(int? id)
         {
-            Env.Load();
-            string databaseUrl = Environment.GetEnvironmentVariable("API_KEY");
+            //env test
+            //Env.Load();
+            //string databaseUrl = Environment.GetEnvironmentVariable("API_KEY");
 
-            if (databaseUrl != null)
-            {
-                Console.WriteLine(databaseUrl);
-            }
+            //if (databaseUrl != null)
+            //{
+            //    Console.WriteLine(databaseUrl);
+            //}
 
             if (id == null)
             {

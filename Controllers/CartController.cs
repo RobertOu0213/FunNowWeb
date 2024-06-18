@@ -21,7 +21,6 @@ namespace PrjFunNowWeb.Controllers
         }
 
 
-        //[Authorize]
         public IActionResult cartItems()
         {
             //登入判斷

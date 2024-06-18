@@ -979,11 +979,13 @@
 
                     if (!response.ok) {
                         throw new Error(response.statusText);
+
                     }
 
                     const data = await response.json();
                     if (data.success) {
                         showCartModal(data);
+
                     }
                 } catch (err) {
                     console.log(err);

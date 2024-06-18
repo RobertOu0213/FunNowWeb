@@ -119,9 +119,8 @@
 }
 @section Scripts {
     <script>
-        var userId = '@Model';
-        console.log(userId);
-        console.log(typeof userId);
+        const userId = @Model;
+
         //需再修改
         $(window).on('load', function () {
     
@@ -157,8 +156,8 @@
             data.forEach(item => {
                 imageCategoryStr +=
                     `
-                                <option value = "${item.imageCategoryId}">${item.imageCategoryName}</option>
-                            `
+                      <option value = "${item.imageCategoryId}">${item.imageCategoryName}</option>
+                    `
             })
 
 
@@ -344,9 +343,7 @@
                                                         <div class="card-body">
                                                             <select class="form-select" aria-label="Default select example" id="selectImageCategory">
 
-
                                                                       ${imageCategoryStr}
-
                                                             </select>
                                                         </div>
                                                         <button class="btn btn-danger delete-button" style="display: none;">刪除照片</button>
@@ -503,8 +500,7 @@
                 });
 
                 sessionStorage.setItem('tRoom', JSON.stringify(roomData));
-                // sessionStorage.setItem('forceRedirect', 'true');
-
+     
 
 
                 //API
@@ -515,6 +511,7 @@
                     const formData = new FormData();
                     formData.append('hotelData', JSON.stringify(hotelData));
                     formData.append('roomData', JSON.stringify(roomData));
+                    formData.append('MemberId', userId);
 
                     const url = "https://localhost:7103/api/HotelCreate";
                     const res = await fetch(url, {
