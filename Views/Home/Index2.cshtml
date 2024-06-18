@@ -439,10 +439,28 @@
             // const encryptedCheckOutDate = encryptData(searchHotelForLouieee.checkOutDate, secretKey);
 
 
+            // 從後端 API 獲取指定 hotelId 的評論數和最新評論
+            async function getHotelCommentsCount(hotelId) {
+                try {
+                    const response = await fetch(`https://localhost:7103/api/Comment/${hotelId}/ForHotelComment`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    console.log(data); // 確認返回的數據結構
+                    return data.totalComments; // 確保返回的數據屬性名稱與後端一致
+                } catch (error) {
+                    console.error(`Error fetching comments count for hotel ID ${hotelId}:`, error);
+                    return "N/A"; // 如果获取评论数失败，显示N/A
+                }
+            }
+
             // 生成並顯示飯店信息
             const hotels = await Promise.all(data.map(async hotel => {
                 const { hotelId, hotelName, hotelAddress, hotelImages, levelStar, hotelEquipmentNames, hotelPrice } = hotel;
                 let totalAverageScore;
+                let commentsCount;
+
                 try {
                     totalAverageScore = await getHotelScore(hotelId);
                 } catch (error) {
@@ -450,61 +468,82 @@
                     totalAverageScore = "N/A"; // 如果获取评分失败，显示N/A
                 }
 
+                try {
+                    commentsCount = await getHotelCommentsCount(hotelId);
+                } catch (error) {
+                    console.error(`Error fetching comments count for hotel ID ${hotelId}:`, error);
+                    commentsCount = "N/A"; // 如果获取评论数失败，显示N/A
+                }
+
+                let ratingDescription;
+                if (totalAverageScore >= 9) {
+                    ratingDescription = "超讚";
+                } else if (totalAverageScore >= 7) {
+                    ratingDescription = "很讚";
+                } else if (totalAverageScore >= 5) {
+                    ratingDescription = "很好";
+                } else if (totalAverageScore >= 3) {
+                    ratingDescription = "尚可";
+                } else {
+                    ratingDescription = "低於預期";
+                }
+
                 console.log(`Hotel ID: ${hotelId}, Total Average Score: ${totalAverageScore}`); // 添加日志
                 console.log(`Hotel Images: ${hotelImages}`); // 調試輸出圖片 URL
+                console.log(`Comments Count: ${commentsCount}`); // 調試輸出評論數
 
                 const mainImage = hotelImages[0] ? `https://localhost:7284/image/${hotelImages[0]}` : '';
                 const smallImages = hotelImages.slice(1, 4).map(img => img ? `https://localhost:7284/image/${img}` : '');
 
                 return `
-                            <div class="col-lg-12 hotel-card" data-hotel-id="${hotelId}">
-                                <div class="row">
-                                    <a href="https://localhost:7284/PgHotel/pgHotel/?hotelId=${hotel.hotelId}&checkInDate=${searchHotelForLouieee.checkInDate}&checkOutDate=${searchHotelForLouieee.checkOutDate}" class="col-lg-12 hotel-link">
-                                        <div class="row">
-                                            <div class="col-lg-4 col-sm-8 hotel-image-container" style="padding:0px">
-                                                <table>
-                                                    <tr>
-                                                        <td colspan="3" style="position: relative;">
-                                                            <img src="${mainImage}" class="img-fluid" style="width:100%" />
-                                                            <div class="favorite-icon-container">
-                                                                <i class="fa fa-heart favorite-icon" data-hotel-id="${hotelId}" onclick="toggleFavorite(event, ${hotelId})"></i>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        ${smallImages.map(img => `<td><img src="${img}" class="img-fluid" /></td>`).join('')}
-                                                    </tr>
-                                                </table>
+            <div class="col-lg-12 hotel-card" data-hotel-id="${hotelId}">
+                <div class="row">
+                    <a href="https://localhost:7284/PgHotel/pgHotel/?hotelId=${hotelId}&checkInDate=${searchHotelForLouieee.checkInDate}&checkOutDate=${searchHotelForLouieee.checkOutDate}" class="col-lg-12 hotel-link">
+                        <div class="row">
+                            <div class="col-lg-4 col-sm-8 hotel-image-container" style="padding:0px">
+                                <table>
+                                    <tr>
+                                        <td colspan="3" style="position: relative;">
+                                            <img src="${mainImage}" class="img-fluid" style="width:100%" />
+                                            <div class="favorite-icon-container">
+                                                <i class="fa fa-heart favorite-icon" data-hotel-id="${hotelId}" onclick="toggleFavorite(event, ${hotelId})"></i>
                                             </div>
-                                            <div class="col-lg-5 col-sm-10 hotel-details">
-                                                <h3>${hotelName}</h3>
-                                                <span>${levelStar}星級飯店 </span><span style="color:blue">${hotelAddress}</span>
-                                                <h6>此住宿提供:</h6>
-                                                ${hotelEquipmentNames.map(name => `<h5 style="border: 1px solid black; display: inline-block;">${name}</h5>`).join('')}
-                                                <br>
-                                                <h6 style="color:green">${levelStar}星級飯店最優價</h6>
-                                                <h6 style="color:red">昨天起已收到${levelStar}張訂單</h6>
-                                            </div>
-
-                                            <div class="col-lg-3 col-sm-12 hotel-pricing">
-                                                <div class="rating">
-                                                    <div class="rating-text">
-                                                        <span class="rating-count">很出色</span>
-                                                        <span class="rating-count">2,446篇評鑑</span>
-                                                    </div>
-                                                    <span class="rating-score">${totalAverageScore}</span>
-                                                </div>
-                                                <br>
-                                                <h6 style="border: 1px solid red; display:inline-block; background-color: red; color:white">優惠只剩1間</h6>
-                                                <h6 style="color:gray">每晚價格(不連稅及其他費用)</h6>
-                                                <br><br>
-                                                <h3>NT$${hotelPrice}</h3>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        ${smallImages.map(img => `<td><img src="${img}" class="img-fluid" /></td>`).join('')}
+                                    </tr>
+                                </table>
                             </div>
-                        `;
+                            <div class="col-lg-5 col-sm-10 hotel-details">
+                                <h3>${hotelName}</h3>
+                                <span>${levelStar}星級飯店 </span><span style="color:blue">${hotelAddress}</span>
+                                <h6>此住宿提供:</h6>
+                                ${hotelEquipmentNames.map(name => `<h5 style="border: 1px solid black; display: inline-block;">${name}</h5>`).join('')}
+                                <br>
+                                <h6 style="color:green">${levelStar}星級飯店最優價</h6>
+                                <h6 style="color:red">昨天起已收到${levelStar}張訂單</h6>
+                            </div>
+
+                            <div class="col-lg-3 col-sm-12 hotel-pricing">
+                                <div class="rating">
+                                    <div class="rating-text">
+                                        <span class="rating-count">${ratingDescription}</span>
+                                        <span class="rating-count">${commentsCount}篇評鑑</span> <!-- 直接使用commentsCount -->
+                                    </div>
+                                    <span class="rating-score">${totalAverageScore}</span>
+                                </div>
+                                <br>
+                                <h6 style="border: 1px solid red; display:inline-block; background-color: red; color:white">優惠只剩1間</h6>
+                                <h6 style="color:gray">每晚價格(不連稅及其他費用)</h6>
+                                <br><br>
+                                <h3>NT$${hotelPrice}</h3>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        `;
             }));
 
             divHotels.innerHTML = hotels.join("");
