@@ -81,12 +81,11 @@
     <div class="input-group width px-3">
         <select class="form-select" id="inputGroupSelecthotel" aria-label="Example select with button addon">
             <option selected>所有飯店類型</option>
-            <!-- 動態添加的酒店名稱將在這裡顯示 -->
+            <!-- 动态添加的酒店名称将显示在这里 -->
         </select>
     </div>
 
     <div class="input-group width px-1">
-        <!--px-1(數字好像可以填1到9越小越寬) -->
         <select class="form-select" id="inputGroupSelectstatus" aria-label="Example select with button addon">
             <option selected>所有審核狀態</option>
             <option value="true">已上架</option>
@@ -241,6 +240,15 @@
             document.getElementById('hotelContainer').innerHTML = tableStr;
         }
 
+        // 搜索饭店
+        function searchHotels() {
+            const searchText = document.getElementById('searchBar').value.toLowerCase();
+            const filteredHotels = allHotels.filter(item => {
+                return item.hotelName.toLowerCase().includes(searchText) || item.hotelAddress.toLowerCase().includes(searchText);
+            });
+            updateHotelDisplay(filteredHotels);
+        }
+
         // 切换飯店的isActive狀態
         function toggleHotelStatus(hotelID) {
             fetch(`https://localhost:7103/api/BackSideHotel/${hotelID}/toggleActive`, {
@@ -323,8 +331,7 @@
             document.getElementById('searchBar').value = "";
             updateHotelDisplay(allHotels);
         }
-        // 初始加載飯店資訊
-        fetchHotels();
+
 
 
         function updateSelectOptions() {
@@ -381,6 +388,10 @@
                 let selectedHotelTypeName = document.getElementById('inputGroupSelecthotel').value;
                 let selectedHotelStatus = document.getElementById('inputGroupSelectstatus').value;
                 filterHotels(selectedHotelTypeName, selectedHotelStatus);
+            });
+
+            document.getElementById('searchBtn').addEventListener('click', () => {
+                searchHotels();
             });
         });
     </script>
