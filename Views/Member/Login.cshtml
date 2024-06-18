@@ -286,6 +286,7 @@
                 Password: password
             };
 
+    
             try {
                 const response = await fetch('/Member/LoginWithAPI', {
                     method: 'POST',
@@ -294,7 +295,7 @@
                     },
                     body: JSON.stringify(loginData)
                 });
-
+                console.log(loginData);
                 if (!response.ok) {
                     throw new Error('登入失敗');
                 }
