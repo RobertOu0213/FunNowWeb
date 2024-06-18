@@ -59,9 +59,8 @@ namespace PrjFunNowWeb.Controllers
                 var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseData);
 
 
-
-                // 將memberInfo和token存在Session中
-                HttpContext.Session.SetString("MemberInfo", JsonConvert.SerializeObject(loginResponse.memberInfo));
+                // 將memberID和token存在Session中
+                HttpContext.Session.SetString("MemberID", loginResponse.memberID.ToString());
                 HttpContext.Session.SetString("Token", loginResponse.token);
 
                 return Ok(loginResponse);
@@ -152,7 +151,7 @@ namespace PrjFunNowWeb.Controllers
             HttpContext.Session.Remove("GoogleMemberID");
             HttpContext.Session.Remove("GoogleMemberEmail");
             HttpContext.Session.Remove("GoogleMemberFirstName");
-            HttpContext.Session.Remove("MemberInfo");
+            HttpContext.Session.Remove("MemberID");
             HttpContext.Session.Remove("Token");
 
             // 重定向到首頁

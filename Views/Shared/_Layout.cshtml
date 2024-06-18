@@ -1,8 +1,7 @@
 ﻿@using System.Text.Json
 
 @{
-    var memberInfo = Context.Session.GetString("MemberInfo");
-    var memberInfoJson = memberInfo != null ? JsonSerializer.Serialize(memberInfo) : "null";
+    var memberID = Context.Session.GetString("MemberID");
     var token = Context.Session.GetString("Token");
 
     var googleMemberId = Context.Session.GetString("GoogleMemberID");
@@ -299,60 +298,64 @@
 
   
 
-    <script type="text/javascript">
-        //決定會員資訊是否顯示
+    <script>
+        //決定nav bar的會員資訊是否顯示
         document.addEventListener("DOMContentLoaded", function () {
            
-            var memberInformation = @Html.Raw(memberInfoJson);
-            if (memberInformation == null) 
-            {
-                memberInformation = null;
-            }
-
             var googleMemberId = '@googleMemberId';
             var googleMemberFirstName = '@googleMemberFirstName';
-            var token = '@token';
+            var memberID = '@memberID';
             
-            console.log("Google Member ID: " + googleMemberId);
-            console.log("Google Member First Name: " + googleMemberFirstName);
-
-            // 自己輸入帳號密碼的登入者
-            if (memberInformation !== null && token) {
-                
-                var memberData = JSON.parse(memberInformation);
-                var memberId = memberData.MemberId;
-                var memberFirstName = memberData.FirstName;
-                
-
-                if (memberId && memberFirstName) 
-                {
-                    document.getElementById("memberContent").style.display = "block";
-                    document.getElementById("memberId").innerText = memberId;
-                    document.getElementById("memberFirstName").innerText = memberFirstName;
-                }
-
+            // 如果都沒有值，顯示訪客內容
+            if (!googleMemberId && !googleMemberFirstName && !memberID) {
+                document.getElementById("guestContent").style.display = "block";
             }
-            // Google登入者
-            else if (googleMemberId && googleMemberFirstName) 
-            {
+            // 判斷若有googlememberID，顯示googlememberID內容
+            else if (googleMemberId && googleMemberFirstName) {
                 document.getElementById("memberContent").style.display = "block";
                 document.getElementById("memberId").innerText = googleMemberId;
                 document.getElementById("memberFirstName").innerText = googleMemberFirstName;
             }
-             // 如果兩個地方都沒有資料，顯示訪客內容
-            else 
-            {
-               document.getElementById("guestContent").style.display = "block";
+            // 若以上都沒有才顯示member內容
+            else if (memberID) {
+                fetchMemberData(memberID);
             }
-
-
-            //點下登出按鈕，把session storage的資料清空，也把google登入的session清空
-            document.getElementById("logoutButton").addEventListener("click", function () {
-               
+       
+            //點下登出按鈕，把session的資料清空，也把google登入的session清空
+            document.getElementById("logoutButton").addEventListener("click", function () 
+            {
+                document.getElementById("guestContent").style.display = "block";
+                document.getElementById("memberContent").style.display = "none";
                 // 重定向到登出操作方法
                 window.location.href = "@Url.Action("Logout", "Member")";
             });
         });
+
+
+        async function fetchMemberData(memberID) {
+            try {
+                const response = await fetch(`https://localhost:7103/api/Members/searchByID?ID=${memberID}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+
+                });
+                if (response.ok) {
+                    const data = await response.json(); // 將回應內容解析為 JSON
+                    document.getElementById("memberContent").style.display = "block";
+                    document.getElementById("memberId").innerText = memberID;
+                    document.getElementById("memberFirstName").innerText = data.firstName;
+                } else {
+                    const errorText = await response.text();
+                    console.error('查詢失敗:', errorText);
+                    alert('查詢失敗，請稍後再試');
+                }
+            } catch (error) {
+                console.error('發生錯誤:', error);
+                alert(`發生錯誤，請稍後再試。錯誤信息: ${error.message}`);
+            }
+        }
     </script>
 
 
