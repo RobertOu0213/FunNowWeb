@@ -6,6 +6,9 @@ using PrjFunNowWeb.Models.ViewModel;
 using System;
 using System.Linq;
 using DotNetEnv;
+using System.Text.Json;
+using PrjFunNowWebApi.Models;
+//using PrjFunNowWeb.Models;
 
 namespace PrjFunNowWeb.Controllers
 {
@@ -309,6 +312,12 @@ namespace PrjFunNowWeb.Controllers
             {
                 return BadRequest("Invalid room data.");
             }
+            var user = HttpContext.Session.GetString("MemberInfo");
+            if (string.IsNullOrEmpty(user))
+            {
+                return RedirectToAction("Login", "Member");
+            }
+            var userId = JsonSerializer.Deserialize<MemberInfo>(user).MemberId;
 
             var room = new Room
             {
@@ -319,7 +328,7 @@ namespace PrjFunNowWeb.Controllers
                 RoomPrice = roomDto.RoomPrice,
                 Description = roomDto.RoomDescription,
                 RoomStatus = true,
-                MemberId = 1,
+                MemberId = userId,
                 HotelId = roomDto.HotelId
             };
             _context.Rooms.Add(room);
