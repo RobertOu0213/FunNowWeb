@@ -56,6 +56,21 @@ builder.Services.Configure<GoogleCaptchaConfig>(builder.Configuration.GetSection
 // Add SignalR client services if needed for SignalR client side (optional)
 builder.Services.AddSignalR();
 
+//Angular用
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularApp",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:4200")
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
+
+builder.Services.AddControllersWithViews();
+
+
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
@@ -89,11 +104,13 @@ app.UseRouting();
 app.UseAuthorization();
 
 
+app.UseCors("AllowAngularApp");
+
 
 app.MapControllerRoute(
     name: "default",
     //pattern: "{controller=Home}/{action=Index}/{id?}");
-pattern: "{controller=OrderManagement}/{action=Index}/{id?}");
+pattern: "{controller=Comment}/{action=Angular_test}/{id?}");
 
 
 //// 配置路由以支持 Angular 路由
