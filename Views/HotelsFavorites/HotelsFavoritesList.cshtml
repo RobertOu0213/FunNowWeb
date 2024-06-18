@@ -83,7 +83,7 @@
 
           const url = `https://localhost:7103/api/HotelsFavorite/`+`${memberId}/FavoriteHotels`;
        // const url = `https://localhost:7103/api/HotelsFavorite/1/FavoriteHotels`;
-
+       
     
 
         const loadFavoriteHotels = async () => {
@@ -96,12 +96,16 @@
                 console.log(data);
 
                 const cities = data.map(item => {
-                    const { imageUrl, hotelName, city, country, hotelCount } = item;
+                    const { hotelImage, hotelName, city, country, hotelCount } = item;
+
+                    const HotelImage = getImageUrl(hotelImage);
+                    console.log(HotelImage);
+
                     return( `
                     <a href="/HotelsFavorites/HotelsFavoritesListToCity?memberId=${memberId}&city=${city}&country=${country}">  /* 點擊卡片會轉向到這個Controller/Action  =>   HotelsFavorites/HotelsFavoritesListToCity*/
                             <div class="col-md-4">
                                 <div class="card">
-                                    <img src="${imageUrl}" class="card-img-top" alt="${city}">
+                                                    <img src="${HotelImage}"  class="card-img-top" alt="${city}">
                                     <div class="card-body">
                                         <h5 class="card-title">${city}, ${country}</h5>
                                         <p class="card-text">${hotelCount} 間住宿</p>
@@ -121,6 +125,14 @@
         };
 
         loadFavoriteHotels();  //调用函数以加载数据
+        //解析照片
+        function getImageUrl(imagePath) {
+            if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
+                return imagePath;
+            } else {
+                return window.location.origin + '/image/' + imagePath;
+            }
+        }
     </script>
 
 }
