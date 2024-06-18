@@ -198,6 +198,21 @@
     <script>
         let allHotels = [];
 
+        // 獲取飯店資訊並更新顯示
+        function fetchHotels() {
+            fetch('https://localhost:7103/api/BackSideHotel/details')
+                .then(response => response.json())
+                .then(data => {
+                    allHotels = data;
+                    updateHotelDisplay(data);
+                    updateSelectOptions(); //可以刪除
+                })
+                .catch(error => {
+                    console.error('Error fetching hotels:', error);
+                });
+        }
+
+        // 更新飯店顯示
         function updateHotelDisplay(hotelList) {
             let tableStr = "";
             hotelList.forEach(item => {
@@ -223,6 +238,19 @@
             document.getElementById('hotelContainer').innerHTML = tableStr;
         }
 
+        // 獲取並顯示房間資訊
+        function loadRooms(hotelID) {
+            fetch(`https://localhost:7103/api/BackSideHotel/${hotelID}/rooms`)
+                .then(response => response.json())
+                .then(data => {
+                    updateRoomDisplay(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching rooms:', error);
+                });
+        }
+
+        // 更新房間顯示
         function updateRoomDisplay(roomList) {
             let roomTableStr = "";
             roomList.forEach(item => {
@@ -246,6 +274,10 @@
             document.getElementById('roomContainer').innerHTML = roomTableStr;
         }
 
+        // 初始加載飯店資訊
+        fetchHotels();
+
+
         function updateSelectOptions() {
             let selecthoteltypeStr = "<option selected>所有飯店類型</option>";
             let hotelTypeSet = new Set();  // 使用Set來記錄已經添加過的飯店類型
@@ -261,18 +293,7 @@
             document.getElementById('inputGroupSelecthotel').innerHTML = selecthoteltypeStr;
         }
 
-        function fetchHotels() {
-            fetch('https://localhost:7103/api/BackSideHotel/details')
-                .then(response => response.json())
-                .then(data => {
-                    allHotels = data;
-                    updateHotelDisplay(data);
-                    updateSelectOptions();
-                })
-                .catch(error => {
-                    console.error('Error fetching hotels:', error);
-                });
-        }
+
 
         function fetchRoomsByHotelId(hotelID) {
             console.log(`Fetching rooms for hotelID: ${hotelID}`);
@@ -287,9 +308,7 @@
             }
         }
 
-        function loadRooms(hotelID) {
-            fetchRoomsByHotelId(hotelID);
-        }
+
 
         function filterHotels(hotelTypeName, hotelStatus) {
             let filteredHotels = allHotels.filter(item => {
