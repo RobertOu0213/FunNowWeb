@@ -1,15 +1,13 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "OrderCallApi";
 }
 
-<h1>OrderCallApi</h1>
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>訂單頁面</title>
+    <title>我的訂單</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -32,11 +30,6 @@
             padding: 20px;
             margin-bottom: 20px;
         }
-
-            .order-list h2 {
-                font-size: 24px;
-                margin-bottom: 20px;
-            }
 
         .order-item {
             display: flex;
@@ -116,55 +109,72 @@
     </style>
 </head>
 <body>
+    <h1>我的訂單</h1>
 
     <div class="container">
-        <div class="order-list">
-            <h2>我的訂單</h2>
-            <div class="order-item">
-                <div class="order-details">
-                    <img src="hotel1.jpg" alt="Hotel Image">
-                </div>
-                <div class="order-info">
-                    <div class="order-meta">
-                        <span>訂單編號: 30636543551</span>
-                        <span>預訂日期: 2024年2月27日</span>
-                        <span class="confirmed">已確認</span>
-                        <span>22天內</span>
-                    </div>
-                    <h3>大邱東城路東橫旅館</h3>
-                    <p>雙床房 - YUYU HAN</p>
-                    <p>私人的停車位, 餐廳, 行李寄存</p>
-                    <p>2024年7月6日 - 7月7日</p>
-                </div>
-                <div class="order-actions">
-                    <p>TWD 2,688</p>
-                    <button>再次預訂</button>
-                </div>
-            </div>
-            <div class="order-item">
-                <div class="order-details">
-                    <img src="hotel2.jpg" alt="Hotel Image">
-                </div>
-                <div class="order-info">
-                    <div class="order-meta">
-                        <span>訂單編號: 30619410360</span>
-                        <span>預訂日期: 2024年2月27日</span>
-                        <span class="confirmed">已確認</span>
-                        <span>21天內</span>
-                    </div>
-                    <h3>釜山站布朗點商務飯店</h3>
-                    <p>水療豪華雙人房 - YUYU HAN</p>
-                    <p>私人的停車位, 餐廳, 早餐服務</p>
-                    <p>2024年7月5日 - 7月6日</p>
-                </div>
-                <div class="order-actions">
-                    <p>TWD 1,865</p>
-                    <button>再次預訂</button>
-                </div>
-            </div>
+        <div class="order-list" id="orderList">
+            <!-- Orders will be dynamically added here -->
         </div>
     </div>
 
+    <script>
+        // Fetch data from API
+        fetch('https://localhost:7103/api/Orders/ByMemberAndStatus/2/1')
+            .then(response => response.json())
+            .then(data => {
+                const orderList = document.getElementById('orderList');
+
+                if (data.$values.length > 0) {
+                    data.$values.forEach(order => {
+                        const orderItem = document.createElement('div');
+                        orderItem.classList.add('order-item');
+
+                        // Accessing order details
+                        const orderDetails = order.orderDetails.$values;
+
+                        // Constructing the order item HTML
+                        orderItem.innerHTML = `
+                                    <div class="order-details">
+                                        <img src="hotel1.jpg" alt="Hotel Image">
+                                    </div>
+                                    <div class="order-info">
+                                        <div class="order-meta">
+                                            <span>訂單編號: ${order.orderId}</span>
+                                            <span>預訂日期: ${order.createdAt}</span>
+                                            <span class="confirmed">已確認</span>
+                                            <span>${calculateDaysRemaining(orderDetails[0].checkInDate)}天內</span>
+                                        </div>
+                                        <h3>${orderDetails[0].hotelName}</h3>
+                                        <p>${formatDates(orderDetails)}</p>
+                                    </div>
+                                    <div class="order-actions">
+                                        <p>TWD ${order.totalPrice}</p>
+                                        <button>再次預訂</button>
+                                    </div>
+                                `;
+                        orderList.appendChild(orderItem);
+                    });
+                } else {
+                    orderList.innerHTML = `<p>暫無訂單數據可顯示。</p>`;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                orderList.innerHTML = `<p>加載訂單數據時出現錯誤。</p>`;
+            });
+
+        function calculateDaysRemaining(checkInDate) {
+            const today = new Date();
+            const checkIn = new Date(checkInDate);
+            const timeDiff = checkIn.getTime() - today.getTime();
+            const daysRemaining = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+            return daysRemaining;
+        }
+
+        function formatDates(orderDetails) {
+            return orderDetails.map(detail => `${detail.checkInDate} - ${detail.checkOutDate}`).join('<br>');
+        }
+    </script>
+
 </body>
 </html>
-
