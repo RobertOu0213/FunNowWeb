@@ -24,13 +24,13 @@ namespace PrjFunNowWeb.Controllers
         //[Authorize]
         public IActionResult cartItems()
         {
-            //登入controller 判斷
+            //登入判斷
             var user = HttpContext.Session.GetString("MemberInfo");
-            //if (string.IsNullOrEmpty(user))
-            //{
+            if (string.IsNullOrEmpty(user))
+            {
 
-            //    return RedirectToAction("Login", "Member");
-            //}
+                return RedirectToAction("Login", "Member");
+            }
 
             var userId = JsonSerializer.Deserialize<MemberInfo>(user).MemberId;
 
