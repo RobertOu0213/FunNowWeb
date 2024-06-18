@@ -140,7 +140,7 @@
                 selectedTab.classList.add('active');
             }
 
-            function formatOrderData(data) {
+            function formatOrderData(data, activeTab) {
                 let htmlContent = '';
                 if (data.orders && data.orders.length > 0) {
                     data.orders.forEach(order => {
@@ -167,33 +167,40 @@
                         const currentDate = new Date();
                         const stayCompleted = checkOutDate && new Date(checkOutDate) < currentDate;
 
-                        const buttonText = stayCompleted ? '再預訂' : '需要取消';
-                        const buttonClass = stayCompleted ? 'rebook-button' : 'cancel-button';
+                        let buttonText;
+                        let buttonClass;
+                        if (activeTab === 'completedTab' || activeTab === 'cancelledTab') {
+                            buttonText = '再次訂購';
+                            buttonClass = 'rebook-button';
+                        } else {
+                            buttonText = '需要取消';
+                            buttonClass = 'cancel-button';
+                        }
 
                         htmlContent += `
-                                <div class="order-card">
-                                    <div class="order-card-header">
-                                        <a href="#" class="order-number">訂單編號: ${order.orderId}</a>
-                                        <div class="order-date">預訂日期: ${new Date(order.createdAt).toLocaleDateString()}</div>
-                                    </div>
-                                    <div class="order-card-body">
-                                        <div class="hotel-image">
-                                            <img src="${hotelImage}" alt="Hotel Image">
-                                        </div>
-                                        <div class="order-info">
-                                            <h3>${hotelName}</h3>
-                                            <p class="date-range">${checkInDate} - ${checkOutDate}</p>
-                                            <p class="guest-info">${guestLastName} ${guestFirstName}</p>
-                                            <p class="guest-info">${guestEmail}</p>
-                                        </div>
-                                        <div class="price">NT$${order.totalPrice}</div>
-                                    </div>
-                                    <div class="order-card-footer">
-                                        <div class="order-status">已確認</div>
-                                        <div class="${buttonClass}"><a href="#">${buttonText}</a></div>
-                                    </div>
+                        <div class="order-card" data-order-id="${order.orderId}">
+                            <div class="order-card-header">
+                                        <a href="/OrderManagement/OrderdETAIL?orderId=${order.orderId}" class="order-number" data-order-id="${order.orderId}">訂單編號: ${order.orderId}</a>
+                                <div class="order-date">預訂日期: ${new Date(order.createdAt).toLocaleDateString()}</div>
+                            </div>
+                            <div class="order-card-body">
+                                <div class="hotel-image">
+                                    <img src="${hotelImage}" alt="Hotel Image">
                                 </div>
-                            `;
+                                <div class="order-info">
+                                    <h3>${hotelName}</h3>
+                                    <p class="date-range">${checkInDate} - ${checkOutDate}</p>
+                                    <p class="guest-info">${guestLastName} ${guestFirstName}</p>
+                                    <p class="guest-info">${guestEmail}</p>
+                                </div>
+                                <div class="price">NT$${order.totalPrice}</div>
+                            </div>
+                            <div class="order-card-footer">
+                                <div class="order-status">已確認</div>
+                                <div class="${buttonClass}"><a href="#">${buttonText}</a></div>
+                            </div>
+                        </div>
+                    `;
                     });
                 } else {
                     htmlContent = '<p>暫無訂單數據可顯示。</p>';
@@ -201,7 +208,13 @@
                 return htmlContent;
             }
 
+
             function createPagination(totalOrders, pageSize, currentPage) {
+                if (totalOrders <= pageSize) {
+                    pagination.innerHTML = '';
+                    return;
+                }
+
                 let totalPages = Math.ceil(totalOrders / pageSize);
                 let paginationHTML = '';
 
@@ -212,7 +225,7 @@
                 pagination.innerHTML = paginationHTML;
             }
 
-            function loadTabContent(url) {
+            function loadTabContent(url, activeTab) {
                 fetch(url)
                     .then(response => {
                         if (!response.ok) {
@@ -221,22 +234,36 @@
                         return response.json();
                     })
                     .then(data => {
-                        tabContent.innerHTML = formatOrderData(data);
-                        createPagination(data.totalOrders, pageSize, currentPage);
+                        tabContent.innerHTML = formatOrderData(data, activeTab);
+                        if (data.orders && data.orders.length > 0) {
+                            createPagination(data.totalOrders, pageSize, currentPage);
+                        } else {
+                            pagination.innerHTML = ''; // 清除分頁
+                        }
+
+                        // Add event listeners for order cards and order numbers
+                        document.querySelectorAll('.order-card, .order-number').forEach(element => {
+                            element.addEventListener('click', (event) => {
+                                const orderId = event.currentTarget.getAttribute('data-order-id');
+                                window.location.href = `/orderdetails.html?orderId=${orderId}`;
+                            });
+                        });
                     })
                     .catch(error => {
                         console.error('資料載入失敗:', error);
                         tabContent.innerHTML = `
-                                <h3>目前沒有任何即將到來的預訂</h3>
-                                <p>開始計劃下一次的旅行吧！</p>
-                                <div class="buttons">
-                                    <a href="#">找住宿？</a>
-                                    <a href="#">找機票</a>
-                                    <a href="#">找活動體驗</a>
-                                </div>
-                            `;
+                        <h3>目前沒有任何即將到來的預訂</h3>
+                        <p>開始計劃下一次的旅行吧！</p>
+                        <div class="buttons">
+                            <a href="#">找住宿？</a>
+                            <a href="#">找機票</a>
+                            <a href="#">找活動體驗</a>
+                        </div>
+                    `;
+                        pagination.innerHTML = ''; // 清除分頁
                     });
             }
+
 
             function onPageClick(event) {
                 const target = event.target;
@@ -253,32 +280,32 @@
                         url = `https://localhost:7103/api/Orders/ByMemberAndStatus/1/3/${currentPage}/${pageSize}`;
                     }
 
-                    loadTabContent(url);
+                    loadTabContent(url, activeTab);
                 }
             }
 
             ongoingTab.addEventListener('click', () => {
                 setActiveTab(ongoingTab);
                 currentPage = 1;
-                loadTabContent(`https://localhost:7103/api/Orders/ByMemberAndStatus/1/1/${currentPage}/${pageSize}`);
+                loadTabContent(`https://localhost:7103/api/Orders/ByMemberAndStatus/1/1/${currentPage}/${pageSize}`, 'ongoingTab');
             });
 
             completedTab.addEventListener('click', () => {
                 setActiveTab(completedTab);
                 currentPage = 1;
-                loadTabContent(`https://localhost:7103/api/Orders/ByMemberAndStatus/1/2/${currentPage}/${pageSize}`);
+                loadTabContent(`https://localhost:7103/api/Orders/ByMemberAndStatus/1/2/${currentPage}/${pageSize}`, 'completedTab');
             });
 
             cancelledTab.addEventListener('click', () => {
                 setActiveTab(cancelledTab);
                 currentPage = 1;
-                loadTabContent(`https://localhost:7103/api/Orders/ByMemberAndStatus/1/3/${currentPage}/${pageSize}`);
+                loadTabContent(`https://localhost:7103/api/Orders/ByMemberAndStatus/1/3/${currentPage}/${pageSize}`, 'cancelledTab');
             });
 
             pagination.addEventListener('click', onPageClick);
 
             setActiveTab(ongoingTab);
-            loadTabContent(`https://localhost:7103/api/Orders/ByMemberAndStatus/1/1/${currentPage}/${pageSize}`);
+            loadTabContent(`https://localhost:7103/api/Orders/ByMemberAndStatus/1/1/${currentPage}/${pageSize}`, 'ongoingTab');
         });
     </script>
 
