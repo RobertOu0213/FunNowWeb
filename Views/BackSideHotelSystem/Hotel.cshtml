@@ -218,8 +218,8 @@
             hotelList.forEach(item => {
                 let status = item.hotelIsActive ? "已上架" : "待審核";
                 let actionButton = item.hotelIsActive
-                    ? '<td><button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="loadRooms(' + item.hotelID + ')">下架飯店</button></td>'
-                    : '<td><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="loadRooms(' + item.hotelID + ')">上架飯店</button></td>';
+                    ? `<td><button class="btn btn-danger" onclick="toggleHotelStatus(${item.hotelID})">下架飯店</button></td>`
+                    : `<td><button class="btn btn-primary" onclick="toggleHotelStatus(${item.hotelID})">上架飯店</button></td>`;
 
                 tableStr += `
                             <tr data-hotel-id="${item.hotelID}">
@@ -237,6 +237,26 @@
 
             document.getElementById('hotelContainer').innerHTML = tableStr;
         }
+
+        // 切换飯店的isActive狀態
+        function toggleHotelStatus(hotelID) {
+            fetch(`https://localhost:7103/api/BackSideHotel/${hotelID}/toggleActive`, {
+                method: 'PUT'
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    // 更新當前飯店的狀態
+                    const hotel = allHotels.find(h => h.hotelID === hotelID);
+                    hotel.hotelIsActive = !hotel.hotelIsActive;
+                    updateHotelDisplay(allHotels);
+                })
+                .catch(error => {
+                    console.error('Error toggling hotel status:', error);
+                });
+        }
+
 
         // 獲取並顯示房間資訊
         function loadRooms(hotelID) {
