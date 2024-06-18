@@ -4,11 +4,12 @@
     Layout = "_Layout";
 }
 @section Styles{
+
+    @* //房間數及大人小孩下拉選單 *@
     <style>
-        /* //房間數及大人小孩下拉選單 */
         .dropdown {
-            position: relative;
-            display: inline-block;
+            position: relative; /* 設定相對定位，方便子元素絕對定位 */
+            display: inline-block; /* 內聯塊狀顯示 */
         }
 
         .dropdown-toggle1 {
@@ -16,8 +17,8 @@
             padding: 10px;
             border: 2px solid #4285F4;
             border-radius: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 陰影效果 */
+            cursor: pointer; /* 游標指標變成手形 */
             font-size: 16px;
             text-align: center;
             background-color: white;
@@ -40,14 +41,14 @@
         }
 
             .dropdown-menu.active {
-                display: block;
+                display: block; /* 當active時顯示 */
             }
 
         .dropdown-item {
             padding: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            display: flex; /* 彈性布局 */
+            justify-content: space-between; /* 子元素兩端對齊 */
+            align-items: center; /* 子元素垂直置中 */
         }
 
             .dropdown-item label {
@@ -66,7 +67,7 @@
                     font-size: 18px;
                     padding: 5px;
                     cursor: pointer;
-                    outline: none;
+                    outline: none; /* 無外框 */
                 }
 
                 .dropdown-item .quantity-control span {
@@ -94,7 +95,7 @@
         }
 
         #search-input {
-            flex: 1;
+            flex: 1; /* 佔滿剩餘空間 */
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -102,11 +103,11 @@
 
         .search-icon {
             position: absolute;
-            top: 50%;
-            left: 10px;
-            transform: translateY(-50%);
-            font-size: 18px;
-            color: #999;
+            top: 40%;
+            left: -28px;
+            transform: translateY(-50%); /* 垂直居中 */
+            font-size: 25px;
+            color: #E0E0E0;
         }
 
         /* 當焦點在搜尋框時的圖示樣式 */
@@ -123,10 +124,10 @@
             border: none;
             border-radius: 20px; /* 圆角 */
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 阴影效果 */
-            text-align: center;
+            text-align: center; /* 文字置中 */
             text-decoration: none;
             cursor: pointer;
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease; /* 過渡效果 */
             margin-top: 40px;
             margin-bottom: -38px ;
             text-decoration: none; /* 移除底線 */
@@ -139,6 +140,7 @@
             }
 
     </style>
+    @* //下拉選單內容 *@
     <style>
         .input-container {
             width: 100%;
@@ -152,7 +154,7 @@
             background-color: white;
             background-image: url('images/search_icon.png');
             background-repeat: no-repeat; /* 背景圖片不重複 */
-            background-position: 10px center;
+            background-position: 10px center; /* 背景圖片位置：距離左邊10px，垂直居中 */
             background-size: 20px 20px;
         }
 
@@ -178,20 +180,159 @@
 
 
     </style>
+    @* //日期選單內容 *@
+    <style>
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        input[type="date"] {
+            width: 85%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-size: 16px;
+            font-family: Arial, sans-serif; /* 字體為Arial */
+            transition: border-color 0.3s, box-shadow 0.3s; /* 邊框顏色和陰影效果的過渡效果 */
+        }
+
+            input[type="text"]::placeholder, input[type="date"]::placeholder {
+                color: #aaa; /* 佔位符顏色灰色 */
+            }
+
+            input[type="text"]:focus, input[type="date"]:focus {
+                border-color: #66afe9; /* 聚焦時的邊框顏色 */
+                box-shadow: 0 0 8px rgba(102, 175, 233, 0.6); /* 聚焦時的陰影效果 */
+                outline: none;
+            }
+    </style>
+    @* autocomplete方法CSS *@
+    <style>
+        #autocomplete-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            z-index: 1000; /* 層級1000，確保在其他元素之上 */
+            background-color: white; /* 背景顏色為白色 */
+            border-radius: 5px; /* 圓角5px */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* 陰影效果 */
+        }
+    </style>
+    @* AI圖片搜尋CSS *@
+    <style>
+        .upload_image_item {
+            display: flex;
+            align-items: center; /* 子元素垂直置中對齊 */
+        }
+
+            .upload_image_item label {
+                margin-right: 5px;
+                margin-bottom:0px;
+            }
+
+        #imageLabel {
+            margin-left: 10px;
+            vertical-align: middle; /* 垂直對齊中間 */
+            white-space: nowrap; /* 禁止換行 */
+            overflow: hidden; /* 溢出隱藏 */
+            text-overflow: ellipsis; /* 文字溢出時顯示省略號 */
+            max-width: 300px; /* 你可以根据需要调整这个宽度 */
+            display: inline-block;
+        }
+
+        #landmarkName {
+            margin-top: 10px;
+            color: green;
+        }
+
+        .hidden-input {
+            display: none;
+        }
+    </style>
 }
 
 @section Scripts{   
-        @* JavaScript 外部庫的引用，用於提供日期選擇器功能 *@
+    @* JavaScript 外部庫的引用，用於提供日期選擇器功能 *@
     <script src="https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.min.js"></script>
 
-    @* //兩個搜尋方法 *@
+    @* autocomplete方法 *@
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('search-input');
+            const autocompleteList = document.getElementById('autocomplete-list');
+
+            searchInput.addEventListener('input', async function () {
+                // 當輸入框的內容改變時執行此函數
+                const query = searchInput.value.trim();// 獲取並修剪輸入的值
+                if (query.length > 0) {
+                    const suggestions = await fetchSuggestions(query);
+                    displaySuggestions(suggestions);
+                } else {
+                    clearSuggestions();
+                }
+            });
+
+            function clearSuggestions() {
+                autocompleteList.innerHTML = '';
+            }
+
+            async function fetchSuggestions(query) {
+                try {
+                    const response = await fetch(`https://localhost:7103/api/HotelSearch/suggestions?keyword=${encodeURIComponent(query)}`);
+                    if (response.ok) {
+                        return await response.json();
+                    } else {
+                        console.error('Failed to fetch suggestions:', response.status, response.statusText);
+                        return [];
+                    }
+                } catch (error) {
+                    console.error('Error fetching suggestions:', error);
+                    return [];
+                }
+            }
+
+            function displaySuggestions(suggestions) {// 顯示建議
+                clearSuggestions();// 清空現有建議
+                suggestions.forEach(suggestion => {
+                    const item = document.createElement('button');
+                    item.type = 'button';
+                    item.classList.add('list-group-item', 'list-group-item-action');
+                    item.textContent = `${suggestion.hotelName}, ${suggestion.cityName}`;// 設置按鈕文本
+                    item.addEventListener('click', () => {
+                        searchInput.value = suggestion.hotelName;// 將輸入框的值設置為所選建議hotelName
+                        clearSuggestions();
+                    });
+                    autocompleteList.appendChild(item);
+                });
+            }
+
+            document.addEventListener('click', function (event) {
+                // 當點擊事件發生時執行此函數
+                if (!searchInput.contains(event.target) && !autocompleteList.contains(event.target)) {
+                 // 如果點擊的目標不在輸入框和自動完成列表內
+                    clearSuggestions();
+                }
+            });
+        });
+
+    </script>
+
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+    @* //三個搜尋方法 *@
     <script>
         //當 DOM 內容加載完成時執行
         window.addEventListener('DOMContentLoaded', () => {
             // 單獨的按鈕按下事件監聽器,用於 btnSubmit 按鈕
             const btnSubmit = document.querySelector('#buttonSubmit');
             btnSubmit.addEventListener('click', async (event) => {
-                // 檢查是哪個按鈕被點擊
+                // 檢查是哪個按鈕被點擊 方法1 or 方法2
                 // 方法1 的按鈕按下事件
                 const inputkeyword = document.querySelector('#search-input').value;
                 const inputDatestart = document.querySelector('#myDatepickerstart').value;
@@ -246,9 +387,36 @@
                 }
             };
             waitForElements();
-        });
-    </script> 
 
+            // 按下圖片後執行
+            const today = new Date().toISOString().split('T')[0];
+            // 獲取今天的日期，格式為 YYYY-MM-DD
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const tomorrowFormatted = tomorrow.toISOString().split('T')[0];
+
+            document.querySelectorAll('.city-image').forEach(image => {
+                image.addEventListener('click', (event) => {
+                    const city = event.target.getAttribute('data-city');
+                    const searchHotel = {
+                        "keyword": city,
+                        "checkInDate": today,
+                        "checkOutDate": tomorrowFormatted,
+                        "roomnum": 1,
+                        "adults": 2,
+                        "children": 0
+                    };
+                    console.log(searchHotel);
+                    sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel));
+
+                    // 跳轉到指定的 URL
+                    window.location.href = 'https://localhost:7284/home/index2';
+                });
+            });
+        });
+    </script>
+
+    @* //設定大搜尋欄日期選擇的方法 *@
     <script>
         //設定大搜尋欄的方法
         const cn1 = {
@@ -268,6 +436,14 @@
         const today = new Date();
         today.setHours(0, 0, 0, 0); // 設定時間為當天的0點0分0秒，避免時間因素影響
 
+        // 取得明天的日期
+        const tomorrow = new Date();
+        tomorrow.setDate(today.getDate() + 1);
+        tomorrow.setHours(0, 0, 0, 0);
+
+        const formatDate = (date) => {
+            return date.toISOString().split('T')[0];
+        }
 
         const datepicker = new AirDatepicker('#myDatepicker', {
             locale: cn1,
@@ -285,10 +461,23 @@
                 }
             }
         });
+
+        // 頁面加載完成後設置預設日期
+        document.addEventListener('DOMContentLoaded', function () {
+            const startDateInput = document.getElementById('myDatepickerstart');
+            const endDateInput = document.getElementById('myDatepickerend');
+            if (!startDateInput.value) {
+                startDateInput.value = formatDate(today);// 如果起始日期輸入框為空，設置為今天
+            }
+            if (!endDateInput.value) {
+                endDateInput.value = formatDate(tomorrow);
+            }
+        });
     </script>
 
+    @* //可折疊的下拉選單 *@
     <script>
-        //可折疊的下拉選單
+        // 可折疊的下拉選單
         function toggleDropdown() {
             var dropdownMenu = document.getElementById("dropdownMenu");
             // 檢查當前的顯示狀態
@@ -302,6 +491,7 @@
                 dropdownMenu.style.display = "none";
                 // 移除點擊事件監聽器
                 document.removeEventListener('click', handleOutsideClick);
+                resetDropdownValuesIfUnchanged();
             }
         }
 
@@ -312,9 +502,10 @@
             var newValue = currentValue + value; // 計算新數量
             if (newValue >= 0) { // 確保數量不小於0
                 element.textContent = newValue; // 更新數量
+                element.setAttribute('data-changed', 'true'); // 標記為已更改
             }
             updateDropdownText(); // 更新下拉選單文本
-        } 
+        }
 
         // 更新下拉選單的文本
         function updateDropdownText() {
@@ -327,15 +518,199 @@
 
         // 處理外部點擊
         function handleOutsideClick(event) {
-            var dropdownContainer = document.querySelector('.dropdown-container');
             var dropdownMenu = document.getElementById('dropdownMenu');
-            // 檢查點擊是否發生在下拉選單之外
-            if (dropdownContainer && !dropdownContainer.contains(event.target)) {
+            var dropdownToggle = document.querySelector(".dropdown-toggle1");
+            // 檢查點擊是否發生在下拉選單或觸發按鈕之外
+            if (!dropdownToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
                 dropdownMenu.style.display = 'none'; // 隱藏下拉選單
                 document.removeEventListener('click', handleOutsideClick); // 移除點擊事件監聽器
+                resetDropdownValuesIfUnchanged();
             }
         }
 
+        // 重置下拉選單的數值為預設值
+        function resetDropdownValuesIfUnchanged() {
+            var rooms = document.getElementById("rooms");
+            var adults = document.getElementById("adults");
+            var children = document.getElementById("children");
+
+            // 檢查是否有更改標記，沒有則重置為預設值
+            if (!rooms.hasAttribute('data-changed')) {
+                rooms.textContent = "1";
+            }
+            if (!adults.hasAttribute('data-changed')) {
+                adults.textContent = "2";
+            }
+            if (!children.hasAttribute('data-changed')) {
+                children.textContent = "0";
+            }
+
+            // 更新顯示的文本
+            updateDropdownText();
+        }
+
+        // 添加全局點擊事件監聽器
+        document.addEventListener('click', function (event) {
+            var dropdownMenu = document.getElementById("dropdownMenu");
+            var dropdownToggle = document.querySelector(".dropdown-toggle1");
+
+            // 如果點擊發生在下拉選單和觸發按鈕之外
+            if (!dropdownToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                dropdownMenu.style.display = 'none';
+                document.removeEventListener('click', handleOutsideClick); // 移除點擊事件監聽器
+                resetDropdownValuesIfUnchanged();
+            }
+        });
+    </script>
+
+    <!-- 放置JavaScript代碼來處理AI圖片上傳 -->
+    <script>
+        const apiKey = 'AIzaSyAyKcSGzZi4LQsJEvbJOw3Kh8q_9uhtRvw';
+
+        async function handleImageUpload(event) {
+            const file = event.target.files[0]; //獲取上傳的第一個文件
+            const imageLabel = document.getElementById('imageLabel');
+            const landmarkName = document.getElementById('landmarkName');
+            const searchInput = document.getElementById('search-input');
+
+            if (file) {
+                console.log('已選擇文件:', file.name);
+                imageLabel.textContent = `照片: ${file.name}`; // 在界面上顯示選擇的文件名稱
+
+                const reader = new FileReader();// 創建文件讀取器
+                reader.onloadend = async function () {
+                    const base64String = reader.result.replace('data:', '').replace(/^.+,/, '');// 獲取文件的 base64 字符串
+
+                    const response = await fetch(`https://vision.googleapis.com/v1/images:annotate?key=${apiKey}`, {
+                        //向 Google Vision API 發送請求
+                        method: 'POST',
+                        body: JSON.stringify({
+                            requests: [
+                                {
+                                    image: {
+                                        content: base64String
+                                    },
+                                    features: [
+                                        {
+                                            type: 'LANDMARK_DETECTION',
+                                            maxResults: 1//指定返回的結果數量最多為 1 個
+                                        }
+                                    ]
+                                }
+                            ]
+                        }),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    const result = await response.json();//獲取 Vision API 的回應
+                    console.log('Vision API 回應: ', result);
+
+                    if (result.responses && result.responses[0].landmarkAnnotations) {
+                        //如果 API 回應包含地標註釋，則執行以下代碼
+                        const landmark = result.responses[0].landmarkAnnotations[0];
+                        let landmarkInfo = `地標: ${landmark.description}`; //設置地標描述信息
+
+                        if (landmark.locations && landmark.locations.length > 0) {
+                            const latitude = landmark.locations[0].latLng.latitude;//緯度
+                            const longitude = landmark.locations[0].latLng.longitude;//經度
+
+                            try {
+                                const location = await getCityAndCountry(latitude, longitude);//獲取地標的城市和國家信息
+                                const translatedCity = await translateText(location.city, 'zh-TW');//翻譯成繁體中文
+                                const translatedCountry = await translateText(location.country, 'zh-TW');
+                                const translatedLandmark = await translateText(landmark.description, 'zh-TW');
+
+                                landmarkInfo = `地標: ${translatedLandmark}`;
+                                landmarkInfo += translatedCity ? `，縣市: ${translatedCity}` : '，無法獲取縣市信息';
+                                landmarkInfo += translatedCountry ? `，國家: ${translatedCountry}` : '，無法獲取國家信息';
+
+                                // 將縣市名稱設置到 search-input
+                                searchInput.value = translatedCity;
+                            } catch (error) {
+                                landmarkInfo += `，錯誤信息: ${error.message}`;
+                            }
+                        } else {
+                            landmarkInfo += '，無法獲取地理位置信息';
+                        }
+
+                        landmarkName.innerHTML = landmarkInfo;
+                    } else {
+                        landmarkName.textContent = '無法識別地標';
+                    }
+                };
+                reader.readAsDataURL(file);
+            } else {
+                imageLabel.textContent = '尚未選擇照片';
+                landmarkName.textContent = '';
+            }
+        }
+
+        async function getCityAndCountry(latitude, longitude) {
+            console.log(`獲取地址信息，經度: ${longitude}，緯度: ${latitude}`);
+            try {//向 Google Geocoding API 發送請求
+                const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`);
+                const result = await response.json();
+                console.log('Geocoding API 回應: ', result);
+
+                if (result.results && result.results.length > 0) {
+                    const addressComponents = result.results[0].address_components;
+                    let city = '';
+                    let country = '';
+
+                    for (const component of addressComponents) {
+                        if (component.types.includes('administrative_area_level_1') || component.types.includes('administrative_area_level_2') || component.types.includes('locality')) {
+                            city = component.long_name;
+                        } else if (component.types.includes('country')) {
+                            country = component.long_name;
+                        }
+                    }
+
+                    if (!city && !country) {
+                        throw new Error('無法獲取縣市和國家信息');
+                    }
+
+                    return {
+                        city: city || '未知縣市',
+                        country: country || '未知國家'
+                    };
+                } else {
+                    throw new Error('無法獲取地址信息');
+                }
+            } catch (error) {
+                console.error(`錯誤: ${error.message}`);
+                throw new Error('無法通過Google Maps Geocoding API獲取地址信息');
+            }
+        }
+
+        async function translateText(text, targetLang) {
+            console.log(`翻譯文本: ${text} 到語言: ${targetLang}`);
+            try {//用 fetch 發送 HTTP 請求到 Google Cloud Translation API
+                const response = await fetch(`https://translation.googleapis.com/language/translate/v2?key=${apiKey}`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        q: text,
+                        target: targetLang,
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const result = await response.json();
+                console.log('Translation API 回應: ', result);
+
+                if (result.data && result.data.translations && result.data.translations.length > 0) {
+                    return result.data.translations[0].translatedText;
+                } else {
+                    throw new Error('翻譯失敗');
+                }
+            } catch (error) {
+                console.error(`錯誤: ${error.message}`);
+                throw new Error('無法通過Google Cloud Translation API進行翻譯');
+            }
+        }
     </script>
 
 
@@ -343,6 +718,7 @@
 
 <!--================Header Area ===================-->
 <!--================搜尋訂房欄(固定式) Area =================-->
+<!-- 橫幅區域 -->
 <section class="banner_area">
     <div class="booking_table d_flex align-items-center">
         <div class="overlay bg-parallax" data-stellar-ratio="0.9" data-stellar-vertical-offset="0" data-background=""></div>
@@ -371,74 +747,86 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="search-container">
-                                    <input type="text" id="search-input" class="input-container" placeholder="今天想去哪裡旅行">
+                                    <i class="fas fa-search search-icon"></i>
+                                    <input type="text" id="search-input" class="form-control" placeholder="今天想去哪裡旅行" autocomplete="off">
+                                    <div id="autocomplete-list" class="list-group"></div>
                                 </div>
                             </div>
-                         <div class="row">
-                            <div class="col-md-6">
-                                <div class="book_tabel_item" style="margin-left:30px">
-                                    <div class="form-group">
-                                        <div class='input-group '>
-                                            <!-- Air datepicker Html element -->
-                                            <input type="text" id="myDatepicker" placeholder="選擇日期範圍">
-                                            <!-- Air datepicker JavaScript-->
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class='input-group ' >
-                                            <!-- Air datepicker Html element -->
-                                            <input id="myDatepickerstart" placeholder="訂房日期">
-                                            <!-- Air datepicker JavaScript-->
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class='input-group ' >
-                                            <!-- Air datepicker Html element -->
-                                            <input id="myDatepickerend" placeholder="退房日期">
-                                            <!-- Air datepicker JavaScript-->
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">                    
-                                 <div class="book_tabel_item">
-                                    <div class="dropdown">
-                                        <div class="dropdown-toggle1" onclick="toggleDropdown()">
-                                            <span>請選擇人數及房數</span>
-                                        </div>
-                                        <div class="dropdown-menu" id="dropdownMenu">
-                                            <div class="dropdown-item">
-                                                <label for="rooms">客房</label>
-                                                <div class="quantity-control">
-                                                    <button onclick="changeQuantity('rooms', -1)">-</button>
-                                                    <span id="rooms">1</span>
-                                                    <button onclick="changeQuantity('rooms', 1)">+</button>
-                                                </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="book_tabel_item" style="margin-left:30px">
+                                        <div class="form-group">
+                                            <div class='input-group '>
+                                                <!-- Air datepicker Html element -->
+                                                <input type="text" id="myDatepicker" placeholder="選擇日期範圍" style="padding:5px">
+                                                <!-- Air datepicker JavaScript-->
                                             </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class='input-group '>
+                                                <!-- Air datepicker Html element -->
+                                                <input id="myDatepickerstart" placeholder="訂房日期">
+                                                <!-- Air datepicker JavaScript-->
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class='input-group '>
+                                                <!-- Air datepicker Html element -->
+                                                <input id="myDatepickerend" placeholder="退房日期">
+                                                <!-- Air datepicker JavaScript-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="book_tabel_item">
+                                        <div class="dropdown">
+                                            <div class="dropdown-toggle1" onclick="toggleDropdown()">
+                                                <span>請選擇人數及房數</span>
+                                            </div>
+                                            <div class="dropdown-menu" id="dropdownMenu">
                                                 <div class="dropdown-item">
-                                                <label for="adults">成人</label>
-                                                <div class="quantity-control">
-                                                    <button onclick="changeQuantity('adults', -1)">-</button>
-                                                    <span id="adults">2</span>
-                                                    <button onclick="changeQuantity('adults', 1)">+</button>
+                                                    <label for="rooms">客房</label>
+                                                    <div class="quantity-control">
+                                                        <button onclick="changeQuantity('rooms', -1)">-</button>
+                                                        <span id="rooms">1</span>
+                                                        <button onclick="changeQuantity('rooms', 1)">+</button>
+                                                    </div>
                                                 </div>
-                                            </div>
                                                 <div class="dropdown-item">
-                                                <label for="children">
-                                                    小童
-                                                    <span class="children-hint">(12歲以下)</span>
-                                                </label>
-                                                <div class="quantity-control">
-                                                    <button onclick="changeQuantity('children', -1)">-</button>
-                                                    <span id="children">0</span>
-                                                    <button onclick="changeQuantity('children', 1)">+</button>
+                                                    <label for="adults">成人</label>
+                                                    <div class="quantity-control">
+                                                        <button onclick="changeQuantity('adults', -1)">-</button>
+                                                        <span id="adults">2</span>
+                                                        <button onclick="changeQuantity('adults', 1)">+</button>
+                                                    </div>
+                                                </div>
+                                                <div class="dropdown-item">
+                                                    <label for="children">
+                                                        孩童
+                                                        <span class="children-hint">(12歲以下)</span>
+                                                    </label>
+                                                    <div class="quantity-control">
+                                                        <button onclick="changeQuantity('children', -1)">-</button>
+                                                        <span id="children">0</span>
+                                                        <button onclick="changeQuantity('children', 1)">+</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        <!-- 新增的上傳圖片按鈕和說明文字 -->
+                                        <!-- 新增的上傳圖片按鈕和說明文字 -->
+                                        <div class="upload_image_item">
+                                            <label for="uploadImage" class="btn btn-primary">上傳景點照片</label>
+                                            <input type="file" id="uploadImage" class="hidden-input" onchange="handleImageUpload(event)">
+                                            <span id="imageLabel">尚未選擇照片</span>
+                                        </div>
+                                        <div id="landmarkName"></div>
+
                                     </div>
+
                                 </div>
                             </div>
-                          </div>
                         </div>
                     </div>
                     <div class="container">
@@ -455,14 +843,10 @@
         </div>
     </div>
 </section>
-
 <!--================搜尋訂房欄(固定式)  Area =================-->
+<br /><br /><br /><br /><br />
 <!--================ 台灣熱門城市 Area  =================-->
 <section class="accomodation_area section_gap">
-
-    <br /><br /><br /><br />
-
-
     <div class="container">
         <div class="section_title text-center">
             <h2 class="title_color">台灣熱門城市</h2>
@@ -472,10 +856,10 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/台北市.jpg" />
+                        <img src="~/image/ming_img/臺北市.jpg" data-city="臺北市" class="city-image" />
                     </div>
                     <a href="#">
-                        <h4 class="sec_h4">台北市</h4>
+                        <h4 class="sec_h4">臺北市</h4>
                     </a>
                     <h5>
                         共有888間
@@ -486,7 +870,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/台中市.jpg" />
+                        <img src="~/image/ming_img/台中市.jpg" data-city="台中市" class="city-image" />
                     </div>
                     <a href="#">
                         <h4 class="sec_h4">台中市</h4>
@@ -500,7 +884,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/高雄市.jpg" />
+                        <img src="~/image/ming_img/高雄市.jpg" data-city="高雄市" class="city-image" />
                     </div>
                     <a href="#">
                         <h4 class="sec_h4">高雄市</h4>
@@ -514,7 +898,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/台南市.jpg" />
+                        <img src="~/image/ming_img/台南市.jpg" data-city="台南市" class="city-image" />
                     </div>
                     <a href="#">
                         <h4 class="sec_h4">台南市</h4>
@@ -531,17 +915,16 @@
 <!--================ 台灣熱門城市 Area  =================-->
 <!--================ 精選特色 Area  =================-->
 <section class="accomodation_area section_gap">
-
     <div class="container">
         <div class="section_title text-center">
             <h2 class="title_color">精選特色區</h2>
-            <p>你想要的我們都懂 </p>
+            <p>你想要的我們都懂</p>
         </div>
         <div class="row mb_30">
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/海濱度假村區.jpg" />
+                        <img src="~/image/ming_img/海濱度假村區.jpg" data-city="海濱度假村區" class="city-image" />
                     </div>
                     <a href="#">
                         <h4 class="sec_h4">海濱度假村區</h4>
@@ -555,7 +938,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/森林小屋區.jpg" />
+                        <img src="~/image/ming_img/森林小屋區.jpg" data-city="森林小屋區" class="city-image" />
                     </div>
                     <a href="#">
                         <h4 class="sec_h4">森林小屋區</h4>
@@ -569,7 +952,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/山間度假村區.jpg" />
+                        <img src="~/image/ming_img/山間度假村區.jpg" data-city="山間度假村區" class="city-image" />
                     </div>
                     <a href="#">
                         <h4 class="sec_h4">山間度假村區</h4>
@@ -583,7 +966,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/城市精品酒店區.jpg" />
+                        <img src="~/image/ming_img/城市精品酒店區.jpg" data-city="城市精品酒店區" class="city-image" />
                     </div>
                     <a href="#">
                         <h4 class="sec_h4">城市精品酒店區</h4>
@@ -595,12 +978,11 @@
                 </div>
             </div>
         </div>
-        <br />
         <div class="row mb_30">
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/農莊民宿區.jpg" />
+                        <img src="~/image/ming_img/農莊民宿區.jpg" data-city="農莊民宿區" class="city-image" />
                     </div>
                     <a href="#">
                         <h4 class="sec_h4">農莊民宿區</h4>
@@ -614,7 +996,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/湖畔度假村區.jpg" />
+                        <img src="~/image/ming_img/湖畔度假村區.jpg" data-city="湖畔度假村區" class="city-image" />
                     </div>
                     <a href="#">
                         <h4 class="sec_h4">湖畔度假村區</h4>
@@ -628,7 +1010,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/沙漠綠洲區.jpg" />
+                        <img src="~/image/ming_img/沙漠綠洲區.jpg" data-city="沙漠綠洲區" class="city-image" />
                     </div>
                     <a href="#">
                         <h4 class="sec_h4">沙漠綠洲區</h4>
@@ -642,7 +1024,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/島嶼度假村區.jpg" />
+                        <img src="~/image/ming_img/島嶼度假村區.jpg" data-city="島嶼度假村區" class="city-image" />
                     </div>
                     <a href="#">
                         <h4 class="sec_h4">島嶼度假村區</h4>
@@ -654,11 +1036,10 @@
                 </div>
             </div>
         </div>
-
-
     </div>
 </section>
 <!--================ 精選特色 Area  =================-->
+
 
 <!--================ About History Area  =================-->
 <section class="about_history_area section_gap">

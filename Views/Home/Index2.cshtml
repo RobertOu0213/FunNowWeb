@@ -21,9 +21,7 @@
                 </div>
 
                 <div>
-                    <a class="book_now_btn button_hover" href="#" style="border-radius: 20px;background: #F0F0F0; text-align:left">
-                        <img src="~/image/ming_img/search.png" alt="">搜尋關鍵字
-                    </a>
+                    <input type="text" id="search-input4" class="form-control" placeholder="搜尋關鍵字" onkeydown="handleKeyDownIndex2(event)">
                 </div>
                 <br />
                 <p style="margin:0px 10px">每晚預算</p>
@@ -45,6 +43,7 @@
                 </div>
                 <!--//價格搜尋拉霸end-->
 
+                <!-- 住宿類型 -->
                 <div style="margin:20px 10px" class="form-check-container-hotel-type">
                     <p>住宿類型</p>
                     @foreach (var hotelType in Model.HotelTypes)
@@ -58,6 +57,7 @@
                     }
                 </div>
 
+                <!-- 住宿設備 -->
                 <div style="margin:20px 10px" class="form-check-container-hotel-equipment">
                     <p>住宿設備</p>
                     @foreach (var hotelEquipment in Model.HotelEquipments)
@@ -71,6 +71,7 @@
                     }
                 </div>
 
+                <!-- 城市 -->
                 <div style="margin:20px 10px" class="form-check-container-city">
                     <p>城市</p>
                     @foreach (var city in Model.Cities)
@@ -84,6 +85,8 @@
                     }
                     <button id="toggleCityButton" class="toggle-button">顯示更多</button>
                 </div>
+
+                <!-- 房間設備 -->
                 <div style="margin:20px 10px" class="form-check-container-room-equipment">
                     <p>房間設備</p>
                     @foreach (var roomEquipment in Model.RoomEquipments)
@@ -96,6 +99,9 @@
                         </div>
                     }
                 </div>
+
+
+
             </div>
 
             <div class="col-lg-9 col-sm-12">
@@ -180,6 +186,16 @@
                 });
             }
 
+            // 綁定搜索輸入框的按鍵事件
+            const searchInput4 = document.querySelector("#search-input4");
+            if (searchInput4) {
+                searchInput4.addEventListener("keydown", async (event) => {
+                    if (event.key === "Enter") {
+                        handleSearchKeywordEnter();
+                    }
+                });
+            }
+
             // 綁定所有複選框的事件監聽器
             const containerSelectors = [
                 '.form-check-container-hotel-type',
@@ -232,8 +248,8 @@
             // 初始化 lowerHandle 和 lowerLabel
             rangeSlider.lowerHandle.style.left = '0%';
             rangeSlider.lowerLabel.textContent = '下限：1';
-            rangeSlider.lowerInput.value = 1;
-
+            rangeSlider.lowerInput.value = 1;        
+                        
             // 綁定滑桿拖動事件
             [rangeSlider.lowerHandle, rangeSlider.upperHandle].forEach(handle => {
                 handle.addEventListener('mousedown', startDrag);
@@ -329,6 +345,31 @@
             await loadHotels(searchHotel);
         }
 
+        // 處理搜索關鍵字的函數，會被觸發
+        async function handleSearchKeywordEnter() {
+            const searchHotel = {
+                keyword: document.querySelector("#search-input4").value, // 獲取搜索關鍵字
+                checkInDate: document.querySelector("#myDatepickerstart3").value, // 獲取入住日期
+                checkOutDate: document.querySelector("#myDatepickerend3").value, // 獲取退房日期
+                roomnum: parseInt(document.querySelector("#rooms3").value), // 獲取房間數量並轉換為整數
+                adults: parseInt(document.querySelector("#adults3").value), // 獲取成人數量並轉換為整數
+                children: 0, // 固定值，設為0
+                sortBy: null, // 排序方式，暫時設為空
+                sortType: null, // 排序類型，暫時設為空
+                lowerPrice: parseInt(document.querySelector("#lowerInput").value), // 獲取最低價格並轉換為整數
+                upperPrice: parseInt(document.querySelector("#upperInput").value), // 獲取最高價格並轉換為整數
+                hotelTypes: getSelectedCheckboxes('.form-check-container-hotel-type'), // 獲取選中的酒店類型
+                hotelEquipments: getSelectedCheckboxes('.form-check-container-hotel-equipment'), // 獲取選中的酒店設備
+                cities: getSelectedCheckboxes('.form-check-container-city'), // 獲取選中的城市
+                roomEquipments: getSelectedCheckboxes('.form-check-container-room-equipment') // 獲取選中的房間設備
+            };
+
+            // 將搜索條件存儲到 sessionStorage 中
+            sessionStorage.setItem("searchHotel", JSON.stringify(searchHotel));
+            // 發送請求並更新顯示結果
+            await loadHotels(searchHotel);
+        }
+
         // 更新飯店列表的函數
         async function updateHotels(lowerPrice, upperPrice) {
             const searchHotelJson = sessionStorage.getItem('searchHotel');
@@ -403,7 +444,7 @@
 
             // 生成並顯示飯店信息
             const hotels = await Promise.all(data.map(async hotel => {
-                const { hotelId, hotelName, hotelAddress, hotelImage, levelStar, hotelEquipmentNames, hotelPrice } = hotel;
+                const { hotelId, hotelName, hotelAddress, hotelImages, levelStar, hotelEquipmentNames, hotelPrice } = hotel;
                 let totalAverageScore;
                 try {
                     totalAverageScore = await getHotelScore(hotelId);
@@ -413,26 +454,28 @@
                 }
 
                 console.log(`Hotel ID: ${hotelId}, Total Average Score: ${totalAverageScore}`); // 添加日志
+                console.log(`Hotel Images: ${hotelImages}`); // 調試輸出圖片 URL
+
+                const mainImage = hotelImages[0] ? `https://localhost:7284/image/${hotelImages[0]}` : '';
+                const smallImages = hotelImages.slice(1, 4).map(img => img ? `https://localhost:7284/image/${img}` : '');
 
                 return `
-                    <div class="col-lg-12 hotel-card" data-hotel-id="${hotelId}">
-                        <div class="row">
-                                   <a href="https://localhost:7284/PgHotel/pgHotel/?hotelId=${hotel.hotelId}&checkInDate=${searchHotelForLouieee.checkInDate}&checkOutDate=${searchHotelForLouieee.checkOutDate}" class="col-lg-12 hotel-link">
-                                          <div class="row">
+                            <div class="col-lg-12 hotel-card" data-hotel-id="${hotelId}">
+                                <div class="row">
+                                    <a href="https://localhost:7284/PgHotel/pgHotel/?hotelId=${hotel.hotelId}&checkInDate=${searchHotelForLouieee.checkInDate}&checkOutDate=${searchHotelForLouieee.checkOutDate}" class="col-lg-12 hotel-link">
+                                        <div class="row">
                                             <div class="col-lg-4 col-sm-8 hotel-image-container" style="padding:0px">
                                                 <table>
                                                     <tr>
                                                         <td colspan="3" style="position: relative;">
-                                                            <img src='https://localhost:7284/image/${hotelImage}' class="img-fluid" style="width:100%" />
+                                                            <img src="${mainImage}" class="img-fluid" style="width:100%" />
                                                             <div class="favorite-icon-container">
                                                                 <i class="fa fa-heart favorite-icon" data-hotel-id="${hotelId}" onclick="toggleFavorite(event, ${hotelId})"></i>
                                                             </div>
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td><img src="/image/ming_img/room1.jpg" class="img-fluid" /></td>
-                                                        <td><img src="/image/ming_img/room3.jpg" class="img-fluid" /></td>
-                                                        <td><img src="/image/ming_img/room4.jpg" class="img-fluid" /></td>
+                                                        ${smallImages.map(img => `<td><img src="${img}" class="img-fluid" /></td>`).join('')}
                                                     </tr>
                                                 </table>
                                             </div>
@@ -459,9 +502,7 @@
                                                 <h6 style="color:gray">每晚價格(不連稅及其他費用)</h6>
                                                 <br><br>
                                                 <h3>NT$${hotelPrice}</h3>
-
                                             </div>
-
                                         </div>
                                     </a>
                                 </div>
@@ -546,8 +587,9 @@
 }
 
 @section Styles {
+    @* 價格搜尋拉霸設定 *@
     <style>
-         /* //價格搜尋拉霸設定 */
+         
         .slider-container {
             display: flex;
             flex-direction: column;
@@ -589,8 +631,8 @@
             }
 
     </style>
-    <style>
-         /* //主搜尋欄的下拉式選單 */
+    @* 主搜尋欄的下拉式選單 *@
+    <style>     
         .navbar {
             display: flex;
             border: 1px solid #ddd;
@@ -628,8 +670,62 @@
         }
 
     </style>
+    @* checkbox設定 *@
     <style>
-        /* checkbox設定 */
+        /* 設定 checkbox 和標籤的樣式 */
+        .form-check-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+            margin-left: -20px; /* 調整這個數值以讓 checkbox 與標題對齊 */
+        }
+
+        /* 隱藏原本的 checkbox */
+        .form-check-input {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            width: 0;
+            height: 0;
+            position: absolute;
+            opacity: 0;
+        }
+
+            /* 自定義的 checkbox 樣式 */
+            .form-check-input + .form-check-label::before {
+                content: '';
+                display: inline-block;
+                width: 16px;
+                height: 16px;
+                border: 1px solid #ccc;
+                border-radius: 2px;
+                margin-right: 10px;
+                vertical-align: middle;
+                background-color: #fff;
+            }
+
+            /* 當 checkbox 被選中時的樣式 */
+            .form-check-input:checked + .form-check-label::before {
+                content: '\2713';
+                display: inline-block;
+                width: 16px;
+                height: 16px;
+                border: 1px solid #007bff;
+                border-radius: 2px;
+                margin-right: 10px;
+                vertical-align: middle;
+                background-color: #007bff;
+                color: #fff;
+                text-align: center;
+                line-height: 16px;
+            }
+
+            .form-check-input:hover + .form-check-label::before {
+                border-color: #007bff;
+            }
+
+        /* 城市選單樣式 */
         .form-check-container-city .city-item {
             display: none;
         }
@@ -642,6 +738,7 @@
             display: block;
         }
 
+        /* 顯示更多按鈕樣式 */
         .toggle-button {
             margin-top: 10px;
             padding: 5px 10px;
@@ -652,9 +749,19 @@
             border-radius: 5px;
         }
 
+        /* 標題樣式 */
+        .form-check-container-hotel-type > p,
+        .form-check-container-hotel-equipment > p,
+        .form-check-container-city > p,
+        .form-check-container-room-equipment > p {
+            font-size: 18px; /* 調整字體大小 */
+            font-weight: bold; /* 調整字體粗細 */
+            margin-bottom: 10px;
+        }
+
     </style>
-    <style>
-        /* 點擊旅館的效果 */
+    @* 點擊旅館的效果 *@
+    <style>        
         .col-lg-4.col-sm-8 {
             height: 280px; /* 設置一個固定的高度，可根據需要調整 */
             padding: 0;
@@ -718,8 +825,9 @@
             width: 100%;
         }
     </style>
+    @* index2跳轉至PGHotel專用 *@
     <style>
-        /* //index2跳轉至PGHotel專用 */
+        
         a.hotel-link {
             text-decoration: none;
             color: inherit;
@@ -740,8 +848,9 @@
             color: inherit;
         }
     </style>
+    @* 廣告區 *@
     <style>
-        /* 廣告區 */
+        
         .ad-container {
             position: fixed;
             right: 50px;  /* //距離頁面右側的位置 */
@@ -759,8 +868,9 @@
                 margin-bottom: 15px;
             }
     </style>
+    @* 我的最愛 *@
     <style>
-        /* //我的最愛 */
+        
         .hotel-card {
             margin-bottom: 10px;
             border: 1px solid #ddd;
@@ -803,8 +913,8 @@
                 margin: 1%;
             }
     </style>
-    <style>
-        /* //評分表 */
+    @* 評分表 *@
+    <style>        
         .rating {
             display: flex;
             align-items: center;
