@@ -31,9 +31,10 @@ namespace PrjFunNowWeb.Controllers
                 return RedirectToAction("Login", "Member");
             }
 
-    
 
-            return View(userID);
+            ViewBag.UserID = userID;
+            return View();
+         
         }
 
         public IActionResult HostHotelInfo(int? id)

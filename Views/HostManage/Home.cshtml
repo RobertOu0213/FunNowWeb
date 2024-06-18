@@ -38,7 +38,7 @@
 
 @section Scripts {
     <script defer>
-        const userId = @Model
+        const userId = "@ViewBag.UserID";
 
         async function fetchAndDisplayHotels(isActive) {
             const res = await fetch(`https://localhost:7103/api/HostManage?userId=${userId}`);

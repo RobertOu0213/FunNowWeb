@@ -119,7 +119,7 @@
 }
 @section Scripts {
     <script>
-        const userId = @Model;
+        const userId = "@ViewBag.UserID";
 
         //需再修改
         $(window).on('load', function () {
@@ -520,7 +520,7 @@
                     });
                     if (res.ok) {
                         const data = await res.json();
-                        console.log(data);
+                  
                         sessionStorage.removeItem('tHotel');
                         sessionStorage.removeItem('tRoom');
                         showModal();

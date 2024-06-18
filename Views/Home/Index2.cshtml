@@ -743,7 +743,8 @@
                         // 為新生成的 closeButton 添加事件監聽器
                         closeButton.addEventListener('click', () => {
                             const imageContainer = closeButton.parentElement;
-                            imageContainer.parentElement.removeChild(imageContainer);
+                            imageContainer.parentElement.removeChild(imageContainer)
+                        });
 
                         // 生成Modal的表格行
                         const row = document.createElement('tr');
@@ -759,7 +760,7 @@
                             <button type="button" class="btn btn-primary">查看飯店</button>
                             <button type="button" class="btn btn-secondary">移除</button>
                         </td>
-                    `;
+                        `;
                         document.querySelector('#myModal .table tbody').appendChild(row);
                     });
                 });
