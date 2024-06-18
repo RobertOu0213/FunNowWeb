@@ -106,6 +106,7 @@
                 </div>
                 <div class="main-content" id="tabContent">
                 </div>
+                <div class="pagination" id="pagination"></div>
                 <div>
                     <br />
                     <br />
@@ -128,6 +129,9 @@
             const completedTab = document.getElementById('completedTab');
             const cancelledTab = document.getElementById('cancelledTab');
             const tabContent = document.getElementById('tabContent');
+            const pagination = document.getElementById('pagination');
+            const pageSize = 5;
+            let currentPage = 1;
 
             function setActiveTab(selectedTab) {
                 document.querySelectorAll('.tab__link').forEach(tab => {
@@ -138,49 +142,58 @@
 
             function formatOrderData(data) {
                 let htmlContent = '';
-                if (data && data.$values && data.$values.length > 0) {
-                    data.$values.forEach(order => {
-                        // 获取第一个订单详情的第一个酒店图像路径
+                if (data.orders && data.orders.length > 0) {
+                    data.orders.forEach(order => {
                         let hotelImage = '';
-                        if (order.orderDetails.$values.length > 0 && order.orderDetails.$values[0].hotelImages.$values.length > 0) {
-                            hotelImage = order.orderDetails.$values[0].hotelImages.$values[0];
+                        let hotelName = '';
+                        let checkInDate = '';
+                        let checkOutDate = '';
+                        let guestLastName = order.guestLastName || '無姓氏';
+                        let guestFirstName = order.guestFirstName || '';
+                        let guestEmail = order.guestEmail || '';
+
+                        if (order.orderDetails && order.orderDetails.length > 0) {
+                            const orderDetail = order.orderDetails[0];
+
+                            hotelName = orderDetail.hotelName || '';
+                            checkInDate = orderDetail.checkInDate ? new Date(orderDetail.checkInDate).toLocaleDateString() : '';
+                            checkOutDate = orderDetail.checkOutDate ? new Date(orderDetail.checkOutDate).toLocaleDateString() : '';
+
+                            if (orderDetail.hotelImages && orderDetail.hotelImages.length > 0) {
+                                hotelImage = orderDetail.hotelImages[0];
+                            }
                         }
 
-                        // Determine if the stay is completed or not
                         const currentDate = new Date();
-                        const checkOutDate = new Date(order.orderDetails.$values[0].checkOutDate);
-                        const isStayCompleted = currentDate > checkOutDate;
+                        const stayCompleted = checkOutDate && new Date(checkOutDate) < currentDate;
 
-                        // Set button text and class based on the stay status
-                        const buttonText = isStayCompleted ? '再預訂' : '需要取消';
-                        const buttonClass = isStayCompleted ? 'rebook-button' : 'cancel-button';
+                        const buttonText = stayCompleted ? '再預訂' : '需要取消';
+                        const buttonClass = stayCompleted ? 'rebook-button' : 'cancel-button';
 
                         htmlContent += `
-                        <div class="order-card">
-                            <div class="order-card-header">
-                                <a href="#" class="order-number">訂單編號: ${order.orderId}</a>
-                                <div class="order-date">預訂日期: ${new Date(order.createdAt).toLocaleDateString()}</div>
-                            </div>
-                            <div class="order-card-body">
-                                <div class="hotel-image">
-                                    <img src="${hotelImage}" alt="Hotel Image">
+                                <div class="order-card">
+                                    <div class="order-card-header">
+                                        <a href="#" class="order-number">訂單編號: ${order.orderId}</a>
+                                        <div class="order-date">預訂日期: ${new Date(order.createdAt).toLocaleDateString()}</div>
+                                    </div>
+                                    <div class="order-card-body">
+                                        <div class="hotel-image">
+                                            <img src="${hotelImage}" alt="Hotel Image">
+                                        </div>
+                                        <div class="order-info">
+                                            <h3>${hotelName}</h3>
+                                            <p class="date-range">${checkInDate} - ${checkOutDate}</p>
+                                            <p class="guest-info">${guestLastName} ${guestFirstName}</p>
+                                            <p class="guest-info">${guestEmail}</p>
+                                        </div>
+                                        <div class="price">NT$${order.totalPrice}</div>
+                                    </div>
+                                    <div class="order-card-footer">
+                                        <div class="order-status">已確認</div>
+                                        <div class="${buttonClass}"><a href="#">${buttonText}</a></div>
+                                    </div>
                                 </div>
-                                <div class="order-info">
-                                    <h3>${order.orderDetails.$values[0].hotelName}</h3>
-                                    <p class="date-range">${new Date(order.orderDetails.$values[0].checkInDate).toLocaleDateString()} - ${new Date(order.orderDetails.$values[0].checkOutDate).toLocaleDateString()}</p>
-                                </div>
-                                <div class="order-info">
-                                    <p class="guest-info">${order.guestLastName} ${order.guestFirstName}</p>
-                                    <p class="guest-info">${order.guestEmail}</p>
-                                </div>
-                                <div class="price">NT$${order.totalPrice}</div>
-                            </div>
-                            <div class="order-card-footer">
-                                <div class="order-status">已確認</div>
-                                <div class="${buttonClass}"><a href="#">${buttonText}</a></div>
-                            </div>
-                        </div>
-                    `;
+                            `;
                     });
                 } else {
                     htmlContent = '<p>暫無訂單數據可顯示。</p>';
@@ -188,56 +201,87 @@
                 return htmlContent;
             }
 
+            function createPagination(totalOrders, pageSize, currentPage) {
+                let totalPages = Math.ceil(totalOrders / pageSize);
+                let paginationHTML = '';
 
+                for (let i = 1; i <= totalPages; i++) {
+                    paginationHTML += `<button class="page-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
+                }
+
+                pagination.innerHTML = paginationHTML;
+            }
 
             function loadTabContent(url) {
                 fetch(url)
                     .then(response => {
-                        if (response.status === 200) {
-                            return response.json();
-                        } else {
-                            throw new Error('Failed to load data, status code: ' + response.status);
+                        if (!response.ok) {
+                            throw new Error(`Failed to load data, status code: ${response.status}`);
                         }
+                        return response.json();
                     })
                     .then(data => {
-                        if (data.$values && data.$values.length > 0) {
-                            tabContent.innerHTML = formatOrderData(data);
-                        } else {
-                            tabContent.innerHTML = '<p>暫無訂單數據可顯示。</p>';
-                        }
+                        tabContent.innerHTML = formatOrderData(data);
+                        createPagination(data.totalOrders, pageSize, currentPage);
                     })
                     .catch(error => {
                         console.error('資料載入失敗:', error);
                         tabContent.innerHTML = `
-                                        <h3>目前沒有任何即將到來的預訂</h3>
-                                        <p>開始計劃下一次的旅行吧！</p>
-                                        <div class="buttons">
-                                            <a href="#">找住宿？</a>
-                                            <a href="#">找機票</a>
-                                            <a href="#">找活動體驗</a>
-                                        </div>
-                                    `;
+                                <h3>目前沒有任何即將到來的預訂</h3>
+                                <p>開始計劃下一次的旅行吧！</p>
+                                <div class="buttons">
+                                    <a href="#">找住宿？</a>
+                                    <a href="#">找機票</a>
+                                    <a href="#">找活動體驗</a>
+                                </div>
+                            `;
                     });
+            }
+
+            function onPageClick(event) {
+                const target = event.target;
+                if (target.classList.contains('page-btn')) {
+                    currentPage = parseInt(target.dataset.page);
+                    const activeTab = document.querySelector('.tab__link.active').id;
+
+                    let url;
+                    if (activeTab === 'ongoingTab') {
+                        url = `https://localhost:7103/api/Orders/ByMemberAndStatus/1/1/${currentPage}/${pageSize}`;
+                    } else if (activeTab === 'completedTab') {
+                        url = `https://localhost:7103/api/Orders/ByMemberAndStatus/1/2/${currentPage}/${pageSize}`;
+                    } else if (activeTab === 'cancelledTab') {
+                        url = `https://localhost:7103/api/Orders/ByMemberAndStatus/1/3/${currentPage}/${pageSize}`;
+                    }
+
+                    loadTabContent(url);
+                }
             }
 
             ongoingTab.addEventListener('click', () => {
                 setActiveTab(ongoingTab);
-                loadTabContent('https://localhost:7103/api/Orders/ByMemberAndStatus/2/1');
+                currentPage = 1;
+                loadTabContent(`https://localhost:7103/api/Orders/ByMemberAndStatus/1/1/${currentPage}/${pageSize}`);
             });
 
             completedTab.addEventListener('click', () => {
                 setActiveTab(completedTab);
-                loadTabContent('https://localhost:7103/api/Orders/ByMemberAndStatus/2/2');
+                currentPage = 1;
+                loadTabContent(`https://localhost:7103/api/Orders/ByMemberAndStatus/1/2/${currentPage}/${pageSize}`);
             });
 
             cancelledTab.addEventListener('click', () => {
                 setActiveTab(cancelledTab);
-                loadTabContent('https://localhost:7103/api/Orders/ByMemberAndStatus/2/3');
+                currentPage = 1;
+                loadTabContent(`https://localhost:7103/api/Orders/ByMemberAndStatus/1/3/${currentPage}/${pageSize}`);
             });
 
+            pagination.addEventListener('click', onPageClick);
+
             setActiveTab(ongoingTab);
-            loadTabContent('https://localhost:7103/api/Orders/ByMemberAndStatus/2/1');
+            loadTabContent(`https://localhost:7103/api/Orders/ByMemberAndStatus/1/1/${currentPage}/${pageSize}`);
         });
     </script>
+
+
 </body>
 </html>
