@@ -102,6 +102,9 @@
     <div>
         <input type="button" class="btn btn-outline-primary display" id="searchBtn" value="搜尋" onclick="searchHotels()">
     </div>
+    <div class="ms-2">
+        <input type="button" class="btn btn-outline-secondary display" id="clearBtn" value="清除" onclick="clearFilters()">
+    </div>
 </div>
 
 <div>
@@ -294,6 +297,13 @@
             document.getElementById('roomContainer').innerHTML = roomTableStr;
         }
 
+        // 清除篩選和搜尋
+        function clearFilters() {
+            document.getElementById('inputGroupSelecthotel').value = "所有飯店類型";
+            document.getElementById('inputGroupSelectstatus').value = "所有審核狀態";
+            document.getElementById('searchBar').value = "";
+            updateHotelDisplay(allHotels);
+        }
         // 初始加載飯店資訊
         fetchHotels();
 
