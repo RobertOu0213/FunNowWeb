@@ -648,12 +648,7 @@
 
 
 <!-- 購物車modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#rightModal">
-    Open Right Side Modal
-</button>
-
-<div class="cartModal">
-</div>
+<div class="cartModal"></div>
 
 @section Styles {
    <style> 
@@ -844,8 +839,7 @@
         }
 
             .cartModal .modal-footer .btn:hover {
-                opacity: 0.7;
-                background-color: green;
+                opacity: 0.7; 
             }
 
         .cartModal .modal-footer .note {
@@ -1160,23 +1154,37 @@
 
             //購物車
             $('.addCart').on('click', async function () {
+                let memberID;
+                //判定是否有登入
+                try {
+                    const getMemberIdUrl = '@Url.Content("~/GetMember/GetMemberId")';
+                    const memberResponse = await fetch(getMemberIdUrl);
+
+                    if (!memberResponse.ok) {
+                        throw new Error('未登入或獲取 MemberID 失敗');
+                    }
+
+                    const memberData = await memberResponse.json();
+                    memberID = memberData.memberID;
+                  
+                } catch (error) {
+                    console.log(error);
+                    alert(`尚未登入~~`);
+                    const loginURL = `${window.location.origin}/Member/Login`;
+                    window.location.href = loginURL;
+                }
+
+
                 const roomID = $(this).data('id');
-                // console.log(roomID);
-
-                //是否有登入
-                // const memberID = getMemberID();
-                // if (!memberID) {
-                //     window.location.href = '/login';
-                //     return;
-                // }
-
+                const searchHotel = JSON.parse(sessionStorage.getItem('searchHotel'));
                 const orderDetail = {
-                    MemberID: 1,
+                    MemberID: memberID,
                     RoomID: roomID,
-                    CheckInDate: "2024-06-15",
-                    CheckOutDate: "2024-06-20",
-
+                    CheckInDate: searchHotel.checkInDate,
+                    CheckOutDate: searchHotel.checkOutDate,
+                    GuestNumber: searchHotel.adults
                 };
+                console.log(orderDetail);
 
                 try {
                     const response = await fetch('https://localhost:7103/api/Cart', {
@@ -1189,16 +1197,16 @@
 
                     if (!response.ok) {
                         throw new Error(response.statusText);
+
                     }
 
                     const data = await response.json();
                     if (data.success) {
-                        // console.log(data);
                         showCartModal(data);
+
                     }
                 } catch (err) {
-                    console.error(err);
-
+                    console.log(err);
                 }
             });
 
@@ -1206,9 +1214,10 @@
 
             //直接購買
             $('.directBuy').on('click', async function () {
-                // const roomID = $(this).data('roomid');
+                const roomID = $(this).data('roomid');
+                const searchHotel = JSON.parse(sessionStorage.getItem('searchHotel'));
 
-                //是否有登入
+                //是否有登入寫在後端
                 // const memberID = getMemberID();
                 // if (!memberID) {
                 //     window.location.href = '/login';
@@ -1217,9 +1226,9 @@
 
                 const orderDetail = {
                     MemberID: 1,
-                    RoomID: 10,   //寫死roomID,
-                    CheckInDate: "2024-06-15",
-                    CheckOutDate: "2024-06-20",
+                    RoomID: roomID,
+                    CheckInDate: searchHotel.checkInDate,
+                    CheckOutDate: searchHotel.checkOutDate
                 };
 
                 try {
@@ -1242,17 +1251,14 @@
                     }
 
                 } catch (err) {
-                    console.error(err);
-
+                    console.log(err);
                 }
             });
 
             //前往購物車
             $(document).on('click', '#ToCartItems', function () {
 
-                var userId = 1;
-                const cartPageUrl = window.location.origin + '/cart/cartItems?userId=' + userId;
-
+                const cartPageUrl = `${window.location.origin}/cart/cartItems`;
                 window.location.href = cartPageUrl;
             });
 
@@ -1276,13 +1282,15 @@
         }
 
         function getImageUrl(imagePath) {
+            if (imagePath == null) {
+                return null;
+            }
             if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
                 return imagePath;
             } else {
                 return window.location.origin + '/image/' + imagePath;
             }
         }
-
         function showCartModal(data) {
 
             const days = getDaysBetweenDates(data.checkInDate, data.checkOutDate);

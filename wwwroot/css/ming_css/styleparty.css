@@ -42,7 +42,7 @@ nav li {
 
     .btn:hover {
         opacity: 0.8;
-        background-color: #f05f5c !important;
+ /*       background-color: #f05f5c;*/
     }
 
 #second {

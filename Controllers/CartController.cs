@@ -3,20 +3,37 @@ using Microsoft.EntityFrameworkCore;
 using PrjFunNowWeb.Models;
 using PrjFunNowWeb.Models.DTO;
 using PrjFunNowWeb.Models.ViewModel;
+using System.Text;
 using System.Text.Json;
+using System.Web;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Authorization;
+using PrjFunNowWebApi.Models;
 namespace PrjFunNowWeb.Controllers
 {
-    public class Cart : Controller
+
+    public class CartController : Controller
     {
         private readonly FunNowContext _context;
-        public Cart(FunNowContext context)
+        public CartController(FunNowContext context)
         {
             _context = context;
         }
 
-        public IActionResult cartItems(int? userId)
+
+        public IActionResult cartItems()
         {
-            if (userId <= 0)
+            //登入判斷
+            var user = HttpContext.Session.GetString("MemberInfo");
+            if (string.IsNullOrEmpty(user))
+            {
+
+                return RedirectToAction("Login", "Member");
+            }
+
+            var userId = JsonSerializer.Deserialize<MemberInfo>(user).MemberId;
+
+            if (userId <= 0 || userId == null)
             {
                 return BadRequest("UserID is required");
             }
@@ -82,8 +99,38 @@ namespace PrjFunNowWeb.Controllers
                     return NotFound("Order details not found");
                 }
 
-                var member = firstOrderDetail.Member;
+                var totalAmount = orderDetails.Sum(od =>Convert.ToInt32((od.Room?.RoomPrice ?? 0) * (od.CheckOutDate - od.CheckInDate).Days));
 
+
+                //綠界金流
+                var orderId = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20);
+                var website = $"https://localhost:7284";
+                var ecpayParameters = new Dictionary<string, string>
+                     {
+                         { "MerchantTradeNo",  orderId },
+                         { "MerchantTradeDate",  DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") },
+                         { "TotalAmount",  totalAmount.ToString() }, 
+                         { "TradeDesc",  "無" },
+                         { "ItemName",  "測試商品" },
+                         { "ExpireDate",  "3" },
+                         { "CustomField1",  "" },
+                         { "CustomField2",  "" },
+                         { "ReturnURL",  $"{website}/Payment/thankyou" },
+                         //{ "OrderResultURL", $"{website}/Home/Index" },
+                         { "ClientBackURL",  $"{website}/Payment/thankyou2" },
+                         { "MerchantID",  "3002607" },
+                         { "PaymentType",  "aio" },
+                         { "ChoosePayment",  "ALL" },
+                         { "EncryptType",  "1" },
+                     };
+
+                ecpayParameters["CheckMacValue"] = GetCheckMacValue(ecpayParameters);
+
+
+
+
+
+                var member = firstOrderDetail.Member;
                 var viewModel = orderDetails.Select(od => new CReservationSummaryViewModel
                 {
                     OrderDetailID = od.OrderDetailId,
@@ -104,16 +151,45 @@ namespace PrjFunNowWeb.Controllers
                     FirstName = member?.FirstName,
                     LastName = member?.LastName,
                     Email = member?.Email,
-                    Phone = member?.Phone
+                    Phone = member?.Phone,
+                    HotelID = (int)od.Room?.Hotel?.HotelId,
+                    GuestNumber = od.GuestNumber,
+                    EcpayParameters = ecpayParameters
                 }).ToList();
+
+                ViewBag.Member = member;
 
                 return View(viewModel);
             }
             catch (Exception ex)
             {
-
                 return StatusCode(500, "An error occurred while processing your request. Please try again later.");
             }
+        }
+
+        private string GetCheckMacValue(Dictionary<string, string> order)
+        {
+            var param = order.Keys.OrderBy(x => x).Select(key => key + "=" + order[key]).ToList();
+            var checkValue = string.Join("&", param);
+            var hashKey = "pwFHCqoQZGmho4w6";
+            var HashIV = "EkRm7iFT261dpevs";
+            checkValue = $"HashKey={hashKey}&{checkValue}&HashIV={HashIV}";
+            checkValue = HttpUtility.UrlEncode(checkValue).ToLower();
+            checkValue = GetSHA256(checkValue);
+            return checkValue.ToUpper();
+        }
+
+        private string GetSHA256(string value)
+        {
+            var result = new StringBuilder();
+            var sha256 = SHA256Managed.Create();
+            var bts = Encoding.UTF8.GetBytes(value);
+            var hash = sha256.ComputeHash(bts);
+            for (int i = 0; i < hash.Length; i++)
+            {
+                result.Append(hash[i].ToString("X2"));
+            }
+            return result.ToString();
         }
 
         private string GetImageUrl(string imagePath)
