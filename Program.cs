@@ -23,7 +23,6 @@ builder.Services.AddAuthentication(options =>
 
 
 
-
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -114,11 +113,13 @@ app.UseCors("AllowAllOrigins");
 
 app.UseAuthorization();
 
+
+
 app.MapControllerRoute(
     name: "default",
     
 pattern: "{controller=Home}/{action=index}/{id?}");
 
-// 配置路由以支持 Angular 路由
+//// 配置路由以支持 Angular 路由
 //app.MapFallbackToFile("/dist/fun-now-angular1/index.html");
 app.Run();
