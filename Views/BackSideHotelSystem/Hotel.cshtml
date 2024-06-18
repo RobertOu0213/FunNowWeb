@@ -261,8 +261,9 @@
         }
 
 
-        // 獲取並顯示房間資訊
+        // 获取并显示房间信息
         function loadRooms(hotelID) {
+            currentHotelID = hotelID; // 设置当前酒店ID
             fetch(`https://localhost:7103/api/BackSideHotel/${hotelID}/rooms`)
                 .then(response => response.json())
                 .then(data => {
@@ -273,14 +274,13 @@
                 });
         }
 
-        // 更新房間顯示
+        // 更新房间显示
         function updateRoomDisplay(roomList) {
             let roomTableStr = "";
             roomList.forEach(item => {
-                let roomStatus = item.roomStatus ? "可預訂" : "已滿";
                 let actionButton = item.roomStatus
-                    ? '<td><button class="btn btn-danger" onclick="deactivateRoom()">下架房間</button></td>'
-                    : '<td><button class="btn btn-primary" onclick="activateRoom()">上架房間</button></td>';
+                    ? `<td><button class="btn btn-danger" onclick="toggleRoomStatus(${item.roomID})">下架房间</button></td>`
+                    : `<td><button class="btn btn-primary" onclick="toggleRoomStatus(${item.roomID})">上架房间</button></td>`;
 
                 roomTableStr += `
                             <tr>
@@ -296,6 +296,25 @@
 
             document.getElementById('roomContainer').innerHTML = roomTableStr;
         }
+
+
+        // 切换房间的RoomStatus状态
+        function toggleRoomStatus(roomID) {
+            fetch(`https://localhost:7103/api/BackSideHotel/rooms/${roomID}/toggleStatus`, {
+                method: 'PUT'
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    // 更新房间状态后重新加载房间信息
+                    loadRooms(currentHotelID); // 确保当前酒店ID（currentHotelID）已在其他地方定义
+                })
+                .catch(error => {
+                    console.error('Error toggling room status:', error);
+                });
+        }
+
 
         // 清除篩選和搜尋
         function clearFilters() {
