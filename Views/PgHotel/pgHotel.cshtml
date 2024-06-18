@@ -9,10 +9,10 @@
 <!-- 插入聊天室的Partial View -->
 @Html.Partial("~/Views/Chat/Mailroom.cshtml"))
 
-@*==================================測試OPENSTREETMAP=====================================*@
+@*==================================使用OPENSTREETMAP=====================================*@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
-@*==================================測試OPENSTREETMAP=====================================*@
+@*==================================使用OPENSTREETMAP=====================================*@
 
 <div class="container mt-5 pt-5" id="top">
     <div class="row">
@@ -255,7 +255,7 @@
                                     <div class="d-flex flex-column">
                                         @foreach (var equipment in Model.HotelDetail.HotelEquipments)
                                         {
-                                            <i class="fa-regular fa-thumbs-up">@equipment</i>
+                                            <i class="fa-regular fa-circle-check">@equipment</i>
                                         }
                                     </div>
                                 </div>
@@ -289,6 +289,7 @@
             </ul>
 
             @*房型區--自動生成*@
+            @*房型區--自動生成*@
             <div class="container mt-5 pt-5" id="room-types" data-id="{}">
                 <h2>所有房型</h2>
                 @if (Model.HotelDetail.Rooms != null && Model.HotelDetail.Rooms.Any())
@@ -297,7 +298,7 @@
                     {
                         var limitedRoomImages = room.RoomImages?.Take(4).ToList() ?? new List<pgHotel_ImageDTO>();
                         int imageCount = limitedRoomImages.Count;
-                        <div class="row room-item round-edge-container" data-room-name="@room.RoomName" data-room-price="@room.RoomPrice" data-room-equips="@Newtonsoft.Json.JsonConvert.SerializeObject(room.RoomEquipments)" data-room-images="@Newtonsoft.Json.JsonConvert.SerializeObject(room.RoomImages)">
+                        <div class="row room-item round-edge-container @(room.IsBooked ? "booked" : "")" data-room-name="@room.RoomName" data-room-price="@room.RoomPrice" data-room-equips="@Newtonsoft.Json.JsonConvert.SerializeObject(room.RoomEquipments)" data-room-images="@Newtonsoft.Json.JsonConvert.SerializeObject(room.RoomImages)">
                             <h3 data-bs-toggle="modal" data-bs-target="#roomModal">@room.RoomName</h3>
                             <div class="col-4">
                                 <table data-bs-toggle="modal" data-bs-target="#roomModal">
@@ -358,12 +359,26 @@
                                         <td class="align-bottom">
                                             <h3>TWD @room.RoomPrice</h3>
                                             <div style="margin-left: auto;">
-                                                <button class="btn btn-outline-primary btn-lg addCart" data-id="@room.RoomId">加入購物車</button>
-                                                <button class="btn btn-primary btn-lg directBuy" data-roomid="">立即下訂</button>
+                                                @if (room.IsBooked)
+                                                {
+                                                    <button class="btn btn-outline-primary btn-lg addCart" data-id="@room.RoomId" disabled>加入購物車</button>
+                                                    <button class="btn btn-primary btn-lg directBuy" data-roomid="" disabled>立即下訂</button>
+                                                }
+                                                else
+                                                {
+                                                    <button class="btn btn-outline-primary btn-lg addCart" data-id="@room.RoomId">加入購物車</button>
+                                                    <button class="btn btn-primary btn-lg directBuy" data-roomid="">立即下訂</button>
+                                                }
                                             </div>
                                         </td>
                                     </tr>
                                 </table>
+                                @if (room.IsBooked)
+                                {
+                                    <div class="booked-overlay">
+                                        <img src="~/image/louieee_img/booked.png" alt="Booked" />
+                                    </div>
+                                }
                             </div>
                         </div>
                     }
@@ -373,6 +388,7 @@
                     <p>暫無房間資訊</p>
                 }
             </div>
+
 
             @*房間彈出視窗*@
             <div class="modal fade" id="roomModal" tabindex="-1" aria-labelledby="roomModalLabel" aria-hidden="true">
@@ -463,13 +479,13 @@
                             </div>
                         </div>
                         <div>
-                            <h4>你可能也喜歡</h4>
+                            <h4>其他周邊飯店</h4>
                             @if (Model.HotelDetail.SimilarHotels != null && Model.HotelDetail.SimilarHotels.Any())
                             {
                                 <div class="scrollable-container">
                                     @foreach (var hotel in Model.HotelDetail.SimilarHotels)
                                     {
-                                        <div class="row mb-3 similar-hotel" style="border: 1px solid #ddd; border-radius: 10px; padding: 10px;">
+                                        <div class="row mb-3 similar-hotel" id="hotel-@hotel.HotelId" style="border: 1px solid #ddd; border-radius: 10px; padding: 10px;">
                                             <div class="col-3 p-0">
                                                 @{
                                                     var imageUrl = hotel.HotelImage?.ImageUrl ?? "/image/louieee_img/default-picture.jpg";
@@ -514,7 +530,7 @@
             </div>
 
 
-            @*推薦其他飯店*@
+            @*瀏覽紀錄*@
             <div>
                 <h2>你可能也喜歡</h2>
                 <div id="carouselExampleControls" class="carousel slide round-edge-container" data-ride="carousel">
@@ -816,10 +832,33 @@
             right: 0;
         }
 
-        .similar-hotel:hover {
+        .similar-hotel.hover {
             background-color: #f0f0f0;
-            cursor: pointer;
+            transition: background-color 0.3s;
         }
+
+
+        .booked {
+            position: relative;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .booked-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+            .booked-overlay img {
+                max-width: 100%;
+                max-height: 100%;
+            }
 
 
 
@@ -834,79 +873,100 @@
         document.addEventListener('DOMContentLoaded', function () {
         
 
-        //==================================測試OPENSTREETMAP=====================================
+        //==================================使用OPENSTREETMAP=====================================
         
         // 为了保持一致性并减少在客户端和服务器端之间传递的数据，我们可以在JavaScript中抓取已经生成的DOM对象的数据，
         // 而不是在JavaScript中再次使用@model。这样可以减少服务器负担，并且代码更简洁。
 
 
 
-                // 获取当前饭店的纬度和经度
-                var hotelLatitude = parseFloat(document.getElementById("hotel-latitude").value);
-                var hotelLongitude = parseFloat(document.getElementById("hotel-longitude").value);
-                var hotelName = document.getElementById("hotel-name").textContent;
+            // 获取当前饭店的纬度和经度
+            var hotelLatitude = parseFloat(document.getElementById("hotel-latitude").value);
+            var hotelLongitude = parseFloat(document.getElementById("hotel-longitude").value);
+            var hotelName = document.getElementById("hotel-name").textContent;
 
-                // 初始化地图
-                var map = L.map('openstreet-map').setView([hotelLatitude, hotelLongitude], 10);
+            // 初始化地图
+            var map = L.map('openstreet-map').setView([hotelLatitude, hotelLongitude], 10);
 
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '© OpenStreetMap',
-                    zoomControl: true,
-                }).addTo(map);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap',
+                zoomControl: true,
+            }).addTo(map);
 
-                // 添加当前饭店的标记
+            // 自定义图标
             const customIcon = L.icon({
                 iconUrl: 'https://cdn1.iconfinder.com/data/icons/everyday-2/64/Flat_Internet_onwork-16-256.png',
                 iconSize: [42, 42],
             });
 
-
-                var hotelMarker = L.marker([hotelLatitude, hotelLongitude], {
+            // 添加当前饭店的标记
+            var hotelMarker = L.marker([hotelLatitude, hotelLongitude], {
                 icon: customIcon,
-                    title: hotelName,
-                    opacity: 1.0
-                }).addTo(map);
+                title: hotelName,
+                opacity: 1.0
+            }).addTo(map);
 
-                hotelMarker.bindPopup("<b>" + hotelName + "</b>").openPopup();
+            hotelMarker.bindPopup("<b>" + hotelName + "</b>");
 
-                // 获取相似饭店的标记数据并保存地标引用
-                var similarHotels = document.querySelectorAll(".similar-hotel");
-                var markers = [];
+            // 获取相似饭店的标记数据并保存地标引用
+            var similarHotels = document.querySelectorAll(".similar-hotel");
+            var markers = [];
 
-                similarHotels.forEach(function (hotel) {
-                    var similarHotelLatitude = parseFloat(hotel.querySelector(".hotel-latitude").value);
-                    var similarHotelLongitude = parseFloat(hotel.querySelector(".hotel-longitude").value);
-                    var similarHotelName = hotel.querySelector(".hotel-name").textContent;
+            similarHotels.forEach(function (hotel) {
+                var similarHotelLatitude = parseFloat(hotel.querySelector(".hotel-latitude").value);
+                var similarHotelLongitude = parseFloat(hotel.querySelector(".hotel-longitude").value);
+                var similarHotelName = hotel.querySelector(".hotel-name").textContent;
 
-                    if (!isNaN(similarHotelLatitude) && !isNaN(similarHotelLongitude)) {
-                        var similarHotelMarker = L.marker([similarHotelLatitude, similarHotelLongitude], {
-                            title: similarHotelName,
-                            opacity: 1.0
-                        }).addTo(map);
+                if (!isNaN(similarHotelLatitude) && !isNaN(similarHotelLongitude)) {
+                    var similarHotelMarker = L.marker([similarHotelLatitude, similarHotelLongitude], {
+                        title: similarHotelName,
+                        opacity: 1.0
+                    }).addTo(map);
 
-                        similarHotelMarker.bindPopup("<b>" + similarHotelName + "</b>");
-                        markers.push({ marker: similarHotelMarker, element: hotel });
-                    }
-                });
+                    similarHotelMarker.bindPopup("<b>" + similarHotelName + "</b>");
+                    markers.push({ marker: similarHotelMarker, element: hotel });
 
-                // 添加悬停事件监听器
-                markers.forEach(function (item) {
-                    item.element.addEventListener("mouseenter", function () {
-                        item.marker.openPopup();
+                    // 添加地标的悬停事件
+                    similarHotelMarker.on('mouseover', function () {
+                        similarHotelMarker.openPopup();
+                        hotel.classList.add('hover');
+                        // 滚动到对应的饭店列表项
+                        hotel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                     });
 
-                    item.element.addEventListener("mouseleave", function () {
-                        item.marker.closePopup();
+                    similarHotelMarker.on('mouseout', function () {
+                        similarHotelMarker.closePopup();
+                        hotel.classList.remove('hover');
                     });
+                }
+            });
+
+            // 添加悬停事件监听器
+            markers.forEach(function (item) {
+                item.element.addEventListener("mouseenter", function () {
+                    item.marker.openPopup();
+                    item.element.classList.add('hover');
+                    // 滚动到对应的饭店列表项
+                    item.element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 });
-            
+
+                item.element.addEventListener("mouseleave", function () {
+                    item.marker.closePopup();
+                    item.element.classList.remove('hover');
+                });
+            });
+
+        
+
+
+
 
             
 
 
 
 
-        //==================================測試OPENSTREETMAP=====================================
+        //==================================使用OPENSTREETMAP=====================================
 
 
 
