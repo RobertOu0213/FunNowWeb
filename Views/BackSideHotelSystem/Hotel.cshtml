@@ -240,15 +240,6 @@
             document.getElementById('hotelContainer').innerHTML = tableStr;
         }
 
-        // 搜索饭店
-        function searchHotels() {
-            const searchText = document.getElementById('searchBar').value.toLowerCase();
-            const filteredHotels = allHotels.filter(item => {
-                return item.hotelName.toLowerCase().includes(searchText) || item.hotelAddress.toLowerCase().includes(searchText);
-            });
-            updateHotelDisplay(filteredHotels);
-        }
-
         // 切换飯店的isActive狀態
         function toggleHotelStatus(hotelID) {
             fetch(`https://localhost:7103/api/BackSideHotel/${hotelID}/toggleActive`, {
@@ -262,7 +253,7 @@
                     const hotel = allHotels.find(h => h.hotelID === hotelID);
                     hotel.hotelIsActive = !hotel.hotelIsActive;
                     // 保留篩選條件並更新顯示
-                    applyFilters();
+                    applyFiltersAndSearch();
                 })
                 .catch(error => {
                     console.error('Error toggling hotel status:', error);
@@ -305,6 +296,11 @@
             document.getElementById('roomContainer').innerHTML = roomTableStr;
         }
 
+        // 搜索飯店
+        function searchHotels() {
+            applyFiltersAndSearch();
+        }
+
         // 清除篩選和搜尋
         function clearFilters() {
             document.getElementById('inputGroupSelecthotel').value = "所有飯店類型";
@@ -313,7 +309,7 @@
             updateHotelDisplay(allHotels);
         }
 
-
+        // 更新篩選選項
         function updateSelectOptions() {
             let selecthoteltypeStr = "<option selected>所有飯店類型</option>";
             let hotelTypeSet = new Set();  // 使用Set來記錄已經添加過的飯店類型
@@ -329,31 +325,19 @@
             document.getElementById('inputGroupSelecthotel').innerHTML = selecthoteltypeStr;
         }
 
-        function fetchRoomsByHotelId(hotelID) {
-            console.log(`Fetching rooms for hotelID: ${hotelID}`);
-            // 確保 hotelID 為數字類型
-            const numericHotelID = Number(hotelID);
-            const hotel = allHotels.find(hotel => hotel.HotelID === numericHotelID);
-            if (hotel) {
-                console.log(`Rooms data for hotelID ${numericHotelID}:`, hotel.Rooms);
-                updateRoomDisplay(hotel.Rooms);
-            } else {
-                console.error(`Hotel with ID ${numericHotelID} not found.`);
-            }
-        }
-
-        function applyFilters() {
+        // 應用篩選和搜索條件
+        function applyFiltersAndSearch() {
             let selectedHotelTypeName = document.getElementById('inputGroupSelecthotel').value;
             let selectedHotelStatus = document.getElementById('inputGroupSelectstatus').value;
-            filterHotels(selectedHotelTypeName, selectedHotelStatus);
-        }
+            let searchBar = document.getElementById('searchBar').value.toLowerCase();
 
-        function filterHotels(hotelTypeName, hotelStatus) {
             let filteredHotels = allHotels.filter(item => {
-                let matchesType = hotelTypeName === "所有飯店類型" || item.hotelTypeName === hotelTypeName;
-                let matchesStatus = hotelStatus === "所有審核狀態" || item.hotelIsActive.toString() === hotelStatus;
-                return matchesType && matchesStatus;
+                let matchesType = selectedHotelTypeName === "所有飯店類型" || item.hotelTypeName === selectedHotelTypeName;
+                let matchesStatus = selectedHotelStatus === "所有審核狀態" || item.hotelIsActive.toString() === selectedHotelStatus;
+                let matchesSearch = item.hotelName.toLowerCase().includes(searchBar) || item.hotelAddress.toLowerCase().includes(searchBar);
+                return matchesType && matchesStatus && matchesSearch;
             });
+
             updateHotelDisplay(filteredHotels);
         }
 
@@ -361,11 +345,11 @@
             fetchHotels();
 
             document.getElementById('inputGroupSelecthotel').addEventListener('change', () => {
-                applyFilters();
+                applyFiltersAndSearch();
             });
 
             document.getElementById('inputGroupSelectstatus').addEventListener('change', () => {
-                applyFilters();
+                applyFiltersAndSearch();
             });
 
             document.getElementById('searchBtn').addEventListener('click', () => {
@@ -380,10 +364,6 @@
                 if (event.key === 'Enter') {
                     searchHotels();
                 }
-            });
-
-            document.getElementById('searchBtn').addEventListener('click', () => {
-                searchHotels();
             });
         });
     </script>
