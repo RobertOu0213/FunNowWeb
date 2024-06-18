@@ -119,7 +119,6 @@ namespace PrjFunNowWeb.Controllers
                          //{ "OrderResultURL", $"{website}/Home/Index" },
                          { "ClientBackURL",  $"{website}/Payment/thankyou2" },
                          { "MerchantID",  "3002607" },
-                         //{ "IgnorePayment",  "GooglePay#WebATM#CVS#BARCODE" },
                          { "PaymentType",  "aio" },
                          { "ChoosePayment",  "ALL" },
                          { "EncryptType",  "1" },
@@ -154,6 +153,7 @@ namespace PrjFunNowWeb.Controllers
                     Email = member?.Email,
                     Phone = member?.Phone,
                     HotelID = (int)od.Room?.Hotel?.HotelId,
+                    GuestNumber = od.GuestNumber,
                     EcpayParameters = ecpayParameters
                 }).ToList();
 
@@ -163,7 +163,6 @@ namespace PrjFunNowWeb.Controllers
             }
             catch (Exception ex)
             {
-
                 return StatusCode(500, "An error occurred while processing your request. Please try again later.");
             }
         }

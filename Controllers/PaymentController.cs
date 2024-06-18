@@ -38,7 +38,6 @@ namespace PrjFunNowWeb.Controllers
                 {
                     MemberId = userId,
                     OrderStatusId = 1,    //未付款
-                    PaymentStatusId = 1,  //到時可以註解掉
                     TotalPrice = orderIn.TotalPrice,
                     CreatedAt = DateTime.Now,
                     GuestLastName = orderIn.GuestLastName,

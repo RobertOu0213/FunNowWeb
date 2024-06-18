@@ -29,6 +29,7 @@
         public double AverageScore { get; set; }  
         public string RatingText { get; set; }
         public Dictionary<string, string> EcpayParameters { get; set; }
+        public int? GuestNumber { get; set; }
 
     }
 }

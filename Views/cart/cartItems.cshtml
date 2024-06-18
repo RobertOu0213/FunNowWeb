@@ -143,14 +143,13 @@
                 const data = await res.json();
                 if (data.success) {
                     const orderDetailDtos = data.orderDetailDtos;
-
+                    console.log(orderDetailDtos);
                     await Promise.all(orderDetailDtos.map(async (item) => {
                         const ratingRes = await fetch(`https://localhost:7103/api/Comment/AverageRatingText/${item.hotelID}`);
                         if (!ratingRes.ok) {
                             throw new Error(ratingRes.statusText);
                         }
                         const ratingData = await ratingRes.json();
-                        // console.log(item);
                         item.averageScore = Math.round(ratingData.averageScore);
                         item.ratingText = ratingData.ratingText;
                     }));
@@ -223,7 +222,7 @@
                                                 </div>
                                                 <div class="cartRoom-bookingInfo-div3">
                                                     <i class="fa-solid fa-users"></i>
-                                                    <span>住客人數 : </span><span>${item.maximumOccupancy}位大人</span>
+                                                       <span>住客人數 :  ${item.guestNumber !== null ? item.guestNumber : 0}位大人</span>
                                                 </div>
                                                 <div class="cartRoom-bookingInfo-div4">
                                                     <span>NT $</span> <span>${totalPrice}</span>

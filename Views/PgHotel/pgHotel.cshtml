@@ -964,9 +964,10 @@
                     MemberID: memberID,
                     RoomID: roomID,
                     CheckInDate: searchHotel.checkInDate,
-                    CheckOutDate: searchHotel.checkOutDate
-
+                    CheckOutDate: searchHotel.checkOutDate,
+                    GuestNumber: searchHotel.adults
                 };
+                console.log(orderDetail);
 
                 try {
                     const response = await fetch('https://localhost:7103/api/Cart', {
