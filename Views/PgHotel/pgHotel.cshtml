@@ -6,6 +6,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @model PrjFunNowWeb.Models.louie_viewmodel.pgHotel_HotelDetailViewModel
+
 <!-- 插入聊天室的Partial View -->
 @Html.Partial("~/Views/Chat/Mailroom.cshtml"))
  <link href="~/css/joanna_css/styles.b13b175880f4995b.css" rel="stylesheet"  />
@@ -426,7 +427,7 @@
                         <!-- 評分條 -->
                         <div class="flex-grow-2 ms-5 ps-5">
                             <div class="column-container" id="averageScoresContainer">
-                                <!-- 各项评分将在这里插入 -->
+                                <!-- 各項評分 -->
                             </div>
                         </div>
                     </div>
@@ -439,7 +440,7 @@
                             <div class="carousel" id="carousel">
                             
                             <div class="carousel-container">
-                                <!-- 评论内容将在这里插入 -->
+                                <!-- 評論內容 -->
                                
                             </div>
                            
@@ -447,7 +448,7 @@
                         <i class=" prev fa-solid fa-caret-right fa-2xl " onclick="prevSlide()"></i>
                     </div>
                     <a href="http://localhost:4200/comment/@Model.HotelDetail.HotelID/@Model.HotelDetail.CheckInDate/@Model.HotelDetail.CheckOutDate" class="  d-flex justify-content-center">顯示更多評論</a>
-                </div>                                           @*帶hotelId*@
+                </div>                                           @*TODO帶 hotelId*@
 
                 
 
