@@ -24,21 +24,14 @@ namespace PrjFunNowWeb.Controllers
         public IActionResult cartItems()
         {
             //登入判斷
-            var user = HttpContext.Session.GetString("MemberInfo");
-            if (string.IsNullOrEmpty(user))
+            var userID = HttpContext.Session.GetString("MemberID");
+            if (string.IsNullOrEmpty(userID))
             {
-
                 return RedirectToAction("Login", "Member");
             }
 
-            var userId = JsonSerializer.Deserialize<MemberInfo>(user).MemberId;
 
-            if (userId <= 0 || userId == null)
-            {
-                return BadRequest("UserID is required");
-            }
-
-            var MemberID = _context.Members.Where(x => x.MemberId == userId).Select(x => x.MemberId).FirstOrDefault();
+            var MemberID = _context.Members.Where(x => x.MemberId == Convert.ToInt32(userID)).Select(x => x.MemberId).FirstOrDefault();
 
             if (MemberID <= 0)
             {

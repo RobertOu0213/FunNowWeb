@@ -31,15 +31,15 @@ namespace PrjFunNowWeb.Controllers
         public IActionResult UploadImage()
         {
             //需要將ＭemberId帶到API
-            var user = HttpContext.Session.GetString("MemberInfo");
-            if (string.IsNullOrEmpty(user))
+            var userID = HttpContext.Session.GetString("MemberID");
+            if (string.IsNullOrEmpty(userID))
             {
 
                 return RedirectToAction("Login", "Member");
             }
-            var userId = JsonSerializer.Deserialize<MemberInfo>(user).MemberId;
+          
 
-            return View(userId);
+            return View(userID);
         }
     }
 }

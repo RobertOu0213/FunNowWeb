@@ -9,13 +9,13 @@ namespace PrjFunNowWeb.Controllers
         public IActionResult GetMemberId()
         {
 
-            var user = HttpContext.Session.GetString("MemberInfo"); 
-            if (string.IsNullOrEmpty(user))
+            var userId = HttpContext.Session.GetString("MemberID"); 
+            if (string.IsNullOrEmpty(userId))
             {
                 return Unauthorized(); 
             }
 
-            var userId = JsonSerializer.Deserialize<MemberInfo>(user).MemberId;
+       
             return Ok(new { MemberID = userId });
 
         }

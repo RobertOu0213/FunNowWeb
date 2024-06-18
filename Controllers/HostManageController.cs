@@ -24,16 +24,16 @@ namespace PrjFunNowWeb.Controllers
         }
         public IActionResult Home()
         {
-            var user = HttpContext.Session.GetString("MemberInfo");
-            if (string.IsNullOrEmpty(user))
+            var userID = HttpContext.Session.GetString("MemberID");
+            if (string.IsNullOrEmpty(userID))
             {
 
                 return RedirectToAction("Login", "Member");
             }
 
-            var userId = JsonSerializer.Deserialize<MemberInfo>(user).MemberId;
+    
 
-            return View(userId);
+            return View(userID);
         }
 
         public IActionResult HostHotelInfo(int? id)
@@ -321,12 +321,12 @@ namespace PrjFunNowWeb.Controllers
             {
                 return BadRequest("Invalid room data.");
             }
-            var user = HttpContext.Session.GetString("MemberInfo");
-            if (string.IsNullOrEmpty(user))
+            var userID = HttpContext.Session.GetString("MemberID");
+            if (string.IsNullOrEmpty(userID))
             {
                 return RedirectToAction("Login", "Member");
             }
-            var userId = JsonSerializer.Deserialize<MemberInfo>(user).MemberId;
+   
 
             var room = new Room
             {
@@ -337,7 +337,7 @@ namespace PrjFunNowWeb.Controllers
                 RoomPrice = roomDto.RoomPrice,
                 Description = roomDto.RoomDescription,
                 RoomStatus = true,
-                MemberId = userId,
+                MemberId = Convert.ToInt32(userID),
                 HotelId = roomDto.HotelId
             };
             _context.Rooms.Add(room);

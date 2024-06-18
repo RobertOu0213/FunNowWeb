@@ -26,17 +26,17 @@ namespace PrjFunNowWeb.Controllers
                     return BadRequest("OrderDetailsId is required");
                 }
 
-                var user = HttpContext.Session.GetString("MemberInfo");
-                if (string.IsNullOrEmpty(user))
+                var userID = HttpContext.Session.GetString("MemberID");
+                if (string.IsNullOrEmpty(userID))
                 {
                     return RedirectToAction("Login", "Member");
                 }
 
-                var userId = JsonSerializer.Deserialize<MemberInfo>(user).MemberId;
+         
 
                 var order = new Order
                 {
-                    MemberId = userId,
+                    MemberId = Convert.ToInt32(userID),
                     OrderStatusId = 1,    //未付款
                     TotalPrice = orderIn.TotalPrice,
                     CreatedAt = DateTime.Now,
