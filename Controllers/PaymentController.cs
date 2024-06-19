@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PrjFunNowWeb.Models;
+using PrjFunNowWeb.Models.DTO;
 using PrjFunNowWeb.Models.ViewModel;
 using PrjFunNowWebApi.Models;
 using System.Text.Json;
@@ -33,7 +34,6 @@ namespace PrjFunNowWeb.Controllers
                 }
 
          
-
                 var order = new Order
                 {
                     MemberId = Convert.ToInt32(userID),
@@ -50,7 +50,7 @@ namespace PrjFunNowWeb.Controllers
            
                 var orderId = order.OrderId;
 
-           
+
                 foreach (var detailId in orderIn.OrderDetailsID)
                 {
                     var orderDetail = _context.OrderDetails.Find(detailId);
@@ -58,12 +58,59 @@ namespace PrjFunNowWeb.Controllers
                     {
                         orderDetail.OrderId = orderId;
                         orderDetail.IsOrdered = true;
-                 
+
                     }
                 }
                 _context.SaveChanges();
+
+                var responseOrder = _context.Orders
+                    .Where(x => x.OrderId == orderId)
+                    .Include(x => x.OrderDetails)
+                        .ThenInclude(od => od.Room)
+                            .ThenInclude(r => r.Hotel)
+                                .ThenInclude(h => h.HotelImages)
+                    .Include(x => x.OrderDetails)
+                        .ThenInclude(od => od.Room)
+                            .ThenInclude(r => r.RoomType)
+                    .Include(x => x.OrderDetails)
+                        .ThenInclude(od => od.Room)
+                            .ThenInclude(r => r.Hotel)
+                                .ThenInclude(h => h.City)
+                                    .ThenInclude(c => c.Country)
+                    .Include(x => x.OrderDetails)
+                        .ThenInclude(od => od.Room)
+                            .ThenInclude(r => r.Hotel)
+                                .ThenInclude(h => h.HotelType)
+                    .Include(x => x.OrderDetails)
+                        .ThenInclude(od => od.Member)
+                    .ToList();
+
+
+                var orderDto = responseOrder.SelectMany(o => o.OrderDetails.Select(od => new COrderSuccessEmailDTO
+                {
+                    CheckInDate = od.CheckInDate,
+                    CheckOutDate = od.CheckOutDate,
+                    NumberOfDays = (od.CheckOutDate - od.CheckInDate).Days,
+                    RoomName = od.Room.RoomName,
+                    RoomPrice = od.Room.RoomPrice,
+                    RoomType = od.Room.RoomType.RoomTypeName,
+                    GuestNumber = od.GuestNumber,
+                    HotelName = od.Room.Hotel.HotelName,
+                    HotelAddress = od.Room.Hotel.HotelAddress,
+                    HotelPhone = od.Room.Hotel.HotelPhone,
+                    LevelStar = od.Room.Hotel.LevelStar,
+                    CityName = od.Room.Hotel.City.CityName,
+                    CountryName = od.Room.Hotel.City.Country.CountryName,
+                    HotelImage = GetImageUrl(od.Room.Hotel.HotelImages.FirstOrDefault()?.HotelImage1),
+                    GuestFirstName = o.GuestFirstName,
+                    GuestLastName = o.GuestLastName,
+                    TotalPrice = o.TotalPrice
+                })).ToList();
+
+
                 transaction.Commit();
-                return Ok(new { success = true, message="Order 資料表新增成功" });
+
+                return Ok(new { success = true, message="Order 資料表新增成功", data= orderDto });
 
                 //var orderDetails = _context.OrderDetails
                 //.Where(od => orderIn.OrderDetailsID.Contains(od.OrderDetailId))

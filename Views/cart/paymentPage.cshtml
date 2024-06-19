@@ -108,7 +108,7 @@
                             <div class="d-flex">
                                 <div class="reservation-container-info-score averageScore"></div>
                                 <div class="d-flex flex-column mt-2">
-                                    <span class="text-xs ratingText"></span>
+                                    <span class="ratingText text-xs"></span>
                                     <span class="commentsCount">得分自 @item.AllCommentsCount 篇評鑑</span>
                                 </div>
                             </div>
@@ -206,80 +206,81 @@
                         },
                         body: JSON.stringify(formData)
                     });
+                    const data = await response.json();
+                    console.log(data.data);
 
                     if (!response.ok) {
+                        console.log("test");
                         throw new Error(response.statusText);
                     }
 
-                    if (response.ok) {
+                    // if (response.ok) {
 
-                        const formData = {
-                            To: "starshining12345@gmail.com",
-                            Subject: "Hotel Booking Confirmation",
-                            Body: `
+                    //     const formData = {
+                    //         To: "starshining12345@gmail.com",
+                    //         Subject: "Hotel Booking Confirmation",
+                    //         Body: `
 
-                                       <div class="container mt-4" style="margin-top: 1.5rem;">
-                                        <div class="booking-card p-4 mb-4" style="background-color: #ffffff; border: 1px solid #dee2e6; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
-                                            <h2 class="hotel-name" style="font-size: 1.5rem; font-weight: bold;">Chongqing N. APT <span class="star-rating" style="font-size: 1rem; color: #ffb400;">★★★☆☆</span></h2>
-                                            <p class="hotel-subtitle" style="font-size: 1rem; color: #6c757d;">重慶北樓</p>
-                                            <div class="d-flex" style="display: flex;">
-                                                <img src="hotel_image.jpg" alt="Hotel Image" class="hotel-image me-4" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px; margin-right: 1.5rem;">
-                                                <div>
-                                                    <p class="hotel-address" style="font-size: 1rem; margin: 0;">163 Section 2, Chongqing North Road, 2樓, 台北市, 台灣, 103</p>
-                                                    <p class="hotel-location" style="font-size: 1rem; margin: 0;">台北市, 台灣</p>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex justify-content-between mt-3" style="display: flex; justify-content: space-between; margin-top: 1.5rem;">
-                                                <div>
-                                                    <p style="font-size: 1rem; margin: 0;">入住日期</p>
-                                                    <p class="date" style="font-size: 1rem; margin: 0;">星期四, 8月 29, 2024</p>
-                                                    <p style="font-size: 1rem; margin: 0;">( 下午4:00後 )</p>
-                                                </div>
-                                                <div>
-                                                    <p style="font-size: 1rem; margin: 0;">退房日期</p>
-                                                    <p class="date" style="font-size: 1rem; margin: 0;">星期五, 8月 30, 2024</p>
-                                                    <p style="font-size: 1rem; margin: 0;">( 上午11:00前 )</p>
-                                                </div>
-                                            </div>
-                                        </div>
+                    //                    <div class="mt-4 container" style="margin-top: 1.5rem;">
+                    //                     <div class="booking-card p-4 mb-4" style="background-color: #ffffff; border: 1px solid #dee2e6; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                    //                         <h2 class="HotelName" style="font-size: 1.5rem; font-weight: bold;">Chongqing N. APT <span class="LevelStar" style="font-size: 1rem; color: #ffb400;">★★★☆☆</span></h2>
+                    //                         <div class="d-flex" style="display: flex;">
+                    //                             <img src="hotel_image.jpg" alt="Hotel Image" class="HotelImage me-4" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px; margin-right: 1.5rem;">
+                    //                             <div>
+                    //                                 <p class="HotelAddress" style="font-size: 1rem; margin: 0;">163 Section 2, Chongqing North Road, 2樓, 台北市, 台灣, 103</p>
+                    //                                 <span class="CityName" style="font-size: 1rem; margin: 0;">台北市,</span>  <span class="CountryName" style="font-size: 1rem; margin: 0;">台灣</span>
+                    //                             </div>
+                    //                         </div>
+                    //                         <div class="d-flex justify-content-between mt-3" style="display: flex; justify-content: space-between; margin-top: 1.5rem;">
+                    //                             <div>
+                    //                                 <p style="font-size: 1rem; margin: 0;">入住日期</p>
+                    //                                 <p class="CheckInDate" style="font-size: 1rem; margin: 0;">星期四, 8月 29, 2024</p>
+                    //                             </div>
+                    //                             <div>
+                    //                                 <p style="font-size: 1rem; margin: 0;">退房日期</p>
+                    //                                 <p class="CheckOutDate" style="font-size: 1rem; margin: 0;">星期五, 8月 30, 2024</p>
+                    //                             </div>
+                    //                         </div>
+                    //                     </div>
 
-                                        <div class="order-details-card p-4 mb-4" style="background-color: #ffffff; border: 1px solid #dee2e6; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
-                                            <h3 style="font-size: 1.25rem; font-weight: bold;">訂單明細</h3>
-                                            <p style="font-size: 1rem; margin: 0;">訂房摘要 1間客房 | 1晚</p>
-                                            <p style="font-size: 1rem; margin: 0;">房型 Standard Twin Room</p>
-                                            <p style="font-size: 1rem; margin: 0;">主要住客 Oliver Oliver</p>
-                                            <p style="font-size: 1rem; margin: 0;">入住人數 2位大人</p>
-                                        </div>
+                    //                     <div class="order-details-card p-4 mb-4" style="background-color: #ffffff; border: 1px solid #dee2e6; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                    //                         <h3 style="font-size: 1.25rem; font-weight: bold;">訂單明細</h3>
+                    //                         <p style="font-size: 1rem; margin: 0;">訂房摘要 1間客房 | 1晚</p>
+                    //                         <p style="font-size: 1rem; margin: 0;" class="RoomTypeName">房型 Standard Twin Room</p>
+                    //                         <span style="font-size: 1rem; margin: 0;" class="GuestFirstName">主要住客 Oliver</span>  <span style="font-size: 1rem; margin: 0;" class="GuestLastName">Oliver</span>
+                    //                         <p style="font-size: 1rem; margin: 0;" class="GuestNumber">入住人數 2位大人</p>
+                    //                         <p style="font-size: 1rem; margin: 0;" class="RoomSize">NT 2200</p>
+                    //                     </div>
 
-                                        <div class="payment-summary-card p-4 mb-4" style="background-color: #ffffff; border: 1px solid #dee2e6; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
-                                            <p style="font-size: 1rem; margin: 0;">1間客房 x 1晚</p>
-                                            <p style="font-size: 1rem; margin: 0;">總金額 TWD 863.91</p>
-                                        </div>
-                                    </div>
+                    //                     <div class="payment-summary-card p-4 mb-4" style="background-color: #ffffff; border: 1px solid #dee2e6; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                    //                         <p style="font-size: 1rem; margin: 0;">1間客房 x 1晚</p>
+                    //                         <p style="font-size: 1rem; margin: 0;" class="TotalPrice">總金額 TWD 863.91</p>
+                    //                     </div>
+                    //                 </div>
                             
                                                         
-                            `
-                        };
+                    //         `
+                    //     };
 
-                        (async () => {
-                            const response = await fetch('https://localhost:7103/api/Email/SendMessage', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify(formData)
-                            });
+                    //     (async () => {
+                    //         const response = await fetch('https://localhost:7103/api/Email/SendMessage', {
+                    //             method: 'POST',
+                    //             headers: { 'Content-Type': 'application/json' },
+                    //             body: JSON.stringify(formData)
+                    //         });
 
-                            if (response.ok) {
-                                console.log('Email sent successfully');
-                            } else {
-                                console.error('Error sending email');
-                            }
-                        })();
+                    //         if (response.ok) {
+                    //             console.log('Email sent successfully');
+                    //         } else {
+                    //             console.error('Error sending email');
+                    //         }
+                    //     })();
 
-                        // $('#paymentForm').submit();
-                    } 
+                    //     // $('#paymentForm').submit();
+                    // } 
 
                 } catch (error) {
-                    console.error('Error:', error);
+                    console.log('Error:', error);
 
                 }
             });
