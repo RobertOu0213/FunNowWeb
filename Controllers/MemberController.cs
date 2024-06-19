@@ -17,6 +17,9 @@ using NuGet.Protocol;
 using PrjFunNowWebApi.Models;
 using NuGet.Common;
 using System.Net.Http;
+using Azure;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System;
 
 namespace PrjFunNowWeb.Controllers
 {
@@ -98,17 +101,15 @@ namespace PrjFunNowWeb.Controllers
                     RedirectUri = Url.Action("GoogleResponse","Member")  
                 });
         }
-        
-        //處理Google登入時驗證成功或失敗時的跳轉頁面
+
         public async Task<IActionResult> GoogleResponse()
         {
             // 嘗試進行驗證，使用Cookie作為驗證方案
             var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
-            if (!result.Succeeded) //如果Google驗證失敗，回到MemberController的Login登入頁面，並使用TempData傳遞錯誤訊息
-            { 
-                TempData["ErrorMessage"] = "Google驗證失敗，請再試一次。";
-                return RedirectToAction("Login", "Member");   
+            if (!result.Succeeded)
+            {
+                ViewBag.ErrorMessage = "Google驗證失敗，請再試一次。";
+                return View("Login");
             }
 
             //如果驗證成功
@@ -121,7 +122,6 @@ namespace PrjFunNowWeb.Controllers
 
             // 檢查使用者是否已經存在於資料庫中
             var existingMember = _context.Members.FirstOrDefault(m => m.Email == email);
-
             if (existingMember == null) // 如果不存在則創建新的使用者
             {
                 var newMember = new Member
@@ -131,7 +131,6 @@ namespace PrjFunNowWeb.Controllers
                     FirstName = name,
                     Phone = "google登入不用設定手機號碼",
                     Password = "google登入不用設定密碼",
-
                 };
                 _context.Members.Add(newMember); //直接幫這些用google登入的使用者註冊進資料庫
                 _context.SaveChanges();
@@ -142,10 +141,32 @@ namespace PrjFunNowWeb.Controllers
             HttpContext.Session.SetString("GoogleMemberID", existingMember.MemberId.ToString());
             HttpContext.Session.SetString("GoogleMemberEmail", existingMember.Email);
             HttpContext.Session.SetString("GoogleMemberFirstName", existingMember.FirstName);
-            return RedirectToAction("Index", "Home");
+
+            //根據角色判斷登入權限
+            var roleID = _context.Members.Where(m => m.MemberId == existingMember.MemberId)
+                                     .Select(m => m.RoleId)
+                                     .FirstOrDefault();
+
+            switch (roleID)
+            {
+                case 4:
+                    ViewBag.ErrorMessage = "您的帳戶已被刪除，請重新註冊";
+                    return View("Login");
+                case 3:
+                    ViewBag.ErrorMessage = "您的帳戶已被鎖定，請洽客服協助解鎖";
+                    return View("Login");
+                case 2:
+                    ViewBag.ErrorMessage = "管理員歡迎你";
+                    return RedirectToAction("pgBack_Member", "PgBack_Member");
+                case 1:
+                    return RedirectToAction("Index", "Home");
+                default:
+                    ViewBag.ErrorMessage = "角色驗證錯誤";
+                    return View("Login");
+            }
         }
 
-       //處理登出 
+        //處理登出 
         public IActionResult Logout()
         {
             // 清除 Session 資料

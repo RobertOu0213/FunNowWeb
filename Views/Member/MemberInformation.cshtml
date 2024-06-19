@@ -29,10 +29,10 @@
             <!--============================側邊導航欄=========================================-->
             <div class="sidebar">
                 <ul>
-                    <li><a href="#" class="fa-solid fa-calendar-days" alt="管理訂單"><span>管理訂單</span></a></li>
-                    <li><a href="#" class="fa-solid fa-building" alt="住宿"><span>住宿</span></a></li>
-                    <li><a href="#" class="fa-solid fa-comment-dots" alt="住宿訊息"><span>住宿訊息</span></a></li>
-                    <li><a href="#" class="fa-solid fa-star" alt="住宿評鑑"><span>住宿評鑑</span></a></li>
+                    <li><a href="/OrderManagement/Index" class="fa-solid fa-calendar-days" alt="管理訂單"><span>管理訂單</span></a></li>
+                    <li><a href="/Home/Index2" class="fa-solid fa-building" alt="住宿"><span>尋找住宿</span></a></li>
+                    <li><a href="/OrderManagement/HotelMessenge" class="fa-solid fa-comment-dots" alt="住宿訊息"><span>住宿訊息</span></a></li>
+                    <li><a href="/Comment/Angular_membercomment" class="fa-solid fa-star" alt="住宿評鑑"><span>住宿評鑑</span></a></li>
                     <li><a href="/Member/MemberInformation" class="fa-solid fa-user" alt="個人資料"><span>個人資料</span></a></li>
                 </ul>
             </div>
@@ -858,7 +858,7 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ memberID: memberID, password: originalPwd })
+                    body: JSON.stringify({ memberID: LoginmemberID, password: originalPwd })
                 });
 
                 if (response.ok) {
