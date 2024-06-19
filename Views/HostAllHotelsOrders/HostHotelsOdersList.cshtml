@@ -54,7 +54,7 @@
                             <!-- 移除列表样式和内边距 -->
                             <li><strong>訂單編號：</strong>@item.OrderNumber</li>
                             <li><strong>房客姓名：</strong>@item.GuestName</li>
-                            <li><strong>天數：@item.Nights 天</li>
+                            <li><strong>天數：</strong>@item.Nights 天</li>
                         </ul>
                     </td>
 
@@ -62,9 +62,7 @@
                     <td>@item.CheckInDate.ToString("yyyy/MM/dd") - @item.CheckOutDate.ToString("yyyy/MM/dd")</td>
                     <td>NTD$@item.Price</td>
                     <td style="color:@(item.Status == "已完成" ? "green" : "red")">@item.Status</td>
-                    <td class="btn-center">
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">...</button>
-                    </td>
+                    
                 </tr>
             }
         </tbody>
