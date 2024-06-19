@@ -1,6 +1,13 @@
-﻿ @* @{
-   ViewBag.Title = "Index";
-}  *@
+﻿@using System.Text.Json
+
+@{
+    var memberID = Context.Session.GetString("MemberID");
+    var token = Context.Session.GetString("Token");
+
+    var googleMemberId = Context.Session.GetString("GoogleMemberID");
+    var googleMemberFirstName = Context.Session.GetString("GoogleMemberFirstName");
+    
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -10,13 +17,13 @@
     <title>@ViewData["Title"] - testModel</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-@*     <link rel="stylesheet" href="~/testModel.styles.css" asp-append-version="true" />
- *@
+    @*     <link rel="stylesheet" href="~/testModel.styles.css" asp-append-version="true" />
+    *@
     <!-- 套版的CSS -->
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="icon" href="~/image/ming_img/favicon.png" type="image/png">
+    <link rel="icon" href="~/image/ming_img/funnowlogo3.png" type="image/png">
     <title>FUNNOW</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="~/css/ming_css/bootstrap.css">
@@ -34,6 +41,7 @@
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.min.css">
+
 
     <style>
         .booking-area {
@@ -69,38 +77,38 @@
         <div class="container-fluid" style="padding: 0;">
             <nav class="navbar navbar-expand-lg navbar-light" style="height: 60px;">
                 <!-- Brand and toggle get grouped for better mobile display -->
-                <a class="navbar-brand logo_h" href="index.html" style="padding:5px;">
-                    <img src="~/image/ming_img/FunNowlogo.png" style="height: 60px; border-radius: 12px;">
+                <a class="navbar-brand logo_h" href="/home/index" style="padding:5px;">
+                    <img src="~/image/ming_img/funnowlog.png" style="height: 40px; border-radius: 12px; margin-bottom:5px" />
                 </a>
-                <div id="guestContent" style="display: none;">
+                <div id="guestContent" style="display: none; margin-top:10px">
                     <label>歡迎路過客～哎呀~我發現你還沒登入！！！ 趕緊 <a class="btn btn-danger"  href="/Member/Login">登入</a>來探索更多精彩內容!!!</label>
                 </div>
                 <div id="memberContent" style="display: none;">
                     <label>歡迎我們尊貴的會員ID是<span id="memberId"></span>號的<span id="memberFirstName"></span>完成登入</label>
                     <button id="logoutButton" class="btn btn-primary">登出</button>
                 </div>
-                
+
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
                 <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
+                <div class="navbar-collapse offset collapse" id="navbarSupportedContent">
                     <ul class="nav navbar-nav menu_nav ml-auto">
                         <li class="nav-item active">
-                            <a class="nav-link" href="index.html" style="color:red;">刊登家中空房</a>
+                            <a class="nav-link" href="/HostManage/Home" style="color:red;">刊登家中空房</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="about.html">
-                                <img src="~/image/ming_img/flag.jpg" style="height:50px"/>
+                                <img src="~/image/ming_img/flag.jpg" style="height:50px" />
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="accomodation.html">NT $</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="gallery.html">
+                            <a class="nav-link" href="/Cart/cartItems">
                                 <i class="fa-solid fa-cart-shopping"></i>
                             </a>
                         </li>
@@ -110,7 +118,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="blog.html">會員資料</a>
+                                    <a class="nav-link" asp-controller="Member" asp-action="MemberInformation">會員資料</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="blog-single.html">評論</a>
@@ -124,7 +132,7 @@
                         <li></li>
                     </ul>
                 </div>
-            </nav> 
+            </nav>
         </div>
         <!-- Date picker and booking button 浮動訂房欄 -->
         <div class="container-fluid booking-area" style="background-color: #20274d; padding: 20px;">
@@ -153,13 +161,13 @@
         </div>
     </header>
     <div>
-            @RenderBody()    
+        @RenderBody()
     </div>
 
     <footer class="footer-area section_gap">
         <div class="container">
             <div class="row">
-                <div class="col-lg-3  col-md-6 col-sm-6">
+                <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="single-footer-widget">
                         <h6 class="footer_title">About Agency</h6>
                         <p>The world has become so fast paced that people don’t want to stand by reading a page of information, they would much rather look at a presentation and understand the message. It has come to a point </p>
@@ -289,68 +297,71 @@
     <script src="~/ming/vendors/lightbox/simpleLightbox.min.js"></script>
     <script src="~/js/ming_js/custom.js"></script>
 
-    
+  
+
     <script>
-        //決定會員資訊是否顯示
-        document.addEventListener("DOMContentLoaded", function () 
-        {
-
-            // 儲存在Session storage中的資訊(自己輸入帳號密碼的登入者)
-            var memberId = sessionStorage.getItem("MemberID");
-            var memberFirstName = sessionStorage.getItem("MemberFisrtName");
-            const token = sessionStorage.getItem("JWToken");
-
-            // 儲存在Session中的資訊（從後端傳遞到前端的變數）(用Google的登入者)
-            var sessionMemberId = '@Context.Session.GetString("MemberID")';
-            var sessionMemberFirstName = '@Context.Session.GetString("MemberFirstName")';
+        //決定nav bar的會員資訊是否顯示
+        document.addEventListener("DOMContentLoaded", function () {
+           
+            var googleMemberId = '@googleMemberId';
+            var googleMemberFirstName = '@googleMemberFirstName';
+            var memberID = '@memberID';
             
-            // 檢查Session storage中的資料
-            if (token && memberId && memberFirstName) 
-            {
-                document.getElementById("memberContent").style.display = "block";
-                document.getElementById("memberId").innerText = memberId;
-                document.getElementById("memberFirstName").innerText = memberFirstName;
-            }
-            // 檢查Session中的資料
-            else if (sessionMemberId && sessionMemberFirstName) 
-            {
-                document.getElementById("memberContent").style.display = "block";
-                document.getElementById("memberId").innerText = sessionMemberId;
-                document.getElementById("memberFirstName").innerText = sessionMemberFirstName;
-                sessionStorage.setItem("MemberID", sessionMemberId);
-                sessionStorage.setItem("MemberFisrtName", sessionMemberFirstName);
-            }
-
-            // 如果兩個地方都沒有資料，顯示訪客內容
-            else 
-            {
+            // 如果都沒有值，顯示訪客內容
+            if (!googleMemberId && !googleMemberFirstName && !memberID) {
                 document.getElementById("guestContent").style.display = "block";
             }
-
-            
-            //點下登出按鈕，把session storage的資料清空，也把google登入的session清空
+            // 判斷若有googlememberID，顯示googlememberID內容
+            else if (googleMemberId && googleMemberFirstName) {
+                document.getElementById("memberContent").style.display = "block";
+                document.getElementById("memberId").innerText = googleMemberId;
+                document.getElementById("memberFirstName").innerText = googleMemberFirstName;
+            }
+            // 若以上都沒有才顯示member內容
+            else if (memberID) {
+                fetchMemberData(memberID);
+            }
+       
+            //點下登出按鈕，把session的資料清空，也把google登入的session清空
             document.getElementById("logoutButton").addEventListener("click", function () 
-             {
-                sessionStorage.removeItem("JWToken");
-                sessionStorage.removeItem("MemberID");
-                sessionStorage.removeItem("MemberFisrtName");
-                sessionStorage.removeItem("MemberLastName");
-                sessionStorage.removeItem("MemberEmail");
-                sessionStorage.removeItem("MemberPhone");
-                sessionStorage.removeItem("MemberBirthday");
-                sessionStorage.removeItem("MemberRoleID");
-
-                    // 重定向到登出操作方法
-                    window.location.href = "@Url.Action("Logout", "Member")";
-                });
+            {
+                document.getElementById("guestContent").style.display = "block";
+                document.getElementById("memberContent").style.display = "none";
+                // 重定向到登出操作方法
+                window.location.href = "@Url.Action("Logout", "Member")";
             });
+        });
+
+
+        async function fetchMemberData(memberID) {
+            try {
+                const response = await fetch(`https://localhost:7103/api/Members/searchByID?ID=${memberID}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+
+                });
+                if (response.ok) {
+                    const data = await response.json(); // 將回應內容解析為 JSON
+                    document.getElementById("memberContent").style.display = "block";
+                    document.getElementById("memberId").innerText = memberID;
+                    document.getElementById("memberFirstName").innerText = data.firstName;
+                } else {
+                    const errorText = await response.text();
+                    console.error('查詢失敗:', errorText);
+                    alert('查詢失敗，請稍後再試');
+                }
+            } catch (error) {
+                console.error('發生錯誤:', error);
+                alert(`發生錯誤，請稍後再試。錯誤信息: ${error.message}`);
+            }
+        }
     </script>
-    
-    
-    
-    
-    
+
+
     <script>
+        //如果莫名出錯應該是這一段有錯
         document.addEventListener('DOMContentLoaded', function () {
             // 監聽滾動事件
             window.addEventListener('scroll', function () {
@@ -361,18 +372,19 @@
                 }
                 var scrollPosition = window.scrollY || window.pageYOffset;
 
-            // 如果滾動至頁面中間，顯示浮動容器，否則隱藏
-            if (scrollPosition > (window.innerHeight / 2)) {
-                floatingContainer.style.display = 'block';
-            }
-            // else {
-            //     floatingContainer.style.display = 'none';
-            // }
+                // 如果滾動至頁面中間，顯示浮動容器，否則隱藏
+                if (scrollPosition > (window.innerHeight / 2)) {
+                    floatingContainer.style.display = 'block';
+                }
+                // else {
+                //     floatingContainer.style.display = 'none';
+                // }
+            });
         });
     </script>
 
 
-    
+
     <script>
         $(document).ready(function () {
             // 頁面剛載入時隱藏訂房欄，顯示導航欄

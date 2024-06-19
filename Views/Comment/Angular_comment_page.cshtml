@@ -3,34 +3,24 @@
     ViewData["Title"] = "Angular_comment_page";
 }
 
-<h1>Angular_comment_page</h1>
  
 
+@section Styles {
+    <link href="~/css/joanna_css/styles.b13b175880f4995b.css" rel="stylesheet" />
+}
+<iframe src="http://localhost:4200/comment" style="width: 100%; height:900px; border: none;"></iframe>
 
-<app-root>
-    <router-outlet></router-outlet>
-</app-root>
 @section Scripts {
-    @* angular提供 *@
-   @*  <script src="~/node_modules/@@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js"></script>
-    <script src="~/dist/main-client.js"></script> *@
-    <script src="~/dist/fun-now-angular1/runtime.48f9e552146618a8.js" type="module"></script>
-    <script src="~/dist/fun-now-angular1/polyfills.b6cd8ceb7f42859a.js" type="module"></script>
-    <script src="~/dist/fun-now-angular1/main.f81e503038aad525.js" type="module"></script>
 
     <script>
-        // document.addEventListener('DOMContentLoaded', function () {
-        //     const containerEl = document.getElementById('angular-component-container');
 
-        //     const ngPlatformBrowser = platformBrowserDynamic.platformBrowserDynamic();
-        //     ngPlatformBrowser.bootstrapModule(CommentModule) //改自己的
-        //         .then(ref => {
-        //             const factory = ref.injector.get(ComponentFactoryResolver);
-        //             const componentFactory = factory.resolveComponentFactory(CommentComponent);//改自己的
-        //             const componentRef = componentFactory.create(ref.injector);
-        //             containerEl.appendChild((componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0]);
-        //         })
-        //         .catch(err => console.error(err));
+        // // 確保Angular應用程序已經加載完畢後進行導航
+        // document.addEventListener('DOMContentLoaded', function () {
+        //     // 使用Angular路由導航到特定組件
+        //     window.location.href = '#/membercomment'; // 注意這裡使用了Hash路由
         // });
+
+        // document.getElementById('navigateButton').addEventListener('click', function () {
+        //     window.location.href = 'http://localhost:4200/';
     </script>
 }
