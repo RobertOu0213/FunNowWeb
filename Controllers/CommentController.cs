@@ -7,7 +7,7 @@ namespace PrjFunNowWeb.Controllers
     {
      
 
-        public IActionResult Angular_comment_page()
+        public IActionResult Angular_comment_page() //目前沒用
         {
             return View();
         }
@@ -35,7 +35,7 @@ namespace PrjFunNowWeb.Controllers
             return View();
         }
 
-        public IActionResult Angular_plaform()
+        public IActionResult Angular_plaform() //目前沒用
         {
             return View();
         }
