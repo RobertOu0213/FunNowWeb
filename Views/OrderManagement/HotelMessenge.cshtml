@@ -1,0 +1,131 @@
+﻿
+@{
+    ViewData["Title"] = "HotelMessenge";
+    Layout = "_Layout_OrderManagement";
+}
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>範例頁面</title>
+    <link rel="stylesheet" href="/Ting/css/HotelMessenge.css">
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <img src="logo.png" alt="Logo">
+            <span>Hotel管理系統</span>
+        </div>
+        <div class="nav-links">
+            <a href="#">首頁</a>
+            <a href="#">訂單管理</a>
+            <a href="#">客服中心</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="content-wrapper">
+            <div class="sidebar">
+                <ul>
+                    <li>
+                        <a href="#">
+                            <div class="icon"><i class="fa-solid fa-calendar-days"></i></div>
+                            <div class="text"><span>管理訂單</span></div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <div class="icon"><i class="fa-solid fa-briefcase"></i></div>
+                            <div class="text"><span>訂單詳情</span></div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <div class="icon"><i class="fa-solid fa-building"></i></div>
+                            <div class="text"><span>住宿</span></div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <div class="icon"><i class="fa-solid fa-plane"></i></div>
+                            <div class="text"><span>機票</span></div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <div class="icon"><i class="fa-solid fa-person-skiing-nordic"></i></div>
+                            <div class="text"><span>活動體驗</span></div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <div class="icon"><i class="fa-solid fa-comment-dots"></i></div>
+                            <div class="text"><span>住宿訊息</span></div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <div class="icon"><i class="fa-solid fa-star"></i></div>
+                            <div class="text"><span>住宿評鑑</span></div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <div class="icon"><i class="fa-solid fa-crown"></i></div>
+                            <div class="text"><span>AgodaVIP</span></div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <div class="icon"><i class="fa-solid fa-money-check-dollar"></i></div>
+                            <div class="text"><span>A金回饋</span></div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <div class="icon"><i class="fa-solid fa-sack-dollar"></i></div>
+                            <div class="text"><span>現金回饋</span></div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <div class="icon"><i class="fa-solid fa-piggy-bank"></i></div>
+                            <div class="text"><span>PointsMAX</span></div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <div class="icon"><i class="fa-solid fa-user"></i></div>
+                            <div class="text"><span>個人資料</span></div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="content">
+                <div class="content-header">
+                    <h2>住宿訊息</h2>
+                    <div class="actions">
+                        <input type="text" placeholder="搜尋訊息...">
+                    </div>
+                </div>
+                <div class="tabs">
+                    <div class="tab__link active">所有訊息</div>
+                    <div class="tab__link">已讀訊息</div>
+                    <div class="tab__link">未讀訊息</div>
+                </div>
+                <div class="main-content">
+                    <h3>目前沒有訊息</h3>
+                    <img src="no-messages.png" alt="No Messages">
+                    <div class="buttons">
+                        <a href="#">發送新訊息</a>
+                        <a href="#">返回首頁</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://kit.fontawesome.com/091893cea4.js" crossorigin="anonymous"></script>
+</body>
+</html>
+
