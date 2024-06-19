@@ -68,6 +68,21 @@ builder.Services.AddCors(options =>
 // Add SignalR client services if needed for SignalR client side (optional)
 builder.Services.AddSignalR();
 
+//Angular用
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularApp",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:4200")
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
+
+builder.Services.AddControllersWithViews();
+
+
 
 
 builder.Services.AddControllers().AddJsonOptions(options =>
@@ -116,6 +131,8 @@ app.UseRouting();
 app.UseCors("AllowAllOrigins");
 app.UseAuthorization();
 
+
+app.UseCors("AllowAngularApp");
 
 
 app.MapControllerRoute(
