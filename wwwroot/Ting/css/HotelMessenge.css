@@ -101,37 +101,33 @@ body {
     font-size: 16px;
 }
 
-.content {
-    margin-left: 270px;
-    padding: 20px;
-    background-color: #fff;
+.messages {
     flex: 1;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    border-radius: 10px;
+    margin-right: 20px;
 }
 
-.content-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-    .content-header h2 {
-        margin: 0;
-    }
-
-    .content-header .actions {
+    .messages .content-header {
         display: flex;
+        justify-content: space-between;
         align-items: center;
+        margin-bottom: 20px;
     }
 
-        .content-header .actions input {
-            padding: 5px;
-            margin-left: 10px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
+        .messages .content-header h2 {
+            margin: 0;
         }
+
+        .messages .content-header .actions {
+            display: flex;
+            align-items: center;
+        }
+
+            .messages .content-header .actions input {
+                padding: 5px;
+                margin-left: 10px;
+                border: 1px solid #ccc;
+                border-radius: 3px;
+            }
 
 .tabs {
     display: flex;
@@ -163,30 +159,125 @@ body {
         color: #007bff;
     }
 
-.main-content {
-    text-align: center;
-    padding: 50px 0;
+.message-list {
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #fff;
+    max-height: 500px;
+    overflow-y: auto;
 }
 
-    .main-content h3 {
-        margin: 0 0 20px;
+    .message-list ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
     }
 
-    .main-content img {
-        width: 100px;
-        margin-bottom: 20px;
+        .message-list ul li {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+.message-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+    .message-header h3 {
+        margin: 0;
+        font-size: 16px;
+        color: #333;
     }
 
-    .main-content .buttons a {
-        display: inline-block;
-        margin: 10px;
+    .message-header .message-date {
+        font-size: 12px;
+        color: #999;
+    }
+
+.message-body p {
+    margin: 0;
+    font-size: 14px;
+    color: #555;
+}
+
+.chat-details {
+    width: 500px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+    .chat-details .content-header {
+        padding: 20px;
+        border-bottom: 1px solid #eee;
+    }
+
+        .chat-details .content-header h2 {
+            margin: 0;
+        }
+
+    .chat-details .chat-content {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+    }
+
+.chat-message {
+    margin-bottom: 15px;
+}
+
+    .chat-message .chat-date {
+        display: block;
+        font-size: 12px;
+        color: #999;
+        margin-bottom: 5px;
+    }
+
+    .chat-message p {
+        margin: 0;
+        padding: 10px;
+        background-color: #f4f4f4;
+        border-radius: 10px;
+        font-size: 14px;
+        color: #333;
+    }
+
+.chat-input {
+    display: flex;
+    padding: 20px;
+    border-top: 1px solid #eee;
+    background-color: #fafafa;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+    .chat-input input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        margin-right: 10px;
+    }
+
+    .chat-input button {
         padding: 10px 20px;
         background-color: #007bff;
         color: #fff;
-        border-radius: 5px;
-        text-decoration: none;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
     }
 
-        .main-content .buttons a:hover {
+        .chat-input button:hover {
             background-color: #0056b3;
         }

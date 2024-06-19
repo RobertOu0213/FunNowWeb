@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "HotelMessenge";
     Layout = "_Layout_OrderManagement";
 }
@@ -102,7 +101,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="content">
+            <div class="messages">
                 <div class="content-header">
                     <h2>住宿訊息</h2>
                     <div class="actions">
@@ -114,13 +113,37 @@
                     <div class="tab__link">已讀訊息</div>
                     <div class="tab__link">未讀訊息</div>
                 </div>
-                <div class="main-content">
-                    <h3>目前沒有訊息</h3>
-                    <img src="no-messages.png" alt="No Messages">
-                    <div class="buttons">
-                        <a href="#">發送新訊息</a>
-                        <a href="#">返回首頁</a>
+                <div class="message-list">
+                    <ul>
+                        <li>
+                            <div class="message-item">
+                                <div class="message-header">
+                                    <h3>訊息標題</h3>
+                                    <span class="message-date">2024/6/13</span>
+                                </div>
+                                <div class="message-body">
+                                    <p>這是一條示範訊息內容。</p>
+                                </div>
+                            </div>
+                        </li>
+                        <!-- 在此處生成更多訊息 -->
+                    </ul>
+                </div>
+            </div>
+            <div class="chat-details">
+                <div class="content-header">
+                    <h2>聊天詳細內容</h2>
+                </div>
+                <div class="chat-content">
+                    <div class="chat-message">
+                        <span class="chat-date">2024/6/13</span>
+                        <p>這是聊天內容的示範。</p>
                     </div>
+                    <!-- 在此處生成更多聊天內容 -->
+                </div>
+                <div class="chat-input">
+                    <input type="text" placeholder="寫些什麼吧！">
+                    <button type="button">送出</button>
                 </div>
             </div>
         </div>
@@ -128,4 +151,3 @@
     <script src="https://kit.fontawesome.com/091893cea4.js" crossorigin="anonymous"></script>
 </body>
 </html>
-
