@@ -1,9 +1,4 @@
-﻿@{
-    ViewData["Title"] = "HotelMessage";
-    Layout = "_Layout_HotelHome";
-}
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
@@ -52,7 +47,7 @@
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    padding:10px;
+                    padding: 10px;
                 }
 
                     .left-panel .top .header h2 {
@@ -102,7 +97,7 @@
             .right-panel .top, .right-panel .middle, .right-panel .bottom {
                 box-sizing: border-box;
                 border: 1px solid #E0E0E0;
-                padding:0px 10px;
+                padding: 0px 10px;
             }
 
             .right-panel .top {
@@ -118,8 +113,7 @@
                 flex: 9;
                 background-color: #ffffff;
                 overflow-y: auto;
-                padding:10px;
-
+                padding: 10px;
             }
 
             .right-panel .bottom {
@@ -133,6 +127,9 @@
         .customer-info {
             display: flex;
             align-items: center;
+            background-color: aliceblue;
+            padding: 10px;
+            border-radius: 10px;
         }
 
             .customer-info img {
@@ -140,6 +137,7 @@
                 height: 50px;
                 border-radius: 50%;
                 margin: 20px;
+                border: 2px solid #007bff; /* 添加一个边框来实现圆框效果 */
             }
 
             .customer-info div {
@@ -157,13 +155,34 @@
                 margin-bottom: 10px;
             }
 
+            .messages .message {
+                display: flex;
+                flex-direction: column;
+                padding: 10px;
+                border: 1px solid #E0E0E0;
+                border-radius: 5px;
+            }
+
             .messages .customer-message {
                 text-align: left;
+                background-color: #f1f1f1;
             }
 
             .messages .owner-message {
                 text-align: right;
+                background-color: #e1f5fe;
             }
+
+        .message-header {
+            font-size: 12px;
+            color: #555;
+        }
+
+        .message-text {
+            margin-top: 5px;
+            font-size: 14px;
+            color: #000;
+        }
 
         /* 底部输入区样式 */
         .input-container {
@@ -210,7 +229,7 @@
             <!-- 左侧下部 -->
             <div class="bottom">
                 <!-- 左侧下部内容 -->
-                <div class="customer-info" style="background-color:aliceblue">
+                <div class="customer-info">
                     <img src="path/to/customer-photo.jpg" alt="客人照片">
                     <div>
                         <span>姓名: 客人名稱</span>
@@ -230,9 +249,6 @@
                 </div>
                 <div class="customer-info">
                     <div>
-                        <span>電話: 123456789</span>
-                    </div>
-                    <div>
                         <span>飯店: 客人選取飯店資訊</span>
                     </div>
                 </div>
@@ -241,8 +257,14 @@
             <!-- 右侧中部 -->
             <div class="middle">
                 <ul class="messages" id="messages">
-                    <li class="customer-message">客人訊息</li>
-                    <li class="owner-message">業主訊息</li>
+                    <li class="message customer-message">
+                        <div class="message-header">客人1 - 10:00 AM</div>
+                        <div class="message-text">客人訊息</div>
+                    </li>
+                    <li class="message owner-message">
+                        <div class="message-header">業主1 - 10:05 AM</div>
+                        <div class="message-text">業主訊息</div>
+                    </li>
                 </ul>
             </div>
 
@@ -263,9 +285,20 @@
             if (message) {
                 const messagesList = document.getElementById('messages');
                 const newMessage = document.createElement('li');
-                newMessage.classList.add('owner-message');
-                newMessage.textContent = message;
+                newMessage.classList.add('message', 'owner-message');
+
+                const header = document.createElement('div');
+                header.classList.add('message-header');
+                header.textContent = '業主 - ' + new Date().toLocaleTimeString();
+
+                const text = document.createElement('div');
+                text.classList.add('message-text');
+                text.textContent = message;
+
+                newMessage.appendChild(header);
+                newMessage.appendChild(text);
                 messagesList.appendChild(newMessage);
+
                 input.value = '';
                 messagesList.scrollTop = messagesList.scrollHeight;
             }
