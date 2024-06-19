@@ -1,0 +1,221 @@
+﻿@{
+   
+    Layout = "_Layout_HotelHome";
+}
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/9bbb5484f7.js" crossorigin="anonymous"></script>
+
+    <title>房東物業的查看訂單</title>
+    <style>
+        /* body {
+                    font-family: Arial, sans-serif;
+                    background-color: #f6f6ff;
+                    margin: 0;
+                    padding: 0;
+                }
+                .container {
+                    width: 80%;
+                    margin: 20px auto;
+                    background-color: #fff;
+                    padding: 20px;
+                    border-radius: 10px;
+                    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                }*/
+
+
+        /* 設定整個網頁的字體、間距和背景顏色 */
+        body {
+            font-family: Arial, sans-serif; /* 使用Arial字體 */
+            margin: 0; /* 移除預設的外邊距 */
+            padding: 0; /* 移除預設的內邊距 */
+            background-color: #fcfcfc; /* 設定網頁背景顏色 */
+        }
+
+        /* 設定頁面頂部的導航欄樣式 */
+        .header {
+            background-color: #1174a6; /* 設定背景為白色 */
+            padding: 10px 20px; /* 設定上下內邊距為10px，左右內邊距為20px */
+            display: flex; /* 使用彈性盒子布局 */
+            justify-content: space-between; /* 讓子元素在主軸方向上兩端對齊 */
+            align-items: center; /* 垂直居中對齊子元素 */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* 添加陰影效果 */
+        }
+
+            /* 設定標誌區域的樣式 */
+            .header .logo {
+                display: flex; /* 使用彈性盒子布局 */
+                align-items: center; /* 垂直居中對齊子元素 */
+            }
+
+                /* 設定標誌圖像的樣式 */
+                .header .logo img {
+                    height: 40px; /* 設定圖片高度為40px */
+                    margin-right: 10px; /* 設定右側外邊距為10px */
+                }
+
+            /* 設定導航鏈接區域的樣式 */
+            .header .nav-links {
+                display: flex; /* 使用彈性盒子布局 */
+                align-items: center; /* 垂直居中對齊子元素 */
+            }
+
+                /* 設定導航鏈接的樣式 */
+                .header .nav-links a {
+                    margin-left: 20px; /* 設定左側外邊距為20px */
+                    text-decoration: none; /* 移除鏈接的下劃線 */
+                    color: #333; /* 設定文本顏色為深灰色 */
+                }
+
+                    /* 設定導航鏈接在懸停時的樣式 */
+                    .header .nav-links a:hover {
+                        color: #007bff; /* 設定文本顏色為藍色 */
+                    }
+
+        /* 設定頁面內容區域的樣式 */
+        .container {
+            /*display: flex;*/ /* 使用彈性盒子布局 */
+            justify-content: center; /* 在主軸方向上居中對齊子元素 */
+        }
+
+        .subHeader {
+            background-color: #f6f6ff;
+            border: 1px solid;
+            padding: 20px 170px 20px 170px; /* 設定內邊距為20px */
+        }
+
+        .mainContent {
+            padding: 20px 150px 20px 150px; /* 設定內邊距為20px */
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+            .search-container input, .search-container select, .search-container button {
+                padding: 10px;
+                font-size: 16px;
+            }
+
+            .search-container input {
+                width: 40%;
+            }
+
+            .search-container select, .search-container button {
+                width: 20%;
+            }
+
+        .tabs {
+            display: flex;
+            justify-content: space-around;
+            border-bottom: 2px solid #ddd;
+            margin-bottom: 20px;
+        }
+
+            .tabs div {
+                padding: 10px;
+                cursor: pointer;
+            }
+
+            .tabs .active {
+                border-bottom: 2px solid #7d57c1;
+                color: #7d57c1;
+            }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f6f6ff;
+        }
+
+        .confirmed {
+            color: green;
+        }
+
+        .download {
+            text-align: right;
+            margin-top: 20px;
+        }
+
+            .download button {
+                margin: 10px 20px;
+                font-size: 16px;
+                color: grey;
+                background-color: transparent;
+                border: none;
+                cursor: pointer;
+            }
+    </style>
+</head>
+<body>
+    
+    <!--============================主要內容=========================================-->
+    <div class="container justify-content-center align-items-center">
+
+        <div class="container">
+            <div class="subHeader">
+                <h1>物業_ABC飯店的訂單總覽</h1>
+                <div class="search-container">
+                    <input type="text" placeholder="訂單編號/住客姓名">
+                    <select>
+                        <option value="checkin-date">入住日期</option>
+                    </select>
+                    <input type="date" value="2024-05-13">
+                    <input type="date" value="2024-06-28">
+                    <button>搜尋</button>
+                </div>
+            </div>
+            <div class="mainContent">
+                <div class="tabs">
+                    <div class="active">全部 (1)</div>
+                    <div>已確認 (1)</div>
+                    <div>已修改 (0)</div>
+                    <div>已取消 (0)</div>
+                </div>
+                <div class="download">
+                    <button>
+                        <i class="fa-solid fa-download"></i>下載 (.csv)
+                    </button>
+                </div>
+                <table>
+                    <tr>
+                        <th>訂單編號</th>
+                        <th>住客姓名</th>
+                        <th>入住日期</th>
+                        <th>房型 & 入住人數</th>
+                        <th>收款方式</th>
+                        <th>快速操作</th>
+                    </tr>
+                    <tr>
+                        <td class="confirmed">1226786372</td>
+                        <td>WEN HUI CHANG</td>
+                        <td>25 May 2024 - 26 May 2024</td>
+                        <td>公寓 (853155515) 2位大人, 1位兒童 | 1晚</td>
+                        <td>Agoda收款</td>
+                        <td><button>詳細</button></td>
+                    </tr>
+                </table>
+
+            </div> <!--mainContent的結尾-->
+        </div>
+    </div>
+</body>
+</html>

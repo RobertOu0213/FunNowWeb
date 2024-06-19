@@ -52,7 +52,8 @@ namespace PrjFunNowWeb.Controllers
                 {
                     // 顯示錯誤訊息用的
                     var errorMessage = await response.Content.ReadAsStringAsync();
-                    return StatusCode((int)response.StatusCode, errorMessage);
+                    //return StatusCode((int)response.StatusCode, errorMessage);
+                    return BadRequest();
                 }
 
                 var responseData = await response.Content.ReadAsStringAsync();
