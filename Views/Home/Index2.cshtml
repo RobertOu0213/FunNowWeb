@@ -155,42 +155,22 @@
 </div>
 
 @* Accordion*@
-<div class="container1">
+<div class="container1" id="container1" style="display: none;">
     <div class="accordion" id="accordionExample">
         <div class="card">
             <h2 class="card-header" id="headingOne">
-                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne">
+                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" id="accordionButton">
                     已選擇住宿 (n/5)
                 </button>
             </h2>
-            <div id="collapseOne" class="collapse" data-parent="#accordionExample">
+            <div id="collapseOne" class="collapse" data-parent="#accordionExample" >
                 <div class="card-body">
-                @*     <div class="bottom"> *@
                     <div class="row">
-                        <div class="col-9">
-                           
+                        <div class="col-9">                         
                                 <div class="image-container" style="position: relative; width: 200px; display: inline-block;">
                                     <button type="button" class="close remove-image" style="position: absolute; z-index: 2; left: 80px; top: 5px;"><span aria-hidden="true">&times;</span></button>
                                     <img src="~/image/julia/haiou.png" class="img-thumbnail float-left mx-1" style="position: relative; z-index: 1;" alt="房间图片">
-                                </div>
-                                <div class="image-container" style="position: relative; width: 200px; display: inline-block;">
-                                    <button type="button" class="close remove-image" style="position: absolute; z-index: 2; left: 80px; top: 5px;"><span aria-hidden="true">&times;</span></button>
-                                    <img src="~/image/julia/haiou.png" class="img-thumbnail float-left mx-1" style="position: relative; z-index: 1;" alt="房间图片">
-                                </div>
-                                <div class="image-container" style="position: relative; width: 200px; display: inline-block;">
-                                    <button type="button" class="close remove-image" style="position: absolute; z-index: 2; left: 80px; top: 5px;"><span aria-hidden="true">&times;</span></button>
-                                    <img src="~/image/julia/haiou.png" class="img-thumbnail float-left mx-1" style="position: relative; z-index: 1;" alt="房间图片">
-                                </div>
-                                <div class="image-container" style="position: relative; width: 200px; display: inline-block;">
-                                    <button type="button" class="close remove-image" style="position: absolute; z-index: 2; left: 80px; top: 5px;"><span aria-hidden="true">&times;</span></button>
-                                    <img src="~/image/julia/haiou.png" class="img-thumbnail float-left mx-1" style="position: relative; z-index: 1;" alt="房间图片">
-                                </div>
-                                <div class="image-container" style="position: relative; width: 200px; display: inline-block;">
-                                    <button type="button" class="close remove-image" style="position: absolute; z-index: 2; left: 80px; top: 5px;"><span aria-hidden="true">&times;</span></button>
-                                    <img src="~/image/julia/haiou.png" class="img-thumbnail float-left mx-1" style="position: relative; z-index: 1;" alt="房间图片">
-                                </div>
-                            
-                         
+                                </div>     
                         </div>
                         <div class="col-3">
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
@@ -198,8 +178,6 @@
                             </button>
                         </div>
                     </div>
-                      
-                  @*   </div> *@
                 </div>
             </div>
         </div>
@@ -640,6 +618,8 @@
                 }
             }
 
+            //根據傳入的星級數 stars 生成對應數量的星級 HTML 標記。
+            //初始化一個空字串 starsHtml
             const generateStars = (stars) => {
                 let starsHtml = '';
                 for (let i = 0; i < stars; i++) {
@@ -648,79 +628,120 @@
                 return starsHtml;
             };
 
+            //獲取所有具有 .form-check-input 類別的 checkbox 元素。對每個 checkbox 元素註冊一個 change 事件監聽器。
+            //checkbox 的勾選狀態發生變化時,就會觸發 updateUI 函式的執行。
             document.querySelectorAll('.form-check-input').forEach(checkbox => {
-                checkbox.addEventListener('change', function () {
-                    const compareDatas = buildCompareDatas();
-                    console.warn(compareDatas);
-                    // 清空之前的內容
-                    const accordionContainer = document.querySelector('#collapseOne .card-body .row .col-9');
-                    accordionContainer.innerHTML = '';
-                    document.querySelector('#myModal .table tbody').innerHTML = '';
-                    // 生成新的內容
-                    compareDatas.forEach(hotel => {
-                        const { hotelImage, hotelName, cityName, levelStar, hotelEquipmentNames, totalAverageScore, hotelPrice } = hotel;
-                        // 生成展開收合區塊中的照片容器
-                        const accordionButton = document.querySelector('.accordion-button');
-                        // accordionButton.innerHTML = `已選擇住宿 (${compareDatas.length}/5)`;
-                        const HotelImage = getImageUrl(hotelImage);
-                      const ratingscore= JSON.parse(totalAverageScore)
-                        const formattedScore = parseFloat(ratingscore.toFixed(1));
-
-                        const imageContainer = document.createElement('div');
-                        imageContainer.className = 'image-container';
-
-                        const closeButton = document.createElement('button');
-                        closeButton.type = 'button';
-                        closeButton.className = 'close remove-image';
-                        closeButton.ariaLabel = 'Close';
-                        closeButton.innerHTML = '<span aria-hidden="true">&times;</span>';
-                        closeButton.style.position = 'absolute';
-                        closeButton.style.zIndex = '2';
-                        closeButton.style.left = '10px';
-                        closeButton.style.top = '5px';
-                        imageContainer.appendChild(closeButton);
-
-                        // <button type="button" class="close remove-image" style = "position: absolute; z-index: 2; left: 80px; top: 5px;" > <span aria - hidden="true" >& times; </span></button >
-                        //     <img src="~/image/julia/haiou.png" class="img-thumbnail float-left mx-1" style = "position: relative; z-index: 1;" alt = "房间图片" >
-
-                        const img = document.createElement('img');
-                        img.src = getImageUrl(hotelImage);
-                       // img.className = 'card-img-top';
-                        img.className = 'img-thumbnail float-left mx-1';
-                        img.alt = '房間圖片';
-                        img.style.position = 'relative';
-                        img.style.zIndex= '1';                    
-
-                        imageContainer.appendChild(closeButton);
-                        imageContainer.appendChild(img);
-                        accordionContainer.appendChild(imageContainer);
-
-                        // 為新生成的 closeButton 添加事件監聽器
-                        closeButton.addEventListener('click', () => {
-                            const imageContainer = closeButton.parentElement;
-                            imageContainer.parentElement.removeChild(imageContainer);
-
-                        // 生成Modal的表格行
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                        <td><img src="${HotelImage}" class="card-img-top" alt="房間圖片"></td>
-                        <td>${hotelName}</td>
-                        <td>${cityName}</td>
-                        <td>${generateStars(levelStar)}</td>
-                        <td>${hotelEquipmentNames.join(', ')}</td>
-                        <td>${formattedScore}</td>
-                        <td>${hotelPrice}</td>
-                        <td>
-                            <button type="button" class="btn btn-primary">查看飯店</button>
-                            <button type="button" class="btn btn-secondary">移除</button>
-                        </td>
-                    `;
-                        document.querySelector('#myModal .table tbody').appendChild(row);
-                    });
-                });
+                checkbox.addEventListener('change', updateUI);
             });
 
-      
+            function updateUI() {
+                const compareDatas = buildCompareDatas();
+                console.warn(compareDatas);
+
+                const accordionContainer = document.querySelector('#collapseOne .card-body .row .col-9');
+
+                // 顯示或隱藏 Accordion
+                const Accordion = document.querySelector('#container1');
+
+                // 根據 compareDatas 的長度決定是否顯示 Accordion
+                if (compareDatas.length > 0) {
+                    Accordion.style.display = 'block';
+                } else {
+                    Accordion.style.display = 'none';
+                }
+              
+
+       
+                // 清空之前的內容
+                accordionContainer.innerHTML = '';
+                document.querySelector('#myModal .table tbody').innerHTML = '';
+
+                // 更新展開收合區塊中的n/5 checkbox勾選個數
+                const accordionButton = document.querySelector('#accordionButton');
+                accordionButton.innerHTML = `已選擇住宿 (${compareDatas.length}/5)`;
+
+                // 更新展開收合區塊中的照片容器
+                compareDatas.forEach(hotel => {
+                    const { hotelImage, hotelId } = hotel;
+                    const HotelImage = getImageUrl(hotelImage);
+
+                    const imageContainer = document.createElement('div');
+                    imageContainer.className = 'image-container';
+
+                    const closeButton = document.createElement('button');
+                    closeButton.type = 'button';
+                    closeButton.className = 'close remove-image';
+                    closeButton.ariaLabel = 'Close';
+                    closeButton.innerHTML = '<span aria-hidden="true">&times;</span>';
+                    closeButton.style.position = 'absolute';
+                    closeButton.style.zIndex = '2';
+                    closeButton.style.left = 'calc(100% - 20px)';
+                    closeButton.style.top = '5px';
+                    imageContainer.appendChild(closeButton);
+
+                    const img = document.createElement('img');
+                    img.src = getImageUrl(hotelImage);
+                    // img.className = 'card-img-top';
+                    img.className = 'img-thumbnail float-left mx-1';
+                    img.alt = '房間圖片';
+                    img.style.position = 'relative';
+                    img.style.zIndex = '1';
+                    img.style.width = '100%';
+
+                    imageContainer.appendChild(closeButton);
+                    imageContainer.appendChild(img);
+                    accordionContainer.appendChild(imageContainer);
+
+                    // 為新生成的 closeButton 添加事件監聽器,當按鈕被點擊時,它會找到對應的 checkbox,
+                    // 將其勾選狀態設置為 false (取消勾選),然後重新呼叫 updateUI 函式來更新 UI。
+                    closeButton.addEventListener('click', () => {
+                        const checkbox = document.querySelector(`.form-check-input[data-hotel-id="${hotelId}"]`);
+                        checkbox.checked = false;
+                        updateUI();
+                    });
+                });
+
+                // 更新Modal的表格行
+                compareDatas.forEach(hotel => {
+                    const { hotelImage, hotelName, cityName, levelStar, hotelEquipmentNames, totalAverageScore, hotelPrice, hotelId } = hotel;
+                    const HotelImage = getImageUrl(hotelImage);
+                    const ratingscore = JSON.parse(totalAverageScore);
+                    const formattedScore = parseFloat(ratingscore.toFixed(1));
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                    <td><img src="${HotelImage}" class="card-img-top" alt="房間圖片"></td>
+                    <td>${hotelName}</td>
+                    <td>${cityName}</td>
+                    <td>${generateStars(levelStar)}</td>
+                    <td>${hotelEquipmentNames.join(', ')}</td>
+                    <td>${formattedScore}</td>
+                    <td>${hotelPrice}</td>
+                    <td>
+                        <button type="button" class="btn btn-primary">查看飯店</button>
+                        <button type="button" class="btn btn-secondary remove-row">移除</button>
+                    </td>
+                `;
+                    document.querySelector('#myModal .table tbody').appendChild(row);
+
+
+                    //  為新生成的remove-row 按鈕添加一個點擊事件監聽器,
+                    // 當按鈕被點擊時,它會找到對應的 checkbox, 將其勾選狀態設置為 false (取消勾選),然後重新呼叫 updateUI 函式來更新 UI。
+                    const removeRowButton = row.querySelector('.remove-row');
+                    removeRowButton.addEventListener('click', () => {
+                        const checkbox = document.querySelector(`.form-check-input[data-hotel-id="${hotelId}"]`);
+                        checkbox.checked = false;
+                        updateUI();
+                    });
+                });
+            }
+            // 為新生成的 view-hotel 按鈕添加事件監聽器
+            // const viewHotelButton = row.querySelector('.view-hotel');
+            // viewHotelButton.addEventListener('click', () => {
+            //     // 導航到相應的飯店頁面
+            //     const hotelUrl = `/Hotels/Details/${hotelId}`;
+            //     window.location.href = hotelUrl;
+            // });
 
         }
 

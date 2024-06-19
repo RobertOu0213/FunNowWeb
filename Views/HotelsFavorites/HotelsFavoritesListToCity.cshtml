@@ -172,7 +172,7 @@
                // cityCountryLabel.textContent = `${cityName}, ${countryName}`;  // 更新標籤顯示正確的城市和國家
                 cityCountryLabel.textContent = `${decodeURIComponent(cityName)}, ${decodeURIComponent(countryName)}`;
 
-                  //須放在loadFavoriteHotels
+                  //須放在loadFavoriteHotels裡面,因為動態生成每張card,愛心按鈕跟著生成
                 //獲取所有愛心按鈕元素
                 const loveButtons = document.querySelectorAll('.love-button');
 
@@ -196,7 +196,7 @@
             return starsHtml;
         };
 
-        loadFavoriteHotels();
+         loadFavoriteHotels();
 
      
         // 處理愛心按鈕點擊事件
