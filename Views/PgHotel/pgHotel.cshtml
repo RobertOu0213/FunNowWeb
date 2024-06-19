@@ -38,6 +38,7 @@
                 <div class="row">
                     <div class="col-8">
                         <div style="display:flex;">
+                            <input type="hidden" id="hotel-id" value="@Model.HotelDetail.HotelID" />
                             <h2>@Model.HotelDetail.HotelName</h2>
                             @for (int i = 0; i < Model.HotelDetail.LevelStar; i++)
                             {
@@ -294,7 +295,6 @@
             </ul>
 
             @*房型區--自動生成*@
-            @*房型區--自動生成*@
             <div class="container mt-5 pt-5" id="room-types" data-id="{}">
                 <h2>所有房型</h2>
                 @if (Model.HotelDetail.Rooms != null && Model.HotelDetail.Rooms.Any())
@@ -303,7 +303,7 @@
                     {
                         var limitedRoomImages = room.RoomImages?.Take(4).ToList() ?? new List<pgHotel_ImageDTO>();
                         int imageCount = limitedRoomImages.Count;
-                        <div class="row room-item round-edge-container @(room.IsBooked ? "booked" : "")" data-room-name="@room.RoomName" data-room-price="@room.RoomPrice" data-room-equips="@Newtonsoft.Json.JsonConvert.SerializeObject(room.RoomEquipments)" data-room-images="@Newtonsoft.Json.JsonConvert.SerializeObject(room.RoomImages)">
+                        <div class="row room-item round-edge-container @(room.IsBooked ? "booked" : "")" data-room-id="@room.RoomId" data-room-name="@room.RoomName" data-room-price="@room.RoomPrice" data-room-equips="@Newtonsoft.Json.JsonConvert.SerializeObject(room.RoomEquipments)" data-room-images="@Newtonsoft.Json.JsonConvert.SerializeObject(room.RoomImages)">
                             <h3 data-bs-toggle="modal" data-bs-target="#roomModal">@room.RoomName</h3>
                             <div class="col-4">
                                 <table data-bs-toggle="modal" data-bs-target="#roomModal">
@@ -393,6 +393,7 @@
                     <p>暫無房間資訊</p>
                 }
             </div>
+
 
 
             @*房間彈出視窗*@
@@ -520,7 +521,7 @@
                             </div>
                         </div>
                         <div>
-                            <h4>其他周邊飯店</h4>
+                            <h4>你可能也喜歡</h4>
                             @if (Model.HotelDetail.SimilarHotels != null && Model.HotelDetail.SimilarHotels.Any())
                             {
                                 <div class="scrollable-container">
@@ -549,9 +550,9 @@
                                                         }
                                                     </div>
                                                 </div>
-                                                <span style="color:green; font-weight:700;">@hotel.AverageRatingScores /10 </span>
+                                                <span style="background-color:green; color:white; font-weight:700;">@hotel.AverageRatingScores /10 超讚</span>
                                                 <i class="fa-solid fa-location-dot d-block mt-2">@hotel.HotelAddress</i>
-                                                <span style="color:red; font-weight:700;">只剩 @hotel.AvailableRooms 間房!!!</span>
+                                                <span style="color:red; text-decoration:underline; font-weight:700;">只剩 @hotel.AvailableRooms 間房!!!</span>
                                                 <div style="display:flex; align-items: center; margin-top: 10px;">
                                                     <h3 class="mb-0 mr-3">TWD @(hotel.AverageRoomPrice.ToString("F2"))</h3>
                                                     <a class="btn btn-primary" href="/PgHotel/pgHotel?hotelId=@(hotel.HotelId)&checkInDate=@(Model.HotelDetail.CheckInDate)&checkOutDate=@(Model.HotelDetail.CheckOutDate)">查看房型</a>
@@ -569,79 +570,6 @@
                     </div>
                 </div>
             </div>
-
-
-            @*瀏覽紀錄*@
-            <div>
-                <h2>你可能也喜歡</h2>
-                <div id="carouselExampleControls" class="carousel slide round-edge-container" data-ride="carousel">
-                    <div class="carousel-inner">
-                        @{
-                            var hotelGroups = Enumerable.Range(0, 9).Select(index => new { index })
-                            .GroupBy(x => x.index / 3)
-                            .Select(g => g.Select(x => x.index).ToList())
-                            .ToList();
-                            for (int i = 0; i < hotelGroups.Count; i++)
-                            {
-                                <div class="carousel-item @(i == 0 ? "active" : "")">
-                                    <div class="card-deck mb-5">
-                                        @foreach (var index in hotelGroups[i])
-                                        {
-                                            var hotel = index < Model.HotelDetail.SimilarHotels.Count ? Model.HotelDetail.SimilarHotels[index] : null;
-                                            var imageUrl = hotel?.HotelImage?.ImageUrl ?? "/image/louieee_img/default-picture.jpg";
-                                            if (!imageUrl.StartsWith("http") && imageUrl != "/image/louieee_img/default-picture.jpg")
-                                            {
-                                                imageUrl = $"https://localhost:7284/image/{imageUrl}";
-                                            }
-                                            <a href="@((hotel != null) ? ("/PgHotel/pgHotel?hotelId=" + hotel.HotelId + "&checkInDate=" + @Model.HotelDetail.CheckInDate + "&checkOutDate=" + @Model.HotelDetail.CheckOutDate) : "#")" class="card">
-                                                <div class="card">
-                                                    <img src="@imageUrl" class="card-img-top" alt="Hotel Image">
-                                                    <div class="card-body">
-                                                        @if (hotel != null)
-                                                        {
-                                                            <h5 class="card-title">@hotel.HotelName</h5>
-                                                            for (int j = 0; j < hotel.LevelStar; j++)
-                                                            {
-                                                                <img src="~/image/louieee_img/star.png" />
-                                                            }
-                                                            <p class="card-text">
-                                                                <span>@hotel.AverageRatingScores /10</span>
-                                                                <i class="fa-solid fa-location-dot">@hotel.HotelAddress</i>
-                                                            </p>
-                                                        }
-                                                        else
-                                                        {
-                                                            <h5 class="card-title">飯店名稱</h5>
-                                                            <p class="card-text">
-                                                                <span>評分</span>
-                                                                <i class="fa-solid fa-location-dot">飯店地址</i>
-                                                            </p>
-                                                        }
-                                                    </div>
-                                                    <div class="card-footer">
-                                                        <small class="text-body-secondary">只剩 @(hotel?.AvailableRooms) 間房!!!</small>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        }
-                                    </div>
-                                </div>
-                            }
-                        }
-                    </div>
-                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Next</span>
-                    </a>
-                </div>
-            </div>
-            
-            
-            
         </div>
     </div>
 </div>
@@ -914,98 +842,140 @@
         // 为了保持一致性并减少在客户端和服务器端之间传递的数据，我们可以在JavaScript中抓取已经生成的DOM对象的数据，
         // 而不是在JavaScript中再次使用@model。这样可以减少服务器负担，并且代码更简洁。
 
-
-
-            // 获取当前饭店的纬度和经度
-            var hotelLatitude = parseFloat(document.getElementById("hotel-latitude").value);
-            var hotelLongitude = parseFloat(document.getElementById("hotel-longitude").value);
-            var hotelName = document.getElementById("hotel-name").textContent;
-
-            // 初始化地图
-            var map = L.map('openstreet-map').setView([hotelLatitude, hotelLongitude], 10);
-
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap',
-                zoomControl: true,
-            }).addTo(map);
-
-            // 自定义图标
-            const customIcon = L.icon({
-                iconUrl: 'https://cdn1.iconfinder.com/data/icons/everyday-2/64/Flat_Internet_onwork-16-256.png',
-                iconSize: [42, 42],
-            });
-
-            // 添加当前饭店的标记
-            var hotelMarker = L.marker([hotelLatitude, hotelLongitude], {
-                icon: customIcon,
-                title: hotelName,
-                opacity: 1.0
-            }).addTo(map);
-
-            hotelMarker.bindPopup("<b>" + hotelName + "</b>");
-
-            // 获取相似饭店的标记数据并保存地标引用
-            var similarHotels = document.querySelectorAll(".similar-hotel");
-            var markers = [];
-
-            similarHotels.forEach(function (hotel) {
-                var similarHotelLatitude = parseFloat(hotel.querySelector(".hotel-latitude").value);
-                var similarHotelLongitude = parseFloat(hotel.querySelector(".hotel-longitude").value);
-                var similarHotelName = hotel.querySelector(".hotel-name").textContent;
-
-                if (!isNaN(similarHotelLatitude) && !isNaN(similarHotelLongitude)) {
-                    var similarHotelMarker = L.marker([similarHotelLatitude, similarHotelLongitude], {
-                        title: similarHotelName,
-                        opacity: 1.0
-                    }).addTo(map);
-
-                    similarHotelMarker.bindPopup("<b>" + similarHotelName + "</b>");
-                    markers.push({ marker: similarHotelMarker, element: hotel });
-
-                    // 添加地标的悬停事件
-                    similarHotelMarker.on('mouseover', function () {
-                        similarHotelMarker.openPopup();
-                        hotel.classList.add('hover');
-                        // 滚动到对应的饭店列表项
-                        hotel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                    });
-
-                    similarHotelMarker.on('mouseout', function () {
-                        similarHotelMarker.closePopup();
-                        hotel.classList.remove('hover');
-                    });
+                // Haversine formula to calculate the distance between two points
+                function calculateDistance(lat1, lon1, lat2, lon2) {
+                    const R = 6371; // Radius of the Earth in km
+                    const dLat = (lat2 - lat1) * Math.PI / 180;
+                    const dLon = (lon2 - lon1) * Math.PI / 180;
+                    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+                    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                    return R * c;
                 }
-            });
 
-            // 添加悬停事件监听器
-            markers.forEach(function (item) {
-                item.element.addEventListener("mouseenter", function () {
-                    item.marker.openPopup();
-                    item.element.classList.add('hover');
-                    // 滚动到对应的饭店列表项
-                    item.element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                // 获取当前饭店的纬度和经度
+                var hotelLatitude = parseFloat(document.getElementById("hotel-latitude").value);
+                var hotelLongitude = parseFloat(document.getElementById("hotel-longitude").value);
+                var hotelName = document.getElementById("hotel-name").textContent;
+
+                // 初始化地图
+                var map = L.map('openstreet-map').setView([hotelLatitude, hotelLongitude], 10);
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap',
+                    zoomControl: true,
+                }).addTo(map);
+
+                // 自定义图标
+                const customIcon = L.icon({
+                    iconUrl: 'https://cdn1.iconfinder.com/data/icons/everyday-2/64/Flat_Internet_onwork-16-256.png',
+                    iconSize: [42, 42],
                 });
 
-                item.element.addEventListener("mouseleave", function () {
-                    item.marker.closePopup();
-                    item.element.classList.remove('hover');
+                // 添加当前饭店的标记
+                var hotelMarker = L.marker([hotelLatitude, hotelLongitude], {
+                    icon: customIcon,
+                    title: hotelName,
+                    opacity: 1.0
+                }).addTo(map);
+
+                hotelMarker.bindPopup("<b>" + hotelName + "</b>");
+
+                // 获取相似饭店的标记数据并保存地标引用
+                var similarHotels = document.querySelectorAll(".similar-hotel");
+                var markers = [];
+
+                similarHotels.forEach(function (hotel) {
+                    var similarHotelLatitude = parseFloat(hotel.querySelector(".hotel-latitude").value);
+                    var similarHotelLongitude = parseFloat(hotel.querySelector(".hotel-longitude").value);
+                    var similarHotelName = hotel.querySelector(".hotel-name").textContent;
+
+                    if (!isNaN(similarHotelLatitude) && !isNaN(similarHotelLongitude)) {
+                        var similarHotelMarker = L.marker([similarHotelLatitude, similarHotelLongitude], {
+                            title: similarHotelName,
+                            opacity: 1.0
+                        }).addTo(map);
+
+                        similarHotelMarker.bindPopup("<b>" + similarHotelName + "</b>");
+                        markers.push({ marker: similarHotelMarker, element: hotel });
+
+                        let polyline;
+
+                        // 添加地标的悬停事件
+                        similarHotelMarker.on('mouseover', function () {
+                            similarHotelMarker.openPopup();
+                            hotel.classList.add('hover');
+
+                            // 计算距离
+                            var distance = calculateDistance(hotelLatitude, hotelLongitude, similarHotelLatitude, similarHotelLongitude);
+                            similarHotelMarker.bindPopup("<b>" + similarHotelName + "</b><br>與當前飯店距離: " + distance.toFixed(2) + "公里").openPopup();
+
+                            // 绘制路线
+                            polyline = L.polyline([
+                                [hotelLatitude, hotelLongitude],
+                                [similarHotelLatitude, similarHotelLongitude]
+                            ], { color: 'blue' }).addTo(map);
+
+                            // 滚动到对应的饭店列表项
+                            hotel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        });
+
+                        similarHotelMarker.on('mouseout', function () {
+                            similarHotelMarker.closePopup();
+                            if (polyline) {
+                                map.removeLayer(polyline);
+                            }
+                            hotel.classList.remove('hover');
+                        });
+
+                        // 右侧列表的悬停事件
+                        hotel.addEventListener("mouseenter", function () {
+                            similarHotelMarker.openPopup();
+                            hotel.classList.add('hover');
+
+                            // 计算距离
+                            var distance = calculateDistance(hotelLatitude, hotelLongitude, similarHotelLatitude, similarHotelLongitude);
+                            similarHotelMarker.bindPopup("<b>" + similarHotelName + "</b><br>與當前飯店距離: " + distance.toFixed(2) + "公里").openPopup();
+
+                            // 绘制路线
+                            polyline = L.polyline([
+                                [hotelLatitude, hotelLongitude],
+                                [similarHotelLatitude, similarHotelLongitude]
+                            ], { color: 'blue' }).addTo(map);
+
+                            // 滚动到对应的饭店列表项
+                            hotel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        });
+
+                        hotel.addEventListener("mouseleave", function () {
+                            similarHotelMarker.closePopup();
+                            if (polyline) {
+                                map.removeLayer(polyline);
+                            }
+                            hotel.classList.remove('hover');
+                        });
+                    }
                 });
-            });
 
-        
+                // 添加悬停事件监听器
+                markers.forEach(function (item) {
+                    item.element.addEventListener("mouseenter", function () {
+                        item.marker.openPopup();
+                        item.element.classList.add('hover');
+                        // 滚动到对应的饭店列表项
+                        item.element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    });
 
-
-
-
-            
-
-
-
+                    item.element.addEventListener("mouseleave", function () {
+                        item.marker.closePopup();
+                        item.element.classList.remove('hover');
+                    });
+                });
 
         //==================================使用OPENSTREETMAP=====================================
 
-
-
+        //思璇------------------------------------------------------------------------------------
             //飯店描述-顯示更多
             var toggleDescription = document.getElementById('toggle-description');
             var descriptionElement = document.getElementById('description');
@@ -1028,35 +998,6 @@
                 });
             }
 
-
-            //你可能也喜歡-輪播
-            $(document).ready(function () {
-                $('#carouselExampleControls').carousel({
-                    interval: false // 禁用自动轮播
-                });
-
-                $('#carouselExampleControls').on('slide.bs.carousel', function (e) {
-                    var $e = $(e.relatedTarget);
-                    var idx = $e.index();
-                    var itemsPerSlide = 3;
-                    var totalItems = $('.carousel-item').length;
-
-                    if (idx >= totalItems - (itemsPerSlide - 1)) {
-                        var it = itemsPerSlide - (totalItems - idx);
-                        for (var i = 0; i < it; i++) {
-                            // append slides to end
-                            if (e.direction === "left") {
-                                $('.carousel-item').eq(i).appendTo('.carousel-inner');
-                            } else {
-                                $('.carousel-item').eq(0).appendTo('.carousel-inner');
-                            }
-                        }
-                    }
-                });
-            });
-
-
-
             //飯店彈出視窗-查看房型
             window.scrollToRoomTypes = function () {
                 var roomTypesElement = document.getElementById('room-types');
@@ -1075,10 +1016,6 @@
                     }
                 }
             };
-
-
-
-
 
             //導覽列-避免被遮住
             const links = document.querySelectorAll('.this-page-nav-link');
@@ -1103,7 +1040,6 @@
             });
 
             //房間彈出視窗
-
             var roomModal = document.getElementById('roomModal');
             var roomNameElement = document.getElementById('room-name');
             var roomEquipmentsElement = document.getElementById('room-equipments');
@@ -1152,6 +1088,7 @@
                 });
             });
 
+            //歐哲------------------------------------------------------------------------------------
             //購物車
             $('.addCart').on('click', async function () {
                 let memberID;
@@ -1202,16 +1139,12 @@
 
                     const data = await response.json();
                     if (data.success) {
-
                         showCartModal(data);
-                        //給思璇
                     }
                 } catch (err) {
                     console.log(err);
                 }
             });
-
-
 
             //直接購買
             $('.directBuy').on('click', async function () {
@@ -1292,6 +1225,11 @@
                 return window.location.origin + '/image/' + imagePath;
             }
         }
+
+            
+
+
+
         function showCartModal(data) {
 
             const days = getDaysBetweenDates(data.checkInDate, data.checkOutDate);
@@ -1328,9 +1266,58 @@
 
             $('.cartModal').html(cartString);
             $('#rightModal').modal('show');
+
+                // 思璇:關閉購物車彈出視窗時, 部分刷新房型區--------------------------------------------------------
+                $('#rightModal').on('hidden.bs.modal', async function () {
+                    const hotelIdElement = document.getElementById("hotel-id");
+
+                    if (!hotelIdElement) {
+                        console.error('Cannot find element with id "hotel-id"');
+                        return;
+                    }
+
+                    const hotelId = hotelIdElement.value; // 获取当前饭店的ID
+                    const searchHotel = JSON.parse(sessionStorage.getItem('searchHotel'));
+                    const apiUrl = `https://localhost:7103/api/pgHotel/${hotelId}?checkInDate=${searchHotel.checkInDate}&checkOutDate=${searchHotel.checkOutDate}`;
+
+                    try {
+                        const response = await fetch(apiUrl);
+
+                        if (!response.ok) {
+                            throw new Error('Failed to fetch room status');
+                        }
+
+                        const hotelDetail = await response.json();
+
+                        hotelDetail.rooms.forEach(room => {
+                            const roomElement = document.querySelector(`[data-room-id='${room.roomId}']`);
+                            if (roomElement) {
+                                if (room.isBooked) {
+                                    roomElement.classList.add('booked');
+                                    if (!roomElement.querySelector('.booked-overlay')) {
+                                        const bookedOverlay = document.createElement('div');
+                                        bookedOverlay.className = 'booked-overlay';
+                                        bookedOverlay.innerHTML = '<img src="https://localhost:7284/image/louieee_img/booked.png" alt="Booked" />';
+                                        roomElement.appendChild(bookedOverlay);
+                                    }
+                                } else {
+                                    roomElement.classList.remove('booked');
+                                    const bookedOverlay = roomElement.querySelector('.booked-overlay');
+                                    if (bookedOverlay) {
+                                        roomElement.removeChild(bookedOverlay);
+                                    }
+                                }
+                            }
+                        });
+                    } catch (error) {
+                        console.error('Error refreshing room status:', error);
+                    }
+                });
+                //--------------------------------------------------------------------------------------------
+
         }
 
-
+        //飯店彈出視窗-下滑到指定類別的圖片
         function smoothScroll(targetId) {
             console.log(targetId);
             const targetEle = document.getElementById(targetId);
