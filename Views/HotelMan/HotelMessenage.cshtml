@@ -1,0 +1,192 @@
+﻿@{
+    ViewData["Title"] = "HotelMessage";
+    Layout = "_Layout_HotelHome";
+}
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <style>
+        /* 全局样式 */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* 容器样式 */
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* 左侧栏样式 */
+        .left-panel {
+            width: 33.33%;
+            background-color: #f4f4f4;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* 右侧栏样式 */
+        .right-panel {
+            width: 66.67%;
+            display: flex;
+            flex-direction: column;
+        }
+
+            /* 右侧上部、中部、下部样式 */
+            .right-panel .top, .right-panel .middle, .right-panel .bottom {
+                padding: 20px;
+                box-sizing: border-box;
+            }
+
+            .right-panel .top {
+                flex: 1;
+                background-color: #e9e9e9;
+            }
+
+            .right-panel .middle {
+                flex: 7;
+                background-color: #ffffff;
+                overflow-y: auto;
+            }
+
+            .right-panel .bottom {
+                flex: 2;
+                background-color: #f9f9f9;
+                display: flex;
+                align-items: center;
+            }
+
+        /* 客人信息样式 */
+        .customer-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+            .customer-info img {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                margin-right: 20px;
+            }
+
+            .customer-info div {
+                display: flex;
+                flex-direction: column;
+            }
+
+        /* 互动信息区样式 */
+        .messages {
+            list-style: none;
+            padding: 0;
+        }
+
+            .messages li {
+                margin-bottom: 10px;
+            }
+
+            .messages .customer-message {
+                text-align: left;
+            }
+
+            .messages .owner-message {
+                text-align: right;
+            }
+
+        /* 底部输入区样式 */
+        .input-container {
+            width: 100%;
+            display: flex;
+        }
+
+            .input-container input {
+                flex: 1;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                margin-right: 10px;
+            }
+
+            .input-container button {
+                padding: 10px 20px;
+                border: none;
+                background-color: #007bff;
+                color: #fff;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+                .input-container button:hover {
+                    background-color: #0056b3;
+                }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 左侧栏 -->
+        <div class="left-panel">
+            <div class="customer-info">
+                <img src="path/to/customer-photo.jpg" alt="客人照片">
+                <div>
+                    <span>姓名: 客人名稱</span>
+                    <span>電話: 123456789</span>
+                    <span>飯店: 客人選取飯店資訊</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 右侧栏 -->
+        <div class="right-panel">
+            <!-- 右侧上部 -->
+            <div class="top">
+                <div class="customer-info">
+                    <img src="path/to/customer-photo.jpg" alt="客人照片">
+                    <div>
+                        <span>姓名: 客人名稱</span>
+                        <span>電話: 123456789</span>
+                        <span>飯店: 客人選取飯店資訊</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧中部 -->
+            <div class="middle">
+                <ul class="messages" id="messages">
+                    <li class="customer-message">客人訊息</li>
+                    <li class="owner-message">業主訊息</li>
+                </ul>
+            </div>
+
+            <!-- 右侧下部 -->
+            <div class="bottom">
+                <div class="input-container">
+                    <input type="text" id="messageInput" placeholder="請輸入訊息">
+                    <button onclick="sendMessage()">發送</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            if (message) {
+                const messagesList = document.getElementById('messages');
+                const newMessage = document.createElement('li');
+                newMessage.classList.add('owner-message');
+                newMessage.textContent = message;
+                messagesList.appendChild(newMessage);
+                input.value = '';
+                messagesList.scrollTop = messagesList.scrollHeight;
+            }
+        }
+    </script>
+</body>
+</html>
