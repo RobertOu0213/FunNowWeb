@@ -127,10 +127,10 @@
                                     <a class="nav-link" asp-controller="Member" asp-action="MemberInformation">會員資料</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="blog-single.html">評論</a>
+                                    <a class="nav-link" asp-controller="Comment" asp-action="Angular_membercomment">評論</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="blog-single.html">我的最愛</a>
+                                    <a class="nav-link" asp-controller="HotelsFavorites" asp-action="HotelsFavoritesList">我的最愛</a>
                                 </li>
                             </ul>
                         </li>
@@ -312,27 +312,38 @@
             var googleMemberId = '@googleMemberId';
             var googleMemberFirstName = '@googleMemberFirstName';
             var memberID = '@memberID';
+            var memberFirstNameElement = document.getElementById("memberFirstName");
+            var memberContentElement = document.getElementById("memberContent");
+            var guestContentElement = document.getElementById("guestContent");
+            var memberIdElement = document.getElementById("memberId");
+
             
             // 如果都沒有值，顯示訪客內容
-            if (!googleMemberId && !googleMemberFirstName && !memberID) {
-                document.getElementById("guestContent").style.display = "block";
+            if (!googleMemberId && !googleMemberFirstName && !memberID) 
+            {
+                if (guestContentElement) guestContentElement.style.display = "block";
+                console.log("這是Layout訪客");
             }
             // 判斷若有googlememberID，顯示googlememberID內容
-            else if (googleMemberId && googleMemberFirstName) {
-                document.getElementById("memberContent").style.display = "block";
-                document.getElementById("memberId").innerText = googleMemberId;
-                document.getElementById("memberFirstName").innerText = googleMemberFirstName;
+            else if (googleMemberId && googleMemberFirstName) 
+            {
+                if (memberContentElement) memberContentElement.style.display = "block";
+                if (memberIdElement) memberIdElement.innerText = googleMemberId;
+                if (memberFirstNameElement) memberFirstNameElement.innerText = googleMemberFirstName;
+ 
+                console.log("這是Layout:Google登入" + googleMemberId + googleMemberFirstName);
             }
             // 若以上都沒有才顯示member內容
-            else if (memberID) {
+            else if (memberID) 
+            {
                 fetchMemberData(memberID);
             }
        
             //點下登出按鈕，把session的資料清空，也把google登入的session清空
             document.getElementById("logoutButton").addEventListener("click", function () 
             {
-                document.getElementById("guestContent").style.display = "block";
-                document.getElementById("memberContent").style.display = "none";
+                if (guestContentElement) guestContentElement.style.display = "block";
+                if (memberContentElement) memberContentElement.style.display = "none";
                 // 重定向到登出操作方法
                 window.location.href = "@Url.Action("Logout", "Member")";
             });
@@ -340,6 +351,15 @@
 
 
         async function fetchMemberData(memberID) {
+            
+            var googleMemberId = '@googleMemberId';
+            var googleMemberFirstName = '@googleMemberFirstName';
+            var memberID = '@memberID';
+            var memberFirstNameElement = document.getElementById("memberFirstName");
+            var memberContentElement = document.getElementById("memberContent");
+            var guestContentElement = document.getElementById("guestContent");
+            var memberIdElement = document.getElementById("memberId");
+            
             try {
                 const response = await fetch(`https://localhost:7103/api/Members/searchByID?ID=${memberID}`, {
                     method: 'GET',
@@ -348,11 +368,13 @@
                     },
 
                 });
-                if (response.ok) {
+                if (response.ok) 
+                {
                     const data = await response.json(); // 將回應內容解析為 JSON
-                    document.getElementById("memberContent").style.display = "block";
-                    document.getElementById("memberId").innerText = memberID;
-                    document.getElementById("memberFirstName").innerText = data.firstName;
+                    if (memberContentElement) memberContentElement.style.display = "block";
+                    if (memberIdElement) memberIdElement.innerText = memberID;
+                    if (memberFirstNameElement) memberFirstNameElement.innerText = data.firstName;
+                    console.log("這是Layout:一般登入" + memberID + data.firstName);
                 } else {
                     const errorText = await response.text();
                     console.error('查詢失敗:', errorText);
