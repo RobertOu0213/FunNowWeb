@@ -12,6 +12,7 @@
         public string? Longitude { get; set; }
         public bool IsActive { get; set; }
         public int MemberID { get; set; }
+        public int HotelID { get; set; }
         public List<string>? HotelEquipments { get; set; }
         public List<pgHotel_ImageDTO>? HotelImages { get; set; }
         public List<pgHotel_RoomDTO>? Rooms { get; set; }

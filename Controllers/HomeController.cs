@@ -29,7 +29,7 @@ namespace PrjFunNowWeb.Controllers
             return View();
         }
 
-        [AuthTokenFilter]
+        //[AuthTokenFilter]
         public IActionResult Index2(string searchValue = null)// 将搜索值放入ViewBag(by louieee)
         {
             var viewModel = new HotelViewModel

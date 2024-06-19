@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PrjFunNowWebApi.Models;
+using System.Text.Json;
 
 namespace PrjFunNowWeb.Controllers
 {
@@ -28,6 +30,15 @@ namespace PrjFunNowWeb.Controllers
 
         public IActionResult UploadImage()
         {
+            //需要將ＭemberId帶到API
+            var userID = HttpContext.Session.GetString("MemberID");
+            if (string.IsNullOrEmpty(userID))
+            {
+
+                return RedirectToAction("Login", "Member");
+            }
+
+            ViewBag.UserID = userID;
             return View();
         }
     }

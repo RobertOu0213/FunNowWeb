@@ -5,6 +5,7 @@ using System.Configuration;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using PrjFunNowWeb.Models.DTO;
+using PrjFunNowWeb.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +21,6 @@ builder.Services.AddAuthentication(options =>
        options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientID").Value;
        options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
    });
-
 
 
 
@@ -69,6 +69,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddSignalR();
 
 
+
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
@@ -109,16 +110,18 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
+app.UseMiddleware<AuthenticationMiddleware>();
+
 // 使用 CORS
 app.UseCors("AllowAllOrigins");
-
 app.UseAuthorization();
 
+
+
 app.MapControllerRoute(
-    name: "default",
-    
+    name: "default",   
 pattern: "{controller=Home}/{action=index}/{id?}");
 
-// 配置路由以支持 Angular 路由
+//// 配置路由以支持 Angular 路由
 //app.MapFallbackToFile("/dist/fun-now-angular1/index.html");
 app.Run();

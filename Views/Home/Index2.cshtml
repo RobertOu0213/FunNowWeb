@@ -162,16 +162,160 @@
         </a>
     </div>
 </div>
+
+@* Accordion*@
+<div class="container1">
+    <div class="accordion" id="accordionExample">
+        <div class="card">
+            <h2 class="card-header" id="headingOne">
+                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne">
+                    已選擇住宿 (n/5)
+                </button>
+            </h2>
+            <div id="collapseOne" class="collapse" data-parent="#accordionExample">
+                <div class="card-body">
+                @*     <div class="bottom"> *@
+                    <div class="row">
+                        <div class="col-9">
+                           
+                                <div class="image-container" style="position: relative; width: 200px; display: inline-block;">
+                                    <button type="button" class="close remove-image" style="position: absolute; z-index: 2; left: 80px; top: 5px;"><span aria-hidden="true">&times;</span></button>
+                                    <img src="~/image/julia/haiou.png" class="img-thumbnail float-left mx-1" style="position: relative; z-index: 1;" alt="房间图片">
+                                </div>
+                                <div class="image-container" style="position: relative; width: 200px; display: inline-block;">
+                                    <button type="button" class="close remove-image" style="position: absolute; z-index: 2; left: 80px; top: 5px;"><span aria-hidden="true">&times;</span></button>
+                                    <img src="~/image/julia/haiou.png" class="img-thumbnail float-left mx-1" style="position: relative; z-index: 1;" alt="房间图片">
+                                </div>
+                                <div class="image-container" style="position: relative; width: 200px; display: inline-block;">
+                                    <button type="button" class="close remove-image" style="position: absolute; z-index: 2; left: 80px; top: 5px;"><span aria-hidden="true">&times;</span></button>
+                                    <img src="~/image/julia/haiou.png" class="img-thumbnail float-left mx-1" style="position: relative; z-index: 1;" alt="房间图片">
+                                </div>
+                                <div class="image-container" style="position: relative; width: 200px; display: inline-block;">
+                                    <button type="button" class="close remove-image" style="position: absolute; z-index: 2; left: 80px; top: 5px;"><span aria-hidden="true">&times;</span></button>
+                                    <img src="~/image/julia/haiou.png" class="img-thumbnail float-left mx-1" style="position: relative; z-index: 1;" alt="房间图片">
+                                </div>
+                                <div class="image-container" style="position: relative; width: 200px; display: inline-block;">
+                                    <button type="button" class="close remove-image" style="position: absolute; z-index: 2; left: 80px; top: 5px;"><span aria-hidden="true">&times;</span></button>
+                                    <img src="~/image/julia/haiou.png" class="img-thumbnail float-left mx-1" style="position: relative; z-index: 1;" alt="房间图片">
+                                </div>
+                            
+                         
+                        </div>
+                        <div class="col-3">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                                比較住宿
+                            </button>
+                        </div>
+                    </div>
+                      
+                  @*   </div> *@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container position-relative">
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title rounded-pill" id="exampleModalLabel">比較飯店</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tbody>
+                                <!-- Row 1 to Row 10 for each column -->
+                                <tr>
+                                    <td><img src="~/image/julia/haiou.png" class="card-img-top" alt="房間圖片"></td>
+                                    <td><img src="~/image/julia/hidden.png" class="card-img-top" alt="房間圖片"></td>
+                                    <td><img src="~/image/julia/rabe.png" class="card-img-top" alt="房間圖片"></td>
+                                    <td><img src="~/image/julia/台北文華東方飯店-4.jpg" class="card-img-top" alt="房間圖片"></td>
+                                    <td><img src="~/image/julia/高雄海嗨嗨渡假村.jpg" class="card-img-top" alt="房間圖片"></td>
+                                </tr>
+                                <!-- 其他行數據 -->
+                                <tr><td>蛙滴家</td><td>九份九重町民宿</td><td>九份山旅</td><td>窄巷子公寓</td><td>九份百萬夜景</td></tr>
+                                <!-- 根據需要添加更多行 -->
+                                <tr><td>九份</td><td>城市</td><td>城市</td><td>城市</td><td>城市</td></tr>
+                                <tr>
+                                    <td>
+                                        <p>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <p>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <p>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <p>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <p>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr><td>評價/幾則評論</td><td>評價/幾則評論</td><td>評價/幾則評論</td><td>評價/幾則評論</td><td>評價/幾則評論</td></tr>
+                                <tr><td>價錢</td><td>價錢</td><td>價錢</td><td>價錢</td><td>價錢</td></tr>
+                                <tr>
+                                    <td><button type="button" class="btn btn-primary">查看飯店</button></td>
+                                    <td><button type="button" class="btn btn-primary">查看飯店</button></td>
+                                    <td><button type="button" class="btn btn-primary">查看飯店</button></td>
+                                    <td><button type="button" class="btn btn-primary">查看飯店</button></td>
+                                    <td><button type="button" class="btn btn-primary">查看飯店</button></td>
+                                </tr>
+                                <tr>
+                                    <td><button type="button" class="btn btn-secondary">移除</button></td>
+                                    <td><button type="button" class="btn btn-secondary">移除</button></td>
+                                    <td><button type="button" class="btn btn-secondary">移除</button></td>
+                                    <td><button type="button" class="btn btn-secondary">移除</button></td>
+                                    <td><button type="button" class="btn btn-secondary">移除</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <!--================ 台灣熱門城市 Area  =================-->
 @section Scripts {
 
     <script>
+
+
         document.addEventListener("DOMContentLoaded", async function () {
             // 網頁加載完成後自動加載儲存在 sessionStorage 的 searchHotel 資訊
             const searchHotelJson = sessionStorage.getItem("searchHotel");
             if (searchHotelJson) {
                 const searchHotel = JSON.parse(searchHotelJson);
-                console.log(searchHotel);
+                // console.log(searchHotel);
                 //解析並加載飯店資訊
                 await loadHotels(searchHotel); 
             } else {
@@ -393,6 +537,7 @@
                 throw new Error('Failed to fetch hotel scores');
             }
             const data = await response.json();
+
             console.log(`Hotel ID: ${hotelId}, Score Data: `, data); // 添加日志
             return data.totalAverageScore.toFixed(1); // 确保这里使用的是 totalAverageScore，并格式化为小数点后一位
         }
@@ -441,8 +586,9 @@
             // const encryptedCheckInDate = encryptData(searchHotelForLouieee.checkInDate, secretKey);
             // const encryptedCheckOutDate = encryptData(searchHotelForLouieee.checkOutDate, secretKey);
 
-
+            console.log(data);
             // 生成並顯示飯店信息
+          
             const hotels = await Promise.all(data.map(async hotel => {
                 const { hotelId, hotelName, hotelAddress, hotelImages, levelStar, hotelEquipmentNames, hotelPrice } = hotel;
                 let totalAverageScore;
@@ -502,6 +648,13 @@
                                                 <h6 style="color:gray">每晚價格(不連稅及其他費用)</h6>
                                                 <br><br>
                                                 <h3>NT$${hotelPrice}</h3>
+                                                        <!-- Checkbox 容器 -->
+                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""  data-hotel-id="${hotelId}">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                     比較
+                                </label>
+                            </div>
                                             </div>
                                         </div>
                                     </a>
@@ -511,11 +664,115 @@
             }));
 
             divHotels.innerHTML = hotels.join("");
+
+            //被打勾的checkbox,產生新的compareDatas [ ] ,compareDatas [ ]裡的每個元素都是一間飯店資訊,去生成展開收合區塊中的照片容器、Modal的表格行
+            function buildCompareDatas() {
+                const checkedHotelIds = Array.from(document.querySelectorAll('.form-check-input:checked'))
+                    .map(checkbox => checkbox.getAttribute('data-hotel-id'));
+                const compareDatas = [];
+                for (const id of checkedHotelIds) {
+                    const result = data.filter(value => value.hotelId === parseInt(id));
+                    compareDatas.push(...result);
+                }
+                return compareDatas;
+            }
+
+            function getImageUrl(imagePath) {
+                if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
+                    return imagePath;
+                } else {
+                    return window.location.origin + '/image/' + imagePath;
+                }
+            }
+
+            const generateStars = (stars) => {
+                let starsHtml = '';
+                for (let i = 0; i < stars; i++) {
+                    starsHtml += '<i class="fa-solid fa-star"></i>';
+                }
+                return starsHtml;
+            };
+
+            document.querySelectorAll('.form-check-input').forEach(checkbox => {
+                checkbox.addEventListener('change', function () {
+                    const compareDatas = buildCompareDatas();
+                    console.warn(compareDatas);
+                    // 清空之前的內容
+                    const accordionContainer = document.querySelector('#collapseOne .card-body .row .col-9');
+                    accordionContainer.innerHTML = '';
+                    document.querySelector('#myModal .table tbody').innerHTML = '';
+                    // 生成新的內容
+                    compareDatas.forEach(hotel => {
+                        const { hotelImage, hotelName, cityName, levelStar, hotelEquipmentNames, totalAverageScore, hotelPrice } = hotel;
+                        // 生成展開收合區塊中的照片容器
+                        const accordionButton = document.querySelector('.accordion-button');
+                        // accordionButton.innerHTML = `已選擇住宿 (${compareDatas.length}/5)`;
+                        const HotelImage = getImageUrl(hotelImage);
+                      const ratingscore= JSON.parse(totalAverageScore)
+                        const formattedScore = parseFloat(ratingscore.toFixed(1));
+
+                        const imageContainer = document.createElement('div');
+                        imageContainer.className = 'image-container';
+
+                        const closeButton = document.createElement('button');
+                        closeButton.type = 'button';
+                        closeButton.className = 'close remove-image';
+                        closeButton.ariaLabel = 'Close';
+                        closeButton.innerHTML = '<span aria-hidden="true">&times;</span>';
+                        closeButton.style.position = 'absolute';
+                        closeButton.style.zIndex = '2';
+                        closeButton.style.left = '10px';
+                        closeButton.style.top = '5px';
+                        imageContainer.appendChild(closeButton);
+
+                        // <button type="button" class="close remove-image" style = "position: absolute; z-index: 2; left: 80px; top: 5px;" > <span aria - hidden="true" >& times; </span></button >
+                        //     <img src="~/image/julia/haiou.png" class="img-thumbnail float-left mx-1" style = "position: relative; z-index: 1;" alt = "房间图片" >
+
+                        const img = document.createElement('img');
+                        img.src = getImageUrl(hotelImage);
+                       // img.className = 'card-img-top';
+                        img.className = 'img-thumbnail float-left mx-1';
+                        img.alt = '房間圖片';
+                        img.style.position = 'relative';
+                        img.style.zIndex= '1';                    
+
+                        imageContainer.appendChild(closeButton);
+                        imageContainer.appendChild(img);
+                        accordionContainer.appendChild(imageContainer);
+
+                        // 為新生成的 closeButton 添加事件監聽器
+                        closeButton.addEventListener('click', () => {
+                            const imageContainer = closeButton.parentElement;
+                            imageContainer.parentElement.removeChild(imageContainer)
+                        });
+
+                        // 生成Modal的表格行
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                        <td><img src="${HotelImage}" class="card-img-top" alt="房間圖片"></td>
+                        <td>${hotelName}</td>
+                        <td>${cityName}</td>
+                        <td>${generateStars(levelStar)}</td>
+                        <td>${hotelEquipmentNames.join(', ')}</td>
+                        <td>${formattedScore}</td>
+                        <td>${hotelPrice}</td>
+                        <td>
+                            <button type="button" class="btn btn-primary">查看飯店</button>
+                            <button type="button" class="btn btn-secondary">移除</button>
+                        </td>
+                        `;
+                        document.querySelector('#myModal .table tbody').appendChild(row);
+                    });
+                });
+            });
+
+      
+
         }
 
+        console.warn("1233333333333333");
 
-
-
+       
 
         // 切換最愛狀態的函數
         async function toggleFavorite(event, hotelId) {
@@ -576,12 +833,12 @@
     </script>
     <script type="text/javascript">
 
-        var memberInformation = @Html.Raw(memberInfoJson);
-        var memberData = JSON.parse(memberInformation);
-        var memberId = memberData.MemberId;
-        var memberFirstName = memberData.FirstName;
-        console.log(memberId);
-        console.log(memberFirstName);
+        // var memberInformation = @Html.Raw(memberInfoJson);
+        // var memberData = JSON.parse(memberInformation);
+        // var memberId = memberData.MemberId;
+        // var memberFirstName = memberData.FirstName;
+        // console.log(memberId);
+        // console.log(memberFirstName);
     </script>
 
 }
@@ -943,6 +1200,105 @@
             line-height: 1.2;
         }
     </style>
+
+    @*     ============Accordion搬過來的CSS ==============*@
+
+<style>
+        .image-container {
+            position: relative;
+            display: inline-block;
+            width: 200px; /* 根据需要调整宽度 */
+        }
+
+        .remove-image {
+          /*   position: relative;
+            top: 10px;
+            right: 10px; */
+            position: absolute;
+            z-index: 2;
+            left: 80px;
+        }
+
+        .table-responsive {
+            max-height: 400px; /* 根據需求調整 */
+            overflow-y: auto;
+        }
+
+        .table-container {
+            position: relative; /* 用於絕對定位關閉按鈕 */
+            width: 80%;
+        }
+
+        .btn-close {
+            z-index: 1050; /* 確保其位於其他元素之上 */
+            margin: 0.5rem; /* 按鈕周圍的間距 */
+        }
+
+        .table-responsive {
+            margin-left: 40px; /* 根據按鈕大小進行調整 */
+        }
+
+
+        .container1 {
+            bottom: 0; /*網頁底部顯示*/
+            position: fixed; /*網頁底部顯示*/
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .collapsible {
+            background-color: #f2f2f2;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .bottom {
+            display: flex;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .left {
+            flex: 1.0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            width: 100%;
+        }
+
+        .right {
+            flex-basis: 130px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            width: 100%;
+        }
+
+        img {
+            width: 100px;
+            height: auto;
+        }
+
+        .table img {
+            width: 150px; /* 固定圖片寬度 */
+            height: 100px; /* 固定圖片高度 */
+            object-fit: cover; /* 覆蓋模式，保持圖片的比例，超出的部分會被裁切 */
+        }
+
+        /* 星星图标颜色 */
+        .fa-star {
+            color: orange; /* 设置为金色，您也可以使用任何您喜欢的颜色 */
+        }
+    </style>
+
+
+
+
 }
 
 
