@@ -5,6 +5,9 @@
 @{
     Layout = "_Layout_OrderManagement";
 }
+@{
+    var memberID = ViewBag.MemberID;
+}
 
 @section Styles {
     @* <link href="~/css/joanna_css/styles.b13b175880f4995b.css" rel="stylesheet" /> *@
@@ -45,24 +48,6 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" alt="住宿">
-                        <div class="icon"><i class="fa-solid fa-building"></i></div>
-                        <div class="text"><span>住宿</span></div>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" alt="機票">
-                        <div class="icon"><i class="fa-solid fa-plane"></i></div>
-                        <div class="text"><span>機票</span></div>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" alt="活動體驗">
-                        <div class="icon"><i class="fa-solid fa-person-skiing-nordic"></i></div>
-                        <div class="text"><span>活動體驗</span></div>
-                    </a>
-                </li>
-                <li>
                     <a href="#" alt="住宿訊息">
                         <div class="icon"><i class="fa-solid fa-comment-dots"></i></div>
                         <div class="text"><span>住宿訊息</span></div>
@@ -75,30 +60,6 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" alt="AgodaVIP">
-                        <div class="icon"><i class="fa-solid fa-crown"></i></div>
-                        <div class="text"><span>Agoda客服</span></div>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" alt="A金回饋">
-                        <div class="icon"><i class="fa-solid fa-money-check-dollar"></i></div>
-                        <div class="text"><span>A金回饋</span></div>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" alt="現金回饋">
-                        <div class="icon"><i class="fa-solid fa-sack-dollar"></i></div>
-                        <div class="text"><span>現金回饋</span></div>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" alt="PointsMAX">
-                        <div class="icon"><i class="fa-solid fa-piggy-bank"></i></div>
-                        <div class="text"><span>PointsMAX</span></div>
-                    </a>
-                </li>
-                <li>
                     <a href="#" alt="個人資料">
                         <div class="icon"><i class="fa-solid fa-user"></i></div>
                         <div class="text"><span>個人資料</span></div>
@@ -107,9 +68,9 @@
             </ul>
         </div>
         <div class="content1">
-            
-                <member-comment-element></member-comment-element>
 
+            <member-comment-element member-id="@memberID" (navigateToForm)="onNavigateToForm($event)"> </member-comment-element>
+           
         </div>
     </div>
 
@@ -125,15 +86,23 @@
 
 
 @section Scripts {
-        <script src="~/dist/fun-now-angular1/main.efe1d730dda59063.js"></script>
+        <script src="~/dist/fun-now-angular1/main.3ebabe67c33da12f.js"></script>
         <script src="~/dist/fun-now-angular1/polyfills.b6cd8ceb7f42859a.js"></script>
         <script src="~/dist/fun-now-angular1/runtime.48f9e552146618a8.js"></script>
         <script src="~/dist/fun-now-angular1/scripts.6fe6725b87f2ceac.js"></script>
        
     <script>
-            
-
-
+           
+            function onNavigateToForm(data) {
+                // 将数据传递到控制器方法
+                fetch('/Controller/Action', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+            }
 
 
 
