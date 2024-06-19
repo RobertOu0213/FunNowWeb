@@ -3,6 +3,10 @@
   padding: 0;
 }
 
+body {
+  background-color: #F6F7F9;
+}
+
 main {
   display: flex;
   flex-grow: 1;
@@ -161,4 +165,17 @@ main {
   top: 100px;
   z-index: 99;
   width: 408px;
+}
+
+.emptyCart {
+  text-align: center;
+  margin-top: 100px;
+}
+
+.emptyCart img {
+  width: 200px;
+}
+
+#noprice {
+  background-color: #FFFFFF;
 }

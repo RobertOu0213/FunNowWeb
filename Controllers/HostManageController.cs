@@ -5,6 +5,10 @@ using PrjFunNowWeb.Models.DTO;
 using PrjFunNowWeb.Models.ViewModel;
 using System;
 using System.Linq;
+using DotNetEnv;
+using System.Text.Json;
+using PrjFunNowWebApi.Models;
+
 
 namespace PrjFunNowWeb.Controllers
 {
@@ -20,15 +24,35 @@ namespace PrjFunNowWeb.Controllers
         }
         public IActionResult Home()
         {
+            var userID = HttpContext.Session.GetString("MemberID");
+            if (string.IsNullOrEmpty(userID))
+            {
+
+                return RedirectToAction("Login", "Member");
+            }
+
+
+            ViewBag.UserID = userID;
             return View();
+         
         }
 
         public IActionResult HostHotelInfo(int? id)
         {
+            //env test
+            //Env.Load();
+            //string databaseUrl = Environment.GetEnvironmentVariable("API_KEY");
+
+            //if (databaseUrl != null)
+            //{
+            //    Console.WriteLine(databaseUrl);
+            //}
+
             if (id == null)
             {
                 return RedirectToAction("Home");
             }
+      
 
             var hotel = (from h in _context.Hotels
                          where h.HotelId == id
@@ -298,6 +322,12 @@ namespace PrjFunNowWeb.Controllers
             {
                 return BadRequest("Invalid room data.");
             }
+            var userID = HttpContext.Session.GetString("MemberID");
+            if (string.IsNullOrEmpty(userID))
+            {
+                return RedirectToAction("Login", "Member");
+            }
+   
 
             var room = new Room
             {
@@ -308,7 +338,7 @@ namespace PrjFunNowWeb.Controllers
                 RoomPrice = roomDto.RoomPrice,
                 Description = roomDto.RoomDescription,
                 RoomStatus = true,
-                MemberId = 1,
+                MemberId = Convert.ToInt32(userID),
                 HotelId = roomDto.HotelId
             };
             _context.Rooms.Add(room);
