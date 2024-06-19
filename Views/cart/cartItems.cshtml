@@ -9,9 +9,13 @@
     </div>
 
     <div class="user-container">
+        @{
+            var firstInitial = string.IsNullOrEmpty(ViewBag.LastName) ? "" : ViewBag.LastName.Substring(0, 1) + ".";
+            var avatar = string.IsNullOrEmpty(ViewBag.LastName) ? "" : ViewBag.LastName.Substring(0, 1);
+        }
         <button type="button" id="avatarButton">
-            <div class="avatar">O</div>
-            <span>Oliver O.</span>
+            <div class="avatar">@avatar</div>
+            <span>@ViewBag.FirstName</span><span>@firstInitial</span>
             <i class="fas fa-caret-down"></i>
         </button>
     </div>

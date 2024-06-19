@@ -23,21 +23,42 @@ namespace PrjFunNowWeb.Controllers
 
         public IActionResult cartItems()
         {
-            //登入判斷
             var userID = HttpContext.Session.GetString("MemberID");
             if (string.IsNullOrEmpty(userID))
             {
-                return RedirectToAction("Login", "Member");
+
+                userID = HttpContext.Session.GetString("GoogleMemberID");
+                if (string.IsNullOrEmpty(userID))
+                {
+                    return RedirectToAction("Login", "Member");
+                }
+            }
+            else
+            {
+                var existingMember = _context.Members
+                    .Where(x => x.MemberId == Convert.ToInt32(userID))
+                    .FirstOrDefault();
+
+                if (existingMember == null)
+                {
+                    return NotFound("Member not found");
+                }
             }
 
+            var member = _context.Members
+                .Where(x => x.MemberId == Convert.ToInt32(userID))
+                .Select(x => new { x.MemberId, x.FirstName, x.LastName })
+                .FirstOrDefault();
 
-            var MemberID = _context.Members.Where(x => x.MemberId == Convert.ToInt32(userID)).Select(x => x.MemberId).FirstOrDefault();
-
-            if (MemberID <= 0)
+            if (member == null)
             {
                 return NotFound("Member not found");
             }
-            ViewBag.MemberID = MemberID;
+
+            ViewBag.MemberID = member.MemberId;
+            ViewBag.FirstName = member.FirstName;
+            ViewBag.LastName = member.LastName;
+
             return View();
 
         }
@@ -60,8 +81,21 @@ namespace PrjFunNowWeb.Controllers
 
         public async Task<IActionResult> PaymentPage()
         {
+
+            var userID = HttpContext.Session.GetString("MemberID");
+            if (string.IsNullOrEmpty(userID))
+            {
+                userID = HttpContext.Session.GetString("GoogleMemberID");
+                if (string.IsNullOrEmpty(userID))
+                {
+                    return RedirectToAction("Login", "Member");
+                }
+            }
+          
             try
             {
+
+
                 var orderDetailsIdJson = TempData["OrderDetailsId"] as string;
 
                 if (string.IsNullOrEmpty(orderDetailsIdJson))
@@ -120,9 +154,6 @@ namespace PrjFunNowWeb.Controllers
                 ecpayParameters["CheckMacValue"] = GetCheckMacValue(ecpayParameters);
 
 
-
-
-
                 var member = firstOrderDetail.Member;
                 var viewModel = orderDetails.Select(od => new CReservationSummaryViewModel
                 {
@@ -151,6 +182,8 @@ namespace PrjFunNowWeb.Controllers
                 }).ToList();
 
                 ViewBag.Member = member;
+                ViewBag.FirstName = member?.FirstName;
+                ViewBag.LastName = member?.LastName;
 
                 return View(viewModel);
             }
