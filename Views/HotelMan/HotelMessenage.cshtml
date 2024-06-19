@@ -27,9 +27,70 @@
         .left-panel {
             width: 33.33%;
             background-color: #f4f4f4;
-            padding: 20px;
-            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
         }
+
+            /* 左侧上部和下部样式 */
+            .left-panel .top, .left-panel .bottom {
+                padding: 10px;
+                box-sizing: border-box;
+            }
+
+            .left-panel .top {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                background-color: #ffffff;
+                border-bottom: 1px solid #ccc;
+            }
+
+                .left-panel .top .header {
+                    width: 100%;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 10px;
+                }
+
+                    .left-panel .top .header h2 {
+                        margin: 0;
+                        font-size: 18px;
+                        font-weight: normal;
+                        color: #000;
+                    }
+
+            .left-panel .bottom {
+                flex: 9;
+                overflow-y: auto;
+            }
+
+        .tab {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+            .tab a {
+                text-decoration: none;
+                color: #000;
+                padding: 10px;
+                flex: 1;
+                text-align: center;
+                border-bottom: 2px solid transparent;
+            }
+
+                .tab a.active {
+                    color: #007bff;
+                    border-bottom: 2px solid #007bff;
+                }
+
+                .tab a:hover {
+                    color: #0056b3;
+                }
 
         /* 右侧栏样式 */
         .right-panel {
@@ -131,12 +192,26 @@
     <div class="container">
         <!-- 左侧栏 -->
         <div class="left-panel">
-            <div class="customer-info">
-                <img src="path/to/customer-photo.jpg" alt="客人照片">
-                <div>
-                    <span>姓名: 客人名稱</span>
-                    <span>電話: 123456789</span>
-                    <span>飯店: 客人選取飯店資訊</span>
+            <!-- 左侧上部 -->
+            <div class="top">
+                <div class="header">
+                    <h2>客人資訊</h2>
+                </div>
+                <div class="tab">
+                    <a href="#" class="active">All messages</a>
+                    <a href="#">Unread</a>
+                </div>
+            </div>
+            <!-- 左侧下部 -->
+            <div class="bottom">
+                <!-- 左侧下部内容 -->
+                <div class="customer-info">
+                    <img src="path/to/customer-photo.jpg" alt="客人照片">
+                    <div>
+                        <span>姓名: 客人名稱</span>
+                        <span>電話: 123456789</span>
+                        <span>飯店: 客人選取飯店資訊</span>
+                    </div>
                 </div>
             </div>
         </div>
