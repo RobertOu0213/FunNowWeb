@@ -104,8 +104,9 @@
                     const HotelImage = getImageUrl(hotelImage);
                     console.warn(HotelImage);
 
+                    /* 點擊卡片會轉向到這個Controller/Action  =>   HotelsFavorites/HotelsFavoritesListToCity*/
                     return( `
-                    <a href="/HotelsFavorites/HotelsFavoritesListToCity?memberId=${memberId}&city=${city}&country=${country}">  /* 點擊卡片會轉向到這個Controller/Action  =>   HotelsFavorites/HotelsFavoritesListToCity*/
+                    <a href="/HotelsFavorites/HotelsFavoritesListToCity?memberId=${memberId}&city=${city}&country=${country}"> 
                             <div class="col-md-4">
                                 <div class="card">
                                                     <img src="${HotelImage}"  class="card-img-top" alt="${city}">

@@ -152,10 +152,14 @@
                     const HotelImage = getImageUrl(hotelImage);
                     console.log(HotelImage);
                     /* 在卡片元素上設置一個 data-hotel-id 屬性,用於存儲酒店 ID */
+                    // https://localhost:7284/PgHotel/pgHotel/?hotelId=2&checkInDate=2024-06-19&checkOutDate=2024-06-20
+                    // <a href="/PgHotel/pgHotel/?hotelId=${hotelId}&checkInDate=${2024-06-19}&checkOutDate=${2024-06-20}" >
+
                     return (`
-                                <div class="col-md-3">
-                                                    <div class="card" data-hotel-id="${hotelId}">
-                                                                     <img src="${HotelImage}"  alt="Image of ${hotelName}" class="card-img-top">
+                                        <div class="col-md-3">
+                                 <a href="/PgHotel/pgHotel/?hotelId=${hotelId}&checkInDate=2024-06-19&checkOutDate=2024-06-20">
+                                      <div class="card" data-hotel-id="${hotelId}">
+                                        <img src="${HotelImage}"  alt="Image of ${hotelName}" class="card-img-top">
                                         <i class="fa-solid fa-heart love-button"></i> 
                                         <div class="card-body">
                                             <h5 class="card-title">${hotelName}</h5>
@@ -165,7 +169,9 @@
                                             <p class="price">$${minimumPrice} / 晚</p>
                                         </div>
                                     </div>
+                                    </a>
                                 </div>
+                                
                             `);
                 });
                 hotelsContainer.innerHTML = hotels.join('');
