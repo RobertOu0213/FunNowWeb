@@ -14,7 +14,7 @@ namespace PrjFunNowWeb.Middleware
         public async Task Invoke(HttpContext context)
         {
             var user = context.Session.GetString("MemberID");
-            var allowedPaths = new List<string> {"/", "/Home/Index", "/Home/Index2", "/Member/Register", "/Member/Login", "/PgHotel/pgHotel", "/ForgetPwd/ForgotPassword", "/Member/LoginWithAPI", };
+            var allowedPaths = new List<string> {"/", "/Home/Index", "/Home/Index2", "/Member/Register", "/Member/Login", "/PgHotel/pgHotel", "/ForgetPwd/ForgotPassword", "/Member/LoginWithAPI", "/Member/LoginByGoogle", };
             var isAllowedPath = allowedPaths.Any(path => context.Request.Path.StartsWithSegments(path, StringComparison.OrdinalIgnoreCase));
 
             if (string.IsNullOrEmpty(user) && !isAllowedPath)
