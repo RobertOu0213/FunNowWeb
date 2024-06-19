@@ -23,7 +23,7 @@
     <div id="modal" class="modal">
         <div class="modal-arrow"></div>
         <div class="modal-content">
-            <button class="logout-button">登出</button>
+            <button id="logoutBtn" class="logout-button">登出</button>
         </div>
     </div>
 
@@ -102,6 +102,11 @@
                 if (!$(event.target).closest('#avatarButton').length && !$(event.target).closest('#modal').length) {
                     $('#modal').hide();
                 }
+            });
+
+            //登出
+            $('#logoutBtn').on('click', function () {
+                window.location.href = "@Url.Action("Logout", "Member")";
             });
 
 

@@ -43,7 +43,7 @@
                     <div id="modal" class="modal">
                         <div class="modal-arrow"></div>
                         <div class="modal-content">
-                            <button class="logout-button">登出</button>
+                            <button id="logoutBtn" class="logout-button">登出</button>
                         </div>
                     </div>
                 </div>
@@ -65,7 +65,7 @@
     @*  jQuery *@
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     @await RenderSectionAsync("Scripts", required: false)
-    <script>
+    <script defer>
         $('#avatarButton').on('click', function () {
             $('#modal').toggle();
         });
@@ -75,6 +75,10 @@
             if (!$(event.target).closest('#avatarButton').length && !$(event.target).closest('#modal').length) {
                 $('#modal').hide();
             }
+        });
+
+        $('#logoutBtn').on('click', function () {
+            window.location.href = "@Url.Action("Logout", "Member")";
         });
 
     </script>
