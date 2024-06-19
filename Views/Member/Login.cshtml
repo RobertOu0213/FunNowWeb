@@ -1,6 +1,18 @@
-﻿@{
-    // ViewData["Title"] = "登入";
+﻿@using System.Web
+@{
+    
     Layout = "_Layout_login";
+    var alertMessage = Context.Session.GetString("AlertMessage");
+    if (!string.IsNullOrEmpty(alertMessage))
+    {
+        <script>
+            alert(decodeURIComponent("@Html.Raw(HttpUtility.UrlDecode(alertMessage))"));     
+        </script>
+        // 清除伺服器端的 Session 消息
+        Context.Session.Remove("AlertMessage");
+    }
+
+    
 }
 
 
@@ -34,10 +46,17 @@
                             </div>
                             <div id="result"></div>
                             <p></p>
+
                             <div class="mb-3">
                                 <label for="PasswordInput" class="form-label" style="font-size:15px">密碼</label>
-                                <input type="password" class="form-control" id="PasswordInput1" name="PasswordInput" placeholder="密碼">
+                                <div class="input-group">
+                                    <input type="password" class="form-control" id="PasswordInput1" name="Password" placeholder="密碼" style="border-right:none;">
+                                    <span class="input-group-text" id="togglePasswordIcon" style="background-color:white; border-left:none;">
+                                        <i class="fa-solid fa-eye-slash"></i>
+                                    </span>
+                                </div>
                             </div>
+
                             <div class="mb-3">
                                 <div class="g-recaptcha"
                                      data-sitekey="6Ld5o_cpAAAAAG_63ZgwisKvy1y6H_RHfCVKPiZ4"
@@ -58,7 +77,7 @@
                             <div class="row">
                                 <div>
                                     <a class="col ff1" asp-controller="Member" asp-action="Register">我是新朋友</a>
-                                    <a class="col" style="font-size:14px"><i class="fa-solid fa-lock" style="color: #0d6efd;"></i> 忘記密碼？別慌，點此找幫手！</a>
+                                    <a class="col" style="font-size:14px" asp-controller="ForgetPwd" asp-action="ForgotPassword"><i class="fa-solid fa-lock" style="color: #0d6efd;"></i> 忘記密碼？別慌，點此找幫手！</a>
                                 </div>
                             </div>
                             <p style="margin:40px"></p>
@@ -165,7 +184,6 @@
            padding:0px;
         }
 
-
     </style>
 }
 
@@ -258,104 +276,41 @@
         }
 
 
-        // JWT驗證登入
+        // 一般比對帳號密碼及產生JWT token
         async function login() {
             const email = document.getElementById("EmailInput1").value;
             const password = document.getElementById("PasswordInput1").value;
 
+            const loginData = {
+                Email: email,
+                Password: password
+            };
+
+    
             try {
-                const response = await fetch("https://localhost:7103/api/Login", {
-                    method: "POST",
+                const response = await fetch('/Member/LoginWithAPI', {
+                    method: 'POST',
                     headers: {
-                        "Content-Type": "application/json"
+                        'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ email, password })
+                    body: JSON.stringify(loginData)
                 });
-
-                //如果成功串接API
-                if (response.ok) {
-                    
-                    //拿到API回傳的資訊
-                    const data = await response.json();
-
-                    // 清除先前的LocalStorage，避免爆錯
-                    clearSessionStorage();
-
-                    // 把拿到資訊儲存在localStorage裡面
-                    sessionStorage.setItem("JWToken", data.token);
-                    sessionStorage.setItem("MemberID", data.memberInfo.memberId);
-                    sessionStorage.setItem("MemberFisrtName", data.memberInfo.firstName);
-                    sessionStorage.setItem("MemberLastName", data.memberInfo.lastName);
-                    sessionStorage.setItem("MemberEmail", data.memberInfo.email);
-                    sessionStorage.setItem("MemberPhone", data.memberInfo.phone);
-                    sessionStorage.setItem("MemberBirthday", data.memberInfo.birthday);
-                    sessionStorage.setItem("MemberRoleID", data.memberInfo.roleId);
-
-                    console.log("攔截器啟動");
-                    // 設置請求攔截器以自動添加Authorization標頭
-                    // 重新定義全域的 window.fetch 函式, 在發送每個請求時自動將 JWT Token 添加到請求標頭中。
-
-                    // 保存了原始的 fetch 函式
-                    const originalFetch = window.fetch;
-
-                    // 重新定義 window.fetch
-                    // ...args 是一個 rest 參數語法,它可以將所有傳入的參數收集到一個陣列中
-                    window.fetch = async (...args) => {
-
-
-                        //這一行是使用解構賦值來從 args 陣列中取出第一個元素(即資源 URL)並指派給 resource 變數,
-                        //同時將第二個元素(即請求配置物件)指派給 config 變數。 
-                        const [resource, config] = args;
-                        const token = sessionStorage.getItem('JWToken');
-                        if (!token) 
-                        {
-                            console.log("沒有拿到token");
-                            return originalFetch(resource, config);
-                        }
-
-                        // 如果有 Token,構建一個新的請求配置物件
-                        const newConfig = {
-                            ...config,
-                            headers: {
-                                ...config.headers,
-                                Authorization: `Bearer ${token}`
-                            }
-                        };
-
-                        console.log("拿到token");
-                        console.log(resource);
-                        console.log(newConfig);
-                        console.log("攔截器結束");
-                        //如果原始配置物件 config 不存在,它會直接創建一個新物件,只包含 headers 屬性,其值為 { Authorization: Bearer ${token} }。
-                        return originalFetch(resource, newConfig);
-                    };
-
-                    //通過攔截器
-                    console.log("攔截器通過");
-                } 
-                else 
-                {
-                    // 清空使用者填寫的密碼欄位
-                    document.getElementById("PasswordInput1").value = "";
-                    alert("登入失敗，請重新確認電子信箱和密碼");
+                console.log(loginData);
+                if (!response.ok) {
+                    throw new Error('登入失敗');
                 }
-            } 
-            catch (error) 
-            {
-                console.error('錯誤為:', error);
-            }
-        }
 
-        // 清除SessionStorage
-        function clearSessionStorage() {
-            sessionStorage.removeItem("JWToken");
-            sessionStorage.removeItem("MemberID");
-            sessionStorage.removeItem("MemberFisrtName");
-            sessionStorage.removeItem("MemberLastName");
-            sessionStorage.removeItem("MemberEmail");
-            sessionStorage.removeItem("MemberPhone");
-            sessionStorage.removeItem("MemberBirthday");
-            sessionStorage.removeItem("MemberRoleID");
+                const data = await response.json();
+                console.log(data);
+                // 可以在這裡處理返回的數據，例如跳轉到主頁面
+                // window.location.href = '/Home/Index';
+            } catch (error) {
+                console.error('登入失敗:', error);
+                document.getElementById("PasswordInput1").value = "";
+                alert("輸入帳號密碼錯誤，請重新輸入");
+            }
+        
+ 
         }
 
         // 【監聽登入按鈕點擊事件】，先驗證reCaptcha再驗證JWT
@@ -369,16 +324,14 @@
                 alert('有紅框處尚未修改，請再次確認');
                 return;
             }
-           //全部都驗證完，就導向到首頁
-            window.location.href = "/Home/Index";
+            //全部都驗證完，就導向到首頁
+            window.location.href = "/home/index"; 
         });
 
  
-    </script>
-
-
-    <script>
-        //Google驗證失敗時跳出的錯誤訊息
+  
+     @* //Google驗證失敗時跳出的錯誤訊息 *@
+  
         document.addEventListener("DOMContentLoaded", function () {
             var errorMessage = '@TempData["ErrorMessage"]';
             if (errorMessage) {
@@ -387,10 +340,10 @@
 
         });
 
-    </script>
 
-    <script>
-    //【重寄驗證信】
+
+    @*  //【重寄驗證信】 *@
+    
         document.getElementById("reSent").addEventListener("click", async function (event) {
             event.preventDefault();
 
@@ -436,8 +389,18 @@
         });
 
 
+        @*  【密碼小眼睛】 *@
+        const togglePasswordIcon = document.getElementById('togglePasswordIcon');
 
+        togglePasswordIcon.addEventListener('click', function () {
+            // 切換密碼輸入欄位的 type 屬性
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
 
+            // 切換 icon
+            this.querySelector('i').classList.toggle('fa-eye');
+            this.querySelector('i').classList.toggle('fa-eye-slash');
+        });
 
     </script>
    

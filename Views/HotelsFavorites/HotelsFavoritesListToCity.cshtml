@@ -92,7 +92,7 @@
     <div class="container">
         <a href="/HotelsFavorites/HotelsFavoritesList">口袋清單</a>
         <span>/</span>
-        <h3 id="cityandCountry">花蓮縣,台灣</h3>
+        <h3 id="cityandCountry">城市,國家</h3>
     </div>
 
 <div class="container">
@@ -105,7 +105,7 @@
 
     
         <script>
-                const hotelsContainer = document.querySelector('#hotelsContainer');
+        const hotelsContainer = document.querySelector('#hotelsContainer');
         const cityCountryLabel = document.querySelector('#cityandCountry');
 
         // 使用 URLSearchParams 解析 URL 中的參數
@@ -117,7 +117,9 @@
         console.log("Country: ", decodeURIComponent(countryName));  // 应显示 "日本"
 
         // const url = `https://localhost:7103/api/HotelsFavorite/`+`${memberId}/FavoriteHotels/encodeURIComponent${cityName}`;
-        const url = `https://localhost:7103/api/HotelsFavorite/`+`1/FavoriteHotels/${cityName}`;
+        const url = `https://localhost:7103/api/HotelsFavorite/` + `${memberId}/FavoriteHotels/${cityName}`;
+
+      //  const url = `https://localhost:7103/api/HotelsFavorite/`+`1/FavoriteHotels/${cityName}`;
 
         console.log(url);
 
@@ -130,7 +132,7 @@
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 const data = await response.json();
-                console.log("======"+data);
+                console.log(data);
 
                 const hotels = data.map(hotel => {
                     const { hotelId, hotelImage, hotelName, city, country, levelStar, Rating,minimumPrice } = hotel;
@@ -140,22 +142,26 @@
 
                     // 现在可以访问averageScore和totalAverageScore
                     const totalAverageScore = ratingObj.totalAverageScore;
+                    const formattedScore = parseFloat(totalAverageScore.toFixed(1));
+
                     const averageScore = ratingObj.averageScore;
 
                     console.log("Total Average Score:", totalAverageScore);
+                    console.log("formattedScore:", formattedScore);
                     console.log("Average Score Details:", averageScore);
-
+                    const HotelImage = getImageUrl(hotelImage);
+                    console.log(HotelImage);
                     /* 在卡片元素上設置一個 data-hotel-id 屬性,用於存儲酒店 ID */
                     return (`
                                 <div class="col-md-3">
-                                                    <div class="card" data-hotel-id="${hotelId}">                
-                                                     <img src="${hotelImage}" alt="Image of ${hotelName}" class="card-img-top">
+                                                    <div class="card" data-hotel-id="${hotelId}">
+                                                                     <img src="${HotelImage}"  alt="Image of ${hotelName}" class="card-img-top">
                                         <i class="fa-solid fa-heart love-button"></i> 
                                         <div class="card-body">
                                             <h5 class="card-title">${hotelName}</h5>
                                             <p class="card-text">${city}, ${country}</p>
                                             <p>${generateStars(levelStar)}</p>
-                                          <p class="card-text"> Rating: ${totalAverageScore} </p>
+                                                  <p class="card-text"> Rating: ${formattedScore} </p>
                                             <p class="price">$${minimumPrice} / 晚</p>
                                         </div>
                                     </div>
@@ -198,7 +204,7 @@
             const loveButton = event.currentTarget;
             const card = loveButton.closest('.card');  // 獲取包含該按鈕的卡片元素
             const hotelId = card ? card.dataset.hotelId : undefined;   // 假設您在卡片元素上設置了 data-hotel-id 屬性
-            const memberId = 5; // 假設會員 ID 為 5，您可以根據實際情況獲取會員 ID
+            const memberId = 1; // 假設會員 ID 為 1，您可以根據實際情況獲取會員 ID                                                         //TODO.....
 
             if (!hotelId) {
                 console.error('Failed to get hotelId from card element');
@@ -225,8 +231,14 @@
                 console.error('Failed to update like status:', error);
             }
         }
-
-
+        //解析照片
+        function getImageUrl(imagePath) {
+            if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
+                return imagePath;
+            } else {
+                return window.location.origin + '/image/' + imagePath;
+            }
+        }
 
     </script>
 }

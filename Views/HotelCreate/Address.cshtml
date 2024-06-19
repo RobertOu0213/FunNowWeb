@@ -76,7 +76,8 @@
                     </div>
                     <h6 class="fw-bold mt-4">地圖位置</h6>
                     <div class="mb-3">住客只有在訂單確認後才會收到你的確切地址。</div>
-                    <div class="googleMap"></div>
+                    <div id="map">
+                    </div>
                 </div>
 
                 @* button *@
@@ -97,16 +98,69 @@
 @section Styles {
 
     <link href="~/ou/css/Address.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 }
 @section Scripts {
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
-        let selectCountryStr = ""
-       
+        var map = L.map('map').setView([25.033913, 121.5434129], 10);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap',
+            zoomControl: true,
+        }).addTo(map);
+        var currentMarker = null;
+
+        function onMapClick(e) {
+            var lat = e.latlng.lat;
+            var lng = e.latlng.lng;
+            var url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`;
+
+            axios.get(url)
+                .then(function (response) {
+                    var address = response.data.display_name;
+                    var popupContent = `
+                                        <b>地址:</b> ${address}<br>
+                                        <b>經度:</b> ${lng}<br>
+                                        <b>緯度:</b> ${lat}
+                                    `;
+
+                    // 如果已經有地標，先將其移除
+                    if (currentMarker) {
+                        map.removeLayer(currentMarker);
+                    }
+
+                    // 創建新的地標並添加到地圖
+                    currentMarker = L.marker([lat, lng]).addTo(map);
+                    currentMarker.bindPopup(popupContent).openPopup();
+
+                    // 將經緯度存入 sessionStorage
+                    const tHotel = JSON.parse(sessionStorage.getItem('tHotel')) || {};
+                    tHotel.Latitude = lat.toString();
+                    tHotel.Longitude = lng.toString();
+                    sessionStorage.setItem('tHotel', JSON.stringify(tHotel));
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
+
+        map.on('click', onMapClick);
+
+
+
+        let selectCountryStr = ""      
         $(document).ready(async function() {
             //顯示session 在畫面上
             const tHotel = JSON.parse(sessionStorage.getItem('tHotel')) || {};
             if (tHotel) {
                 $('#iptAddress').val(tHotel.HotelAddress || '');
+                if (tHotel.Latitude && tHotel.Longitude) {
+                    map.setView([parseFloat(tHotel.Latitude), parseFloat(tHotel.Longitude)], 15);
+                    currentMarker = L.marker([parseFloat(tHotel.Latitude), parseFloat(tHotel.Longitude)]).addTo(map);
+                    currentMarker.bindPopup(`<b>地址:</b> ${tHotel.HotelAddress}<br><b>經度:</b> ${tHotel.Longitude}<br><b>緯度:</b> ${tHotel.Latitude}`).openPopup();
+                }
+
             }
 
 

@@ -9,6 +9,12 @@
 
 <!-- 插入聊天室的Partial View -->
 @Html.Partial("~/Views/Chat/Mailroom.cshtml"))
+
+@*=================================使用OPENSTREETMAP=====================================*@
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
+@*=================================使用OPENSTREETMAP=====================================*@
+
  <link href="~/css/joanna_css/styles.b13b175880f4995b.css" rel="stylesheet"  />
 
 <div class="container mt-5 pt-5" id="top">
@@ -131,7 +137,7 @@
                 </div>
                 @*飯店介紹區-第三層*@
                 <div class="row">
-                    <div class="col-5">
+                    <div class="col-6">
                         <h3>評論</h3>@*亭蓉做*@
 
                
@@ -163,15 +169,12 @@
                         </table>
                         <a class="link-offset-2 link-underline link-underline-opacity-75 align-self-end" href="#hotel-equips">所有設施></a>
                     </div>
-                    <div class="col-3">
+                    <div class="col-2">
                         <h3>飯店周邊</h3>
                         <div class="row align-items-end">
-                            <div class="col-8">
-                                <img src="~/image/louieee_img/map.png" class="img-fluid" />
-                            </div>
-                            <div class="col-4">
-                                <a class="link-offset-2 link-underline link-underline-opacity-75" href="#hotel-map">地圖></a>
-                            </div>
+                            <a href="#hotel-map">
+                                <img src="~/image/louieee_img/map.png"  />
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -257,7 +260,7 @@
                                     <div class="d-flex flex-column">
                                         @foreach (var equipment in Model.HotelDetail.HotelEquipments)
                                         {
-                                            <i class="fa-regular fa-thumbs-up">@equipment</i>
+                                            <i class="fa-regular fa-circle-check">@equipment</i>
                                         }
                                     </div>
                                 </div>
@@ -291,6 +294,7 @@
             </ul>
 
             @*房型區--自動生成*@
+            @*房型區--自動生成*@
             <div class="container mt-5 pt-5" id="room-types" data-id="{}">
                 <h2>所有房型</h2>
                 @if (Model.HotelDetail.Rooms != null && Model.HotelDetail.Rooms.Any())
@@ -299,7 +303,7 @@
                     {
                         var limitedRoomImages = room.RoomImages?.Take(4).ToList() ?? new List<pgHotel_ImageDTO>();
                         int imageCount = limitedRoomImages.Count;
-                        <div class="row room-item round-edge-container" data-room-name="@room.RoomName" data-room-price="@room.RoomPrice" data-room-equips="@Newtonsoft.Json.JsonConvert.SerializeObject(room.RoomEquipments)" data-room-images="@Newtonsoft.Json.JsonConvert.SerializeObject(room.RoomImages)">
+                        <div class="row room-item round-edge-container @(room.IsBooked ? "booked" : "")" data-room-name="@room.RoomName" data-room-price="@room.RoomPrice" data-room-equips="@Newtonsoft.Json.JsonConvert.SerializeObject(room.RoomEquipments)" data-room-images="@Newtonsoft.Json.JsonConvert.SerializeObject(room.RoomImages)">
                             <h3 data-bs-toggle="modal" data-bs-target="#roomModal">@room.RoomName</h3>
                             <div class="col-4">
                                 <table data-bs-toggle="modal" data-bs-target="#roomModal">
@@ -360,12 +364,26 @@
                                         <td class="align-bottom">
                                             <h3>TWD @room.RoomPrice</h3>
                                             <div style="margin-left: auto;">
-                                                <button class="btn btn-outline-primary btn-lg addCart" data-id="@room.RoomId">加入購物車</button>
-                                                <button class="btn btn-primary btn-lg directBuy" data-roomid="">立即下訂</button>
+                                                @if (room.IsBooked)
+                                                {
+                                                    <button class="btn btn-outline-primary btn-lg addCart" data-id="@room.RoomId" disabled>加入購物車</button>
+                                                    <button class="btn btn-primary btn-lg directBuy" data-roomid="" disabled>立即下訂</button>
+                                                }
+                                                else
+                                                {
+                                                    <button class="btn btn-outline-primary btn-lg addCart" data-id="@room.RoomId">加入購物車</button>
+                                                    <button class="btn btn-primary btn-lg directBuy" data-roomid="">立即下訂</button>
+                                                }
                                             </div>
                                         </td>
                                     </tr>
                                 </table>
+                                @if (room.IsBooked)
+                                {
+                                    <div class="booked-overlay">
+                                        <img src="~/image/louieee_img/booked.png" alt="Booked" />
+                                    </div>
+                                }
                             </div>
                         </div>
                     }
@@ -375,6 +393,7 @@
                     <p>暫無房間資訊</p>
                 }
             </div>
+
 
             @*房間彈出視窗*@
             <div class="modal fade" id="roomModal" tabindex="-1" aria-labelledby="roomModalLabel" aria-hidden="true">
@@ -474,20 +493,19 @@
                     }
                 </div>
             </div>
-
-            @*周邊區*@
+            @* 周邊區 *@
             <div class="hotel-detail-container" id="hotel-map">
                 <h2>飯店周邊</h2>
-                <div class="row round-edge-container">
-                    <div class="col-8">
-                        <div class="embed-responsive embed-responsive-16by9" style="height: 100%;">
-                            <iframe class="embed-responsive-item" src="https://www.google.com/maps/embed?pb=@(Model.HotelDetail.Latitude)" style="border:0; width: 100%; height: 100%;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                        </div>
+                <div class="row round-edge-container" >
+                    <div class="col-8 p-0" style="position: relative;">
+                        <div id="openstreet-map" style="height: 500px; width: 100%;"></div>
                     </div>
                     <div class="col-4">
                         <div class="hotel-info">
                             <div class="hotel-header">
-                                <h3>@Model.HotelDetail.HotelName</h3>
+                                <h3 id="hotel-name">@Model.HotelDetail.HotelName</h3>
+                                <input type="hidden" id="hotel-latitude" value="@Model.HotelDetail.Latitude" />
+                                <input type="hidden" id="hotel-longitude" value="@Model.HotelDetail.Longitude" />
                                 @for (int i = 0; i < Model.HotelDetail.LevelStar; i++)
                                 {
                                     <img src="~/image/louieee_img/star.png" />
@@ -502,13 +520,13 @@
                             </div>
                         </div>
                         <div>
-                            <h4>你可能也喜歡</h4>
+                            <h4>其他周邊飯店</h4>
                             @if (Model.HotelDetail.SimilarHotels != null && Model.HotelDetail.SimilarHotels.Any())
                             {
                                 <div class="scrollable-container">
                                     @foreach (var hotel in Model.HotelDetail.SimilarHotels)
                                     {
-                                        <div class="row mb-3" style="border: 1px solid #ddd; border-radius: 10px; padding: 10px;">
+                                        <div class="row mb-3 similar-hotel" id="hotel-@hotel.HotelId" style="border: 1px solid #ddd; border-radius: 10px; padding: 10px;">
                                             <div class="col-3 p-0">
                                                 @{
                                                     var imageUrl = hotel.HotelImage?.ImageUrl ?? "/image/louieee_img/default-picture.jpg";
@@ -521,7 +539,9 @@
                                             </div>
                                             <div class="col-9 vertical-align">
                                                 <div style="display:flex; align-items: center;">
-                                                    <h4 class="mb-0 mr-2">@hotel.HotelName</h4>
+                                                    <h4 class="mb-0 mr-2 hotel-name">@hotel.HotelName</h4>
+                                                    <input type="hidden" class="hotel-latitude" value="@hotel.Latitude" />
+                                                    <input type="hidden" class="hotel-longitude" value="@hotel.Longitude" />
                                                     <div style="display: flex;">
                                                         @for (int i = 0; i < hotel.LevelStar; i++)
                                                         {
@@ -551,7 +571,7 @@
             </div>
 
 
-            @*推薦其他飯店*@
+            @*瀏覽紀錄*@
             <div>
                 <h2>你可能也喜歡</h2>
                 <div id="carouselExampleControls" class="carousel slide round-edge-container" data-ride="carousel">
@@ -619,18 +639,16 @@
                     </a>
                 </div>
             </div>
+            
+            
+            
         </div>
     </div>
 </div>
 
 
 <!-- 購物車modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#rightModal">
-    Open Right Side Modal
-</button>
-
-<div class="cartModal">
-</div>
+<div class="cartModal"></div>
 
 @section Styles {
    <style> 
@@ -821,8 +839,7 @@
         }
 
             .cartModal .modal-footer .btn:hover {
-                opacity: 0.7;
-                background-color: green;
+                opacity: 0.7; 
             }
 
         .cartModal .modal-footer .note {
@@ -830,7 +847,7 @@
             font-weight: bold;
         }
 
-        /* Img設定 */
+        /* Img設定-偉成神救援 */
 
         .imageBox {
             width: 33%;
@@ -842,181 +859,150 @@
             aspect-ratio: 1/1;
             object-fit: cover;
         }
-       /*  亭蓉Angular樣式 */
-       
-         .comment-cube {
-          border-radius: 8px;
-          background-color: #3f62ee;
-          color: white;
-          padding: 8px;
-        }
 
-        .container {
-          width: 40%;
-        }
-
-        .font-sty {
-          font-weight: bold;
-        }
-        /*各項評分條*/
-        .grid-container {
-          width: 70%;
-          display: flex;
-          justify-content: space-between;
-          flex-wrap: wrap;
-        }
-
-        .grid-item {
-          width: calc(33.33% - 10px);
-          margin-bottom: 20px;
-          padding: 20px;
-          box-sizing: border-box;
-        }
-
-
-        /*進度條 http://www.webkaka.com/tutorial/html/2021/1028198/*/
-        .progress2 {
-          padding: 2px;
-          border-radius: 30px;
-          background: #D0D0D0;
-          box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25), 0 1px rgba(255, 255, 255, 0.08);
-          width: 70%;
-        }
-
-        .progress-bar2 {
-          height: 7px;
-          border-radius: 30px;
-          background-image: linear-gradient(to bottom, #005AB5, #0066CC);
-          transition: 0.4s linear;
-          transition-property: width, background-color;
-        }
-
-        .progress-moved .progress-bar2 {
-
-          background-color: #0072E3;
-          animation: progressAnimation 1s;
-        }
-
-        .carousel-wrapper {
-            position: relative;
-                width: 100%;
-                overflow: hidden;
-        }
-
-        .carousel-container {
-                overflow: hidden;
-                display: flex;
-            position: relative;
-            width: 100%;
-        }
-
-        .carousel {
-            display: flex;
-            transition: transform 0.5s ease-in-out;
-            /* width: 100%; */
-        }
-
-        .carousel-slide {
-            display: flex;
-            flex-shrink: 0;
-            width: 100%;
-            justify-content: center; 
-            /* justify-content: space-around; */
-        }
-
-        .comment-card {
-            flex: 0 0 30%;
-            max-width: 30%;
-            margin: 0 10px;
-            display: flex;
-            justify-content: center; /* 水平居中 */
-            align-items: center; /* 垂直居中 */
-            position: relative; /* 新增 */
-        }
-
-        .card {
-            width: 90%; /* 確保卡片填滿容器 */
-        }
-
-        .reviewItem-userAvatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-
-        .small {
-            font-size: 0.875rem;
-        }
-
-        .mb-0 {
-            margin-bottom: 0;
-        }
-
-        .ms-2 {
-            margin-left: 0.5rem;
-        }
-
-        .button {
+        #openstreet-map {
             position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: rgba(0,0,0,0.5);
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
         }
 
-            button:hover {
-                background-color: rgba(0,0,0,0.7);
-            }
-
-            button:focus {
-                outline: none;
-            }
-
-            button:nth-of-type(1) {
-                left: 10px;
-            }
-
-            button:nth-of-type(2) {
-                right: 10px;
-            }
-
-        .prev {
-            /* left: -30px; */ /* 調整左側按鈕位置 */
+        .similar-hotel.hover {
+            background-color: #f0f0f0;
+            transition: background-color 0.3s;
         }
 
-        .next {
-           /*  right: -50px; */ /* 調整右側按鈕位置 */
+
+        .booked {
+            position: relative;
+            opacity: 0.5;
+            pointer-events: none;
         }
 
-            .column-container {
-                display: flex;
-                justify-content: space-between;
+        .booked-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+            .booked-overlay img {
+                max-width: 100%;
+                max-height: 100%;
             }
 
-            .column {
-                width: 48%;
-            }
 
-            .flex-grow-1 {
-                flex: 5;
-            }
 
-            .flex-grow-2 {
-                flex: 5;
-            }
 
- </style>   
+
+        
+    </style>
 }
 @section Scripts {
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            //痊癒--------------------------------------------------------
+        
 
+        //==================================使用OPENSTREETMAP=====================================
+        
+        // 为了保持一致性并减少在客户端和服务器端之间传递的数据，我们可以在JavaScript中抓取已经生成的DOM对象的数据，
+        // 而不是在JavaScript中再次使用@model。这样可以减少服务器负担，并且代码更简洁。
+
+
+
+            // 获取当前饭店的纬度和经度
+            var hotelLatitude = parseFloat(document.getElementById("hotel-latitude").value);
+            var hotelLongitude = parseFloat(document.getElementById("hotel-longitude").value);
+            var hotelName = document.getElementById("hotel-name").textContent;
+
+            // 初始化地图
+            var map = L.map('openstreet-map').setView([hotelLatitude, hotelLongitude], 10);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap',
+                zoomControl: true,
+            }).addTo(map);
+
+            // 自定义图标
+            const customIcon = L.icon({
+                iconUrl: 'https://cdn1.iconfinder.com/data/icons/everyday-2/64/Flat_Internet_onwork-16-256.png',
+                iconSize: [42, 42],
+            });
+
+            // 添加当前饭店的标记
+            var hotelMarker = L.marker([hotelLatitude, hotelLongitude], {
+                icon: customIcon,
+                title: hotelName,
+                opacity: 1.0
+            }).addTo(map);
+
+            hotelMarker.bindPopup("<b>" + hotelName + "</b>");
+
+            // 获取相似饭店的标记数据并保存地标引用
+            var similarHotels = document.querySelectorAll(".similar-hotel");
+            var markers = [];
+
+            similarHotels.forEach(function (hotel) {
+                var similarHotelLatitude = parseFloat(hotel.querySelector(".hotel-latitude").value);
+                var similarHotelLongitude = parseFloat(hotel.querySelector(".hotel-longitude").value);
+                var similarHotelName = hotel.querySelector(".hotel-name").textContent;
+
+                if (!isNaN(similarHotelLatitude) && !isNaN(similarHotelLongitude)) {
+                    var similarHotelMarker = L.marker([similarHotelLatitude, similarHotelLongitude], {
+                        title: similarHotelName,
+                        opacity: 1.0
+                    }).addTo(map);
+
+                    similarHotelMarker.bindPopup("<b>" + similarHotelName + "</b>");
+                    markers.push({ marker: similarHotelMarker, element: hotel });
+
+                    // 添加地标的悬停事件
+                    similarHotelMarker.on('mouseover', function () {
+                        similarHotelMarker.openPopup();
+                        hotel.classList.add('hover');
+                        // 滚动到对应的饭店列表项
+                        hotel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    });
+
+                    similarHotelMarker.on('mouseout', function () {
+                        similarHotelMarker.closePopup();
+                        hotel.classList.remove('hover');
+                    });
+                }
+            });
+
+            // 添加悬停事件监听器
+            markers.forEach(function (item) {
+                item.element.addEventListener("mouseenter", function () {
+                    item.marker.openPopup();
+                    item.element.classList.add('hover');
+                    // 滚动到对应的饭店列表项
+                    item.element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                });
+
+                item.element.addEventListener("mouseleave", function () {
+                    item.marker.closePopup();
+                    item.element.classList.remove('hover');
+                });
+            });
+
+        
+
+
+
+
+            
+
+
+
+
+        //==================================使用OPENSTREETMAP=====================================
 
 
 
@@ -1168,23 +1154,37 @@
 
             //購物車
             $('.addCart').on('click', async function () {
+                let memberID;
+                //判定是否有登入
+                try {
+                    const getMemberIdUrl = '@Url.Content("~/GetMember/GetMemberId")';
+                    const memberResponse = await fetch(getMemberIdUrl);
+
+                    if (!memberResponse.ok) {
+                        throw new Error('未登入或獲取 MemberID 失敗');
+                    }
+
+                    const memberData = await memberResponse.json();
+                    memberID = memberData.memberID;
+                  
+                } catch (error) {
+                    console.log(error);
+                    alert(`尚未登入~~`);
+                    const loginURL = `${window.location.origin}/Member/Login`;
+                    window.location.href = loginURL;
+                }
+
+
                 const roomID = $(this).data('id');
-                // console.log(roomID);
-
-                //是否有登入
-                // const memberID = getMemberID();
-                // if (!memberID) {
-                //     window.location.href = '/login';
-                //     return;
-                // }
-
+                const searchHotel = JSON.parse(sessionStorage.getItem('searchHotel'));
                 const orderDetail = {
-                    MemberID: 1,
+                    MemberID: memberID,
                     RoomID: roomID,
-                    CheckInDate: "2024-06-15",
-                    CheckOutDate: "2024-06-20",
-
+                    CheckInDate: searchHotel.checkInDate,
+                    CheckOutDate: searchHotel.checkOutDate,
+                    GuestNumber: searchHotel.adults
                 };
+                console.log(orderDetail);
 
                 try {
                     const response = await fetch('https://localhost:7103/api/Cart', {
@@ -1197,16 +1197,17 @@
 
                     if (!response.ok) {
                         throw new Error(response.statusText);
+
                     }
 
                     const data = await response.json();
                     if (data.success) {
-                        // console.log(data);
+
                         showCartModal(data);
+                        //給思璇
                     }
                 } catch (err) {
-                    console.error(err);
-
+                    console.log(err);
                 }
             });
 
@@ -1214,9 +1215,10 @@
 
             //直接購買
             $('.directBuy').on('click', async function () {
-                // const roomID = $(this).data('roomid');
+                const roomID = $(this).data('roomid');
+                const searchHotel = JSON.parse(sessionStorage.getItem('searchHotel'));
 
-                //是否有登入
+                //是否有登入寫在後端
                 // const memberID = getMemberID();
                 // if (!memberID) {
                 //     window.location.href = '/login';
@@ -1225,9 +1227,9 @@
 
                 const orderDetail = {
                     MemberID: 1,
-                    RoomID: 10,   //寫死roomID,
-                    CheckInDate: "2024-06-15",
-                    CheckOutDate: "2024-06-20",
+                    RoomID: roomID,
+                    CheckInDate: searchHotel.checkInDate,
+                    CheckOutDate: searchHotel.checkOutDate
                 };
 
                 try {
@@ -1250,17 +1252,14 @@
                     }
 
                 } catch (err) {
-                    console.error(err);
-
+                    console.log(err);
                 }
             });
 
             //前往購物車
             $(document).on('click', '#ToCartItems', function () {
 
-                var userId = 1;
-                const cartPageUrl = window.location.origin + '/cart/cartItems?userId=' + userId;
-
+                const cartPageUrl = `${window.location.origin}/cart/cartItems`;
                 window.location.href = cartPageUrl;
             });
 
@@ -1284,13 +1283,15 @@
         }
 
         function getImageUrl(imagePath) {
+            if (imagePath == null) {
+                return null;
+            }
             if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
                 return imagePath;
             } else {
                 return window.location.origin + '/image/' + imagePath;
             }
         }
-
         function showCartModal(data) {
 
             const days = getDaysBetweenDates(data.checkInDate, data.checkOutDate);
@@ -1299,31 +1300,31 @@
 
             let cartString = `
 
-                                            <div class="modal right fade" id="rightModal" tabindex="-1" aria-labelledby="rightModalLabel" aria-hidden="true">
-                                             <div class="modal-dialog">
-                                                 <div class="modal-content">
-                                                     <div class="modal-header">
-                                                         <h5 class="modal-title" id="rightModalLabel">已加入購物車</h5>
-                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                     </div>
-                                                     <div class="modal-body d-flex align-items-center">
-                                                          <img src="${imageUrl}" alt="...">
-                                                              <div class="room-info d-flex flex-column">
-                                                             <p>${data.roomName} x ${days}晚已新增至購物車</p>
-                                                             <p>（價格為NT$ ${totalPrice}）</p>
-                                                         </div>
-                                                     </div>
-                                                     <div class="modal-footer">
-                                                         <button type="button" class="btn btn-primary" id="ToCartItems">前往購物車</button>
-
-                                                         <div class="note">訂越多，省越多！</div>
-                                                         <p>同時預訂多個項目，還能省更多！</p>
-                                                     </div>
+                                    <div class="modal right fade" id="rightModal" tabindex="-1" aria-labelledby="rightModalLabel" aria-hidden="true">
+                                     <div class="modal-dialog">
+                                         <div class="modal-content">
+                                             <div class="modal-header">
+                                                 <h5 class="modal-title" id="rightModalLabel">已加入購物車</h5>
+                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                             </div>
+                                             <div class="modal-body d-flex align-items-center">
+                                                  <img src="${imageUrl}" alt="...">
+                                                      <div class="room-info d-flex flex-column">
+                                                     <p>${data.roomName} x ${days}晚已新增至購物車</p>
+                                                     <p>（價格為NT$ ${totalPrice}）</p>
                                                  </div>
                                              </div>
-                                           </div>
+                                             <div class="modal-footer">
+                                                 <button type="button" class="btn btn-primary" id="ToCartItems">前往購物車</button>
 
-                                        `
+                                                 <div class="note">訂越多，省越多！</div>
+                                                 <p>同時預訂多個項目，還能省更多！</p>
+                                             </div>
+                                         </div>
+                                     </div>
+                                   </div>
+
+                                `
 
             $('.cartModal').html(cartString);
             $('#rightModal').modal('show');

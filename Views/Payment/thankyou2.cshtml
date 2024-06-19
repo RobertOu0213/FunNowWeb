@@ -1,0 +1,147 @@
+﻿@{
+    ViewData["Title"] = "thankyou";
+    Layout = "_Layout_Order";
+
+}
+
+<main>
+    <section class="left-section">
+        <div class="contact-info p-4">
+            <div class="contact-info-static mb-2">
+                <div class="mb-2 d-flex align-items-center">
+                    <img src="~/ou/image/checksign.png" alt="..." /><span style="font-size:1.5em; font-weight:700; display:inline-block; margin-left:10px;">感謝您的預訂</span>
+                </div>
+                <div class="mb-3">
+      @*               @foreach (var item in Model.OrderDetails)
+                    {
+                        <div>預定編號 : <strong>@item.OrderDetailID</strong></div>
+                    } *@
+
+                </div>
+                <div class="d-flex justify-content-between">
+                    <div style="width:100%;">
+                        您的訂單可在預訂頁面及訂單確認信中查看，確認信將在10分鐘內發送給您。
+                    </div>
+                    <div style="text-align:end">
+                        <img style="width:70%;" src="~/ou/image/thankyou.png" />
+                    </div>
+                </div>
+                <div>
+                    <a class="returnBack" href='@Url.Content("~/Home/Index")'>返回首頁</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+ @*    <section class="right-section">
+        <div class="reservation-container mb-3">
+            <div class="reservation-container-title">預訂成功</div>
+            @foreach (var item in Model.OrderDetails)
+            {
+                <div class="reservation-container-info hotelContainer" data-hotel-id="@item.HotelID">
+                    <div class="mb-3">
+                        <i class="fa-solid fa-city fa-xs"></i>
+                        <span>住宿</span>
+                        <span class="text-neutral-400 text-xs">@item.CityName</span>
+                    </div>
+                    <div class="d-flex mb-4">
+                        <div>
+                            <img class="reservation-container-info-img" src="@item.RoomImage" alt="..." />
+                        </div>
+                        <div class="ms-2">
+                            <div class="fw-bolder">@item.RoomName</div>
+                            <div>
+                                @for (int i = 0; i < item.LevelStar; i++)
+                                {
+                                    <i class="fa-solid fa-star fa-xs"></i>
+                                }
+                            </div>
+                            <div class="d-flex">
+                                <div class="reservation-container-info-score averageScore"></div>
+                                <div class="d-flex flex-column mt-2">
+                                    <span class="text-xs ratingText"></span>
+                                    <span class="commentsCount">得分自 @item.AllCommentsCount 篇評鑑</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <i class="fa-solid fa-calendar-days me-2"></i>
+
+                        <span>@item.CheckInDate.ToString("yyyy年MM月dd日")</span>
+                        <span>-</span>
+                        <span>@item.CheckOutDate.ToString("yyyy年MM月dd日")</span>
+                        <span>|</span>
+                        <span>@item.NumberOfNights 晚</span>
+                    </div>
+                    <div>
+                        <i class="fa-solid fa-bed me-1"></i>
+                        <span> 1 x @item.RoomType</span>
+                    </div>
+                    <div class="mb-2">
+                        <span class="peopleLimit">入住人數限制：@item.MaximumOccupancy 位大人</span>
+                        <span></span>
+                    </div>
+                    <div class="mb-4">
+                        <span>旅客：@item.MaximumOccupancy 位大人</span>
+                        <span></span>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="payment-detail">
+            <div class="fs-5">收費明細</div>
+            <div class="d-flex justify-content-between">
+                <div>總價</div>
+                <div>NT @Model.Order.TotalPrice</div>
+            </div>
+            <div class="taxText">
+                含稅與附加費用
+            </div>
+        </div>
+    </section> *@
+
+</main>
+
+@section Styles {
+    <link rel="stylesheet" href="~/ou/css/paymentPage.css" />
+
+}
+@section Scripts {
+    <script>
+
+
+        // $(document).ready(function () {
+        //     async function fetchRatings() {
+        //         const elements = $('.hotelContainer');
+        //         const promises = elements.map(async function () {
+        //             const element = $(this);
+        //             const hotelId = element.data('hotel-id');
+
+        //             try {
+        //                 const response = await fetch(`https://localhost:7103/api/Comment/AverageRatingText/${hotelId}`);
+        //                 if (!response.ok) {
+        //                     throw new Error(response.statusText);
+        //                 }
+        //                 const data = await response.json();
+
+        //                 element.find('.averageScore').text(Math.round(data.averageScore));
+        //                 element.find('.ratingText').text(data.ratingText);
+        //             } catch (error) {
+        //                 console.error(error);
+        //             }
+        //         });
+
+        //         await Promise.all(promises);
+        //     }
+
+        //     fetchRatings();
+        // });
+
+
+
+
+    </script>
+}
+

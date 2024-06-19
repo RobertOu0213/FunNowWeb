@@ -18,7 +18,6 @@
             padding: 0;
             background-color: #f5f5f5;
         }
-
         .header {
             background-color: #2d3e50;
             color: white;
@@ -270,9 +269,9 @@
         </div>
 
         <div class="chatbox-content">
-            <div class="chatbox-header">
-                <span id="chatbox-title">快問快答 (測試版)</span>
-                <button class="btn btn-light btn-sm minimize-chat">-</button>
+            <iframe src='https://webchat.botframework.com/embed/0614-chatbot-bot?s=PKmyjOqU0k8.Se9rHsjv8MH31hCiCrqVV4yUOUWWA9eJ-S-zGQsOFg4' style='min-width: 400px; width: 100%; min-height: 500px;'></iframe>         
+            @*   <span id="chatbox-title">快問快答 (測試版)</span>
+                <button class="btn btn-light btn-sm minimize-chat">-</button> *@
             </div>
             <div class="chatbox-body">
                 <div class="system-message" id="chatbox-quick">
@@ -282,7 +281,7 @@
                 <div class="chat-messages" id="quick-messages"></div>
                 <div class="input-container">
                     <textarea id="quick-input" placeholder="輸入訊息..."></textarea>
-                    <button onclick="sendMessage('quick')">發送</button>
+                    <button onclick="">發送</button>
                 </div>
             </div>
         </div>
@@ -355,7 +354,7 @@
             let input;
             let messagesContainer;
             let memberEmail = "leo10117212000@gmail.com";  // 從session storage獲取房客的郵件地址
-            let housemanEmail = "rubyccww@gmail.com";  // 房東的郵件地址
+            let housemanEmail = "leo10117212000@gmail.com";  // 房東的郵件地址
             let memberSubject = '您的訊息已發送至房東';
             let housemanSubject = '有房客向您傳送了訊息';
 
@@ -369,6 +368,19 @@
 
             const messageText = input.value.trim();
             if (messageText) {
+                // 創建用戶消息泡泡
+                const messageBubble = document.createElement('div');
+                messageBubble.className = 'message-bubble';
+
+                const messageContent = document.createElement('div');
+                messageContent.className = 'message-content';
+                messageContent.textContent = messageText;
+
+                messageBubble.appendChild(messageContent);
+                messagesContainer.appendChild(messageBubble);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+
                 // 創建傳送中訊息
                 const sendingMessage = document.createElement('div');
                 sendingMessage.className = 'system-message';
@@ -430,6 +442,7 @@
                     });
             }
         }
+
 
     </script>
 </body>
