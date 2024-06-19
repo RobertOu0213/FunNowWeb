@@ -179,3 +179,87 @@ main {
 #noprice {
   background-color: #FFFFFF;
 }
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 4.5em;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 8px 2px;
+  background-color: #FFFFFF;
+}
+nav .logo {
+  margin-left: 3em;
+}
+nav .logo img {
+  width: 15%;
+}
+nav .user-container {
+  display: flex;
+  align-items: center;
+  margin-right: 2em;
+}
+nav .user-container button {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  padding: 5px 10px;
+  background-color: white;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  color: black;
+}
+nav .user-container button .avatar {
+  background-color: #7d4bcb;
+  color: white;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  margin-right: 10px;
+}
+nav .user-container button span {
+  margin-right: 10px;
+}
+nav .user-container button i {
+  color: black;
+}
+nav .modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+nav .modal .modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 300px;
+  text-align: center;
+  border-radius: 10px;
+}
+nav .modal .logout-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  border-radius: 10px;
+}
+nav .modal .logout-button:hover {
+  background-color: #45a049;
+}

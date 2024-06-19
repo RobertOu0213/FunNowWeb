@@ -145,7 +145,6 @@ main {
 }
 
 .left-section {
-  /* border: 5px solid black;*/
   height: 500px;
   margin: 0 auto;
   flex-grow: 2;

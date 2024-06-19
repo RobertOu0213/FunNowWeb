@@ -1,7 +1,27 @@
 ﻿@{
     ViewData["Title"] = "cartItems";
-    // layout等大家
+   
 }
+
+<nav>
+    <div class="logo">
+        <img src="~/ou/image/FunNow_Logo_Horizontal_Orange.png" alt="LOGO">
+    </div>
+    <div class="user-container">
+        <button type="button">
+            <div class="avatar">O</div>
+            <span>Oliver O.</span>
+            <i class="fas fa-caret-down"></i>
+        </button>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <button class="logout-button">登出</button>
+        </div>
+    </div>
+
+</nav>
 
 <main>
     <section class="cartLists">
@@ -9,10 +29,8 @@
         <div class="cartLists-title">
             <h3 class="cartLists-title-font">您的購物車<span id="allcartsCount"></span></h3>
         </div>
-
         <div id="cartContainer">
         </div>
-
         <div class="emptyCart" id="emptyCartContainer" style="display:none;">
             <div>
                 <img src="~/ou/image/Cart_empty.png" alt="..." />
