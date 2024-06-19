@@ -137,7 +137,7 @@ app.UseCors("AllowAngularApp");
 
 app.MapControllerRoute(
     name: "default",   
-pattern: "{controller=Home}/{action=index}/{id?}");
+pattern: "{controller=PgBack_Member}/{action=pgBack_Member}/{id?}");
 
 //// 配置路由以支持 Angular 路由
 //app.MapFallbackToFile("/dist/fun-now-angular1/index.html");
