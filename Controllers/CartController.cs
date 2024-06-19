@@ -58,6 +58,7 @@ namespace PrjFunNowWeb.Controllers
             ViewBag.MemberID = member.MemberId;
             ViewBag.FirstName = member.FirstName;
             ViewBag.LastName = member.LastName;
+       
 
             return View();
 

@@ -38,8 +38,8 @@
 
 @section Scripts {
     <script defer>
-        const userId = "@ViewBag.UserID";
-
+        const userId = @ViewBag.MemberID;
+        console.log(userId);
         async function fetchAndDisplayHotels(isActive) {
             const res = await fetch(`https://localhost:7103/api/HostManage?userId=${userId}`);
             const data = await res.json();
@@ -124,8 +124,8 @@
             setActiveTab(false);
         })
 
-        fetchAndDisplayHotels(false);
-        setActiveTab(false);
+        fetchAndDisplayHotels(true);
+        setActiveTab(true);
 
     </script>
 }
