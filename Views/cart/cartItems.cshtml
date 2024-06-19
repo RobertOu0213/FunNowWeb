@@ -7,8 +7,9 @@
     <div class="logo">
         <img src="~/ou/image/FunNow_Logo_Horizontal_Orange.png" alt="LOGO">
     </div>
+
     <div class="user-container">
-        <button type="button">
+        <button type="button" id="avatarButton">
             <div class="avatar">O</div>
             <span>Oliver O.</span>
             <i class="fas fa-caret-down"></i>
@@ -16,6 +17,7 @@
     </div>
 
     <div id="modal" class="modal">
+        <div class="modal-arrow"></div>
         <div class="modal-content">
             <button class="logout-button">登出</button>
         </div>
@@ -79,14 +81,25 @@
     <link href="~/ou/css/cartItems.css" rel="stylesheet" />
 }
 @section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-    <script src="https://kit.fontawesome.com/e5eef540c2.js" crossorigin="anonymous"></script>
 
 
     <script>
-        const MemberId = @Model;
-
+       
+        const MemberId = @ViewBag.MemberID;
         $(document).ready(function () {
+
+
+            $('#avatarButton').on('click', function () {
+                $('#modal').toggle();
+            });
+
+
+            $(document).on('click', function (event) {
+                if (!$(event.target).closest('#avatarButton').length && !$(event.target).closest('#modal').length) {
+                    $('#modal').hide();
+                }
+            });
+
 
             fetchCartItems(MemberId);
 
@@ -161,7 +174,7 @@
                 const data = await res.json();
                 if (data.success) {
                     const orderDetailDtos = data.orderDetailDtos;
-                    console.log(orderDetailDtos);
+             
                     await Promise.all(orderDetailDtos.map(async (item) => {
                         const ratingRes = await fetch(`https://localhost:7103/api/Comment/AverageRatingText/${item.hotelID}`);
                         if (!ratingRes.ok) {

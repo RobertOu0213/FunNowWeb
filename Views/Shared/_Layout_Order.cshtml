@@ -51,11 +51,18 @@
             </div>
         </div>
         <div class="user-container">
-            <button type="button">
-                <img src="" alt="...">
-                <span>Oliver</span>
-                <i class="fa-solid fa-caret-down"></i>
+            <button type="button" id="avatarButton">
+                <div class="avatar">O</div>
+                <span>Oliver O.</span>
+                <i class="fas fa-caret-down"></i>
             </button>
+        </div>
+
+        <div id="modal" class="modal">
+            <div class="modal-arrow"></div>
+            <div class="modal-content">
+                <button class="logout-button">登出</button>
+            </div>
         </div>
     </nav>
 
@@ -70,6 +77,25 @@
     @*  jQuery *@
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+
+        $(document).ready(function () {
+
+            $('#avatarButton').on('click', function () {
+                $('#modal').toggle();
+            });
+
+
+            $(document).on('click', function (event) {
+                if (!$(event.target).closest('#avatarButton').length && !$(event.target).closest('#modal').length) {
+                    $('#modal').hide();
+                }
+            });
+        });
+
+
+    </script>
 </body>
 </html>
 

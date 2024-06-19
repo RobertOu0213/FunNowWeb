@@ -37,8 +37,8 @@ namespace PrjFunNowWeb.Controllers
             {
                 return NotFound("Member not found");
             }
-
-            return View(MemberID);
+            ViewBag.MemberID = MemberID;
+            return View();
 
         }
 
