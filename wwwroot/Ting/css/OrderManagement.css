@@ -194,98 +194,82 @@ body {
 
 /* 訂單列表卡片樣式 */
 .order-card {
-    flex-grow: 1;
-    padding-right: 20px;
-    border-radius: 8px; /* 加上整個卡片的圓角效果 */
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
 }
-
-    .order-card img {
-        width: 100px;
-        height: 100px;
-        border-radius: 8px; /* 圖片的圓角效果 */
-        object-fit: cover;
-    }
 
 .order-card-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    background-color: #007bff;
-    color: #fff;
+    background-color: #f8f9fa;
     padding: 10px 20px;
-    border-radius: 8px 8px 0 0; /* 頂部圓角效果 */
+    border-bottom: 1px solid #e0e0e0;
 }
 
 .order-number {
     font-size: 14px;
-    color: aliceblue;
+    color: #007bff;
 }
 
 .order-date {
     font-size: 14px;
+    color: #6c757d;
 }
 
 .order-card-body {
     display: flex;
+    align-items: center;
     padding: 20px;
 }
 
 .hotel-image img {
-    width: 150px;
-    height: 150px;
-    border-radius: 10px;
+    width: 100px;
+    height: 100px;
+    border-radius: 8px;
+    object-fit: cover;
 }
 
 .order-info {
-    display: flex;
-    flex-direction: column; /* 將排列方向設置為列（垂直） */
-    margin-left: 20px;
-    flex: 1;
+    flex-grow: 1;
+    padding-left: 20px;
 }
 
-    .order-info h3,
-    .order-info {
-        flex-grow: 1;
-        padding-left: 20px;
+    .order-info h3 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: bold;
     }
 
-        .order-info h3 {
-            margin: 0 0 10px;
-            font-size: 20px;
-        }
-
-        .order-info p {
-            margin: 5px 0;
-        }
-
-.date-range,
-.guest-info {
-    font-size: 14px;
-    margin-bottom: 5px;
-}
+    .order-info p {
+        margin: 5px 0;
+        font-size: 14px;
+        color: #6c757d;
+    }
 
 .price {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
-    align-self: flex-end; /* 價格置底 */
+    color: #333;
 }
 
 .order-card-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: #f8f9fa;
     padding: 10px 20px;
-    /*background-color: #f8f9fa;*/ /* 淺灰色背景 */
-    border-top: 1px solid #eee;
-    border-radius: 0 0 8px 8px; /* 底部圓角效果 */
+    border-top: 1px solid #e0e0e0;
 }
 
 .order-status {
     font-size: 14px;
-    color: #007bff;
+    color: #28a745;
 }
 
 .rebook-button a {
+    font-size: 14px;
     color: #007bff;
     text-decoration: none;
 }
@@ -293,3 +277,126 @@ body {
     .rebook-button a:hover {
         text-decoration: underline;
     }
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+    .pagination .page-btn {
+        border: 1px solid #ddd;
+        padding: 10px 15px;
+        margin: 0 5px;
+        cursor: pointer;
+        color: #333;
+        background-color: #fff;
+        border-radius: 5px;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+        .pagination .page-btn:hover {
+            background-color: #f0f0f0;
+        }
+
+        .pagination .page-btn.active {
+            background-color: #007bff;
+            color: #fff;
+            border-color: #007bff;
+        }
+
+        .pagination .page-btn.disabled {
+            cursor: not-allowed;
+            color: #ccc;
+            border-color: #ddd;
+        }
+/* 訂單詳情的CSS */
+.order-confirmation-card,
+.hotel-info,
+.stay-info,
+.room-info,
+.guest-info,
+.price-info {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+    .order-confirmation-card:hover,
+    .hotel-info:hover,
+    .stay-info:hover,
+    .room-info:hover,
+    .guest-info:hover,
+    .price-info:hover {
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .order-confirmation-card h2,
+    .hotel-info h3 {
+        margin: 0 0 10px;
+        color: #333;
+        font-size: 1.5em;
+        border-bottom: 2px solid #007bff;
+        padding-bottom: 10px;
+    }
+
+    .hotel-info img,
+    .room-info img {
+        width: 100px;
+        height: 100px;
+        border-radius: 8px;
+        object-fit: cover;
+        margin-right: 10px;
+        margin-top: 10px;
+    }
+
+    .hotel-info div,
+    .room-info div {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .hotel-info p,
+    .stay-info p,
+    .room-info p,
+    .guest-info p,
+    .price-info p {
+        margin: 5px 0;
+        color: #555;
+        font-size: 1.1em;
+    }
+
+.hotel-info,
+.stay-info,
+.room-info,
+.guest-info,
+.price-info {
+    border-left: 5px solid #007bff;
+    padding-left: 15px;
+}
+
+    .hotel-info h3 {
+        color: #007bff;
+    }
+
+    .room-info img {
+        margin-bottom: 10px;
+    }
+
+    .price-info p {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #d9534f;
+    }
+
+.content-orderdetail {
+    margin-left: 270px;
+    padding: 20px;
+    background-color: transparent; /* 設置背景為透明 */
+    flex: 1;
+    box-shadow: none; /* 移除陰影 */
+    border-radius: 0; /* 移除邊框圓角 */
+}

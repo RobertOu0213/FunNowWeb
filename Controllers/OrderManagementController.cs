@@ -16,5 +16,10 @@ namespace PrjFunNowWeb.Controllers
         {
             return View();
         }
+        public IActionResult HotelMessenge()
+        {
+            return View();
+        }
     }
+    
 }
