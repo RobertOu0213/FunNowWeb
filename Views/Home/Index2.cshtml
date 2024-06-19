@@ -16,7 +16,7 @@
                 <!-- 左側篩選條件區域 -->
                 <div>
                     <a class="book_now_btn button_hover" href="#">
-                        <img src="~/image/ming_img/map.png" alt="">
+                        <img src="~/image/ming_img/map.png" alt="" style="height:80px;width:auto">
                     </a>
                 </div>
 
@@ -132,6 +132,7 @@
 
 <!-- 右側動態廣告區域 -->
 <div class="ad-container">
+    <!-- 設置輪播 -->
     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
             <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -139,6 +140,7 @@
             <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
         </ol>
         <div class="carousel-inner">
+            <!-- 第一組輪播項，默認激活 -->
             <div class="carousel-item active">
                 <img src="~/image/ming_img/排球少年1.jfif" class="d-block w-100" alt="Ad Image 1">
                 <img src="~/image/ming_img/排球少年2.jfif" class="d-block w-100 mt-2" alt="Ad Image 2">
@@ -309,7 +311,6 @@
 
     <script>
 
-
         document.addEventListener("DOMContentLoaded", async function () {
             // 網頁加載完成後自動加載儲存在 sessionStorage 的 searchHotel 資訊
             const searchHotelJson = sessionStorage.getItem("searchHotel");
@@ -350,11 +351,13 @@
 
             //所有指定容器內的複選框添加 change 事件監聽器，當複選框的狀態改變時，
             //觸發 updateSearchFilters 函數以更新搜尋條件並重新加載飯店資訊
-            containerSelectors.forEach(selector => {
+            containerSelectors.forEach(selector => { //遍歷 containerSelectors 數組，對每個選擇器進行以下操作
                 document.querySelectorAll(`${selector} input[type="checkbox"]`).forEach(checkbox => {
                     checkbox.addEventListener('change', updateSearchFilters);
-                });
+                });//對每個容器選擇器，選取該容器內的所有複選框，添加 change 事件監聽器
             });
+
+
 
             // 綁定排序按鈕的點擊事件
             const sortButtons = {
@@ -370,13 +373,15 @@
             // 觸發 handleSort 函數以設定排序方式並重新加載飯店資訊
             Object.keys(sortButtons).forEach(id => {
                 document.querySelector(`#${id}`).addEventListener("click", () => handleSort(...sortButtons[id]));
+                //...為使用展開運算符（Spread Operator）將數組 sortButtons[id] 展開為單獨的參數，傳遞給 handleSort 函數。
+                //例如，對於 sortBtn，sortButtons["sortBtn"] 是 ["HotelId", "asc"]，所以實際調用為 handleSort("HotelId", "asc")
             });
 
             // 設定 upperHandle 初始位置在滑動條的尾端
             const rangeSlider = {
-                lowerHandle: document.getElementById('lowerHandle'),
+                lowerHandle: document.getElementById('lowerHandle'),//滑桿的下限手柄
                 upperHandle: document.getElementById('upperHandle'),
-                slider: document.getElementById('rangeSlider'),
+                slider: document.getElementById('rangeSlider'),//滑桿的主體
                 lowerLabel: document.getElementById('lowerLabel'),
                 upperLabel: document.getElementById('upperLabel'),
                 lowerInput: document.getElementById('lowerInput'),
@@ -384,7 +389,7 @@
             };
 
             const max = parseFloat(rangeSlider.slider.getAttribute('max'));
-            const position = 100; // 百分比位置
+            const position = 100; // 百分比位置（100% 表示滑桿的最右端）
             rangeSlider.upperHandle.style.left = `${position}%`;
             rangeSlider.upperLabel.textContent = `上限：${max}`;
             rangeSlider.upperInput.value = max;
@@ -397,40 +402,46 @@
             // 綁定滑桿拖動事件
             [rangeSlider.lowerHandle, rangeSlider.upperHandle].forEach(handle => {
                 handle.addEventListener('mousedown', startDrag);
+                //當手柄被按下（按下滑鼠 事件）時，觸發 startDrag 函數，開始拖動手柄。
             });
 
-            let isDragging = false;
-            let currentHandle = null;
+            let isDragging = false;  //表示是否正在拖動手柄
+            let currentHandle = null; //存儲當前正在拖動的手柄。
 
             // 開始拖動的處理函數
             function startDrag(event) {
                 isDragging = true;
-                currentHandle = event.target;
-                document.addEventListener('mousemove', handleDrag);
-                document.addEventListener('mouseup', stopDrag);
+                currentHandle = event.target; //設置為當前被按下的手柄
+                document.addEventListener('mousemove', handleDrag);//當鼠標移動（mousemove 事件）時
+                document.addEventListener('mouseup', stopDrag);//當鼠標按鍵釋放（mouseup 事件）時
             }
 
             // 處理拖動邏輯的函數
             function handleDrag(event) {
-                if (!isDragging) return;
+                if (!isDragging) return;//如果 isDragging 為 false，則直接返回，不進行後續操作。這樣可以避免在未拖動時誤觸發拖動邏輯
 
                 const handleType = currentHandle === rangeSlider.lowerHandle ? 'lower' : 'upper';
+                //如果 currentHandle 等於 rangeSlider.lowerHandle，則 handleType 設為 'lower'，否則設為 'upper'。
                 const { handle, label, oppositeLabel, lowerInput, upperInput } = handleType === 'lower' ?
                     { handle: rangeSlider.lowerHandle, label: rangeSlider.lowerLabel, oppositeLabel: rangeSlider.upperLabel, lowerInput: rangeSlider.lowerInput, upperInput: rangeSlider.upperInput } :
                     { handle: rangeSlider.upperHandle, label: rangeSlider.upperLabel, oppositeLabel: rangeSlider.lowerLabel, lowerInput: rangeSlider.lowerInput, upperInput: rangeSlider.upperInput };
 
-                const sliderRect = rangeSlider.slider.getBoundingClientRect();
+                const sliderRect = rangeSlider.slider.getBoundingClientRect();  //獲取滑桿的邊界矩形，用於計算手柄位置
                 const position = Math.min(1, Math.max(0, (event.clientX - sliderRect.left) / sliderRect.width));
+                //event.clientX 是鼠標在頁面上的水平位置（X 坐標）  sliderRect.left 是滑桿左邊界在頁面上的水平位置（X 坐標）。
                 const value = Math.round(parseFloat(rangeSlider.slider.getAttribute('min')) + position * (parseFloat(rangeSlider.slider.getAttribute('max')) - parseFloat(rangeSlider.slider.getAttribute('min'))));
-
+                //(event.clientX - sliderRect.left) / sliderRect.width 計算鼠標在滑桿內的相對位置，範圍是 0 到 1 之間。當鼠標在滑桿最左端時，這個值為 0；當鼠標在滑桿最右端時，這個值為 1。
+                
                 // 防止下限超過上限或上限低於下限
                 if (handleType === 'lower' && value >= parseFloat(oppositeLabel.textContent.split('：')[1])) return;
                 if (handleType === 'upper' && value <= parseFloat(oppositeLabel.textContent.split('：')[1])) return;
+                //split('：')[1] 的作用是將字符串根據特定的分隔符進行分割，並提取分割後的第二部分。在這個上下文中，分隔符是 ：（中文冒號），目的是提取數值部分。
 
                 handle.style.left = `${position * 100}%`;
                 label.textContent = `${handleType === 'lower' ? '下限' : '上限'}：${value}`;
                 handleType === 'lower' ? lowerInput.value = value : upperInput.value = value;
                 updateHotels(parseFloat(rangeSlider.lowerInput.value), parseFloat(rangeSlider.upperInput.value));
+                //調用 updateHotels 函數，更新酒店列表。
             }
 
             // 停止拖動的處理函數
@@ -845,8 +856,6 @@
             }
         }
     </script>
-
-
     <script>
         // 解決 checkbox 內容太長的問題
         document.addEventListener("DOMContentLoaded", function () {
