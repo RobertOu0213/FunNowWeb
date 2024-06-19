@@ -177,7 +177,7 @@ nav {
 
 .search__container {
     width: 100%;
-    background-color:#FFFFFF;
+    background-color: #FFFFFF;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -187,6 +187,17 @@ nav {
     &__search {
         width: 35%;
         margin-left: 20px;
+        position: relative;
+
+        img {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
     }
 
     .uploadButton {

@@ -149,6 +149,16 @@ nav .modal .logout-button:hover {
 .search__container__search {
   width: 35%;
   margin-left: 20px;
+  position: relative;
+}
+.search__container__search img {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
 }
 .search__container .uploadButton {
   color: #fff;
