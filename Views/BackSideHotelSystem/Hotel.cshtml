@@ -98,7 +98,8 @@
             <input type="text" class="form-control display" id="searchBar" aria-label="" placeholder="輸入文字">
         </span>
     </div>
-    <div>
+    <div class="ms-1">
+        <!-- 修改這裡的class從ms-5改為ms-1 -->
         <input type="button" class="btn btn-outline-primary display" id="searchBtn" value="搜尋" onclick="searchHotels()">
     </div>
     <div class="ms-2">
@@ -199,6 +200,7 @@
 @section Scripts {
     <script>
         let allHotels = [];
+        let currentHotelID = null; // 確保 currentHotelID 已正確定義
 
         // 獲取飯店資訊並更新顯示
         function fetchHotels() {
@@ -224,17 +226,17 @@
                     : `<td><button class="btn btn-primary" onclick="toggleHotelStatus(${item.hotelID})">上架飯店</button></td>`;
 
                 tableStr += `
-                                    <tr data-hotel-id="${item.hotelID}">
-                                        <td>${item.hotelID}</td>
-                                        <td>${item.hotelName}</td>
-                                        <td>${item.hotelTypeName}</td>
-                                        <td>${item.hotelAddress}</td>
-                                        <td>${item.hotelPhone}</td>
-                                        <td>${status}</td>
-                                        <td><button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="loadRooms(${item.hotelID})">詳細內容</button></td>
-                                        ${actionButton}
-                                    </tr>
-                                `;
+                            <tr data-hotel-id="${item.hotelID}">
+                                <td>${item.hotelID}</td>
+                                <td>${item.hotelName}</td>
+                                <td>${item.hotelTypeName}</td>
+                                <td>${item.hotelAddress}</td>
+                                <td>${item.hotelPhone}</td>
+                                <td>${status}</td>
+                                <td><button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="loadRooms(${item.hotelID})">詳細內容</button></td>
+                                ${actionButton}
+                            </tr>
+                        `;
             });
 
             document.getElementById('hotelContainer').innerHTML = tableStr;
@@ -262,6 +264,7 @@
 
         // 獲取並顯示房間資訊
         function loadRooms(hotelID) {
+            currentHotelID = hotelID; // 設置當前飯店ID
             fetch(`https://localhost:7103/api/BackSideHotel/${hotelID}/rooms`)
                 .then(response => response.json())
                 .then(data => {
@@ -276,24 +279,40 @@
         function updateRoomDisplay(roomList) {
             let roomTableStr = "";
             roomList.forEach(item => {
-                let roomStatus = item.roomStatus ? "可預訂" : "已滿";
                 let actionButton = item.roomStatus
-                    ? '<td><button class="btn btn-danger" onclick="deactivateRoom()">下架房間</button></td>'
-                    : '<td><button class="btn btn-primary" onclick="activateRoom()">上架房間</button></td>';
+                    ? `<td><button class="btn btn-danger" onclick="toggleRoomStatus(${item.roomID})">下架房间</button></td>`
+                    : `<td><button class="btn btn-primary" onclick="toggleRoomStatus(${item.roomID})">上架房间</button></td>`;
 
                 roomTableStr += `
-                                    <tr>
-                                        <td>${item.roomID}</td>
-                                        <td>${item.roomType}</td>
-                                        <td>${item.roomPrice}</td>
-                                        <td>${item.roomSize} 平方公尺</td>
-                                        <td>${item.description}</td>
-                                        ${actionButton}
-                                    </tr>
-                                `;
+                            <tr>
+                                <td>${item.roomID}</td>
+                                <td>${item.roomType}</td>
+                                <td>${item.roomPrice}</td>
+                                <td>${item.roomSize} 平方公尺</td>
+                                <td>${item.description}</td>
+                                ${actionButton}
+                            </tr>
+                        `;
             });
 
             document.getElementById('roomContainer').innerHTML = roomTableStr;
+        }
+
+        // 切換房間的RoomStatus狀態
+        function toggleRoomStatus(roomID) {
+            fetch(`https://localhost:7103/api/BackSideHotel/rooms/${roomID}/toggleStatus`, {
+                method: 'PUT'
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    // 更新房間狀態後重新加載房間資訊
+                    loadRooms(currentHotelID); // 確保當前飯店ID（currentHotelID）已在其他地方定義
+                })
+                .catch(error => {
+                    console.error('Error toggling room status:', error);
+                });
         }
 
         // 搜索飯店
@@ -368,6 +387,3 @@
         });
     </script>
 }
-
-
-
