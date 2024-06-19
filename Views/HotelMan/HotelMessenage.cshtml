@@ -26,14 +26,14 @@
         /* 左侧栏样式 */
         .left-panel {
             width: 33.33%;
-            background-color: #f4f4f4;
+            background-color: #FCFCFC;
             display: flex;
             flex-direction: column;
+            border-right: 1px solid #E0E0E0;
         }
 
             /* 左侧上部和下部样式 */
             .left-panel .top, .left-panel .bottom {
-                padding: 10px;
                 box-sizing: border-box;
             }
 
@@ -52,7 +52,7 @@
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    margin-bottom: 10px;
+                    padding:10px;
                 }
 
                     .left-panel .top .header h2 {
@@ -71,7 +71,6 @@
             display: flex;
             justify-content: space-around;
             width: 100%;
-            margin-bottom: 10px;
         }
 
             .tab a {
@@ -97,27 +96,33 @@
             width: 66.67%;
             display: flex;
             flex-direction: column;
+            margin:0px 10px;
         }
 
             /* 右侧上部、中部、下部样式 */
             .right-panel .top, .right-panel .middle, .right-panel .bottom {
-                padding: 20px;
                 box-sizing: border-box;
             }
 
             .right-panel .top {
                 flex: 1;
-                background-color: #e9e9e9;
+                background-color: #FCFCFC;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                box-sizing: border-box;
             }
 
             .right-panel .middle {
                 flex: 7;
                 background-color: #ffffff;
                 overflow-y: auto;
+                padding:10px;
+
             }
 
             .right-panel .bottom {
-                flex: 2;
+                flex: 1;
                 background-color: #f9f9f9;
                 display: flex;
                 align-items: center;
@@ -127,14 +132,13 @@
         .customer-info {
             display: flex;
             align-items: center;
-            margin-bottom: 20px;
         }
 
             .customer-info img {
                 width: 50px;
                 height: 50px;
                 border-radius: 50%;
-                margin-right: 20px;
+                margin: 20px;
             }
 
             .customer-info div {
@@ -195,7 +199,7 @@
             <!-- 左侧上部 -->
             <div class="top">
                 <div class="header">
-                    <h2>客人資訊</h2>
+                    <h2 style="font-size:30px">客人資訊</h2>
                 </div>
                 <div class="tab">
                     <a href="#" class="active">All messages</a>
@@ -205,7 +209,7 @@
             <!-- 左侧下部 -->
             <div class="bottom">
                 <!-- 左侧下部内容 -->
-                <div class="customer-info">
+                <div class="customer-info" style="background-color:aliceblue">
                     <img src="path/to/customer-photo.jpg" alt="客人照片">
                     <div>
                         <span>姓名: 客人名稱</span>
@@ -220,11 +224,14 @@
         <div class="right-panel">
             <!-- 右侧上部 -->
             <div class="top">
+                <div>
+                    <span>姓名: 客人名稱</span>
+                </div>
                 <div class="customer-info">
-                    <img src="path/to/customer-photo.jpg" alt="客人照片">
                     <div>
-                        <span>姓名: 客人名稱</span>
                         <span>電話: 123456789</span>
+                    </div>
+                    <div>
                         <span>飯店: 客人選取飯店資訊</span>
                     </div>
                 </div>
