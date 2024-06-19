@@ -194,6 +194,9 @@ namespace PrjFunNowWeb.Controllers
 
         public IActionResult HostInformation()
         {
+            
+            
+            
             return View();
         }
 
