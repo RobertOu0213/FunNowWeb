@@ -38,9 +38,10 @@
 
 @section Scripts {
     <script defer>
+        const userId = "@ViewBag.UserID";
 
         async function fetchAndDisplayHotels(isActive) {
-            const res = await fetch('https://localhost:7103/api/HostManage');
+            const res = await fetch(`https://localhost:7103/api/HostManage?userId=${userId}`);
             const data = await res.json();
             const filteredData = data.filter(item => item.isActive === isActive);
             const baseUrl = window.location.origin + '/HostManage/HostHotelInfo';

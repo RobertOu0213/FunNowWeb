@@ -17,7 +17,7 @@ namespace PrjFunNowWeb.Controllers
             _httpClient = httpClient;
         }
 
-        public async Task<IActionResult> pgHotel(int hotelId = 17, string checkInDate="2024-06-29", string checkOutDate="2024-06-30")
+        public async Task<IActionResult> pgHotel(int hotelId = 17, string checkInDate = "2024-06-29", string checkOutDate = "2024-06-30")
         {
             //var secretKey = "my_secret_key123"; // 确保长度为16字节
             //hotelId = HttpUtility.UrlDecode(hotelId);
@@ -56,6 +56,7 @@ namespace PrjFunNowWeb.Controllers
 
             hotelDetail.CheckInDate = checkInDate;
             hotelDetail.CheckOutDate = checkOutDate;
+            hotelDetail.HotelID = hotelId;
 
             var viewModel = new pgHotel_HotelDetailViewModel
             {

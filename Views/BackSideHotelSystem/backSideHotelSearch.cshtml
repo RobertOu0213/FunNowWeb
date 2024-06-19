@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewData["Title"] = "backSideHotelSearch";
+}
+
+
+
+@section Styles {
+    <style>
+
+    </style>
+    }
+
+@section Scripts {
+    <script>
+
+ const searchData = {
+           "HotelID": 0,
+            "keyword": "",
+            "HotelName": "",
+           "HotelAddress": "",
+           "HotelPhone": "",
+           "HotelIsActive": 0,
+           "sortType": "asc",
+           "sortBy": ""
+                };
+
+        //async寫非同步 , ()=>{} 是箭頭函數
+        (async() => {
+            const Url = '@Url.Content("~/api/BackSideHotel")';
+            const response = await fetch(Url, {                       /* 傳json格式資料，Url後面接{}，然後接Post */
+               method: 'POST',
+               body: JSON.stringify(searchData),
+               headers: {
+                    'Content-Type': 'application/json'
+                }
+
+            });
+            const datas = await response.json();
+           console.log(datas);
+            })();
+    </script>
+}

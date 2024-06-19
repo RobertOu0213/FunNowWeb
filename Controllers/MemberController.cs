@@ -28,7 +28,7 @@ namespace PrjFunNowWeb.Controllers
 
         public MemberController(FunNowContext context, HttpClient httpClient)
         {
-                _context = context;
+            _context = context;
             _httpClient = httpClient;
         }
 

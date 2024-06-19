@@ -23,7 +23,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="icon" href="~/image/ming_img/favicon.png" type="image/png">
+    <link rel="icon" href="~/image/ming_img/funnowlogo3.png" type="image/png">
     <title>FUNNOW</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="~/css/ming_css/bootstrap.css">
@@ -41,6 +41,7 @@
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.min.css">
+
 
     <style>
         .booking-area {
@@ -76,11 +77,11 @@
         <div class="container-fluid" style="padding: 0;">
             <nav class="navbar navbar-expand-lg navbar-light" style="height: 60px;">
                 <!-- Brand and toggle get grouped for better mobile display -->
-                <a class="navbar-brand logo_h" href="index.html" style="padding:5px;">
-                    <img src="~/image/ming_img/FunNowlogo.png" style="height: 60px; border-radius: 12px;">
+                <a class="navbar-brand logo_h" href="/home/index" style="padding:5px;">
+                    <img src="~/image/ming_img/funnowlog.png" style="height: 40px; border-radius: 12px; margin-bottom:5px" />
                 </a>
-                <div id="guestContent" style="display: none;">
-                    <label>歡迎路過客～哎呀~我發現你還沒登入！！！ 趕緊 <a class="btn btn-danger" href="/Member/Login">登入</a>來探索更多精彩內容!!!</label>
+                <div id="guestContent" style="display: none; margin-top:10px">
+                    <label>歡迎路過客～哎呀~我發現你還沒登入！！！ 趕緊 <a class="btn btn-danger"  href="/Member/Login">登入</a>來探索更多精彩內容!!!</label>
                 </div>
                 <div id="memberContent" style="display: none;">
                     <label>歡迎我們尊貴的會員ID是<span id="memberId"></span>號的<span id="memberFirstName"></span>完成登入</label>
@@ -93,10 +94,10 @@
                     <span class="icon-bar"></span>
                 </button>
                 <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
+                <div class="navbar-collapse offset collapse" id="navbarSupportedContent">
                     <ul class="nav navbar-nav menu_nav ml-auto">
                         <li class="nav-item active">
-                            <a class="nav-link" href="index.html" style="color:red;">刊登家中空房</a>
+                            <a class="nav-link" href="/HostManage/Home" style="color:red;">刊登家中空房</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="about.html">
@@ -107,7 +108,7 @@
                             <a class="nav-link" href="accomodation.html">NT $</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="gallery.html">
+                            <a class="nav-link" href="/Cart/cartItems">
                                 <i class="fa-solid fa-cart-shopping"></i>
                             </a>
                         </li>
@@ -166,7 +167,7 @@
     <footer class="footer-area section_gap">
         <div class="container">
             <div class="row">
-                <div class="col-lg-3  col-md-6 col-sm-6">
+                <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="single-footer-widget">
                         <h6 class="footer_title">About Agency</h6>
                         <p>The world has become so fast paced that people don’t want to stand by reading a page of information, they would much rather look at a presentation and understand the message. It has come to a point </p>
@@ -392,12 +393,14 @@
                     return; // 如果沒有找到 floating-container 元素，直接返回
                 }
                 var scrollPosition = window.scrollY || window.pageYOffset;
+
                 // 如果滾動至頁面中間，顯示浮動容器，否則隱藏
                 if (scrollPosition > (window.innerHeight / 2)) {
                     floatingContainer.style.display = 'block';
-                } else {
-                    floatingContainer.style.display = 'none';
                 }
+                // else {
+                //     floatingContainer.style.display = 'none';
+                // }
             });
         });
     </script>

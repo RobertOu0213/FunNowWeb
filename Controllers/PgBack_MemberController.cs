@@ -8,5 +8,10 @@ namespace PrjFunNowWeb.Controllers
         {
             return View();
         }
+
+        public IActionResult pgBack_PowerBI()
+        {
+            return View();
+        }
     }
 }

@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>用地圖抓地址+經緯度測試</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 600px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        var map = L.map('map').setView([25.033913, 121.5434129], 10);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap',
+            zoomControl: true,
+        }).addTo(map);
+
+        var currentMarker = null;
+
+        function onMapClick(e) {
+            var lat = e.latlng.lat;
+            var lng = e.latlng.lng;
+            var url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`;
+
+            axios.get(url)
+                .then(function (response) {
+                    var address = response.data.display_name;
+                    var popupContent = `
+                        <b>地址:</b> ${address}<br>
+                        <b>經度:</b> ${lng}<br>
+                        <b>緯度:</b> ${lat}
+                    `;
+
+                    // 如果已經有地標，先將其移除
+                    if (currentMarker) {
+                        map.removeLayer(currentMarker);
+                    }
+
+                    // 創建新的地標並添加到地圖
+                    currentMarker = L.marker([lat, lng]).addTo(map);
+                    currentMarker.bindPopup(popupContent).openPopup();
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
+
+        map.on('click', onMapClick);
+    </script>
+</body>
+</html>

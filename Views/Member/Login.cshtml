@@ -1,5 +1,17 @@
-﻿@{ 
+﻿@{
+    
     Layout = "_Layout_login";
+    var alertMessage = Context.Session.GetString("AlertMessage");
+    if (!string.IsNullOrEmpty(alertMessage))
+    {
+        <script>
+            alert(decodeURIComponent("@Html.Raw(HttpUtility.UrlDecode(alertMessage))"));     
+        </script>
+        // 清除伺服器端的 Session 消息
+        Context.Session.Remove("AlertMessage");
+    }
+
+    
 }
 
 
@@ -273,6 +285,7 @@
                 Password: password
             };
 
+    
             try {
                 const response = await fetch('/Member/LoginWithAPI', {
                     method: 'POST',
@@ -281,7 +294,7 @@
                     },
                     body: JSON.stringify(loginData)
                 });
-
+                console.log(loginData);
                 if (!response.ok) {
                     throw new Error('登入失敗');
                 }
