@@ -93,25 +93,11 @@
                     </li>
                 </ul>
             </div>
-            <div class="content">
+            <div class="content-orderdetail" id="order-details-content">
                 <div class="order-confirmation-card" id="order-confirmation-card">
                     <!-- 訂單確認卡片內容 -->
                 </div>
-                <div class="hotel-info" id="hotel-info">
-                    <!-- 飯店資訊 -->
-                </div>
-                <div class="stay-info" id="stay-info">
-                    <!-- 入住資訊 -->
-                </div>
-                <div class="room-info" id="room-info">
-                    <!-- 房間資訊 -->
-                </div>
-                <div class="guest-info" id="guest-info">
-                    <!-- 旅客資訊 -->
-                </div>
-                <div class="price-info" id="price-info">
-                    <!-- 價格資訊 -->
-                </div>
+                
             </div>
         </div>
     </div>
@@ -125,7 +111,7 @@
             }
 
             function fetchOrderDetails(orderId) {
-                fetch(`https://localhost:7103/api/Orders/${orderId}`)
+                fetch(`https://localhost:7103/api/Orders/ByOrderId/${orderId}`)
                     .then(response => response.json())
                     .then(data => {
                         if (data) {
@@ -141,48 +127,41 @@
                 document.getElementById('order-confirmation-card').innerHTML = `
                             <h2>已確認</h2>
                             <p>訂單編號: ${data.orderId}</p>
-                            <p>PIN碼: ${data.pin}</p>
                             <!-- 其他訂單確認信息 -->
                         `;
 
-                const hotelInfoHTML = data.orderDetails.map(detail => `
-                            <div>
-                                <h3>${detail.hotelName}</h3>
-                                <p>${detail.hotelAddress}</p>
-                                <p>電話: ${detail.hotelPhone}</p>
-                                <!-- 其他飯店信息 -->
-                            </div>
-                        `).join('');
-                document.getElementById('hotel-info').innerHTML = hotelInfoHTML;
-
-                const stayInfoHTML = data.orderDetails.map(detail => `
-                            <div>
-                                <p>入住: ${new Date(detail.checkInDate).toLocaleDateString()}</p>
-                                <p>退房: ${new Date(detail.checkOutDate).toLocaleDateString()}</p>
-                                <!-- 其他入住信息 -->
-                            </div>
-                        `).join('');
-                document.getElementById('stay-info').innerHTML = stayInfoHTML;
-
-                const roomInfoHTML = data.orderDetails.map(detail => `
-                            <div>
-                                <p>房型: ${detail.roomType}</p>
-                                <p>床型: ${detail.bedType}</p>
-                                <p>房間數量: ${detail.roomCount}</p>
-                                <!-- 其他房間信息 -->
-                            </div>
-                        `).join('');
-                document.getElementById('room-info').innerHTML = roomInfoHTML;
-
-                const guestInfoHTML = `
-                            <div>
-                                <p>姓名: ${data.guestName}</p>
-                                <p>聯絡電話: ${data.guestPhone}</p>
-                                <p>電子郵件: ${data.guestEmail}</p>
-                                <!-- 其他旅客信息 -->
-                            </div>
-                        `;
-                document.getElementById('guest-info').innerHTML = guestInfoHTML;
+                const orderDetailsContent = document.getElementById('order-details-content');
+                data.orderDetails.forEach(detail => {
+                    const detailHTML = `
+                                <div class="hotel-info">
+                                    <h3>${detail.hotelName}</h3>
+                                    <p>地址: ${detail.hotelAddress}</p>
+                                    <p>電話: ${detail.hotelPhone}</p>
+                                    <p>類型: ${detail.hotelTypeName}</p>
+                                    <div>圖片: ${detail.hotelImages.map(image => `<img src="${image}" alt="Hotel Image" />`).join('')}</div>
+                                    <!-- 其他飯店信息 -->
+                                </div>
+                                <div class="stay-info">
+                                    <p>入住: ${new Date(detail.checkInDate).toLocaleDateString()}</p>
+                                    <p>退房: ${new Date(detail.checkOutDate).toLocaleDateString()}</p>
+                                    <!-- 其他入住信息 -->
+                                </div>
+                                <div class="room-info">
+                                    <p>房型: ${detail.roomTypeName}</p>
+                                    <div>圖片: ${detail.roomImages.map(image => `<img src="${image}" alt="Room Image" />`).join('')}</div>
+                                    <p>設備: ${detail.roomEquipmentNames.join(', ')}</p>
+                                    <!-- 其他房間信息 -->
+                                </div>
+                                <div class="guest-info">
+                                    <p>姓名: ${data.guestLastName} ${data.guestFirstName}</p>
+                                    <p>電子郵件: ${data.guestEmail}</p>
+                                    <!-- 其他旅客信息 -->
+                                </div>
+                            `;
+                    const detailContainer = document.createElement('div');
+                    detailContainer.innerHTML = detailHTML;
+                    orderDetailsContent.appendChild(detailContainer);
+                });
 
                 document.getElementById('price-info').innerHTML = `
                             <div>

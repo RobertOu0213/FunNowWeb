@@ -309,3 +309,94 @@ body {
             color: #ccc;
             border-color: #ddd;
         }
+/* 訂單詳情的CSS */
+.order-confirmation-card,
+.hotel-info,
+.stay-info,
+.room-info,
+.guest-info,
+.price-info {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+    .order-confirmation-card:hover,
+    .hotel-info:hover,
+    .stay-info:hover,
+    .room-info:hover,
+    .guest-info:hover,
+    .price-info:hover {
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .order-confirmation-card h2,
+    .hotel-info h3 {
+        margin: 0 0 10px;
+        color: #333;
+        font-size: 1.5em;
+        border-bottom: 2px solid #007bff;
+        padding-bottom: 10px;
+    }
+
+    .hotel-info img,
+    .room-info img {
+        width: 100px;
+        height: 100px;
+        border-radius: 8px;
+        object-fit: cover;
+        margin-right: 10px;
+        margin-top: 10px;
+    }
+
+    .hotel-info div,
+    .room-info div {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .hotel-info p,
+    .stay-info p,
+    .room-info p,
+    .guest-info p,
+    .price-info p {
+        margin: 5px 0;
+        color: #555;
+        font-size: 1.1em;
+    }
+
+.hotel-info,
+.stay-info,
+.room-info,
+.guest-info,
+.price-info {
+    border-left: 5px solid #007bff;
+    padding-left: 15px;
+}
+
+    .hotel-info h3 {
+        color: #007bff;
+    }
+
+    .room-info img {
+        margin-bottom: 10px;
+    }
+
+    .price-info p {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #d9534f;
+    }
+
+.content-orderdetail {
+    margin-left: 270px;
+    padding: 20px;
+    background-color: transparent; /* 設置背景為透明 */
+    flex: 1;
+    box-shadow: none; /* 移除陰影 */
+    border-radius: 0; /* 移除邊框圓角 */
+}

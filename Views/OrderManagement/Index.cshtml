@@ -245,7 +245,7 @@
                         document.querySelectorAll('.order-card, .order-number').forEach(element => {
                             element.addEventListener('click', (event) => {
                                 const orderId = event.currentTarget.getAttribute('data-order-id');
-                                window.location.href = `/orderdetails.html?orderId=${orderId}`;
+                                window.location.href = `/OrderManagement/OrderdETAIL?orderId=${orderId}`;
                             });
                         });
                     })
