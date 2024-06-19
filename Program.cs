@@ -110,7 +110,7 @@ app.UseCors("AllowAngularApp");
 app.MapControllerRoute(
     name: "default",
     //pattern: "{controller=Home}/{action=Index}/{id?}");
-pattern: "{controller=Comment}/{action=Angular_test}/{id?}");
+pattern: "{controller=Home}/{action=Index}/{id?}");
 
 
 //// 配置路由以支持 Angular 路由
