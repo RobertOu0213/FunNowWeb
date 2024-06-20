@@ -173,14 +173,14 @@
             </h2>
             <div id="collapseOne" class="collapse" data-parent="#accordionExample" >
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-9">                         
-                                <div class="image-container" style="position: relative; width: 200px; display: inline-block;">
+                    <div class="row d-flex flex-nowrap">
+                        <div class="col-9 d-flex flex-nowrap">
+                            <div class="image-container" style="position: relative; width: 200px; display: inline-block;">
                                     <button type="button" class="close remove-image" style="position: absolute; z-index: 2; left: 80px; top: 5px;"><span aria-hidden="true">&times;</span></button>
                                     <img src="~/image/julia/haiou.png" class="img-thumbnail float-left mx-1" style="position: relative; z-index: 1;" alt="房间图片">
                                 </div>     
                         </div>
-                        <div class="col-3">
+                        <div class="col-3 d-flex align-items-center mt-2">
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
                                 比較住宿
                             </button>
@@ -625,18 +625,20 @@
                                                 <h6 style="color:gray">每晚價格(不連稅及其他費用)</h6>
                                                 <br><br>
                                                 <h3>NT$${hotelPrice}</h3>
-                                                        <div class="checkbox-container">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" data-hotel-id="${hotelId}">
-                                                    <label class="form-check-label" for="flexCheckDefault">
-                                                        比較
-                                                    </label>
-                                                </div>
-                                                </div>
+                                                             <div class="checkbox-container" >
+                                                                        <div class="form-check" onclick="event.stopPropagation()">
+                                                                                    <input class="form-check-input" type="checkbox" id="${hotelId}" data-hotel-id="${hotelId}">
+                                                                                    <label class="form-check-label" for="${hotelId}">
+                                                                                比較
+                                                                            </label>
+                                                                        </div>
+                                                                        </div>
                                             </div>
+                                                      
                                         </div>
-                                    </a>
-                                </div>
+                                          </a>
+                                             
+                                        </div>
                             </div>
                         `;
             }));
@@ -656,6 +658,7 @@
             }
 
             function getImageUrl(imagePath) {
+                console.log(imagePath)
                 if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
                     return imagePath;
                 } else {
@@ -679,13 +682,28 @@
                 checkbox.addEventListener('change', updateUI);
             });
 
+
+            // 獲取 checkbox 容器元素
+            const checkboxContainer = document.querySelector('.checkbox-container');
+
+            // 為 checkbox 容器元素添加點擊事件處理程序
+            checkboxContainer.addEventListener('click', function (event) {
+                // 阻止事件冒泡
+                event.stopPropagation();
+                // 其他操作...
+
+                console.log('form check input clicked');
+
+            });
+
+
             function updateUI() {
                 const compareDatas = buildCompareDatas();
                 console.warn(compareDatas);
 
                 const accordionContainer = document.querySelector('#collapseOne .card-body .row .col-9');
 
-                // 顯示或隱藏 Accordion
+                // // 顯示或隱藏 Accordion
                 const Accordion = document.querySelector('#container1');
 
                 // 根據 compareDatas 的長度決定是否顯示 Accordion
@@ -707,8 +725,11 @@
 
                 // 更新展開收合區塊中的照片容器
                 compareDatas.forEach(hotel => {
-                    const { hotelImage, hotelId } = hotel;
-                    const HotelImage = getImageUrl(hotelImage);
+                    console.log('hotel：', hotel)
+
+                    // 0620 hotelImages !!!! 教官撈回來的data變成陣列了,且hotelImage改為hotelImages複數
+                    const { hotelImages, hotelId } = hotel;
+                    const HotelImage = getImageUrl(hotelImages[0]);
 
                     const imageContainer = document.createElement('div');
                     imageContainer.className = 'image-container';
@@ -725,7 +746,7 @@
                     imageContainer.appendChild(closeButton);
 
                     const img = document.createElement('img');
-                    img.src = getImageUrl(hotelImage);
+                    img.src = getImageUrl(hotelImages[0]);
                     // img.className = 'card-img-top';
                     img.className = 'img-thumbnail float-left mx-1';
                     img.alt = '房間圖片';
@@ -748,8 +769,8 @@
 
                 // 更新Modal的表格行
                 compareDatas.forEach(hotel => {
-                    const { hotelImage, hotelName, cityName, levelStar, hotelEquipmentNames, totalAverageScore, hotelPrice, hotelId } = hotel;
-                    const HotelImage = getImageUrl(hotelImage);
+                    const { hotelImages, hotelName, cityName, levelStar, hotelEquipmentNames, totalAverageScore, hotelPrice, hotelId } = hotel;
+                    const HotelImage = getImageUrl(hotelImages[0]);
                     const ratingscore = JSON.parse(totalAverageScore);
                     const formattedScore = parseFloat(ratingscore.toFixed(1));
 
@@ -792,7 +813,14 @@
 
         console.warn("1233333333333333");
 
-       
+
+
+        
+
+
+    
+
+
 
         // 切換最愛狀態的函數
         async function toggleFavorite(event, hotelId) {
@@ -1217,10 +1245,25 @@
 
 <style>
     
+        .form-check-input {
+            z-index: 999;
+        }
+
+        .form-check-label {
+            z-index: 999;
+        }
+
+
         .image-container {
             position: relative;
             display: inline-block;
             width: 200px; /* 根据需要调整宽度 */
+        }
+
+        .image-container img {
+            height: 100%; /* 根据需要调整高度 */
+            width: 100%;
+            object-fit: cover; /* 使图片保持原始比例并裁剪以填充容器 */
         }
 
         .remove-image {
@@ -1258,6 +1301,7 @@
             width: 50%;
             display: flex;
             flex-direction: column;
+            z-index:999;
         }
 
         .collapsible {

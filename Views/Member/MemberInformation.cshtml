@@ -29,10 +29,10 @@
             <!--============================側邊導航欄=========================================-->
             <div class="sidebar">
                 <ul>
-                    <li><a href="#" class="fa-solid fa-calendar-days" alt="管理訂單"><span>管理訂單</span></a></li>
-                    <li><a href="#" class="fa-solid fa-building" alt="住宿"><span>住宿</span></a></li>
-                    <li><a href="#" class="fa-solid fa-comment-dots" alt="住宿訊息"><span>住宿訊息</span></a></li>
-                    <li><a href="#" class="fa-solid fa-star" alt="住宿評鑑"><span>住宿評鑑</span></a></li>
+                    <li><a href="/OrderManagement/Index" class="fa-solid fa-calendar-days" alt="管理訂單"><span>管理訂單</span></a></li>
+                    <li><a href="/Home/Index2" class="fa-solid fa-building" alt="住宿"><span>尋找住宿</span></a></li>
+                    <li><a href="/OrderManagement/HotelMessenge" class="fa-solid fa-comment-dots" alt="住宿訊息"><span>住宿訊息</span></a></li>
+                    <li><a href="/Comment/Angular_membercomment" class="fa-solid fa-star" alt="住宿評鑑"><span>住宿評鑑</span></a></li>
                     <li><a href="/Member/MemberInformation" class="fa-solid fa-user" alt="個人資料"><span>個人資料</span></a></li>
                 </ul>
             </div>
@@ -249,7 +249,7 @@
 
                 <div class="card mb-3 ms-3" style="background-color: #f9f9f9;margin-top:80px">
                     <div class="card-body " style="padding-bottom: 0px; height: 75px; ">
-                        <button class="delete" id="delete">刪除我的帳戶</button>
+                        <button class="delete" id="deletBtn">刪除我的帳戶</button>
                     </div>
 
                 </div>
@@ -858,7 +858,7 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ memberID: memberID, password: originalPwd })
+                    body: JSON.stringify({ memberID: LoginmemberID, password: originalPwd })
                 });
 
                 if (response.ok) {
@@ -1076,12 +1076,11 @@
             label.textContent = checkbox.checked ? '要' : '不要';
         }
 
-        //【按下刪除我的帳戶】
-        document.getElementById("PwdSave").addEventListener('click', async (evt) => {
+        //【按下刪除我的帳戶(變更會員角色)】
+        document.getElementById("deletBtn").addEventListener('click', async (evt) => {
             evt.preventDefault(); //防止預設行為的發生
 
             //串接API，把資料庫的member刪除(角色轉為4)
-            const newPhone = document.getElementById("PhoneInput").value;
             var memberID = '@memberID';
             var googleMemberId = '@googleMemberId';
 
@@ -1091,29 +1090,34 @@
             } else {
                 LoginmemberID = googleMemberId;
             }
+            // 先跳出提醒視窗，再次詢問是否要刪除
+            const userConfirmed = confirm("你確定要刪除你的帳號嗎？這個動作是無法反悔的喔~");
 
-            try {
-                const response = await fetch(`https://localhost:7103/api/DeleteMember/${LoginmemberID}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ phone: newPhone })
-                });
+            if (userConfirmed) {
+                try {
+                    const response = await fetch(`https://localhost:7103/api/DeleteMember/${LoginmemberID}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                    });
 
-                if (response.ok) 
-                {
-                    alert("帳號刪除成功");
-                    window.location.href = "@Url.Action("Logout", "Member")";
-
-                } else {
-                    const errorText = await response.text();
-                    console.error('刪除失敗:', errorText);
-                    alert("刪除失敗，請稍後再試!");
+                    if (response.ok) {
+                        alert("帳號刪除成功");
+                        window.location.href = "@Url.Action("Logout", "Member")";
+                    } else {
+                        const errorText = await response.text();
+                        console.error('刪除失敗:', errorText);
+                        alert("刪除失敗，請稍後再試!");
+                    }
+                } catch (error) {
+                    console.error('發生錯誤:', error);
+                    alert(`發生錯誤，請稍後再試。錯誤信息: ${error.message}`);
                 }
-            } catch (error) {
-                console.error('發生錯誤:', error);
-                alert(`發生錯誤，請稍後再試。錯誤信息: ${error.message}`);;
+            } else 
+            {
+                // 使用者取消刪除操作，返回頁面或執行其他操作
+                return;
             }
 
         });
