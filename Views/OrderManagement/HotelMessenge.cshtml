@@ -173,8 +173,9 @@
                 const message = messageInput.value.trim();
                 if (message === '' || selectedDialog === null) return;
 
-                const senderId = selectedDialog.memberId; // 當前選中的對話中的 memberId
-                const receiverId = selectedDialog.calltoMemberId; // 當前選中的對話中的 calltoMemberId
+                const senderId = memberId; // 當前用戶的 memberId
+                const receiverId = selectedDialog.memberId === memberId ? selectedDialog.calltoMemberId : selectedDialog.memberId; // 確保 receiverId 與當前用戶的 memberId 不一樣
+
 
                 fetch(`${sendMessageUrl}?senderId=${senderId}&receiverId=${receiverId}`, {
                     method: 'POST',
