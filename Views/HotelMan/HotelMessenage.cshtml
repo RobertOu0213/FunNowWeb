@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = ;
+    Layout = "_Layout_HotelHome";
     var memberID = Context.Session.GetString("MemberID");
     var googleMemberId = Context.Session.GetString("GoogleMemberID");
     var displayMemberId = !string.IsNullOrEmpty(googleMemberId) ? googleMemberId : memberID;
@@ -271,6 +271,7 @@
 
     <script>
         var memberId = '@displayMemberId';
+        console.log(memberId);
 
         async function fetchDialogs(memberId) {
             try {
@@ -281,9 +282,24 @@
                 const data = await response.json();
                 if (data.length > 0) {
                     updateUI(data[0]);
+                    const { calltoMemberId, createAt } = data[0];
+                    fetchDialogsByMemberAndDate(memberId, calltoMemberId, createAt);
                 } else {
                     console.error('No dialogs found for this member.');
                 }
+            } catch (error) {
+                console.error('Fetch error: ', error);
+            }
+        }
+
+        async function fetchDialogsByMemberAndDate(memberId, calltoMemberId, createAt) {
+            try {
+                const response = await fetch(`https://localhost:7103/api/Dialogs/byMemberAndDate?memberId=${memberId}&calltoMemberId=${calltoMemberId}&createAt=${createAt}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                updateMessages(data, memberId);
             } catch (error) {
                 console.error('Fetch error: ', error);
             }
@@ -294,29 +310,58 @@
             const rightPanelTop = document.getElementById('rightPanelTop');
 
             const leftPanelContent = `
-                        <div class="customer-info">
-                            <img src="${dialog.memberImage}" alt="客人照片">
-                            <div>
-                                <span>姓名: ${dialog.firstName} ${dialog.lastName}</span>
-                                <span>訊息: ${dialog.detail}</span>
-                                <span>飯店: ${dialog.memberHotelName} ${dialog.memberHotelAddress}</span>
-                            </div>
+                    <div class="customer-info" onclick="handleCustomerInfoClick('${dialog.memberId}', '${dialog.calltoMemberId}', '${dialog.createAt}')">
+                        <img src="${dialog.memberImage}" alt="客人照片">
+                        <div>
+                            <span>姓名: ${dialog.firstName} ${dialog.lastName}</span>
+                            <span>訊息: ${dialog.detail}</span>
+                            <span>飯店: ${dialog.memberHotelName} ${dialog.memberHotelAddress}</span>
                         </div>
-                    `;
+                    </div>
+                `;
 
             const rightPanelContent = `
-                     <div>
-                            <span>姓名: ${dialog.firstName} ${dialog.lastName}</span>
+                    <div>
+                        <span>姓名: ${dialog.firstName} ${dialog.lastName}</span>
+                    </div>
+                    <div class="customer-info">
+                        <div>
+                            <span>飯店: ${dialog.memberHotelName} ${dialog.memberHotelAddress}</span>
                         </div>
-                        <div class="customer-info">
-                            <div>
-                                <span>飯店: ${dialog.memberHotelName} ${dialog.memberHotelAddress}</span>
-                            </div>
-                        </div>
-                    `;
+                    </div>
+                `;
 
             leftPanelBottom.innerHTML = leftPanelContent;
             rightPanelTop.innerHTML = rightPanelContent;
+        }
+
+        function updateMessages(dialogs, memberId) {
+            const messagesList = document.getElementById('messages');
+            messagesList.innerHTML = '';
+
+            dialogs.forEach(dialog => {
+                const messageItem = document.createElement('li');
+                messageItem.classList.add('message', dialog.memberId === parseInt(memberId) ? 'owner-message' : 'customer-message');
+
+                const header = document.createElement('div');
+                header.classList.add('message-header');
+                header.textContent = (dialog.memberId === parseInt(memberId) ? '業主' : '客人') + ' - ' + new Date(dialog.createAt).toLocaleTimeString();
+
+                const text = document.createElement('div');
+                text.classList.add('message-text');
+                text.textContent = dialog.detail;
+
+                messageItem.appendChild(header);
+                messageItem.appendChild(text);
+                messagesList.appendChild(messageItem);
+            });
+
+            messagesList.scrollTop = messagesList.scrollHeight;
+        }
+
+
+        function handleCustomerInfoClick(memberId, calltoMemberId, createAt) {
+            fetchDialogsByMemberAndDate(memberId, calltoMemberId, createAt);
         }
 
         function sendMessage() {
@@ -344,10 +389,10 @@
             }
         }
 
-        // 當頁面加載時調用fetchDialogs函數，並傳入相應的memberId
         document.addEventListener('DOMContentLoaded', () => {
             fetchDialogs(memberId);
         });
     </script>
+
 </body>
 </html>
