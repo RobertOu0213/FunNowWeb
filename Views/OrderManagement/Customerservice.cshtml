@@ -1,0 +1,185 @@
+﻿@{
+    ViewData["Title"] = "Customerservice";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>FunNow 客服服務</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <style>
+        body {
+            background-color: #f8f9fa;
+            position: relative;
+        }
+
+        .chat-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .chat-window {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 300px;
+            max-width: 90%;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            display: none;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        .card-header {
+            background-color: #343a40;
+            color: #fff;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 400px;
+        }
+
+        .chat-box {
+            flex: 1;
+            overflow-y: auto;
+            border-top: 1px solid #ccc;
+            padding: 10px;
+            background-color: #fff;
+        }
+
+        .chat-input {
+            border-top: 1px solid #ccc;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+            .chat-input input {
+                flex: 1;
+                padding: 5px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+
+            .chat-input button {
+                margin-left: 10px;
+            }
+
+        .message {
+            padding: 5px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+        }
+
+            .message.self {
+                background-color: #d1ecf1;
+                text-align: right;
+            }
+
+            .message.other {
+                background-color: #f8d7da;
+            }
+    </style>
+</head>
+<body>
+    <button id="needHelpBtn" class="btn btn-primary chat-button">需要客服嗎？</button>
+
+    <div id="chatWindow" class="chat-window card">
+        <div class="card-header">
+            <h4 class="card-title">FunNow 客服服務</h4>
+        </div>
+        <div class="card-body chat-container">
+            <div id="chatBox" class="chat-box">
+                <ul class="list-group" id="Content"></ul>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="message" placeholder="請完整輸入您的問題">
+                <button type="button" class="btn btn-primary" id="sendButton">傳送</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.18/signalr.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            function generateUniqueId() {
+                return 'guest_' + Math.random().toString(36).substr(2, 9);
+            }
+
+            const userId = generateUniqueId();
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl("https://localhost:7103/chatHub")
+                .build();
+
+            connection.start()
+                .then(() => {
+                    console.log("Hub 連線完成");
+                    connection.invoke("RegisterUser", userId);
+                })
+                .catch(err => {
+                    console.error('連線錯誤: ' + err.toString());
+                    alert('連線錯誤: ' + err.toString());
+                });
+
+            connection.on("UpdSelfID", function (id) {
+                document.getElementById("SelfID").textContent = id;
+            });
+
+            connection.on("UpdContent", function (msg) {
+                const contentList = document.getElementById("Content");
+                const listItem = document.createElement("li");
+                listItem.className = "list-group-item animate__animated animate__fadeInUp message other";
+                listItem.textContent = msg;
+                contentList.appendChild(listItem);
+                contentList.scrollTop = contentList.scrollHeight;
+            });
+
+            connection.on("ConfirmedConnection", function () {
+                alert('您已成功與客服人員連線');
+            });
+
+            document.getElementById("sendButton").addEventListener("click", sendMessage);
+            document.getElementById("message").addEventListener("keydown", function (event) {
+                if (event.key === "Enter") {
+                    sendMessage();
+                }
+            });
+
+            function sendMessage() {
+                const messageInput = document.getElementById("message");
+                const message = messageInput.value.trim();
+                if (message) {
+                    const selfID = document.getElementById("SelfID").textContent;
+                    connection.invoke("SendMessage", selfID, message, "客服人員").catch(err => {
+                        console.error('發送錯誤: ' + err.toString());
+                        alert('發送錯誤: ' + err.toString());
+                    });
+
+                    const contentList = document.getElementById("Content");
+                    const listItem = document.createElement("li");
+                    listItem.className = "list-group-item animate__animated animate__fadeInUp message self";
+                    listItem.textContent = message;
+                    contentList.appendChild(listItem);
+                    contentList.scrollTop = contentList.scrollHeight;
+
+                    messageInput.value = '';
+                }
+            }
+
+            document.getElementById("needHelpBtn").addEventListener("click", function () {
+                document.getElementById("chatWindow").style.display = 'flex';
+            });
+        });
+    </script>
+</body>
+</html>

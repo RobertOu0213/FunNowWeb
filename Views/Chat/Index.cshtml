@@ -1,5 +1,4 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -88,50 +87,53 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.18/signalr.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const connection = new signalR.HubConnectionBuilder().withUrl("https://localhost:7103/chatHub").build();
+            if (!window.signalRConnectionStarted) {
+                window.signalRConnectionStarted = true;
 
-            connection.start()
-                .then(() => console.log("Hub 連線完成"))
-                .catch(err => {
-                    console.error('連線錯誤: ' + err.toString());
-                    alert('連線錯誤: ' + err.toString());
+                const connection = new signalR.HubConnectionBuilder().withUrl("https://localhost:7103/chatHub").build();
+
+                connection.start()
+                    .then(() => console.log("Hub 連線完成"))
+                    .catch(err => {
+                        console.error('連線錯誤: ' + err.toString());
+                        alert('連線錯誤: ' + err.toString());
+                    });
+
+                connection.on("UpdList", function (jsonList) {
+                    const list = JSON.parse(jsonList);
+                    const idList = document.getElementById("IDList");
+                    idList.innerHTML = ""; // 清空列表
+                    list.forEach(id => {
+                        const listItem = document.createElement("li");
+                        listItem.className = "list-group-item";
+                        listItem.textContent = id;
+                        idList.appendChild(listItem);
+                    });
                 });
 
-            connection.on("UpdList", function (jsonList) {
-                const list = JSON.parse(jsonList);
-                const idList = document.getElementById("IDList");
-                idList.innerHTML = ""; // 清空列表
-                list.forEach(id => {
+                connection.on("UpdSelfID", function (id) {
+                    document.getElementById("SelfID").textContent = id;
+                });
+
+                connection.on("UpdContent", function (msg) {
+                    const contentList = document.getElementById("Content");
                     const listItem = document.createElement("li");
-                    listItem.className = "list-group-item";
-                    listItem.textContent = id;
-                    idList.appendChild(listItem);
+                    listItem.className = "list-group-item animate__animated animate__fadeInUp";
+                    listItem.textContent = msg;
+                    contentList.appendChild(listItem);
                 });
-            });
 
-            connection.on("UpdSelfID", function (id) {
-                document.getElementById("SelfID").textContent = id;
-            });
-
-            connection.on("UpdContent", function (msg) {
-                const contentList = document.getElementById("Content");
-                const listItem = document.createElement("li");
-                listItem.className = "list-group-item animate__animated animate__fadeInUp";
-                listItem.textContent = msg;
-                contentList.appendChild(listItem);
-            });
-
-            document.getElementById("sendButton").addEventListener("click", function () {
-                const selfID = document.getElementById("SelfID").textContent;
-                const message = document.getElementById("message").value;
-                const sendToID = document.getElementById("sendToID").value;
-                connection.invoke("SendMessage", selfID, message, sendToID).catch(err => {
-                    console.error('傳送錯誤: ' + err.toString());
-                    alert('傳送錯誤: ' + err.toString());
+                document.getElementById("sendButton").addEventListener("click", function () {
+                    const selfID = document.getElementById("SelfID").textContent;
+                    const message = document.getElementById("message").value;
+                    const sendToID = document.getElementById("sendToID").value;
+                    connection.invoke("SendMessage", selfID, message, sendToID).catch(err => {
+                        console.error('傳送錯誤: ' + err.toString());
+                        alert('傳送錯誤: ' + err.toString());
+                    });
                 });
-            });
+            }
         });
-
     </script>
 </body>
 </html>
