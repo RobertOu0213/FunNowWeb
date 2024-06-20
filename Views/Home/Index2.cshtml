@@ -312,7 +312,6 @@
 @section Scripts {
 
     <script>
-
         document.addEventListener("DOMContentLoaded", async function () {
             //DOMContentLoaded 事件：這個事件在初始的 HTML 文檔被完全加載和解析後觸發，不必等待樣式表、圖像和子框架的完全加載。
             // 網頁加載完成後自動加載儲存在 sessionStorage 的 searchHotel 資訊
@@ -325,6 +324,21 @@
             } else {
                 console.log("searchHotel not found in sessionStorage");
             }
+
+
+            // 加載已喜歡的飯店 ID
+            const memberId = '@memberID'; // 取得實際的會員ID
+            const likedHotels = await getLikedHotels(memberId);
+
+            // 根據已喜歡的飯店 ID 設置紅色愛心
+            const favoriteIcons = document.querySelectorAll(".favorite-icon");
+            favoriteIcons.forEach(icon => {
+                const hotelId = icon.getAttribute("data-hotel-id");
+                if (likedHotels.includes(parseInt(hotelId))) {
+                    icon.classList.add("liked");
+                }
+            });
+
 
             // 監聽提交按鈕，獲取輸入值並發送請求
             const btnSubmit3 = document.querySelector("#buttonSubmit3");
@@ -455,6 +469,22 @@
                 document.removeEventListener('mouseup', stopDrag);
             }
         });
+
+        // 新增取得已喜歡的飯店 ID 的函數
+        async function getLikedHotels(memberId) {
+            try {
+                const response = await fetch(`https://localhost:7103/api/HotelSearch/likedHotels/${memberId}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch liked hotels');
+                }
+                const likedHotelIds = await response.json();
+                return likedHotelIds;
+            } catch (error) {
+                console.error('Error fetching liked hotels:', error);
+                return [];
+            }
+        }
+
 
         // 檢查所有選中的 checkbox 並返回其值的列表
         function getSelectedCheckboxes(containerSelector) {
@@ -820,14 +850,10 @@
                     });
                 });
             });
-
-      
+                 
 
         }
 
-
-
-        var memberID = '@memberID';       
 
         // 切換最愛狀態的函數
         async function toggleFavorite(event, hotelId) {
@@ -841,7 +867,7 @@
                 method: "POST",
                 body: JSON.stringify({
                     HotelId: hotelId,
-                    MemberId: memberID,  // 這裡應該替換為實際的會員ID
+                    MemberId: memberId,  // 這裡應該替換為實際的會員ID
                     LikeStatus: isLiked
                 }),
                 headers: { "Content-Type": "application/json" },
