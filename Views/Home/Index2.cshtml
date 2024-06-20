@@ -173,14 +173,14 @@
             </h2>
             <div id="collapseOne" class="collapse" data-parent="#accordionExample" >
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-9">                         
-                                <div class="image-container" style="position: relative; width: 200px; display: inline-block;">
+                    <div class="row d-flex flex-nowrap">
+                        <div class="col-9 d-flex flex-nowrap">
+                            <div class="image-container" style="position: relative; width: 200px; display: inline-block;">
                                     <button type="button" class="close remove-image" style="position: absolute; z-index: 2; left: 80px; top: 5px;"><span aria-hidden="true">&times;</span></button>
                                     <img src="~/image/julia/haiou.png" class="img-thumbnail float-left mx-1" style="position: relative; z-index: 1;" alt="房间图片">
                                 </div>     
                         </div>
-                        <div class="col-3">
+                        <div class="col-3 d-flex align-items-center mt-2">
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
                                 比較住宿
                             </button>
@@ -1260,6 +1260,12 @@
             width: 200px; /* 根据需要调整宽度 */
         }
 
+        .image-container img {
+            height: 100%; /* 根据需要调整高度 */
+            width: 100%;
+            object-fit: cover; /* 使图片保持原始比例并裁剪以填充容器 */
+        }
+
         .remove-image {
           /*   position: relative;
             top: 10px;
@@ -1295,6 +1301,7 @@
             width: 50%;
             display: flex;
             flex-direction: column;
+            z-index:999;
         }
 
         .collapsible {
