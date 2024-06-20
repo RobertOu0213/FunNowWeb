@@ -1,6 +1,6 @@
 ﻿@{
     ViewData["Title"] = "HotelMessenge";
-    Layout = "_Layout_OrderManagement";
+    Layout = "_Layout";
 }
 
 <!DOCTYPE html>
@@ -24,130 +24,184 @@
         </div>
     </div>
     <div class="container">
+        <!--============================側邊導航欄=========================================-->
+        <div class="sidebar">
+            <ul>
+                <li><a href="/OrderManagement/Index" class="fa-solid fa-calendar-days" alt="管理訂單"><span>管理訂單</span></a></li>
+                <li><a href="/Home/Index2" class="fa-solid fa-building" alt="住宿"><span>尋找住宿</span></a></li>
+                <li><a href="/OrderManagement/HotelMessenge" class="fa-solid fa-comment-dots" alt="住宿訊息"><span>住宿訊息</span></a></li>
+                <li><a href="/Comment/Angular_membercomment" class="fa-solid fa-star" alt="住宿評鑑"><span>住宿評鑑</span></a></li>
+                <li><a href="/Member/MemberInformation" class="fa-solid fa-user" alt="個人資料"><span>個人資料</span></a></li>
+            </ul>
+        </div>
+        <!--============================側邊導航欄=========================================-->
         <div class="content-wrapper">
-            <div class="sidebar">
-                <ul>
-                    <li>
-                        <a href="#">
-                            <div class="icon"><i class="fa-solid fa-calendar-days"></i></div>
-                            <div class="text"><span>管理訂單</span></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <div class="icon"><i class="fa-solid fa-briefcase"></i></div>
-                            <div class="text"><span>訂單詳情</span></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <div class="icon"><i class="fa-solid fa-building"></i></div>
-                            <div class="text"><span>住宿</span></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <div class="icon"><i class="fa-solid fa-plane"></i></div>
-                            <div class="text"><span>機票</span></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <div class="icon"><i class="fa-solid fa-person-skiing-nordic"></i></div>
-                            <div class="text"><span>活動體驗</span></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <div class="icon"><i class="fa-solid fa-comment-dots"></i></div>
-                            <div class="text"><span>住宿訊息</span></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <div class="icon"><i class="fa-solid fa-star"></i></div>
-                            <div class="text"><span>住宿評鑑</span></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <div class="icon"><i class="fa-solid fa-crown"></i></div>
-                            <div class="text"><span>AgodaVIP</span></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <div class="icon"><i class="fa-solid fa-money-check-dollar"></i></div>
-                            <div class="text"><span>A金回饋</span></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <div class="icon"><i class="fa-solid fa-sack-dollar"></i></div>
-                            <div class="text"><span>現金回饋</span></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <div class="icon"><i class="fa-solid fa-piggy-bank"></i></div>
-                            <div class="text"><span>PointsMAX</span></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <div class="icon"><i class="fa-solid fa-user"></i></div>
-                            <div class="text"><span>個人資料</span></div>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <div class="messages">
-                <div class="content-header">
-                    <h2>住宿訊息</h2>
-                    <div class="actions">
-                        <input type="text" placeholder="搜尋訊息...">
+            <div class="main-content">
+                <div class="messages">
+                    <div class="message-list">
+                        <ul id="message-list">
+                            <!-- 卡片將動態生成 -->
+                        </ul>
                     </div>
                 </div>
-                <div class="tabs">
-                    <div class="tab__link active">所有訊息</div>
-                    <div class="tab__link">已讀訊息</div>
-                    <div class="tab__link">未讀訊息</div>
-                </div>
-                <div class="message-list">
-                    <ul>
-                        <li>
-                            <div class="message-item">
-                                <div class="message-header">
-                                    <h3>訊息標題</h3>
-                                    <span class="message-date">2024/6/13</span>
-                                </div>
-                                <div class="message-body">
-                                    <p>這是一條示範訊息內容。</p>
-                                </div>
-                            </div>
-                        </li>
-                        <!-- 在此處生成更多訊息 -->
-                    </ul>
-                </div>
-            </div>
-            <div class="chat-details">
-                <div class="content-header">
-                    <h2>聊天詳細內容</h2>
-                </div>
-                <div class="chat-content">
-                    <div class="chat-message">
-                        <span class="chat-date">2024/6/13</span>
-                        <p>這是聊天內容的示範。</p>
+                <div class="chat-details">
+                    <div class="content-header">
+                        <h2>聊天詳細內容</h2>
                     </div>
-                    <!-- 在此處生成更多聊天內容 -->
-                </div>
-                <div class="chat-input">
-                    <input type="text" placeholder="寫些什麼吧！">
-                    <button type="button">送出</button>
+                    <div class="chat-content" id="chat-content">
+                        <p>請選擇對話並輸入訊息以回覆住宿</p>
+                    </div>
+                    <div class="chat-input" id="chat-input">
+                        <input type="text" placeholder="寫些什麼吧！">
+                        <button type="button">送出</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <script src="https://kit.fontawesome.com/091893cea4.js" crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const apiUrl = 'https://localhost:7103/api/Dialogs/byMember/2';
+            const sendMessageUrl = 'https://localhost:7103/api/Websocket/sendMessage';
+            const chatInput = document.getElementById('chat-input');
+            const messageInput = chatInput.querySelector('input');
+            const sendButton = chatInput.querySelector('button');
+            let selectedDialog = null; // 用於保存當前選中的對話
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const uniqueDialogs = getUniqueDialogs(data);
+                    const messageList = document.getElementById('message-list');
+                    messageList.innerHTML = ''; // 清空列表
+
+                    uniqueDialogs.forEach(dialog => {
+                        const card = document.createElement('li');
+                        card.innerHTML = `
+                            <div class="message-item">
+                                <div class="message-body">
+                                    <img src="${dialog.hotelImage}" alt="${dialog.hotelName}">
+                                    <div>
+                                        <br>
+                                        <h3>${dialog.hotelName}</h3>
+                                        <p>${dialog.hotelAddress}</p>
+                                    </div>
+                                    <span class="message-date">${new Date(dialog.createAt).toLocaleDateString()}</span>
+                                </div>
+                                <div style="display: none;">
+                                    <span class="member-id">${dialog.memberId}</span>
+                                    <span class="callto-member-id">${dialog.calltoMemberId}</span>
+                                </div>
+                            </div>
+                        `;
+                        card.addEventListener('click', function () {
+                            clearSelected();
+                            card.classList.add('selected');
+                            selectedDialog = dialog; // 保存當前選中的對話
+                            fetchChatDetails(dialog.memberId, dialog.calltoMemberId, dialog.createAt);
+                        });
+                        messageList.appendChild(card);
+                    });
+                })
+                .catch(error => console.error('Error fetching data:', error));
+
+            function getUniqueDialogs(data) {
+                const uniqueDialogs = [];
+                const dialogSet = new Set();
+
+                data.forEach(dialog => {
+                    const combination1 = `${dialog.memberId}-${dialog.calltoMemberId}-${new Date(dialog.createAt).toLocaleDateString()}`;
+                    const combination2 = `${dialog.calltoMemberId}-${dialog.memberId}-${new Date(dialog.createAt).toLocaleDateString()}`;
+
+                    if (!dialogSet.has(combination1) && !dialogSet.has(combination2)) {
+                        uniqueDialogs.push(dialog);
+                        dialogSet.add(combination1);
+                        dialogSet.add(combination2);
+                    }
+                });
+
+                return uniqueDialogs;
+            }
+
+            function clearSelected() {
+                const cards = document.querySelectorAll('.message-list ul li');
+                cards.forEach(card => {
+                    card.classList.remove('selected');
+                });
+            }
+
+            function fetchChatDetails(memberId, calltoMemberId, createAt) {
+                const apiUrl = `https://localhost:7103/api/Dialogs/byMemberAndDate?memberId=${memberId}&calltoMemberId=${calltoMemberId}&createAt=${createAt}`;
+                fetch(apiUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        const chatContent = document.getElementById('chat-content');
+                        chatContent.innerHTML = ''; // 清空聊天內容
+
+                        // 按時間排序對話
+                        data.sort((a, b) => new Date(a.createAt) - new Date(b.createAt));
+
+                        data.forEach(dialog => {
+                            const message = document.createElement('div');
+                            message.classList.add('chat-message');
+                            if (dialog.memberId === memberId) {
+                                message.classList.add('received');
+                            } else {
+                                message.classList.add('sent');
+                            }
+                            message.innerHTML = `
+                                <div class="message-content">
+                                    <p>${dialog.detail}</p>
+                                    <span class="message-time">${new Date(dialog.createAt).toLocaleString()}</span>
+                                </div>
+                            `;
+                            chatContent.appendChild(message);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching chat details:', error));
+            }
+
+            function sendMessage() {
+                const message = messageInput.value.trim();
+                if (message === '' || selectedDialog === null) return;
+
+                const senderId = selectedDialog.memberId; // 當前選中的對話中的 memberId
+                const receiverId = selectedDialog.calltoMemberId; // 當前選中的對話中的 calltoMemberId
+
+                fetch(`${sendMessageUrl}?senderId=${senderId}&receiverId=${receiverId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(message)
+                })
+                    .then(response => {
+                        if (!response.ok) throw new Error('Network response was not ok');
+                        return response.json();
+                    })
+                    .then(() => {
+                        // 清空輸入框並刷新對話
+                        messageInput.value = ''; // 清空輸入框
+                        fetchChatDetails(senderId, receiverId, new Date());
+                    })
+                    .catch(error => console.error('Error sending message:', error));
+            }
+
+            sendButton.addEventListener('click', function () {
+                sendMessage();
+                messageInput.value = ''; // 清空輸入框
+            });
+
+            messageInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault(); // 防止表單提交
+                    sendMessage();
+                    messageInput.value = ''; // 清空輸入框
+                }
+            });
+        });
+
+    </script>
 </body>
 </html>
