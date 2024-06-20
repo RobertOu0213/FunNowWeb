@@ -30,8 +30,16 @@ namespace PrjFunNowWeb.Controllers
         }
 
 
-        public IActionResult Angular_membercommentform()
+        public IActionResult Angular_membercommentform(int commentID, string hotelName, string roomtypeName, string checkinDate, string checkoutDate, int roomId, int memberId, int nights)
         {
+            ViewBag.CommentID = commentID;
+            ViewBag.HotelName = hotelName;
+            ViewBag.RoomtypeName = roomtypeName;
+            ViewBag.CheckinDate = checkinDate;
+            ViewBag.CheckoutDate = checkoutDate;
+            ViewBag.RoomId = roomId;
+            ViewBag.MemberId = memberId;
+            ViewBag.Nights = nights;
             return View();
         }
 

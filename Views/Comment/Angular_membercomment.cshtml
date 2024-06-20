@@ -26,45 +26,239 @@
     height: 800px; /* 设置固定高度 */
     overflow: auto; /* 如果内容超过固定大小，显示滚动条 */
     box-sizing: border-box; /* 确保内边距和边框包含在宽度和高度内 */
-}
+        }
+
+        /* 設定整個網頁的字體、間距和背景顏色 */
+        body {
+            font-family: Arial, sans-serif; /* 使用Arial字體 */
+            margin: 0; /* 移除預設的外邊距 */
+            padding: 0; /* 移除預設的內邊距 */
+            background-color: #f4f4f4; /* 設定網頁背景顏色 */
+        }
+
+        /* 設定頁面頂部的導航欄樣式 */
+        .header {
+            background-color: #fff; /* 設定背景為白色 */
+            padding: 10px 20px; /* 設定上下內邊距為10px，左右內邊距為20px */
+            display: flex; /* 使用彈性盒子布局 */
+            justify-content: space-between; /* 讓子元素在主軸方向上兩端對齊 */
+            align-items: center; /* 垂直居中對齊子元素 */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* 添加陰影效果 */
+        }
+
+            /* 設定標誌區域的樣式 */
+            .header .logo {
+                display: flex; /* 使用彈性盒子布局 */
+                align-items: center; /* 垂直居中對齊子元素 */
+            }
+
+                /* 設定標誌圖像的樣式 */
+                .header .logo img {
+                    height: 40px; /* 設定圖片高度為40px */
+                    margin-right: 10px; /* 設定右側外邊距為10px */
+                }
+
+            /* 設定導航鏈接區域的樣式 */
+            .header .nav-links {
+                display: flex; /* 使用彈性盒子布局 */
+                align-items: center; /* 垂直居中對齊子元素 */
+            }
+
+                /* 設定導航鏈接的樣式 */
+                .header .nav-links a {
+                    margin-left: 20px; /* 設定左側外邊距為20px */
+                    text-decoration: none; /* 移除鏈接的下劃線 */
+                    color: #333; /* 設定文本顏色為深灰色 */
+                }
+
+                    /* 設定導航鏈接在懸停時的樣式 */
+                    .header .nav-links a:hover {
+                        color: #007bff; /* 設定文本顏色為藍色 */
+                    }
+
+        /* 設定頁面內容區域的樣式 */
+        .container {
+            display: flex; /* 使用彈性盒子布局 */
+            justify-content: center; /* 在主軸方向上居中對齊子元素 */
+            padding: 20px; /* 設定內邊距為20px */
+        }
+
+        /* 設定內容包裹區域的樣式 */
+        .content-wrapper {
+            width: 1300px; /* 設定寬度為1200px */
+            display: flex; /* 使用彈性盒子布局 */
+            margin-left: 100px;
+            min-width: 500px;
+            max-width: 1300px;
+        }
+
+        /* 設定側邊欄的樣式 */
+        .sidebar {
+            width: 250px; /* 設定寬度為250px */
+            background-color: #fff; /* 設定背景為白色 */
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1); /* 添加陰影效果 */
+            height: calc(800px); /* 設定高度為視窗高度減去60px */
+            padding-top: 20px; /* 設定頂部內邊距為20px */
+
+            border-radius: 10px;
+        }
+
+            /* 設定側邊欄中的列表樣式 */
+            .sidebar ul {
+                list-style-type: none; /* 移除列表項的樣式 */
+                padding: 0; /* 移除內邊距 */
+            }
+
+                /* 設定側邊欄中的每個列表項樣式 */
+                .sidebar ul li {
+                    padding: 15px 20px; /* 設定內邊距 */
+                    border-bottom: 1px solid #eee; /* 添加底部邊框 */
+                    border-radius: 10px;
+                }
+
+                    /* 設定側邊欄中的每個列表項在懸停時的樣式 */
+                    .sidebar ul li:hover {
+                        background-color: #eff4fd; /* 設定背景顏色 */
+                    }
+
+                    /* 設定側邊欄中的鏈接樣式 */
+                    .sidebar ul li a {
+                        text-decoration: none; /* 移除鏈接的下劃線 */
+                        color: #333; /* 設定文本顏色為深灰色 */
+                        display: flex; /* 使用彈性盒子布局 */
+                        align-items: center; /* 垂直居中對齊子元素 */
+                    }
+
+                        .sidebar ul li a:hover {
+                            color: #3170e7;
+                        }
+
+                        /* 設定側邊欄中的鏈接圖像樣式 */
+                        .sidebar ul li a img {
+                            margin-right: 10px; /* 設定右側外邊距為10px */
+                        }
+
+        /* 設定主內容區域的樣式 */
+        .content {
+            margin-left: 20px; /* 設定左側外邊距為270px，為了給側邊欄留出空間 */
+            padding: 5px 20px 20px 20px; /* 設定內邊距 */
+            background-color: #f4f4f4; /* 設定背景為白色 */
+            flex: 1; /* 允許內容區域自動調整大小 */
+            /*box-shadow: 0 0 10px rgba(0,0,0,0.1);*/ /* 添加陰影效果 */
+            /*border-radius: 10px;*/ /* 設定邊框圓角 */
+        }
+
+        /* 設定主內容區域標題的樣式: 用戶詳細資料 */
+        .content-header {
+            display: flex; /* 使用彈性盒子布局 */
+            justify-content: space-between; /* 在主軸方向上兩端對齊子元素 */
+            align-items: center; /* 垂直居中對齊子元素 */
+            margin: 30px 10px 10px 10px;
+        }
+            /* 設定操作區域的樣式 */
+            .content-header .actions {
+                display: flex; /* 使用彈性盒子布局 */
+                align-items: center; /* 垂直居中對齊子元素 */
+            }
+
+        .card {
+            box-shadow: 0 0 10px rgba(0,0,0,0.1); /* 添加陰影效果 */
+            padding-bottom: 10px;
+            border: none;
+            width: 780px;
+        }
+
+            .card:hover {
+                box-shadow: 0 10px 10px rgba(0,0,0,0.2); /* 添加陰影效果 */
+            }
+
+        .verify /*已通過驗證標籤*/ {
+            margin: 0 5px 0 5px;
+            background-color: #4CC5D3;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            border-radius: 5px;
+            color: white;
+            font-size: 12px;
+            padding: 3px;
+        }
+
+        .edit /*編輯按鈕*/ {
+            color: #0285DF;
+            border: none;
+            background-color: white;
+            font-weight: 800;
+            padding: 0px 0px 15px 80px;
+        }
+
+        .card-label {
+            font-size: 16px;
+            font-weight: 800;
+            margin: 10px 0 0 10px;
+        }
+
+        .card-textt {
+            letter-spacing: 1px;
+            margin-left: 10px;
+            color: black;
+        }
+
+        input[type="radio"] {
+            margin-right: 8px;
+        }
+
+        .delete {
+            margin-top: 18px;
+            color: blue;
+            font-size: 16px;
+            font-weight: 400;
+            border: none;
+            background-color: transparent;
+        }
+
+            .delete:hover {
+                text-decoration: underline;
+            }
+
+
+        /* 為文本添加樣式 */
+        a span {
+            margin-left: 10px; /* 為了與圖示之間添加一些間距 */
+            font-family: 'Microsoft JhengHei', sans-serif;
+            font-size: 16px; /* 修改为您希望的字体大小 */
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </style>
 }
 
-@* <iframe src="http://localhost:4200/membercomment" style="width: 100%; height: 800px; border: none;"></iframe> *@
+
 <div class="container mt-5">
     <div class="content-wrapper">
         <div class="sidebar">
             <ul>
-                <li>
-                    <a href="#" alt="管理訂單">
-                        <div class="icon"><i class="fa-solid fa-calendar-days"></i></div>
-                        <div class="text"><span>管理訂單</span></div>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" alt="所有訂單">
-                        <div class="icon"><i class="fa-solid fa-briefcase"></i></div>
-                        <div class="text"><span>所有訂單</span></div>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" alt="住宿訊息">
-                        <div class="icon"><i class="fa-solid fa-comment-dots"></i></div>
-                        <div class="text"><span>住宿訊息</span></div>
-                    </a>
-                </li>
-                <li>
-                    <a href="@Url.Action("Angular_membercomment", "Comment")" alt="住宿評鑑">
-                        <div class="icon"><i class="fa-solid fa-star"></i></div>
-                        <div class="text"><span>住宿評鑑</span></div>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" alt="個人資料">
-                        <div class="icon"><i class="fa-solid fa-user"></i></div>
-                        <div class="text"><span>個人資料</span></div>
-                    </a>
-                </li>
+                <li><a href="/OrderManagement/Index" class="fa-solid fa-calendar-days" alt="管理訂單"><span>管理訂單</span></a></li>
+                <li><a href="/Home/Index2" class="fa-solid fa-building" alt="住宿"><span>尋找住宿</span></a></li>
+                <li><a href="/OrderManagement/HotelMessenge" class="fa-solid fa-comment-dots" alt="住宿訊息"><span>住宿訊息</span></a></li>
+                <li><a href="/Comment/Angular_membercomment" class="fa-solid fa-star" alt="住宿評鑑"><span>住宿評鑑</span></a></li>
+                <li><a href="/Member/MemberInformation" class="fa-solid fa-user" alt="個人資料"><span>個人資料</span></a></li>
             </ul>
         </div>
         <div class="content1">
@@ -86,26 +280,28 @@
 
 
 @section Scripts {
-        <script src="~/dist/fun-now-angular1/main.3da316e1ba1a05ca.js"></script>
+        <script src="~/dist/fun-now-angular1/main.ff1e51b3bc6987f3.js"></script>
         <script src="~/dist/fun-now-angular1/polyfills.b6cd8ceb7f42859a.js"></script>
         <script src="~/dist/fun-now-angular1/runtime.48f9e552146618a8.js"></script>
         <script src="~/dist/fun-now-angular1/scripts.6fe6725b87f2ceac.js"></script>
        
     <script>
             //帶參數，導到membercommentform
-            function onNavigateToForm(event) {
-                const params = new URLSearchParams(event).toString();
-                window.location.href = `https://localhost:7284/Comment/Angular_membercommentform?${params}`;
-            }
+            document.addEventListener('DOMContentLoaded', function () {
+                const memberCommentElement = document.querySelector('member-comment-element');
+                if (memberCommentElement) {
+                    // 确保只绑定一次事件监听器
+                    let eventHandled = false;
 
+                    memberCommentElement.addEventListener('navigateToForm', function (event) {
+                        if (eventHandled) return; // 确保事件只处理一次
+                        eventHandled = true;
 
-
-
-
-
-
-
-
-
+                        const params = new URLSearchParams(event.detail).toString();
+                        console.log('Navigating with params:', params); // 打印生成的查询参数
+                       window.location.href = `https://localhost:7284/Comment/Angular_membercommentform?${params}`;
+                    });
+                }
+            });
     </script>
 }
