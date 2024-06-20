@@ -52,36 +52,49 @@ body {
 }
 
 .sidebar {
-    width: 200px;
-    background-color: #fff;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-    height: 635px;
-    padding-top: 20px;
-    position: absolute;
+    width: 250px; /* 設定寬度為250px */
+    background-color: #fff; /* 設定背景為白色 */
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1); /* 添加陰影效果 */
+    height: calc(800px); /* 設定高度為視窗高度減去60px */
+    padding-top: 20px; /* 設定頂部內邊距為20px */
+
     border-radius: 10px;
 }
 
+    /* 設定側邊欄中的列表樣式 */
     .sidebar ul {
-        list-style-type: none;
-        padding: 0;
+        list-style-type: none; /* 移除列表項的樣式 */
+        padding: 0; /* 移除內邊距 */
     }
 
+        /* 設定側邊欄中的每個列表項樣式 */
         .sidebar ul li {
-            padding: 5px 20px;
-            border-bottom: 1px solid #eee;
+            padding: 15px 20px; /* 設定內邊距 */
+            border-bottom: 1px solid #eee; /* 添加底部邊框 */
             border-radius: 10px;
         }
 
+            /* 設定側邊欄中的每個列表項在懸停時的樣式 */
             .sidebar ul li:hover {
-                background-color: #f4f4f4;
+                background-color: #eff4fd; /* 設定背景顏色 */
             }
 
+            /* 設定側邊欄中的鏈接樣式 */
             .sidebar ul li a {
-                text-decoration: none;
-                color: #333;
-                display: flex;
-                align-items: center;
+                text-decoration: none; /* 移除鏈接的下劃線 */
+                color: #333; /* 設定文本顏色為深灰色 */
+                display: flex; /* 使用彈性盒子布局 */
+                align-items: center; /* 垂直居中對齊子元素 */
             }
+
+                .sidebar ul li a:hover {
+                    color: #3170e7;
+                }
+
+                /* 設定側邊欄中的鏈接圖像樣式 */
+                .sidebar ul li a img {
+                    margin-right: 10px; /* 設定右側外邊距為10px */
+                }  
 
 .icon {
     width: 40px;

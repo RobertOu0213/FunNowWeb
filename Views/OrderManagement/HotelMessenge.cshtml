@@ -1,6 +1,9 @@
 ﻿@{
     ViewData["Title"] = "HotelMessenge";
     Layout = "_Layout";
+    var memberID = Context.Session.GetString("MemberID");
+    var googleMemberId = Context.Session.GetString("GoogleMemberID");
+    var displayMemberId = !string.IsNullOrEmpty(googleMemberId) ? googleMemberId : memberID;
 }
 
 <!DOCTYPE html>
@@ -61,8 +64,12 @@
     </div>
     <script src="https://kit.fontawesome.com/091893cea4.js" crossorigin="anonymous"></script>
     <script>
+
+        var memberId = '@displayMemberId';
+
+
         document.addEventListener("DOMContentLoaded", function () {
-            const apiUrl = 'https://localhost:7103/api/Dialogs/byMember/2';
+            const apiUrl = `https://localhost:7103/api/Dialogs/byMember/${memberId}`;
             const sendMessageUrl = 'https://localhost:7103/api/Websocket/sendMessage';
             const chatInput = document.getElementById('chat-input');
             const messageInput = chatInput.querySelector('input');
