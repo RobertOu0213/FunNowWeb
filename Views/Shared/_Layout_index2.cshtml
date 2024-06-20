@@ -1,4 +1,16 @@
-﻿<!DOCTYPE html>
+﻿@using System.Text.Json
+
+@{
+    var memberID = Context.Session.GetString("MemberID");
+    var token = Context.Session.GetString("Token");
+
+    var googleMemberId = Context.Session.GetString("GoogleMemberID");
+    var googleMemberFirstName = Context.Session.GetString("GoogleMemberFirstName");
+
+}
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
