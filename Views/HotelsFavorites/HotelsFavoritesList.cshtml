@@ -9,14 +9,14 @@
 @section Styles {
     <style>
 
-        #div1 {
+        #favoriteListdiv {
             margin-top: 150px; /* 向下移动150 像素 */
-            margin-bottom: 500px;
+            margin-bottom: 300px;
         }
 
 
         .container {
-            width: 80%;
+            width: 100%;
             margin-top: 50px;
         }
 
@@ -69,7 +69,7 @@
 }
 
 
-<div class="container" id="div1">
+<div class="container" id="favoriteListdiv">
     <div class="container">
         <h3>口袋清單</h3>
         <h6 id="totalCities">n個城市清單</h6>
@@ -121,7 +121,7 @@
 
                     /* 點擊卡片會轉向到這個Controller/Action  =>   HotelsFavorites/HotelsFavoritesListToCity*/
                     return( `
-                                            <div class="col-md-4">
+                                                <div class="col">
                                         <div class="card ">
                                                       <a href="/HotelsFavorites/HotelsFavoritesListToCity?memberId=${MemberID}&city=${city}&country=${country}">
                                                     <img src="${HotelImage}"  class="card-img-top" alt="${city}">
@@ -131,7 +131,7 @@
                                     </div>
                                                   </a>
                                 </div>
-                            </div>
+                                 </div>
                       
                         `)
                 });

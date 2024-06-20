@@ -773,7 +773,19 @@
                     const HotelImage = getImageUrl(hotelImages[0]);
                     const ratingscore = JSON.parse(totalAverageScore);
                     const formattedScore = parseFloat(ratingscore.toFixed(1));
-
+                    //formattedScore 小數點後的平均評分對應文字
+                    let ratingDescription;
+                    if (formattedScore >= 9) {
+                        ratingDescription = "超讚";
+                    } else if (formattedScore >= 7) {
+                        ratingDescription = "很讚";
+                    } else if (formattedScore >= 5) {
+                        ratingDescription = "很好";
+                    } else if (formattedScore >= 3) {
+                        ratingDescription = "尚可";
+                    } else {
+                        ratingDescription = "低於預期";
+                    }
                     const row = document.createElement('tr');
                     row.innerHTML = `
                     <td><img src="${HotelImage}" class="card-img-top" alt="房間圖片"></td>
@@ -781,14 +793,16 @@
                     <td>${cityName}</td>
                     <td>${generateStars(levelStar)}</td>
                     <td>${hotelEquipmentNames.join(', ')}</td>
-                    <td>${formattedScore}</td>
-                    <td>${hotelPrice}</td>
+                     <td>${formattedScore}/10 ${ratingDescription}</td>
+                    <td>$${hotelPrice}</td>
                     <td>
-                        <button type="button" class="btn btn-primary">查看飯店</button>
                         <button type="button" class="btn btn-secondary remove-row">移除</button>
+                        <button type="button" class="btn btn-primary view-hotel">查看飯店</button>
                     </td>
+
                 `;
                     document.querySelector('#myModal .table tbody').appendChild(row);
+
 
 
                     //  為新生成的remove-row 按鈕添加一個點擊事件監聽器,
@@ -799,15 +813,19 @@
                         checkbox.checked = false;
                         updateUI();
                     });
+
+                    // 為新生成的 view-hotel 按鈕添加事件監聽器
+                    const viewHotelButton = row.querySelector('.view-hotel');
+                    viewHotelButton.addEventListener('click', () => {
+                        // 導航到相應的飯店頁面
+                        const hotelUrl = `/PgHotel/pgHotel/?hotelId=${hotelId}&checkInDate=2024-06-28&checkOutDate=2024-06-29`;
+                        window.location.href = hotelUrl;
+                    });
+
+
                 });
             }
-            // 為新生成的 view-hotel 按鈕添加事件監聽器
-            // const viewHotelButton = row.querySelector('.view-hotel');
-            // viewHotelButton.addEventListener('click', () => {
-            //     // 導航到相應的飯店頁面
-            //     const hotelUrl = `/Hotels/Details/${hotelId}`;
-            //     window.location.href = hotelUrl;
-            // });
+            
 
         }
 
