@@ -31,14 +31,18 @@ namespace PrjFunNowWeb.Controllers
                 var userID = HttpContext.Session.GetString("MemberID");
                 if (string.IsNullOrEmpty(userID))
                 {
-                    return RedirectToAction("Login", "Member");
+                    userID = HttpContext.Session.GetString("GoogleMemberID");
+                    if (string.IsNullOrEmpty(userID))
+                    {
+                        return RedirectToAction("Login", "Member");
+                    }
                 }
 
-         
+
                 var order = new Order
                 {
                     MemberId = Convert.ToInt32(userID),
-                    OrderStatusId = 1,    //未付款
+                    OrderStatusId = 1,    //已付款
                     TotalPrice = orderIn.TotalPrice,
                     CreatedAt = DateTime.Now,
                     GuestLastName = orderIn.GuestLastName,

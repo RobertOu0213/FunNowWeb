@@ -1140,7 +1140,6 @@
                   
                 } catch (error) {
                     console.log(error);
-                    alert(`尚未登入~~`);
                     const loginURL = `${window.location.origin}/Member/Login`;
                     window.location.href = loginURL;
                 }
@@ -1155,7 +1154,6 @@
                     CheckOutDate: searchHotel.checkOutDate,
                     GuestNumber: searchHotel.adults
                 };
-                console.log(orderDetail);
 
                 try {
                     const response = await fetch('https://localhost:7103/api/Cart', {

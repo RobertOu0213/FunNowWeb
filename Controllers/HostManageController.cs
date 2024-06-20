@@ -348,12 +348,17 @@ namespace PrjFunNowWeb.Controllers
             {
                 return BadRequest("Invalid room data.");
             }
+
             var userID = HttpContext.Session.GetString("MemberID");
             if (string.IsNullOrEmpty(userID))
             {
-                return RedirectToAction("Login", "Member");
+                userID = HttpContext.Session.GetString("GoogleMemberID");
+                if (string.IsNullOrEmpty(userID))
+                {
+                    return RedirectToAction("Login", "Member");
+                }
             }
-   
+
 
             var room = new Room
             {
