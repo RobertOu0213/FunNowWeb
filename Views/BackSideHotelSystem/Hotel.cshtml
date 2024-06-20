@@ -1,77 +1,8 @@
 ﻿@{
     ViewData["Title"] = "Hotel";
+    Layout= "_Layout_platform";
 }
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark gradient-custom">
-    <!-- Container wrapper -->
-    <div class="container-fluid">
-        <!-- Navbar brand -->
-        <a class="navbar-brand" href="#">FunNow</a>
-
-        <!-- Toggle button -->
-        <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
-                data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-            <i class="fas fa-bars text-light"></i>
-        </button>
-
-        <!-- Collapsible wrapper -->
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <!-- Left links -->
-            <ul class="navbar-nav me-auto d-flex flex-row mt-3 mt-lg-0">
-                <li class="nav-item text-center mx-2 mx-lg-1">
-                    <a class="nav-link" href="#!">
-                        <div>
-                            <i class="fa-solid fa-user mb-1"></i>
-                            <span class="badge rounded-pill badge-notification bg-dark"></span>
-                        </div>
-                        會員
-                    </a>
-                </li>
-                <li class="nav-item text-center mx-2 mx-lg-1">
-                    <a class="nav-link" href="#!">
-                        <div>
-                            <i class="fa-solid fa-house mb-1"></i>
-                            <span class="badge rounded-pill badge-notification bg-dark">2</span>
-                        </div>
-                        房東
-                    </a>
-                </li>
-                <li class="nav-item text-center mx-2 mx-lg-1">
-                    <a class="nav-link" href="#!">
-                        <div>
-                            <i class="fa-solid fa-face-smile mb-1"></i>
-                            <span class="badge rounded-pill badge-notification bg-dark">11</span>
-                        </div>
-                        評論
-                    </a>
-                </li>
-                <li class="nav-item text-center mx-2 mx-lg-1">
-                    <a class="nav-link" href="#!">
-                        <div>
-                            <i class="fa-solid fa-comment mb-1"></i>
-                            <span class="badge rounded-pill badge-notification bg-dark">1</span>
-                        </div>
-                        訊息
-                    </a>
-                </li>
-                <li class="nav-item text-center mx-2 mx-lg-1">
-                    <a class="nav-link" href="#!">
-                        <div>
-                            <i class="fa-solid fa-chart-line mb-1"></i>
-                            <span class="badge rounded-pill badge-notification bg-dark"></span>
-                        </div>
-                        數據分析
-                    </a>
-                </li>
-            </ul>
-            <!-- Left links -->
-        </div>
-        <!-- Collapsible wrapper -->
-    </div>
-    <!-- Container wrapper -->
-</nav>
 <!-- Navbar -->
 <div class="container">
     <h3 class="m-3">飯店審核管理</h3>
@@ -112,8 +43,8 @@
         <thead>
             <tr>
                 <td>編號</td>
-                <td>飯店名稱</td>
-                <td>飯店類型</td>
+                <td class="room-name" >飯店名稱</td>
+                <td class="room-type">飯店類型</td>
                 <td>地址</td>
                 <td>電話</td>
                 <td>飯店狀態</td>
@@ -144,7 +75,7 @@
                         <thead>
                             <tr>
                                 <td>房間編號</td>
-                                <td>房型</td>
+                                <td >房型</td>
                                 <td>房間價格</td>
                                 <td>房間大小</td>
                                 <td>房間描述</td>
@@ -178,7 +109,7 @@
         /*navbar*/
 
         .container {
-            width: 70%;
+            width: 80%;
         }
 
         .filterborder {
@@ -194,6 +125,26 @@
         .hotelList .btn {
             font-size: 14px;
         }
+
+        .room-type {
+            width: 10%; 
+        }
+
+        .room-name {
+            width: 20%;
+            max-width: 20%; /* 固定寬度 */
+            word-wrap: break-word; /* 強制換行 */
+            word-break: break-all; /* 強制換行 */
+        }
+
+        .room-address {
+            width: 20%;
+            max-width: 20%; /* 固定寬度 */
+            word-wrap: break-word; /* 強制換行 */
+            word-break: break-all; /* 強制換行 */
+        }
+
+
     </style>
 }
 
@@ -222,18 +173,18 @@
             hotelList.forEach(item => {
                 let status = item.hotelIsActive ? "已上架" : "待審核";
                 let actionButton = item.hotelIsActive
-                    ? `<td><button class="btn btn-danger" onclick="toggleHotelStatus(${item.hotelID})">下架飯店</button></td>`
-                    : `<td><button class="btn btn-primary" onclick="toggleHotelStatus(${item.hotelID})">上架飯店</button></td>`;
+                    ? `<td class="room-type"><button class="btn btn-danger" onclick="toggleHotelStatus(${item.hotelID})">下架飯店</button></td>`
+                    : `<td class="room-type"><button class="btn btn-primary " onclick="toggleHotelStatus(${item.hotelID})">上架飯店</button></td>`;
 
                 tableStr += `
                             <tr data-hotel-id="${item.hotelID}">
                                 <td>${item.hotelID}</td>
-                                <td>${item.hotelName}</td>
+                                 <td class="room-name"">${item.hotelName}</td>
                                 <td>${item.hotelTypeName}</td>
-                                <td>${item.hotelAddress}</td>
+                                <td class="room-address">${item.hotelAddress}</td>
                                 <td>${item.hotelPhone}</td>
                                 <td>${status}</td>
-                                <td><button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="loadRooms(${item.hotelID})">詳細內容</button></td>
+                                <td class="room-type"><button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="loadRooms(${item.hotelID})">詳細內容</button></td>
                                 ${actionButton}
                             </tr>
                         `;
@@ -280,8 +231,8 @@
             let roomTableStr = "";
             roomList.forEach(item => {
                 let actionButton = item.roomStatus
-                    ? `<td><button class="btn btn-danger" onclick="toggleRoomStatus(${item.roomID})">下架房间</button></td>`
-                    : `<td><button class="btn btn-primary" onclick="toggleRoomStatus(${item.roomID})">上架房间</button></td>`;
+                    ? `<td><button class="btn btn-danger" onclick="toggleRoomStatus(${item.roomID})">下架房間</button></td>`
+                    : `<td><button class="btn btn-primary" onclick="toggleRoomStatus(${item.roomID})">上架房間</button></td>`;
 
                 roomTableStr += `
                             <tr>
