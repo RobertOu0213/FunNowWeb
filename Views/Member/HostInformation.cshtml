@@ -206,6 +206,8 @@
             height: 80px;
             border-radius: 50%;
             margin: 15px 10px 15px 10px;
+            position: relative;
+            display: inline-block;
         }
 
 
@@ -401,16 +403,12 @@
         }
 
         /* 懸浮時放大顯示完整圖片 */
-        .profileImgContainer {
-            position: relative;
-            display: inline-block;
-        }
-
+     
         .fullImageContainer {
             display: none;
             position: absolute;
-            top: calc(100% -800px); /* 調整預覽圖片的垂直位置 */
-            left: -1000;  /* 調整預覽圖片的水平位置 */
+            top: 140%; /* 調整預覽圖片的垂直位置 */
+            left: 200px;  /* 調整預覽圖片的水平位置 */
             z-index: 50;
             max-width: 300px; /*調整預覽圖片的最大寬度 */
             border: 1px solid #ccc;
@@ -827,8 +825,19 @@
                 if (response.ok) {
                     const result = await response.json();
                     alert('修改成功！');
-                    document.getElementById('profileImg').src = result.ImageUrl; // 更新圖片顯示
-                    document.getElementById('fullProfileImg').src = result.ImageUrl; // 更新完整圖片
+
+                    const profileImg = document.getElementById('profileImg');
+                    const originalStyles = profileImg.getAttribute('style'); // 儲存原有的樣式
+                    const originalClasses = profileImg.className; // 儲存原有的類別
+
+                    profileImg.removeAttribute('style'); // 移除所有內聯樣式
+                    profileImg.className = ''; // 移除所有 CSS 類別
+                    profileImg.src = result.ImageUrl; // 設定新的圖片 URL
+
+                    profileImg.setAttribute('style', originalStyles); // 還原原有的樣式
+                    profileImg.className = originalClasses; // 還原原有的類別
+
+                    document.getElementById('fullPreviewImg').src = result.ImageUrl; // 更新完整圖片
                     fetchMemberData(LoginmemberID); //再重撈一次會員資料的功能
                 }
                 else {
