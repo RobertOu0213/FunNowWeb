@@ -7,8 +7,11 @@ namespace PrjFunNowWeb.Controllers
     {
      
 
-        public IActionResult Angular_comment_page() //目前沒用
+        public IActionResult Angular_comment_page(int hotelId, DateTime checkInDate, DateTime checkOutDate) 
         {
+            ViewBag.HotelId = hotelId;
+            ViewBag.CheckInDate = checkInDate;
+            ViewBag.CheckOutDate = checkOutDate;
             return View();
         }
 
@@ -43,7 +46,7 @@ namespace PrjFunNowWeb.Controllers
             return View();
         }
 
-        public IActionResult Angular_plaform() //目前沒用
+        public IActionResult Angular_plaform() 
         {
             return View();
         }
