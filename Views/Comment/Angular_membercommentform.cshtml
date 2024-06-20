@@ -1,0 +1,57 @@
+﻿
+
+@{
+    ViewData["Title"] = "Angular_membercommentform";
+    var commentID = ViewBag.CommentID;
+    var hotelName = ViewBag.HotelName;
+    var roomtypeName = ViewBag.RoomtypeName;
+    var checkinDate = ViewBag.CheckinDate;
+    var checkoutDate = ViewBag.CheckoutDate;
+    var roomId = ViewBag.RoomId;
+    var memberId = ViewBag.MemberId;
+    var nights = ViewBag.Nights;
+}
+
+@section Styles {
+    @* <link href="~/css/joanna_css/styles.b13b175880f4995b.css" rel="stylesheet" /> *@
+    <link href="~/css/joanna_css/Membercomment.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/Ting/css/OrderManagement.css">
+    <link rel="stylesheet" href="~/dist/fun-now-angular1/styles.b13b175880f4995b.css" />
+    <style>
+        
+    </style>
+}
+
+<member-commentform-element 
+                            comment-id="@commentID"
+                            hotel-name="@hotelName"
+                            roomtype-name="@roomtypeName"
+                            checkin-date="@checkinDate"
+                            checkout-date="@checkoutDate"
+                            room-id="@roomId"
+                            member-id="@memberId"
+                            nights="@nights">
+</member-commentform-element>
+
+
+@section Scripts {
+    <script src="~/dist/fun-now-angular1/main.effa90667889b35c.js"></script>
+    <script src="~/dist/fun-now-angular1/polyfills.b6cd8ceb7f42859a.js"></script>
+    <script src="~/dist/fun-now-angular1/runtime.48f9e552146618a8.js"></script>
+    <script src="~/dist/fun-now-angular1/scripts.6fe6725b87f2ceac.js"></script>
+
+    <script>
+
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+}
