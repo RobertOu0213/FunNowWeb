@@ -60,19 +60,24 @@ namespace PrjFunNowWeb.Controllers
                 {
                     // 顯示錯誤訊息用的
                     var errorMessage = await response.Content.ReadAsStringAsync();
-                    //return StatusCode((int)response.StatusCode, errorMessage);
-                    return BadRequest();
+                    return StatusCode((int)response.StatusCode, errorMessage);
+                   
                 }
 
                 var responseData = await response.Content.ReadAsStringAsync();
                 var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseData);
 
-
-                // 將memberID和token存在Session中
-                HttpContext.Session.SetString("MemberID", loginResponse.memberID.ToString());
-                HttpContext.Session.SetString("Token", loginResponse.token);
-
-                return Ok(loginResponse);
+                if (loginResponse != null)
+                {
+                    // 將memberID和token存在Session中
+                    HttpContext.Session.SetString("MemberID", loginResponse.memberID.ToString());
+                    HttpContext.Session.SetString("Token", loginResponse.token);
+                    return Ok(loginResponse);
+                }
+                else
+                {
+                    return BadRequest("無效的回應格式");
+                }
             }
         }
 

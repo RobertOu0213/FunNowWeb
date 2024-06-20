@@ -565,10 +565,10 @@
                 if (memberEmailElement) memberEmailElement.innerText = googleMemberEmail;
                 if (memberPhoneElement) memberPhoneElement.innerText = "使用第三方登入者尚未設定手機號碼";
                 if (pwdCardElement) pwdCardElement.style.display = "none";
-                if (nameEditBtnElement) {
-                    nameEditBtnElement.innerText = "";
-                    nameEditBtnElement.disabled = true;
-                }
+                // if (nameEditBtnElement) {
+                //     nameEditBtnElement.innerText = "";
+                //     nameEditBtnElement.disabled = true;
+                // }
                 console.log("這是會員查詢資料:Google登入" + googleMemberId + googleMemberFirstName);
             }
             // 若以上都沒有才顯示member內容
@@ -589,12 +589,12 @@
                     const data = await response.json(); // 將回應內容解析為 JSON
 
                     if (data.password) {
-                        var memberPwd = data.password;
-                        var lengthmemberPwd = memberPwd.length;
-                        // 根據原本字串長度生成相同數量的●
-                        var maskedPwd = "●".repeat(lengthmemberPwd);
+                         var memberPwd = data.password;
+                        // var lengthmemberPwd = memberPwd.length;
+                        // // 根據原本字串長度生成相同數量的●
+                        // var maskedPwd = "●".repeat(lengthmemberPwd);
                         if (document.getElementById("memberPwd")) {
-                            document.getElementById("memberPwd").innerText = maskedPwd;
+                            document.getElementById("memberPwd").innerText = "您的密碼均經過BCrypt Salt雜湊加密，安全無虞敬請放心";
                         }
                     }
 
@@ -989,12 +989,23 @@
         //【按下原密碼取消鈕】
         document.getElementById("OriginalPwdNo").addEventListener('click', async (evt) => {
             evt.preventDefault(); //防止預設行為的發生
+            
             const showPwd = document.getElementById("showPwd");
             const editPwd = document.getElementById("editPwd");
+            const setNewPwd = document.getElementById("SetNewPwd");
+            const originalPwd = document.getElementById("PasswordInput1");
+            const originalError = document.getElementById("originalError");
+            const NewPasswordInput = document.getElementById("NewPasswordInput");
+            const NewRecheckPasswordInput = document.getElementById("NewRecheckPasswordInput");
 
-            if (showPwd && editPwd) {
+            if (showPwd && editPwd && setNewPwd && originalPwd && originalError) {
                 showPwd.style.display = "block";
                 editPwd.style.display = "none";
+                setNewPwd.style.display = "none";
+                originalPwd.value = "";
+                originalError.innerText = "";
+                NewPasswordInput.value = "";
+                NewRecheckPasswordInput.value = "";
             }
         });
 
