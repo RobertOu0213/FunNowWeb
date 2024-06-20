@@ -39,12 +39,24 @@
                 </div>
 
                 <div class="col-2 ps-5">
-                    <a href="#">
-                        <img class="avatar" />
-                        <span>Oliver</span>
-                        <span>Ou</span>
-                        <i class="fa-solid fa-caret-down"></i>
-                    </a>
+                    <div class="user-container">
+                        @{
+                            var firstInitial = string.IsNullOrEmpty(ViewBag.LastName) ? "" : ViewBag.LastName.Substring(0, 1) + ".";
+                            var avatar = string.IsNullOrEmpty(ViewBag.LastName) ? "" : ViewBag.LastName.Substring(0, 1);
+                        }
+                        <button type="button" id="avatarButton">
+                            <div class="avatar">@avatar</div>
+                            <span>@ViewBag.FirstName</span><span>@firstInitial</span>
+                            <i class="fas fa-caret-down"></i>
+                        </button>
+                    </div>
+
+                    <div id="modal" class="modal">
+                        <div class="modal-arrow"></div>
+                        <div class="modal-content">
+                            <button id="logoutBtn" class="logout-button">登出</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -125,6 +137,21 @@
     @*  jQuery *@
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    <script defer>
+        $('#avatarButton').on('click', function () {
+            $('#modal').toggle();
+        });
+
+        $(document).on('click', function (event) {
+            if (!$(event.target).closest('#avatarButton').length && !$(event.target).closest('#modal').length) {
+                $('#modal').hide();
+            }
+        });
+
+        $('#logoutBtn').on('click', function () {
+            window.location.href = "@Url.Action("Logout", "Member")";
+        });
+    </script>
 </body>
 </html>
 

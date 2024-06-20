@@ -69,10 +69,30 @@ namespace PrjFunNowWeb.Controllers
             //Env.Load();
             //string databaseUrl = Environment.GetEnvironmentVariable("API_KEY");
 
-            //if (databaseUrl != null)
-            //{
-            //    Console.WriteLine(databaseUrl);
-            //}
+            var userID = HttpContext.Session.GetString("MemberID");
+            if (string.IsNullOrEmpty(userID))
+            {
+
+                userID = HttpContext.Session.GetString("GoogleMemberID");
+                if (string.IsNullOrEmpty(userID))
+                {
+                    return RedirectToAction("Login", "Member");
+                }
+            }
+
+            var member = _context.Members
+               .Where(x => x.MemberId == Convert.ToInt32(userID))
+               .Select(x => new { x.MemberId, x.FirstName, x.LastName })
+               .FirstOrDefault();
+
+            if (member == null)
+            {
+                return NotFound("Member not found");
+            }
+
+            ViewBag.MemberID = member.MemberId;
+            ViewBag.FirstName = member.FirstName;
+            ViewBag.LastName = member.LastName;
 
             if (id == null)
             {
