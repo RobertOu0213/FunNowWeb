@@ -192,10 +192,12 @@ namespace PrjFunNowWeb.Controllers
         }
 
         
-        public IActionResult MemberInformation()
-        {
-            return View();
-        }
+        //public IActionResult MemberInformation()
+        //{
+        //    return View();
+        //}
+
+
 
         public IActionResult HostInformation()
         {
@@ -204,7 +206,7 @@ namespace PrjFunNowWeb.Controllers
         }
 
 
-        //修改會員所有資料
+        //修改房東所有個人資料
         [HttpPut("HostMemberEdit/{id}")]
         public async Task<IActionResult> HostMemberEdit(int id, [FromForm] HostMemberEditDTO edit, IFormFile imageFile)
         {
@@ -271,6 +273,8 @@ namespace PrjFunNowWeb.Controllers
             public string Introduction { get; set; }
         }
 
+
+       
 
 
     }

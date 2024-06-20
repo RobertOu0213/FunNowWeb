@@ -20,34 +20,24 @@
         height: 4.5em;
         box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 8px 2px;
         background-color: #FFFFFF;
-        padding-right:10em;
+        width: 2000px;
+        font-family: Arial, sans-serif; /* 使用Arial字體 */
     }
 
-        nav.logo {
-            margin-left: 10em;
+ 
+        nav.logo 
+        {
+            margin-left: 20em;
+            
         }
 
             nav .logo img {
                 width: 15%;
+                margin-left: 3em;
             }
 
-        nav .user-container 
-        {
-            display: flex;
-            align-items: center;
-        }
-        .register
-        {
-          padding-left:200px;
-          color:white;
-          margin-right:50px;
-        
-        }
-        .index
-        {
-            padding-left: 50px;
-            color: white;
-        }
+       
+       
         
 
   /*           nav .user-container button {
@@ -126,17 +116,19 @@
     @* 未登入nvabar *@
     <nav>
         <div class="logo col-8">
-            <img src="~/ou/image/FunNow_Logo_Horizontal_Orange.png" alt="LOGO">
+            <img src="~/image/ming_img/newnewLogo.png" alt="LOGO">
         </div>
-        <div class="col-2 register">
-            <button class="btn btn-primary" onclick="location.href='@Url.Action("Register", "Member")'">
+        <div class="col-3" style=" margin-left: 5em;">
+            <button class="btn " style="border:solid 1px #fe4a55; margin-right:1em; color:#fe4a55;" onclick="location.href='@Url.Action("Login", "Member")'">
+                點我登入
+            </button>
+            <button class="btn " style="border:solid 1px #fe4a55; margin-right:1em; color:#fe4a55;" onclick="location.href='@Url.Action("Register", "Member")'">
                 點我註冊
             </button>
-        </div>
-        <div class="col-1">
-            <button class="btn btn-primary" onclick="location.href='@Url.Action("Index", "Home")'">
+            <button class="btn " style="background-color:#fe4a55;color:white; border:none;" onclick="location.href='@Url.Action("Index", "Home")'">
                 先逛逛首頁
             </button>
+           
         </div>
 
         @*     <div id="modal" class="modal">
