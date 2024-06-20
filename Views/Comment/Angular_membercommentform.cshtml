@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewData["Title"] = "Angular_commentform_page";
+    ViewData["Title"] = "Angular_membercommentform";
 }
 @section Styles {
     @* <link href="~/css/joanna_css/styles.b13b175880f4995b.css" rel="stylesheet" /> *@
@@ -12,7 +12,7 @@
     </style>
 }
 
-<member-comment-form [commentData]="@Json.Serialize(Model.CommentData)"></member-comment-form>
+<member-commentform-element></member-commentform-element>
 
 
 @section Scripts {

@@ -92,16 +92,10 @@
         <script src="~/dist/fun-now-angular1/scripts.6fe6725b87f2ceac.js"></script>
        
     <script>
-           
-            function onNavigateToForm(data) {
-                // 将数据传递到控制器方法
-                fetch('/Controller/Action', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                });
+            //帶參數，導到membercommentform
+            function onNavigateToForm(event) {
+                const params = new URLSearchParams(event).toString();
+                window.location.href = `https://localhost:7284/Comment/Angular_membercommentform?${params}`;
             }
 
 

@@ -30,7 +30,7 @@ namespace PrjFunNowWeb.Controllers
         }
 
 
-        public IActionResult Angular_commentform_page()
+        public IActionResult Angular_membercommentform()
         {
             return View();
         }
