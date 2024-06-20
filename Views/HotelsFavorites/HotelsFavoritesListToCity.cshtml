@@ -156,8 +156,23 @@
 
                     const averageScore = ratingObj.averageScore;
 
+
                     console.log("Total Average Score:", totalAverageScore);
                     console.log("formattedScore:", formattedScore);
+
+                    //formattedScore 小數點後的平均評分對應文字
+                    let ratingDescription;
+                    if (formattedScore >= 9) {
+                        ratingDescription = "超讚";
+                    } else if (formattedScore >= 7) {
+                        ratingDescription = "很讚";
+                    } else if (formattedScore >= 5) {
+                        ratingDescription = "很好";
+                    } else if (formattedScore >= 3) {
+                        ratingDescription = "尚可";
+                    } else {
+                        ratingDescription = "低於預期";
+                    }
                     console.log("Average Score Details:", averageScore);
                     const HotelImage = getImageUrl(hotelImage);
                     console.log(HotelImage);
@@ -174,7 +189,7 @@
                                             <h5 class="card-title">${hotelName}</h5>
                                             <p class="card-text">${city}, ${country}</p>
                                             <p>${generateStars(levelStar)}</p>
-                                                  <p class="card-text"> Rating: ${formattedScore} </p>
+                                                          <p class="card-text"> ${formattedScore} ${ratingDescription} </p>
                                             <p class="price">$${minimumPrice} / 晚</p>
                                         </div>
                                               </a>
