@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@{
+    Layout = ;
+    var memberID = Context.Session.GetString("MemberID");
+    var googleMemberId = Context.Session.GetString("GoogleMemberID");
+    var displayMemberId = !string.IsNullOrEmpty(googleMemberId) ? googleMemberId : memberID;
+}
+<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
@@ -264,6 +270,8 @@
     </div>
 
     <script>
+        var memberId = '@displayMemberId';
+
         async function fetchDialogs(memberId) {
             try {
                 const response = await fetch(`https://localhost:7103/api/Dialogs/byMember/${memberId}`);
@@ -338,7 +346,6 @@
 
         // 當頁面加載時調用fetchDialogs函數，並傳入相應的memberId
         document.addEventListener('DOMContentLoaded', () => {
-            const memberId = 1; // 替換為實際的memberId
             fetchDialogs(memberId);
         });
     </script>
