@@ -628,8 +628,8 @@
                                                 <h3>NT$${hotelPrice}</h3>
                                                              <div class="checkbox-container" >
                                                                         <div class="form-check" onclick="event.stopPropagation()">
-                                                                            <input class="form-check-input" type="checkbox" value="" data-hotel-id="${hotelId}">
-                                                                            <label class="form-check-label" for="flexCheckDefault">
+                                                                                    <input class="form-check-input" type="checkbox" id="${hotelId}" data-hotel-id="${hotelId}">
+                                                                                    <label class="form-check-label" for="${hotelId}">
                                                                                 比較
                                                                             </label>
                                                                         </div>
@@ -638,8 +638,8 @@
                                                       
                                         </div>
                                           </a>
-                                                    
-                                </div>
+                                             
+                                        </div>
                             </div>
                         `;
             }));
@@ -659,6 +659,7 @@
             }
 
             function getImageUrl(imagePath) {
+                console.log(imagePath)
                 if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
                     return imagePath;
                 } else {
@@ -703,15 +704,15 @@
 
                 const accordionContainer = document.querySelector('#collapseOne .card-body .row .col-9');
 
-                // // // 顯示或隱藏 Accordion
-                // const Accordion = document.querySelector('#container1');
+                // // 顯示或隱藏 Accordion
+                const Accordion = document.querySelector('#container1');
 
-                // // 根據 compareDatas 的長度決定是否顯示 Accordion
-                // if (compareDatas.length > 0) {
-                //     Accordion.style.display = 'block';
-                // } else {
-                //     Accordion.style.display = 'none';
-                // }
+                // 根據 compareDatas 的長度決定是否顯示 Accordion
+                if (compareDatas.length > 0) {
+                    Accordion.style.display = 'block';
+                } else {
+                    Accordion.style.display = 'none';
+                }
               
 
        
@@ -725,8 +726,11 @@
 
                 // 更新展開收合區塊中的照片容器
                 compareDatas.forEach(hotel => {
-                    const { hotelImage, hotelId } = hotel;
-                    const HotelImage = getImageUrl(hotelImage);
+                    console.log('hotel：', hotel)
+
+                    // 0620 hotelImages !!!! 教官撈回來的data變成陣列了,且hotelImage改為hotelImages複數
+                    const { hotelImages, hotelId } = hotel;
+                    const HotelImage = getImageUrl(hotelImages[0]);
 
                     const imageContainer = document.createElement('div');
                     imageContainer.className = 'image-container';
@@ -743,7 +747,7 @@
                     imageContainer.appendChild(closeButton);
 
                     const img = document.createElement('img');
-                    img.src = getImageUrl(hotelImage);
+                    img.src = getImageUrl(hotelImages[0]);
                     // img.className = 'card-img-top';
                     img.className = 'img-thumbnail float-left mx-1';
                     img.alt = '房間圖片';
@@ -766,8 +770,8 @@
 
                 // 更新Modal的表格行
                 compareDatas.forEach(hotel => {
-                    const { hotelImage, hotelName, cityName, levelStar, hotelEquipmentNames, totalAverageScore, hotelPrice, hotelId } = hotel;
-                    const HotelImage = getImageUrl(hotelImage);
+                    const { hotelImages, hotelName, cityName, levelStar, hotelEquipmentNames, totalAverageScore, hotelPrice, hotelId } = hotel;
+                    const HotelImage = getImageUrl(hotelImages[0]);
                     const ratingscore = JSON.parse(totalAverageScore);
                     const formattedScore = parseFloat(ratingscore.toFixed(1));
 
@@ -812,19 +816,7 @@
 
 
 
-        const formCheckInput = document.querySelector('.form-check-input');
-
-        formCheckInput.addEventListener('click', function (event) {
-            console.log('form check input clicked');
-            // 其他操作...
-        });
-
-        const formCheckLabel = document.querySelector('.form-check-label');
-
-        formCheckLabel.addEventListener('click', function (event) {
-            console.log('form check label clicked');
-            // 其他操作...
-        });
+        
 
 
     
