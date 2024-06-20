@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using PrjFunNowWeb.Models;
 using PrjFunNowWeb.Models.DTO;
 using PrjFunNowWeb.Models.ViewModel;
@@ -104,7 +105,9 @@ namespace PrjFunNowWeb.Controllers
                     HotelImage = GetImageUrl(od.Room.Hotel.HotelImages.FirstOrDefault()?.HotelImage1),
                     GuestFirstName = o.GuestFirstName,
                     GuestLastName = o.GuestLastName,
-                    TotalPrice = o.TotalPrice
+                    Email = od.Member.Email,
+                    TotalPrice = o.TotalPrice,
+                    EachRoomTotalPrice = od.Room.RoomPrice * ((od.CheckOutDate - od.CheckInDate).Days)
                 })).ToList();
 
 

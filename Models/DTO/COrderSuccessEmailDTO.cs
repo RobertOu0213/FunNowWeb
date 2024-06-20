@@ -20,5 +20,7 @@
         public string GuestLastName { get; set; }
         public decimal TotalPrice { get; set; }
         public int NumberOfDays { get; set; }
+        public string Email { get; set; }
+        public decimal EachRoomTotalPrice { get; set; }
     }
 }
