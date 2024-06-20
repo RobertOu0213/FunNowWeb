@@ -16,6 +16,7 @@
 @*=================================使用OPENSTREETMAP=====================================*@
 
  <link href="~/css/joanna_css/styles.b13b175880f4995b.css" rel="stylesheet"  />
+<link rel="stylesheet" href="~/dist/fun-now-angular1/styles.b13b175880f4995b.css" />
 
 <div class="container mt-5 pt-5" id="top">
     <div class="row">
@@ -435,39 +436,9 @@
             <div id="hotel-reviews">
                 <h2>評論</h2>
                 <div class="round-edge-container">
-                    <!-- 飯店評論 -->
-                    <div class="mt-5 d-flex flex-row">
-                        <div class="flex-grow-1 ps-5 pe-3">
-                            <span class="comment-cube" id="totalAverageScore"></span>
-                            <span id="ratingText"></span>
-                            <div class="mt-3">共 <span id="totalCommentcounts"></span> 則評論</div>
-                        </div>
-                        <hr />
-                        <!-- 評分條 -->
-                        <div class="flex-grow-2 ms-5 ps-5">
-                            <div class="column-container" id="averageScoresContainer">
-                                <!-- 各項評分 -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 篩選列 -->
-                    <br class="mt-5" />
-
-                    <div class="carousel-wrapper d-flex align-items-center">
-                        <i class=" next fa-solid fa-caret-left fa-2xl " onclick="nextSlide()"></i>
-                            <div class="carousel" id="carousel">
-                            
-                            <div class="carousel-container">
-                                <!-- 評論內容 -->
-                               
-                            </div>
-                           
-                        </div>
-                        <i class=" prev fa-solid fa-caret-right fa-2xl " onclick="prevSlide()"></i>
-                    </div>
+                    <hotel-comment-element></hotel-comment-element>
                     <a href="http://localhost:4200/comment/@Model.HotelDetail.HotelID/@Model.HotelDetail.CheckInDate/@Model.HotelDetail.CheckOutDate" class="  d-flex justify-content-center">顯示更多評論</a>
-                </div>                                           @*TODO帶 hotelId*@
+                </div>                                        
 
                 
 
@@ -1520,8 +1491,16 @@
                 const slideWidth = carousel.clientWidth; // 获取每个slide的宽度
                 carousel.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
             }
-
+            
             
     </script>
 
+        <script src="~/dist/fun-now-angular1/main.3da316e1ba1a05ca.js"></script>
+        <script src="~/dist/fun-now-angular1/polyfills.b6cd8ceb7f42859a.js"></script>
+        <script src="~/dist/fun-now-angular1/runtime.48f9e552146618a8.js"></script>
+        <script src="~/dist/fun-now-angular1/scripts.6fe6725b87f2ceac.js"></script>
+
+
+
+}
 }

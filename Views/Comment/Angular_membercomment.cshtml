@@ -1,0 +1,117 @@
+﻿
+@{
+    ViewData["Title"] = "Angular_membercomment";
+}
+@{
+    Layout = "_Layout_OrderManagement";
+}
+@{
+    var memberID = ViewBag.MemberID;
+}
+
+@section Styles {
+    @* <link href="~/css/joanna_css/styles.b13b175880f4995b.css" rel="stylesheet" /> *@
+    <link href="~/css/joanna_css/Membercomment.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/Ting/css/OrderManagement.css">
+    <link rel="stylesheet" href="~/dist/fun-now-angular1/styles.b13b175880f4995b.css" />
+    <style>
+    .content1 {
+    margin-left: 270px;
+    padding: 20px;
+    background-color: #fff;
+    flex: 1;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    width: 500px; /* 设置固定宽度 */
+    height: 800px; /* 设置固定高度 */
+    overflow: auto; /* 如果内容超过固定大小，显示滚动条 */
+    box-sizing: border-box; /* 确保内边距和边框包含在宽度和高度内 */
+}
+    </style>
+}
+
+@* <iframe src="http://localhost:4200/membercomment" style="width: 100%; height: 800px; border: none;"></iframe> *@
+<div class="container mt-5">
+    <div class="content-wrapper">
+        <div class="sidebar">
+            <ul>
+                <li>
+                    <a href="#" alt="管理訂單">
+                        <div class="icon"><i class="fa-solid fa-calendar-days"></i></div>
+                        <div class="text"><span>管理訂單</span></div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" alt="所有訂單">
+                        <div class="icon"><i class="fa-solid fa-briefcase"></i></div>
+                        <div class="text"><span>所有訂單</span></div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" alt="住宿訊息">
+                        <div class="icon"><i class="fa-solid fa-comment-dots"></i></div>
+                        <div class="text"><span>住宿訊息</span></div>
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Angular_membercomment", "Comment")" alt="住宿評鑑">
+                        <div class="icon"><i class="fa-solid fa-star"></i></div>
+                        <div class="text"><span>住宿評鑑</span></div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" alt="個人資料">
+                        <div class="icon"><i class="fa-solid fa-user"></i></div>
+                        <div class="text"><span>個人資料</span></div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="content1">
+
+            <member-comment-element member-id="@memberID" (navigateToForm)="onNavigateToForm($event)"> </member-comment-element>
+           
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+@section Scripts {
+        <script src="~/dist/fun-now-angular1/main.3da316e1ba1a05ca.js"></script>
+        <script src="~/dist/fun-now-angular1/polyfills.b6cd8ceb7f42859a.js"></script>
+        <script src="~/dist/fun-now-angular1/runtime.48f9e552146618a8.js"></script>
+        <script src="~/dist/fun-now-angular1/scripts.6fe6725b87f2ceac.js"></script>
+       
+    <script>
+           
+            function onNavigateToForm(data) {
+                // 将数据传递到控制器方法
+                fetch('/Controller/Action', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+            }
+
+
+
+
+
+
+
+
+
+
+    </script>
+}

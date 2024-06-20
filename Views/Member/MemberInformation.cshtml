@@ -29,18 +29,11 @@
             <!--============================側邊導航欄=========================================-->
             <div class="sidebar">
                 <ul>
-                    <li><a href="#" class="fa-solid fa-calendar-days" alt="管理訂單"><span>管理訂單</span></a></li>
-                    <li><a href="#" class="fa-solid fa-briefcase" alt="所有訂單"><span>所有訂單</span></a></li>
-                    <li><a href="#" class="fa-solid fa-building" alt="住宿"><span>住宿</span></a></li>
-                    <li><a href="#" class="fa-solid fa-plane" alt="機票"><span>機票</span></a></li>
-                    <li><a href="#" class="fa-solid fa-person-skiing-nordic" alt="活動體驗"><span>活動體驗</span></a></li>
-                    <li><a href="#" class="fa-solid fa-comment-dots" alt="住宿訊息"><span>住宿訊息</span></a></li>
-                    <li><a href="#" class="fa-solid fa-star" alt="住宿評鑑"><span>住宿評鑑</span></a></li>
-                    <li><a href="#" class="fa-solid fa-crown" alt="AgodaVIP"><span>AgodaVIP</span></a></li>
-                    <li><a href="#" class="fa-solid fa-money-check-dollar" alt="A金回饋"><span>A金回饋</span></a></li>
-                    <li><a href="#" class="fa-solid fa-sack-dollar" alt="現金回饋"><span>現金回饋</span></a></li>
-                    <li><a href="#" class="fa-solid fa-piggy-bank" alt="PointsMAX"><span>PointsMAX</span></a></li>
-                    <li><a href="#" class="fa-solid fa-user" alt="個人資料"><span>個人資料</span></a></li>
+                    <li><a href="/OrderManagement/Index" class="fa-solid fa-calendar-days" alt="管理訂單"><span>管理訂單</span></a></li>
+                    <li><a href="/Home/Index2" class="fa-solid fa-building" alt="住宿"><span>尋找住宿</span></a></li>
+                    <li><a href="/OrderManagement/HotelMessenge" class="fa-solid fa-comment-dots" alt="住宿訊息"><span>住宿訊息</span></a></li>
+                    <li><a href="/Comment/Angular_membercomment" class="fa-solid fa-star" alt="住宿評鑑"><span>住宿評鑑</span></a></li>
+                    <li><a href="/Member/MemberInformation" class="fa-solid fa-user" alt="個人資料"><span>個人資料</span></a></li>
                 </ul>
             </div>
             <!--============================表單內容=========================================-->
@@ -67,21 +60,21 @@
                     <div class="card mb-3 ms-3 " id="editName" style="display: none;">
                         <div class="card-body " style="padding-bottom: 0px; display: flex; align-items: center;  ">
                             <div style="width:650px; padding-left:10px">
-                        <div class="mb-3" >
-                            <label for="FirstNameInput" class="form-label" style="font-size:15px">護照英文名</label>
-                            <input type="text" class="form-control" id="FirstNameInput" name="FirstName" placeholder="護照英文名" style="width:400px">
-                            <p id="firstNameError" class="form-text text-danger" style="display: none;">請輸入有效的名字，，限英文，不得為特殊符號或中文</p>
-                        </div>
+                                <div class="mb-3">
+                                    <label for="FirstNameInput" class="form-label" style="font-size:15px">護照英文名</label>
+                                    <input type="text" class="form-control" id="FirstNameInput" name="FirstName" placeholder="護照英文名" style="width:400px">
+                                    <p id="firstNameError" class="form-text text-danger" style="display: none;">請輸入有效的名字，，限英文，不得為特殊符號或中文</p>
+                                </div>
 
-                        <div class="mb-3">
-                            <label for="LastNameInput" class="form-label" style="font-size:15px">護照英文姓</label>
+                                <div class="mb-3">
+                                    <label for="LastNameInput" class="form-label" style="font-size:15px">護照英文姓</label>
                                     <input type="text" class="form-control" id="LastNameInput" name="LastName" placeholder="護照英文姓" style="width:400px">
-                            <p id="lastNameError" class="form-text text-danger" style="display: none;">請輸入有效的姓氏，限英文，不得為特殊符號或中文</p>
+                                    <p id="lastNameError" class="form-text text-danger" style="display: none;">請輸入有效的姓氏，限英文，不得為特殊符號或中文</p>
+                                </div>
+                                <button class="btn btn-outline-primary" style="width:150px; margin-right:10px" id="NameCancel">取消</button>
+                                <button class="btn btn-primary " style="width:150px;" id="NameSave">儲存</button>
+                            </div>
                         </div>
-                        <button class="btn btn-outline-primary" style="width:150px; margin-right:10px" id="NameCancel">取消</button>
-                        <button class="btn btn-primary " style="width:150px;" id="NameSave">儲存</button>
-                         </div>
-                       </div>
                     </div>
 
                     <div class="card mb-3 ms-3" >
@@ -93,12 +86,12 @@
                     </div>
 
 
-                    <div class="card mb-3 ms-3" id=" showPhone">
+                    <div class="card mb-3 ms-3" id="showPhone">
                         <div class="card-body" style="padding-bottom: 0px;">
                             <h5 class="card-label mb-3">電話號碼</h5>
                             <div class="row">
                                 <p class="card-textt col-9"><span id="memberPhone"></span></p>
-                                <button class="edit col-2" id="PhoneEditBtn">編輯</button>
+                                <button class="edit col-2" id="PhoneEditBtn" style="margin-left:40px;">編輯</button>
                             </div>
                         </div>
                     </div>
@@ -117,12 +110,12 @@
                     </div>
 
 
-                    <div class="card  mb-3 ms-3" id="showPwd">
+                    <div class="card  mb-3 ms-3" id="showPwd" style="display:block;">
                         <div class="card-body" style="padding-bottom: 0px;">
                             <h5 class="card-label mb-3">密碼</h5>
                             <div class="row">
                                 <p class="card-textt col-9"><span id="memberPwd"></span></p>
-                                <button class="edit col-2" id="PwdEditBtn">編輯</button>
+                                <button class="edit col-2" id="PwdEditBtn" style="margin-left:40px;">編輯</button>
                             </div>
                         </div>
                     </div>
@@ -130,19 +123,24 @@
                         <div class="card-body " style="padding-bottom: 0px; display: flex; align-items: center; ">
                             <div style="width:650px; padding-left:10px">
                                 <div class="mb-3" id="originPwd">
-                                    <label for="PasswordInput" class="form-label" style="font-size:15px">請先輸入原密碼</label>
+                                    <label for="PasswordInput1" class="form-label" style="font-size:15px">請先輸入原密碼</label>
                                     <div class="input-group">
                                         <input type="password" class="form-control" id="PasswordInput1" name="Password" placeholder="密碼" style="border-right:none;">
-                                        <span class="input-group-text" id="togglePasswordIcon" style="background-color:white; border-left:none;">
+                                        <span class="input-group-text" id="togglePasswordIcon1" style="background-color:white; border-left:none;">
                                             <i class="fa-solid fa-eye-slash"></i>
                                         </span>
                                     </div>
+                                    <button class="btn btn-outline-primary" style="width:150px; margin:15px 15px 5px 0px" id="OriginalPwdNo">取消</button>
+                                    <button class="btn btn-primary" style="width:150px; margin:15px 0px 5px 0px " id="OriginalPwdOK">送出</button>
+                                    
                                 </div>
-                                <div class="mb-3" id="SetNewPwd">
+                                <p class="form-text text-danger" id="originalError"></p>
+
+                                <div class="mb-3" id="SetNewPwd" style="display: none;">
                                     <div class="mb-3">
-                                        <label for="PasswordInput" class="form-label" style="font-size:15px">密碼</label>
+                                        <label for="NewPasswordInput" class="form-label" style="font-size:15px">請輸入欲設置的新密碼</label>
                                         <div class="input-group">
-                                            <input type="password" class="form-control" id="PasswordInput" name="Password" placeholder="密碼" style="border-right:none;">
+                                            <input type="password" class="form-control" id="NewPasswordInput" name="Password" placeholder="密碼" style="border-right:none;">
                                             <span class="input-group-text" id="togglePasswordIcon" style="background-color:white; border-left:none;">
                                                 <i class="fa-solid fa-eye-slash"></i>
                                             </span>
@@ -150,9 +148,9 @@
                                         <p id="passwordError" class="form-text text-danger" style="display: none;">請輸入有效的密碼。</p>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="RecheckPasswordInput" class="form-label" style="font-size:15px">確認密碼</label>
+                                        <label for="NewRecheckPasswordInput" class="form-label" style="font-size:15px">請再次輸入欲設置的新密碼</label>
                                         <div class="input-group">
-                                            <input type="password" class="form-control" id="RecheckPasswordInput" placeholder="確認密碼" style="border-right:none;">
+                                            <input type="password" class="form-control" id="NewRecheckPasswordInput" placeholder="確認密碼" style="border-right:none;">
                                             <span class="input-group-text" id="toggleRecheckPasswordIcon" style="background-color:white; border-left:none;">
                                                 <i class="fa-solid fa-eye-slash"></i>
                                             </span>
@@ -160,9 +158,10 @@
                                         <p id="recheckpasswordError" class="form-text text-danger" style="display: none;">該欄位不得為空白</p>
                                         <p id="passwordMismatchError" class="form-text text-danger" style="display: none;">兩次密碼輸入不同，請再次確認</p>
                                     </div>
+                                    <button class="btn btn-outline-primary" style="width:150px; margin-right:10px" id="PwdCancel">取消</button>
+                                    <button class="btn btn-primary " style="width:150px;" id="PwdSave">儲存</button>
                                 </div>
-                                <button class="btn btn-outline-primary" style="width:150px; margin-right:10px" id="NameCancel">取消</button>
-                                <button class="btn btn-primary " style="width:150px;" id="NameSave">儲存</button>
+                                
                             </div>
                         </div>
                     </div>
@@ -173,13 +172,13 @@
                     <h4>付款方式</h4>
                 </div>
 
-                <div class="card  mb-3 ms-3 ">
-                    <div class="card-body " style="padding-bottom: 0px; height: 85px; ">
-                        <div class="row ">
+                <div class="card mb-3 ms-3">
+                    <div class="card-body" style="padding-bottom: 0px; height: 85px;">
+                        <div class="row">
                             <h5 class="card-label col-9" style="margin-top:25px;">幫我儲存信用卡的資料</h5>
-                            <div class="form-check form-switch col-2 " style="margin-top:25px; padding-left:80px">
-                                <label class="form-check-label" for="flexSwitchCheckChecked">好啊</label>
-                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+                            <div class="form-check form-switch col-2" style="margin-top:25px; padding-left:80px">
+                                <input class="form-check-input" type="checkbox" id="flexSwitchCheck1" onchange="toggleLabel(this)">
+                                <label class="form-check-label" for="flexSwitchCheck1">不要</label>
                             </div>
                         </div>
                     </div>
@@ -212,37 +211,37 @@
                     </div>
                 </div>
 
-                <div class="card  mb-3 ms-3 ">
-                    <div class="card-body " style="padding-bottom: 0px; height: 85px; ">
-                        <div class="row ">
+                <div class="card mb-3 ms-3">
+                    <div class="card-body" style="padding-bottom: 0px; height: 85px;">
+                        <div class="row">
                             <h5 class="card-label col-9" style="margin-top:25px;">我希望預訂小幫手能提醒我重要消息</h5>
-                            <div class="form-check form-switch col-2 " style="margin-top:25px; padding-left:80px">
-                                <label class="form-check-label" for="flexSwitchCheckChecked">不要</label>
-                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked">
+                            <div class="form-check form-switch col-2" style="margin-top:25px; padding-left:80px">
+                                <input class="form-check-input" type="checkbox" id="flexSwitchCheck2" onchange="toggleLabel(this)">
+                                <label class="form-check-label" for="flexSwitchCheck2">不要</label>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="card mb-3 ms-3 ">
-                    <div class="card-body " style="padding-bottom: 0px; height: 85px; ">
-                        <div class="row ">
+                <div class="card mb-3 ms-3">
+                    <div class="card-body" style="padding-bottom: 0px; height: 85px;">
+                        <div class="row">
                             <h5 class="card-label col-9" style="margin-top:25px;">我想要收到FunNow的促銷情報</h5>
-                            <div class="form-check form-switch col-2 " style="margin-top:25px; padding-left:80px">
-                                <label class="form-check-label" for="flexSwitchCheckChecked">不要</label>
-                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked">
+                            <div class="form-check form-switch col-2" style="margin-top:25px; padding-left:80px">
+                                <input class="form-check-input" type="checkbox" id="flexSwitchCheck3" onchange="toggleLabel(this)">
+                                <label class="form-check-label" for="flexSwitchCheck3">不要</label>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="card mb-3 ms-3 ">
-                    <div class="card-body " style="padding-bottom: 0px; height: 85px; ">
-                        <div class="row ">
+                <div class="card mb-3 ms-3">
+                    <div class="card-body" style="padding-bottom: 0px; height: 85px;">
+                        <div class="row">
                             <h5 class="card-label col-9" style="margin-top:25px;">我想獲得與我未來行程有關的資訊和特惠活動</h5>
-                            <div class="form-check form-switch col-2 " style="margin-top:25px; padding-left:80px">
-                                <label class="form-check-label" for="flexSwitchCheckChecked">不要</label>
-                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked">
+                            <div class="form-check form-switch col-2" style="margin-top:25px; padding-left:80px">
+                                <input class="form-check-input" type="checkbox" id="flexSwitchCheck4" onchange="toggleLabel(this)">
+                                <label class="form-check-label" for="flexSwitchCheck4">不要</label>
                             </div>
                         </div>
                     </div>
@@ -250,7 +249,7 @@
 
                 <div class="card mb-3 ms-3" style="background-color: #f9f9f9;margin-top:80px">
                     <div class="card-body " style="padding-bottom: 0px; height: 75px; ">
-                        <h5 class="delete">刪除我的帳戶</h5>
+                        <button class="delete" id="deletBtn">刪除我的帳戶</button>
                     </div>
 
                 </div>
@@ -474,9 +473,11 @@
 
         .delete {
             margin-top: 18px;
-            color: dodgerblue;
+            color: blue;
             font-size: 16px;
-            font-weight: 300;
+            font-weight: 400;
+            border: none;
+            background-color:transparent;
         }
 
             .delete:hover {
@@ -500,7 +501,6 @@
        
     <script>
 
-  
        //【一開始載入的時候出現會員資料】
         document.addEventListener("DOMContentLoaded", function () {
 
@@ -509,28 +509,35 @@
             var googleMemberId = '@googleMemberId';
             var memberID = '@memberID';
 
+            var memberNameElement = document.getElementById("memberName");
+            var memberEmailElement = document.getElementById("memberEmail");
+            var memberPhoneElement = document.getElementById("memberPhone");
+            var memberPwdElement = document.getElementById("memberPwd");
+            var pwdCardElement = document.getElementById("showPwd");
+            var nameEditBtnElement = document.getElementById("NameEditBtn");
 
             // 如果都沒有值，顯示未登入，基本上不會用到
             if (!googleMemberId && !googleMemberFirstName && !memberID) 
             {
                 // 其他情況，如未登入或資料缺失
-                document.getElementById("memberName").innerText = "尚未登入無法取得會員資料";
-                document.getElementById("memberEmail").innerText = "尚未登入無法取得會員資料";
-                document.getElementById("memberPhone").innerText = "尚未登入無法取得會員資料";
-                document.getElementById("memberPwd").innerText = "尚未登入無法取得會員資料";
+                if (memberNameElement) memberNameElement.innerText = "尚未登入無法取得會員資料";
+                if (memberEmailElement) memberEmailElement.innerText = "尚未登入無法取得會員資料";
+                if (memberPhoneElement) memberPhoneElement.innerText = "尚未登入無法取得會員資料";
+                if (memberPwdElement) memberPwdElement.innerText = "尚未登入無法取得會員資料";
 
             }
             // 判斷若有googlememberID，顯示googlemember內容
             else if (googleMemberId && googleMemberFirstName) 
-            { 
-            
-                document.getElementById("memberName").innerText = googleMemberFirstName;
-                document.getElementById("memberEmail").innerText = googleMemberEmail;
-                document.getElementById("memberPhone").innerText = "使用第三方登入者尚未設定手機號碼";
-                document.getElementById("pwdcard").style.display = "none";
-                document.getElementById("NameEditBtn").innerText = "";
-                document.getElementById("NameEditBtn").disabled = true;
-
+            {
+                if (memberNameElement) memberNameElement.innerText = googleMemberFirstName;
+                if (memberEmailElement) memberEmailElement.innerText = googleMemberEmail;
+                if (memberPhoneElement) memberPhoneElement.innerText = "使用第三方登入者尚未設定手機號碼";
+                if (pwdCardElement) pwdCardElement.style.display = "none";
+                if (nameEditBtnElement) {
+                    nameEditBtnElement.innerText = "";
+                    nameEditBtnElement.disabled = true;
+                }
+                console.log("這是會員查詢資料:Google登入" + googleMemberId + googleMemberFirstName);
             }
             // 若以上都沒有才顯示member內容
             else if (memberID) 
@@ -539,43 +546,47 @@
             }
 
         });
-            async function fetchMemberData(memberID) {
-                try {
-                    const response = await fetch(`https://localhost:7103/api/Members/searchByID?ID=${memberID}`, {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
+        async function fetchMemberData(memberID) {
+            try {
+                const response = await fetch(`https://localhost:7103/api/Members/searchByID?ID=${memberID}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                });
+                if (response.ok) {
+                    const data = await response.json(); // 將回應內容解析為 JSON
 
-                    });
-                    if (response.ok) 
-                    {
-                        const data = await response.json(); // 將回應內容解析為 JSON
-
-                        if (data.password) 
-                        {
-                            var memberPwd = data.password;
-                            var lengthmemberPwd = memberPwd.length;
-                            // 根據原本字串長度生成相同數量的●
-                            var maskedPwd = "●".repeat(lengthmemberPwd);
+                    if (data.password) {
+                        var memberPwd = data.password;
+                        var lengthmemberPwd = memberPwd.length;
+                        // 根據原本字串長度生成相同數量的●
+                        var maskedPwd = "●".repeat(lengthmemberPwd);
+                        if (document.getElementById("memberPwd")) {
                             document.getElementById("memberPwd").innerText = maskedPwd;
                         }
+                    }
 
+                    if (document.getElementById("memberName")) {
                         document.getElementById("memberName").innerText = `${data.firstName}\xa0${data.lastName}`;
+                    }
+                    if (document.getElementById("memberEmail")) {
                         document.getElementById("memberEmail").innerText = data.email;
+                    }
+                    if (document.getElementById("memberPhone")) {
                         document.getElementById("memberPhone").innerText = data.phone;
                     }
-                    else 
-                    {
-                        const errorText = await response.text();
-                        console.error('查詢失敗:', errorText);
-                        alert('查詢失敗，請稍後再試');
-                    }
-                } catch (error) {
-                    console.error('發生錯誤:', error);
-                    alert(`發生錯誤，請稍後再試。錯誤信息: ${error.message}`);
+                    console.log("這是會員查詢資料:一般登入" + memberID + data.firstName);
+                } else {
+                    const errorText = await response.text();
+                    console.error('查詢失敗:', errorText);
+                    alert('查詢失敗，請稍後再試');
                 }
+            } catch (error) {
+                console.error('發生錯誤:', error);
+                alert(`發生錯誤，請稍後再試。錯誤信息: ${error.message}`);
             }
+        }
 
      // ===================================================================================================      
             
@@ -584,6 +595,8 @@
             evt.preventDefault(); //防止預設行為的發生
             document.getElementById("showName").style.display = "none";
             document.getElementById("editName").style.display = "block";
+            document.getElementById("FirstNameInput").value = "";
+            document.getElementById("LastNameInput").value = "";
            }); 
 
            //【按下姓名取消鈕】
@@ -591,65 +604,70 @@
             evt.preventDefault(); //防止預設行為的發生
             document.getElementById("showName").style.display = "block";
             document.getElementById("editName").style.display = "none";
+            document.getElementById("FirstNameInput").value = "";
+            document.getElementById("LastNameInput").value = "";
            });
+
+
+        // 進行欄位驗證
+        // 驗證輸入的值只能包含英文字
+        function isValidName(name) {
+            var regex = /^[A-Za-z]+$/;
+            return regex.test(name);
+        }
+
+        // 驗證 FirstNameInput 欄位
+        document.getElementById("FirstNameInput").addEventListener("blur", function () {
+            var input = this.value.trim();
+            var error = document.getElementById("firstNameError");
+            if (input === "") {
+                error.textContent = "該欄位不得為空白";
+                error.style.display = "block";
+                this.classList.add("border", "border-danger");
+            } else if (!isValidName(input)) {
+                error.textContent = "請輸入有效的名字，限英文，不得為特殊符號或中文";
+                error.style.display = "block";
+                this.classList.add("border", "border-danger");
+            } else {
+                error.style.display = "none";
+                this.classList.remove("border", "border-danger");
+            }
+
+        });
+
+        // 驗證 LastNameInput 欄位
+        document.getElementById("LastNameInput").addEventListener("blur", function () {
+            var input = this.value.trim();
+            var error = document.getElementById("lastNameError");
+            if (input === "") {
+                error.textContent = "該欄位不得為空白";
+                error.style.display = "block";
+                this.classList.add("border", "border-danger");
+            } else if (!isValidName(input)) {
+                error.textContent = "請輸入有效的姓氏，限英文，不得為特殊符號或中文";
+                error.style.display = "block";
+                this.classList.add("border", "border-danger");
+            } else {
+                error.style.display = "none";
+                this.classList.remove("border", "border-danger");
+            }
+
+        });
+
 
            //【按下姓名儲存鈕】
             document.getElementById("NameSave").addEventListener('click', async (evt) => {
             evt.preventDefault(); //防止預設行為的發生
             
-            // 1. 進行欄位驗證
-            // 驗證輸入的值只能包含英文字
-            function isValidName(name) {
-                var regex = /^[A-Za-z]+$/;
-                return regex.test(name);
-            }
-
-            // 驗證 FirstNameInput 欄位
-            document.getElementById("FirstNameInput").addEventListener("blur", function () {
-                var input = this.value.trim();
-                var error = document.getElementById("firstNameError");
-                if (input === "") {
-                    error.textContent = "該欄位不得為空白";
-                    error.style.display = "block";
-                    this.classList.add("border", "border-danger");
-                } else if (!isValidName(input)) {
-                    error.textContent = "請輸入有效的名字，限英文，不得為特殊符號或中文";
-                    error.style.display = "block";
-                    this.classList.add("border", "border-danger");
-                } else {
-                    error.style.display = "none";
-                    this.classList.remove("border", "border-danger");
-                }
-
-            });
-
-            // 驗證 LastNameInput 欄位
-            document.getElementById("LastNameInput").addEventListener("blur", function () {
-                var input = this.value.trim();
-                var error = document.getElementById("lastNameError");
-                if (input === "") {
-                    error.textContent = "該欄位不得為空白";
-                    error.style.display = "block";
-                    this.classList.add("border", "border-danger");
-                } else if (!isValidName(input)) {
-                    error.textContent = "請輸入有效的姓氏，限英文，不得為特殊符號或中文";
-                    error.style.display = "block";
-                    this.classList.add("border", "border-danger");
-                } else {
-                    error.style.display = "none";
-                    this.classList.remove("border", "border-danger");
-                }
-
-            });
-            
-            // 2.檢查是不是有紅框錯誤
+           
+            // 1.檢查是不是有紅框錯誤
             const redBorderElements = document.querySelectorAll('.border-danger');
             if (redBorderElements.length > 0) {
-                alert('有紅框處尚未修改，請再次確認');
+               
                 return;
             }
             
-            //3.串接API，修正姓名進資料庫
+            //2.串接API，修正姓名進資料庫
                 const newFirstName = document.getElementById("FirstNameInput").value;
                 const newLastName = document.getElementById("LastNameInput").value;
                 var memberID = '@memberID';
@@ -675,14 +693,15 @@
 
                 if (response.ok) 
                 {
-                    alert("姓名修改成功");
                     document.getElementById("showName").style.display = "block";
                     document.getElementById("editName").style.display = "none";
+                    document.getElementById("FirstNameInput").value = "";
+                    document.getElementById("LastNameInput").value = "";
+
                 } else 
                 {
                     const errorText = await response.text();
                     console.error('更新姓名失敗:', errorText);
-                    alert('姓名修改失敗，請稍後再試');
                 }
             } catch (error) {
                 console.error('發生錯誤:', error);
@@ -695,80 +714,71 @@
         });
 
         // ===================================================================================================
-
         //【按下電話編輯鈕】
         document.getElementById("PhoneEditBtn").addEventListener('click', async (evt) => {
             evt.preventDefault(); //防止預設行為的發生
-            document.getElementById("showName").style.display = "none";
-            document.getElementById("editName").style.display = "block";
+            const showPhone = document.getElementById("showPhone");
+            const editPhone = document.getElementById("editPhone");
+            const phoneInput = document.getElementById("PhoneInput");
+            if (showPhone && editPhone) 
+            {
+                showPhone.style.display = "none";
+                editPhone.style.display = "block";
+                phoneInput.value = "";
+            }
         });
 
-        //【按下姓名取消鈕】
-        document.getElementById("NameCancel").addEventListener('click', async (evt) => {
+        //【按下電話取消鈕】
+        document.getElementById("PhoneCancel").addEventListener('click', async (evt) => {
             evt.preventDefault(); //防止預設行為的發生
-            document.getElementById("showName").style.display = "block";
-            document.getElementById("editName").style.display = "none";
+            const showPhone = document.getElementById("showPhone");
+            const editPhone = document.getElementById("editPhone");
+            const phoneInput = document.getElementById("PhoneInput");
+
+            if (showPhone && editPhone) {
+                showPhone.style.display = "block";
+                editPhone.style.display = "none";
+                phoneInput.value = "";
+            }
         });
 
-        //【按下姓名儲存鈕】
-        document.getElementById("NameSave").addEventListener('click', async (evt) => {
+
+        // 驗證輸入的值是否為有效的手機號碼格式
+        function isValidPhone(phone) {
+            var regex = /^09\d{8}$/; // 台灣手機號碼格式為 "09xxxxxxxx"
+            return regex.test(phone);
+        }
+
+        // 監聽 PhoneInput 欄位的 blur 事件
+        const phoneInput = document.getElementById("PhoneInput");
+        const phoneError = document.getElementById("phoneError");
+
+        phoneInput.addEventListener("blur", function () {
+            var input = this.value.trim();
+            if (input === "") {
+                phoneError.style.display = "none";
+                this.classList.remove("border", "border-danger");
+            } else if (!isValidPhone(input)) {
+                phoneError.style.display = "block";
+                this.classList.add("border", "border-danger");
+            } else {
+                phoneError.style.display = "none";
+                this.classList.remove("border", "border-danger");
+            }
+        });
+        
+        
+        //【按下電話儲存鈕】
+        document.getElementById("PhoneSave").addEventListener('click', async (evt) => {
             evt.preventDefault(); //防止預設行為的發生
 
-            // 1. 進行欄位驗證
-            // 驗證輸入的值只能包含英文字
-            function isValidName(name) {
-                var regex = /^[A-Za-z]+$/;
-                return regex.test(name);
+            // 檢查是否有錯誤
+            if (phoneInput.classList.contains("border-danger")) {
+                return; // 有錯誤就不繼續執行
             }
 
-            // 驗證 FirstNameInput 欄位
-            document.getElementById("FirstNameInput").addEventListener("blur", function () {
-                var input = this.value.trim();
-                var error = document.getElementById("firstNameError");
-                if (input === "") {
-                    error.textContent = "該欄位不得為空白";
-                    error.style.display = "block";
-                    this.classList.add("border", "border-danger");
-                } else if (!isValidName(input)) {
-                    error.textContent = "請輸入有效的名字，限英文，不得為特殊符號或中文";
-                    error.style.display = "block";
-                    this.classList.add("border", "border-danger");
-                } else {
-                    error.style.display = "none";
-                    this.classList.remove("border", "border-danger");
-                }
-
-            });
-
-            // 驗證 LastNameInput 欄位
-            document.getElementById("LastNameInput").addEventListener("blur", function () {
-                var input = this.value.trim();
-                var error = document.getElementById("lastNameError");
-                if (input === "") {
-                    error.textContent = "該欄位不得為空白";
-                    error.style.display = "block";
-                    this.classList.add("border", "border-danger");
-                } else if (!isValidName(input)) {
-                    error.textContent = "請輸入有效的姓氏，限英文，不得為特殊符號或中文";
-                    error.style.display = "block";
-                    this.classList.add("border", "border-danger");
-                } else {
-                    error.style.display = "none";
-                    this.classList.remove("border", "border-danger");
-                }
-
-            });
-
-            // 2.檢查是不是有紅框錯誤
-            const redBorderElements = document.querySelectorAll('.border-danger');
-            if (redBorderElements.length > 0) {
-                alert('有紅框處尚未修改，請再次確認');
-                return;
-            }
-
-            //3.串接API，修正姓名進資料庫
-            const newFirstName = document.getElementById("FirstNameInput").value;
-            const newLastName = document.getElementById("LastNameInput").value;
+            //3.串接API，修正電話進資料庫
+            const newPhone = document.getElementById("PhoneInput").value;
             var memberID = '@memberID';
             var googleMemberId = '@googleMemberId';
 
@@ -780,22 +790,29 @@
             }
 
             try {
-                const response = await fetch(`https://localhost:7103/api/Members/${LoginmemberID}`, {
+                const response = await fetch(`https://localhost:7103/api/Edit/${LoginmemberID}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ FirstName: newFirstName, LastName: newLastName })
+                    body: JSON.stringify({ phone: newPhone})
                 });
 
                 if (response.ok) {
-                    alert("姓名修改成功");
-                    document.getElementById("showName").style.display = "block";
-                    document.getElementById("editName").style.display = "none";
-                } else {
+                    const showPhone = document.getElementById("showPhone");
+                    const editPhone = document.getElementById("editPhone");
+                    const phoneInput = document.getElementById("PhoneInput");
+                    if (showPhone && editPhone) 
+                    {
+                        showPhone.style.display = "block";
+                        editPhone.style.display = "none";
+                        phoneInput.value = "";
+                    }
+                } else 
+                {
                     const errorText = await response.text();
-                    console.error('更新姓名失敗:', errorText);
-                    alert('姓名修改失敗，請稍後再試');
+                    console.error('更新電話失敗:', errorText);
+                    alert("電話修改失敗，請稍後再試!");
                 }
             } catch (error) {
                 console.error('發生錯誤:', error);
@@ -807,8 +824,303 @@
 
         });
 
+        // ===================================================================================================
+        //【按下密碼編輯鈕】
+        document.getElementById("PwdEditBtn").addEventListener('click', async (evt) => {
+            evt.preventDefault(); //防止預設行為的發生
+            const showPwd = document.getElementById("showPwd");
+            const editPwd = document.getElementById("editPwd");
+            if (showPwd && editPwd) {
+                showPwd.style.display = "none";
+                editPwd.style.display = "block";
+            }
+        });
+
+        //【按下原密碼送出鈕】
+         document.getElementById("OriginalPwdOK").addEventListener("click", async function (event) {
+            event.preventDefault();
+            
+            //串接API，比對密碼是否相同
+            const originalPwd = document.getElementById("PasswordInput1").value;
+            var memberID = '@memberID';
+            var googleMemberId = '@googleMemberId';
+
+            let LoginmemberID;
+            if (memberID) {
+                LoginmemberID = memberID;
+            } else {
+                LoginmemberID = googleMemberId;
+            }
+
+            try {
+                const response = await fetch(`https://localhost:7103/api/Edit/CheckPassword`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ memberID: LoginmemberID, password: originalPwd })
+                });
+
+                if (response.ok) {
+                    const setNewPwd = document.getElementById("SetNewPwd");
+
+                    if (setNewPwd) 
+                    {
+                        setNewPwd.style.display = "block";
+                        const originalError = document.getElementById("originalError");
+                        if (originalError) originalError.innerText = "密碼輸入正確";
+                    }
+                } else 
+                {
+                    const originalError = document.getElementById("originalError");
+                    if (originalError) originalError.innerText = "密碼輸入錯誤，請再次確認";
+                    const errorText = await response.text();
+                    console.error('密碼輸入錯誤:', errorText);
+                      
+                }
+            } catch (error) {
+                console.error('發生錯誤:', error);
+                alert(`發生錯誤，請稍後再試。錯誤信息: ${error.message}`);;
+            }
+
+        });
+
+        //【按下原密碼取消鈕】
+        document.getElementById("OriginalPwdNo").addEventListener('click', async (evt) => {
+            evt.preventDefault(); //防止預設行為的發生
+            const showPwd = document.getElementById("showPwd");
+            const editPwd = document.getElementById("editPwd");
+            
+            if (showPwd && editPwd) {
+                showPwd.style.display = "block";
+                editPwd.style.display = "none";
+            }
+        });
 
 
+        //【按下新密碼取消鈕】
+        document.getElementById("PwdCancel").addEventListener('click', async (evt) => {
+            evt.preventDefault(); //防止預設行為的發生
+            const showPwd = document.getElementById("showPwd");
+            const editPwd = document.getElementById("editPwd");
+            const setNewPwd = document.getElementById("SetNewPwd");
+            const originalPwd = document.getElementById("PasswordInput1");
+            const originalError = document.getElementById("originalError");
+            const NewPasswordInput = document.getElementById("NewPasswordInput");
+            const NewRecheckPasswordInput = document.getElementById("NewRecheckPasswordInput");
+
+            if (showPwd && editPwd && setNewPwd && originalPwd && originalError) {
+                showPwd.style.display = "block";
+                editPwd.style.display = "none";
+                setNewPwd.style.display = "none";
+                originalPwd.value = "";
+                originalError.innerText = "";
+                NewPasswordInput.value = "";
+                NewRecheckPasswordInput.value = "";
+            }
+        });
+
+
+        //新密碼欄位驗證
+        document.getElementById("NewPasswordInput").addEventListener("blur", function () {
+            var input = this.value.trim();
+            var error = document.getElementById("passwordError");
+            var passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@@$!%*?&])[A-Za-z\d@@$!%*?&]{6,}$/;
+
+            if (input === "") {
+                error.textContent = "密碼欄位不得為空白";
+                error.style.display = "block";
+                this.classList.add("border", "border-danger");
+            } else if (!passwordPattern.test(input)) {
+                error.textContent = "密碼至少6個字元，且需包含大小寫英文字母、數字、特殊符號";
+                error.style.display = "block";
+                this.classList.add("border", "border-danger");
+            } else {
+                error.style.display = "none";
+                this.classList.remove("border", "border-danger");
+            }
+
+        });
+
+
+        //新確認密碼欄位驗證
+        document.getElementById("NewRecheckPasswordInput").addEventListener("blur", function () {
+            var passwordInput = document.getElementById("NewPasswordInput").value.trim();
+            var recheckPasswordInput = this.value.trim();
+            var recheckPasswordError = document.getElementById("recheckpasswordError");
+            var passwordMismatchError = document.getElementById("passwordMismatchError");
+
+            if (recheckPasswordInput === "") {
+                recheckPasswordError.style.display = "block";
+                passwordMismatchError.style.display = "none";
+                this.classList.add("border", "border-danger");
+            } else {
+                recheckPasswordError.style.display = "none";
+                this.classList.remove("border", "border-danger");
+
+                if (recheckPasswordInput !== passwordInput) {
+                    passwordMismatchError.style.display = "block";
+                    this.classList.add("border", "border-danger");
+                } else {
+                    passwordMismatchError.style.display = "none";
+                    this.classList.remove("border", "border-danger");
+                }
+            }
+
+        });
+
+
+        //【按下新密碼儲存鈕】
+        document.getElementById("PwdSave").addEventListener('click', async (evt) => {
+            evt.preventDefault(); //防止預設行為的發生
+
+            // 1.檢查是不是有紅框錯誤
+            const redBorderElements = document.querySelectorAll('.border-danger');
+            if (redBorderElements.length > 0) {
+                return;
+            }
+
+            //2.串接API，修正密碼進資料庫
+            var passwordInput = document.getElementById("NewPasswordInput").value;
+            var memberID = '@memberID';
+            var googleMemberId = '@googleMemberId';
+
+
+            let LoginmemberID;
+            if (memberID) {
+                LoginmemberID = memberID;
+            } else {
+                LoginmemberID = googleMemberId;
+            }
+
+            try {
+                const response = await fetch(`https://localhost:7103/api/Pwd/${LoginmemberID}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ password: passwordInput })
+                });
+
+                if (response.ok) 
+                {
+                    const showPwd = document.getElementById("showPwd");
+                    const editPwd = document.getElementById("editPwd");
+                    const setNewPwd = document.getElementById("SetNewPwd");
+                    const originalPwd = document.getElementById("PasswordInput1");
+                    const originalError = document.getElementById("originalError");
+
+                    if (showPwd && editPwd) 
+                    {
+                        showPwd.style.display = "block";
+                        editPwd.style.display = "none";
+                        setNewPwd.style.display = "none";
+                        originalPwd.value = "";
+                        originalError.innerText = "";
+
+                    }
+                } else {
+                    const errorText = await response.text();
+                    console.error('更新密碼失敗:', errorText);
+                    alert("密碼修改失敗，請稍後再試!");
+                }
+            } catch (error) {
+                console.error('發生錯誤:', error);
+                alert(`發生錯誤，請稍後再試。錯誤信息: ${error.message}`);;
+            }
+
+            //4. 重整畫面
+            fetchMemberData(LoginmemberID);
+
+        });
+
+        // ===================================================================================================
+        // 原密碼欄位眼睛開關
+        const togglePasswordIcon1 = document.getElementById('togglePasswordIcon1');
+        const passwordInput1 = document.getElementById('PasswordInput1');
+
+        togglePasswordIcon1.addEventListener('click', function () {
+            const type = passwordInput1.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput1.setAttribute('type', type);
+            this.querySelector('i').classList.toggle('fa-eye');
+            this.querySelector('i').classList.toggle('fa-eye-slash');
+        });
+        
+
+        // 新密碼欄位眼睛開關
+        const togglePasswordIcon = document.getElementById('togglePasswordIcon');
+        const passwordInput = document.getElementById('NewPasswordInput');
+
+        togglePasswordIcon.addEventListener('click', function () {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.querySelector('i').classList.toggle('fa-eye');
+            this.querySelector('i').classList.toggle('fa-eye-slash');
+        });
+
+
+        // 確認密碼欄位眼睛開關
+        const toggleRecheckPasswordIcon = document.getElementById('toggleRecheckPasswordIcon');
+        const recheckPasswordInput = document.getElementById('NewRecheckPasswordInput');
+
+        toggleRecheckPasswordIcon.addEventListener('click', function () {
+            const type = recheckPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            recheckPasswordInput.setAttribute('type', type);
+            this.querySelector('i').classList.toggle('fa-eye');
+            this.querySelector('i').classList.toggle('fa-eye-slash');
+        });
+
+        
+        function toggleLabel(checkbox) {
+            const label = checkbox.nextElementSibling;
+            label.textContent = checkbox.checked ? '要' : '不要';
+        }
+
+        //【按下刪除我的帳戶(變更會員角色)】
+        document.getElementById("deletBtn").addEventListener('click', async (evt) => {
+            evt.preventDefault(); //防止預設行為的發生
+
+            //串接API，把資料庫的member刪除(角色轉為4)
+            var memberID = '@memberID';
+            var googleMemberId = '@googleMemberId';
+
+            let LoginmemberID;
+            if (memberID) {
+                LoginmemberID = memberID;
+            } else {
+                LoginmemberID = googleMemberId;
+            }
+            // 先跳出提醒視窗，再次詢問是否要刪除
+            const userConfirmed = confirm("你確定要刪除你的帳號嗎？這個動作是無法反悔的喔~");
+
+            if (userConfirmed) {
+                try {
+                    const response = await fetch(`https://localhost:7103/api/DeleteMember/${LoginmemberID}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                    });
+
+                    if (response.ok) {
+                        alert("帳號刪除成功");
+                        window.location.href = "@Url.Action("Logout", "Member")";
+                    } else {
+                        const errorText = await response.text();
+                        console.error('刪除失敗:', errorText);
+                        alert("刪除失敗，請稍後再試!");
+                    }
+                } catch (error) {
+                    console.error('發生錯誤:', error);
+                    alert(`發生錯誤，請稍後再試。錯誤信息: ${error.message}`);
+                }
+            } else 
+            {
+                // 使用者取消刪除操作，返回頁面或執行其他操作
+                return;
+            }
+
+        });
 
     </script>
 }

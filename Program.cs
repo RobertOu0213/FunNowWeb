@@ -68,6 +68,21 @@ builder.Services.AddCors(options =>
 // Add SignalR client services if needed for SignalR client side (optional)
 builder.Services.AddSignalR();
 
+//Angular用
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularApp",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:4200")
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
+
+builder.Services.AddControllersWithViews();
+
+
 
 
 builder.Services.AddControllers().AddJsonOptions(options =>
@@ -110,17 +125,19 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
-app.UseMiddleware<AuthenticationMiddleware>();
+//app.UseMiddleware<AuthenticationMiddleware>();
 
 // 使用 CORS
 app.UseCors("AllowAllOrigins");
 app.UseAuthorization();
 
 
+app.UseCors("AllowAngularApp");
+
 
 app.MapControllerRoute(
     name: "default",   
-pattern: "{controller=Home}/{action=index}/{id?}");
+pattern: "{controller=HostManage}/{action=Home}/{id?}");
 
 //// 配置路由以支持 Angular 路由
 //app.MapFallbackToFile("/dist/fun-now-angular1/index.html");

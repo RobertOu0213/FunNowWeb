@@ -1,6 +1,8 @@
 ﻿@* // 視圖
 @model int *@
-
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
 @section Styles {
     <style>
@@ -73,6 +75,9 @@
 
 @section Scripts {
     <script>
+
+        
+
         const errorMessageContainer = document.querySelector('#errorMessageContainer');
         const hotelsContainer = document.querySelector('#hotelsContainer');
         const totalCitiesLabel = document.querySelector('#totalCities');
@@ -93,16 +98,17 @@
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 const data = await response.json();
-                console.log(data);
+                console.warn(data);
 
                 const cities = data.map(item => {
                     const { hotelImage, hotelName, city, country, hotelCount } = item;
 
                     const HotelImage = getImageUrl(hotelImage);
-                    console.log(HotelImage);
+                    console.warn(HotelImage);
 
+                    /* 點擊卡片會轉向到這個Controller/Action  =>   HotelsFavorites/HotelsFavoritesListToCity*/
                     return( `
-                    <a href="/HotelsFavorites/HotelsFavoritesListToCity?memberId=${memberId}&city=${city}&country=${country}">  /* 點擊卡片會轉向到這個Controller/Action  =>   HotelsFavorites/HotelsFavoritesListToCity*/
+                    <a href="/HotelsFavorites/HotelsFavoritesListToCity?memberId=${memberId}&city=${city}&country=${country}"> 
                             <div class="col-md-4">
                                 <div class="card">
                                                     <img src="${HotelImage}"  class="card-img-top" alt="${city}">
@@ -125,6 +131,8 @@
         };
 
         loadFavoriteHotels();  //调用函数以加载数据
+
+
         //解析照片
         function getImageUrl(imagePath) {
             if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
@@ -133,6 +141,8 @@
                 return window.location.origin + '/image/' + imagePath;
             }
         }
+
+
     </script>
 
 }

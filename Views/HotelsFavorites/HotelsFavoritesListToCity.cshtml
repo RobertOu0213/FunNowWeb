@@ -1,5 +1,7 @@
 ﻿@model IEnumerable<PrjFunNowWeb.ViewModels.OrderViewModel>
-
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
 @section Styles {
     <style>
@@ -152,10 +154,14 @@
                     const HotelImage = getImageUrl(hotelImage);
                     console.log(HotelImage);
                     /* 在卡片元素上設置一個 data-hotel-id 屬性,用於存儲酒店 ID */
+                    // https://localhost:7284/PgHotel/pgHotel/?hotelId=2&checkInDate=2024-06-19&checkOutDate=2024-06-20
+                    // <a href="/PgHotel/pgHotel/?hotelId=${hotelId}&checkInDate=${2024-06-19}&checkOutDate=${2024-06-20}" >
+
                     return (`
-                                <div class="col-md-3">
-                                                    <div class="card" data-hotel-id="${hotelId}">
-                                                                     <img src="${HotelImage}"  alt="Image of ${hotelName}" class="card-img-top">
+                                        <div class="col-md-3">
+                                 <a href="/PgHotel/pgHotel/?hotelId=${hotelId}&checkInDate=2024-06-19&checkOutDate=2024-06-20">
+                                      <div class="card" data-hotel-id="${hotelId}">
+                                        <img src="${HotelImage}"  alt="Image of ${hotelName}" class="card-img-top">
                                         <i class="fa-solid fa-heart love-button"></i> 
                                         <div class="card-body">
                                             <h5 class="card-title">${hotelName}</h5>
@@ -165,14 +171,16 @@
                                             <p class="price">$${minimumPrice} / 晚</p>
                                         </div>
                                     </div>
+                                    </a>
                                 </div>
+                                
                             `);
                 });
                 hotelsContainer.innerHTML = hotels.join('');
                // cityCountryLabel.textContent = `${cityName}, ${countryName}`;  // 更新標籤顯示正確的城市和國家
                 cityCountryLabel.textContent = `${decodeURIComponent(cityName)}, ${decodeURIComponent(countryName)}`;
 
-                  //須放在loadFavoriteHotels
+                  //須放在loadFavoriteHotels裡面,因為動態生成每張card,愛心按鈕跟著生成
                 //獲取所有愛心按鈕元素
                 const loveButtons = document.querySelectorAll('.love-button');
 
@@ -196,7 +204,7 @@
             return starsHtml;
         };
 
-        loadFavoriteHotels();
+         loadFavoriteHotels();
 
      
         // 處理愛心按鈕點擊事件
