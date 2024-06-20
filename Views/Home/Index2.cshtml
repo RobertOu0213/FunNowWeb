@@ -312,6 +312,16 @@
 @section Scripts {
 
     <script>
+
+        //產生漂亮星星
+        const generateStars = (stars) => {
+            let starsHtml = '';
+            for (let i = 0; i < stars; i++) {
+                starsHtml += '<i class="fa-solid fa-star"></i>';
+            }
+            return starsHtml;
+        };
+
         document.addEventListener("DOMContentLoaded", async function () {
             //DOMContentLoaded 事件：這個事件在初始的 HTML 文檔被完全加載和解析後觸發，不必等待樣式表、圖像和子框架的完全加載。
             // 網頁加載完成後自動加載儲存在 sessionStorage 的 searchHotel 資訊
@@ -594,6 +604,23 @@
             return data.totalAverageScore.toFixed(1); // 确保这里使用的是 totalAverageScore，并格式化为小数点后一位
         }
 
+        // 從後端 API 獲取指定 hotelId 的評論數和最新評論
+        async function getHotelCommentsCount(hotelId) {
+            try {
+                const response = await fetch(`https://localhost:7103/api/Comment/${hotelId}/ForHotelComment`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                console.log(data); // 確認返回的數據結構
+                return data.totalComments; // 確保返回的數據屬性名稱與後端一致
+            } catch (error) {
+                console.error(`Error fetching comments count for hotel ID ${hotelId}:`, error);
+                return "N/A"; // 如果获取评论数失败，显示N/A
+            }
+        }
+
+
 
         // 从 sessionStorage 获取搜索条件(by louieee)-------------------------------------------------
         // => 扣louieee Controller, 把session的入駐日跟退訂日以query string傳過去
@@ -613,7 +640,6 @@
         //     //确保加密数据URL安全：
         //     return encodeURIComponent(encryptedData);
         // }
-
 
 
         // 加載飯店的函數
@@ -637,23 +663,7 @@
             // const encryptedHotelId = encryptData(hotel.hotelId.toString(), secretKey);
             // const encryptedCheckInDate = encryptData(searchHotelForLouieee.checkInDate, secretKey);
             // const encryptedCheckOutDate = encryptData(searchHotelForLouieee.checkOutDate, secretKey);
-
-
-            // 從後端 API 獲取指定 hotelId 的評論數和最新評論
-            async function getHotelCommentsCount(hotelId) {
-                try {
-                    const response = await fetch(`https://localhost:7103/api/Comment/${hotelId}/ForHotelComment`);
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    const data = await response.json();
-                    console.log(data); // 確認返回的數據結構
-                    return data.totalComments; // 確保返回的數據屬性名稱與後端一致
-                } catch (error) {
-                    console.error(`Error fetching comments count for hotel ID ${hotelId}:`, error);
-                    return "N/A"; // 如果获取评论数失败，显示N/A
-                }
-            }
+                      
 
             // 生成並顯示飯店信息
 
@@ -719,7 +729,8 @@
                             </div>
                             <div class="col-lg-5 col-sm-10 hotel-details">
                                 <h3>${hotelName}</h3>
-                                <span>${levelStar}星級飯店 </span><span style="color:blue">${hotelAddress}</span>
+                                <p>${generateStars(levelStar)}級飯店</p>
+                                <span style="color:blue">${hotelAddress}</span>
                                 <h6>此住宿提供:</h6>
                                 ${hotelEquipmentNames.map(name => `<h5 style="border: 1px solid black; display: inline-block;">${name}</h5>`).join('')}
                                 <br>
@@ -750,6 +761,8 @@
 
             divHotels.innerHTML = hotels.join("");
 
+
+
             //被打勾的checkbox,產生新的compareDatas [ ] ,compareDatas [ ]裡的每個元素都是一間飯店資訊,去生成展開收合區塊中的照片容器、Modal的表格行
             function buildCompareDatas() {
                 const checkedHotelIds = Array.from(document.querySelectorAll('.form-check-input:checked'))
@@ -770,13 +783,6 @@
                 }
             }
 
-            const generateStars = (stars) => {
-                let starsHtml = '';
-                for (let i = 0; i < stars; i++) {
-                    starsHtml += '<i class="fa-solid fa-star"></i>';
-                }
-                return starsHtml;
-            };
 
             document.querySelectorAll('.form-check-input').forEach(checkbox => {
                 checkbox.addEventListener('change', function () {
@@ -1204,7 +1210,7 @@
                 margin-bottom: 15px;
             }
     </style>
-    @* 我的最愛 *@
+    @* 我的最愛 星星 *@
     <style>
         
         .hotel-card {
@@ -1248,6 +1254,10 @@
                 width: 32%;
                 margin: 1%;
             }
+        /* 星星图标颜色 */
+        .fa-star {
+            color: orange; /* 设置为金色，您也可以使用任何您喜欢的颜色 */
+        }
     </style>
     @* 評分表 *@
     <style>        
