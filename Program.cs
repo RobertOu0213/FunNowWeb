@@ -137,7 +137,7 @@ app.UseCors("AllowAngularApp");
 
 app.MapControllerRoute(
     name: "default",   
-pattern: "{controller=HotelMan}/{action=HotelMessenage}/{id?}");
+pattern: "{controller=HostAllHotelsOrders}/{action=HostHotelsOdersList}/{id?}");
 
 //// 配置路由以支持 Angular 路由
 //app.MapFallbackToFile("/dist/fun-now-angular1/index.html");

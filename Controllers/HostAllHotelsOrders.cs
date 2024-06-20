@@ -30,14 +30,18 @@ namespace PrjFunNowWeb.Controllers
 
             // int memberId = (int)Client.Session.GetString("MemberID");         // TODO....  使用默认值0作为备选 等之後登入好了
             //int memberId = 1;
-            var memberId = HttpContext.Session.GetString("MemberId");
-            if (string.IsNullOrEmpty(memberId))
+            var userID = HttpContext.Session.GetString("MemberID");
+            if (string.IsNullOrEmpty(userID))
             {
-                // 處理 MemberId 為 null 或空字符串的情況
-                return RedirectToAction("Login", "Account"); // 重定向到登錄頁面
+
+                userID = HttpContext.Session.GetString("GoogleMemberID");
+                if (string.IsNullOrEmpty(userID))
+                {
+                    return RedirectToAction("Login", "Member");
+                }
             }
 
-            int memberIdValue = int.Parse(memberId);
+            int memberIdValue = int.Parse(userID);
 
             // 使用 memberId 进行查询
             var orders = from order in _context.Orders                 //LINQ語法  from...in....
