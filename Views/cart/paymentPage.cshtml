@@ -20,6 +20,10 @@
             </div>
         </form>
 
+        <div id="loading" class="loading-background" style="display:none;">
+            <img src="~/ou/image/waiting.gif" alt="Loading..." />
+        </div>
+
         <form id="reservationForm" method="POST">
             <input type="hidden" id="totalPrice" value="@Model.Sum(m => m.RoomPrice * m.NumberOfNights)" />
             @foreach(var item in Model)
@@ -185,6 +189,7 @@
 
             $('#reservationForm').on('submit', async function (event) {
                 event.preventDefault();
+                $('#loading').show(); //spinning show
                 let formData = {
                     OrderDetailsID: [],
                     GuestFirstName: $('#GuestFirstName').val(),
@@ -229,6 +234,8 @@
                 } catch (error) {
                     console.log('Error:', error);
 
+                } finally {
+                    $('#loading').hide();
                 }
             });
         });
