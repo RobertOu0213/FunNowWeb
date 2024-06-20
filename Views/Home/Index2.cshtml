@@ -312,6 +312,7 @@
     <script>
 
         document.addEventListener("DOMContentLoaded", async function () {
+            //DOMContentLoaded 事件：這個事件在初始的 HTML 文檔被完全加載和解析後觸發，不必等待樣式表、圖像和子框架的完全加載。
             // 網頁加載完成後自動加載儲存在 sessionStorage 的 searchHotel 資訊
             const searchHotelJson = sessionStorage.getItem("searchHotel");
             if (searchHotelJson) {
@@ -457,19 +458,27 @@
         function getSelectedCheckboxes(containerSelector) {
             const checkboxes = document.querySelectorAll(`${containerSelector} input[type="checkbox"]:checked`);
             return Array.from(checkboxes).map(checkbox => parseInt(checkbox.value)); // 確保值是數字類型
+            //Array.from(checkboxes)：將 NodeList 轉換為數組，這樣可以使用數組的方法。
         }
 
         // 更新搜尋篩選條件並加載飯店
         async function updateSearchFilters() {
             const searchHotelJson = sessionStorage.getItem('searchHotel');
+            //從 sessionStorage 取得儲存的搜尋飯店條件，並存儲在 searchHotelJson 變數中。
             if (searchHotelJson) {
                 const searchHotel = JSON.parse(searchHotelJson);
                 searchHotel.hotelTypes = getSelectedCheckboxes('.form-check-container-hotel-type');
+                //hotelTypes 是 searchHotel 對象中的一個屬性，用於存儲選中的飯店類型。這些類型通常是從頁面上的多選框（checkboxes）中選取的。
                 searchHotel.hotelEquipments = getSelectedCheckboxes('.form-check-container-hotel-equipment');
                 searchHotel.cities = getSelectedCheckboxes('.form-check-container-city');
                 searchHotel.roomEquipments = getSelectedCheckboxes('.form-check-container-room-equipment');
                 sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel));
                 await loadHotels(searchHotel);
+                //這兩行代碼的目的是將更新後的搜尋條件儲存在 sessionStorage 中，並使用這些條件來加載飯店資料。以下是詳細說明：
+                //sessionStorage：這是一個 Web 存儲 API，允許你在用戶瀏覽器的會話期間儲存資料。不同於 localStorage，sessionStorage 中的資料在關閉瀏覽器窗口後會被清除。
+                //setItem方法：這個方法用來將資料儲存到 sessionStorage 中。它接受兩個參數：鍵名（key）和要儲存的值（value）。
+                //JSON.stringify：這個方法將 JavaScript 對象轉換為 JSON 字符串。這樣可以將複雜的對象結構儲存在 sessionStorage 中。
+
             } else {
                 console.log('searchHotel not found in sessionStorage');
             }
@@ -557,7 +566,7 @@
         // 从 sessionStorage 获取搜索条件(by louieee)-------------------------------------------------
         // => 扣louieee Controller, 把session的入駐日跟退訂日以query string傳過去
         function getSearchHotel() {
-            const searchHotelForLouieee = JSON.parse(sessionStorage.getItem("searchHotel"));
+            const searchHotelForLouieee = JSON.parse(sessionStorage.getItem("searchHotel"));//從瀏覽器的會話存儲中檢索先前保存的搜索條件
             return searchHotelForLouieee;
         }
         // // 在 JavaScript 中加密查询字符串(by louieee)--------------------------------------------------
@@ -581,7 +590,7 @@
             const url = "https://localhost:7103/api/HotelSearch/indexsearch";
             const response = await fetch(url, {
                 method: "POST",
-                body: JSON.stringify(searchHotel),
+                body: JSON.stringify(searchHotel),//將 searchHotel 物件轉換為 JSON 字符串，作為請求的主體。
                 headers: { "Content-Type": "application/json" },
             });
             const data = await response.json();
@@ -615,8 +624,9 @@
             }
 
             // 生成並顯示飯店信息
-          
-            const hotels = await Promise.all(data.map(async hotel => {
+
+            const hotels = await Promise.all(data.map(async hotel => {  //Promise.all：確保所有異步操作完成後才繼續執行後續代碼。
+
                 const { hotelId, hotelName, hotelAddress, hotelImages, levelStar, hotelEquipmentNames, hotelPrice } = hotel;
                 let totalAverageScore;
                 let commentsCount;
