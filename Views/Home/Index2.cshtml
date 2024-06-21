@@ -290,6 +290,25 @@
 
     <script>
 
+        //維持最愛紅心
+        async function applyFavoriteStatus() {
+            const memberId = window.memberId;
+            if (!memberId) {
+                console.log('Member ID not found');
+                return;
+            }
+
+            const likedHotels = await getLikedHotels(memberId);
+            document.querySelectorAll('.favorite-icon').forEach(icon => {
+                const hotelId = icon.getAttribute('data-hotel-id');
+                if (likedHotels.includes(parseInt(hotelId))) {
+                    icon.classList.add('liked');
+                } else {
+                    icon.classList.remove('liked');
+                }
+            });
+        }
+
         //產生漂亮星星
         const generateStars = (stars) => {
             let starsHtml = '';
@@ -305,7 +324,6 @@
             const searchHotelJson = sessionStorage.getItem("searchHotel");
             if (searchHotelJson) {
                 const searchHotel = JSON.parse(searchHotelJson);
-                // console.log(searchHotel);
                 //解析並加載飯店資訊
                 await loadHotels(searchHotel);
             } else {
@@ -313,18 +331,22 @@
             }
 
             // 加載已喜歡的飯店 ID
-            const memberId = '@memberID'; // 取得實際的會員ID
-            window.memberId = memberId; // 確保在其他函數中可以訪問 memberId
-            const likedHotels = await getLikedHotels(memberId);
+            const memberId = '@memberID'; // 取得實際的會員ID，確保這部分已經正確替換
+            window.memberId = memberId;
 
-            // 根據已喜歡的飯店 ID 設置紅色愛心
-            const favoriteIcons = document.querySelectorAll(".favorite-icon");
-            favoriteIcons.forEach(icon => {
-                const hotelId = icon.getAttribute("data-hotel-id");
-                if (likedHotels.includes(parseInt(hotelId))) {
-                    icon.classList.add("liked");
-                }
-            });
+            // 確保 memberId 存在後再呼叫 getLikedHotels
+            if (memberId) {
+                const likedHotels = await getLikedHotels(memberId);
+                const favoriteIcons = document.querySelectorAll(".favorite-icon");
+                favoriteIcons.forEach(icon => {
+                    const hotelId = icon.getAttribute("data-hotel-id");
+                    if (likedHotels.includes(parseInt(hotelId))) {
+                        icon.classList.add("liked");
+                    }
+                });
+            } else {
+                console.log('Member ID not found');
+            }
 
 
             // 監聽提交按鈕，獲取輸入值並發送請求
@@ -455,6 +477,11 @@
                 document.removeEventListener('mousemove', handleDrag);
                 document.removeEventListener('mouseup', stopDrag);
             }
+
+            //維持最愛紅心
+            await applyFavoriteStatus();
+
+
         });
 
         // 新增取得已喜歡的飯店 ID 的函數
@@ -750,6 +777,8 @@
 
             divHotels.innerHTML = hotels.join("");
 
+            //維持最愛紅心
+            await applyFavoriteStatus();
 
 
             //被打勾的checkbox,產生新的compareDatas [ ] ,compareDatas [ ]裡的每個元素都是一間飯店資訊,去生成展開收合區塊中的照片容器、Modal的表格行
@@ -914,35 +943,37 @@
         console.warn("1233333333333333");
 
 
-
-
-
-
-
-
-
-
         // 切換最愛狀態的函數
         async function toggleFavorite(event, hotelId) {
-            event.stopPropagation();  // 防止點擊事件傳遞到其他元素
-            event.preventDefault();   // 阻止默認的跳轉行為
+            event.stopPropagation();
+            event.preventDefault();
             const icon = event.currentTarget;
-            const isLiked = icon.classList.toggle("liked");
+            const isLiked = !icon.classList.contains("liked");
 
             const url = "https://localhost:7103/api/HotelSearch/hotelLike";
+            const payload = {
+                HotelId: hotelId,
+                MemberId: window.memberId,
+                LikeStatus: isLiked
+            };
+
+            console.log('Sending payload:', payload); // 添加日志输出
+
             const response = await fetch(url, {
                 method: "POST",
-                body: JSON.stringify({
-                    HotelId: hotelId,
-                    MemberId: window.memberId,  // 這裡應該替換為實際的會員ID
-                    LikeStatus: isLiked
-                }),
+                body: JSON.stringify(payload),
                 headers: { "Content-Type": "application/json" },
             });
 
-            if (!response.ok) {
-                // 如果API請求失敗，恢復愛心圖標的狀態
-                icon.classList.toggle("liked");
+            if (response.ok) {
+                if (isLiked) {
+                    icon.classList.add("liked");
+                } else {
+                    icon.classList.remove("liked");
+                }
+            } else {
+                const errorText = await response.text(); // 獲取錯誤信息
+                console.error('Failed to update favorite status:', errorText); // 输出错误日志
                 alert("無法更新最愛狀態，請稍後再試");
             }
         }
