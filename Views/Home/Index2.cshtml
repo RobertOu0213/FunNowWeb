@@ -2,7 +2,10 @@
 @{
     ViewData["Title"] = "Home Page2";
     Layout = "_Layout_index2";
+
     var memberID = Context.Session.GetString("MemberID");
+    var googleMemberId = Context.Session.GetString("GoogleMemberID");
+    var displayMemberId = !string.IsNullOrEmpty(googleMemberId) ? googleMemberId : memberID;
 
     var memberInfo = Context.Session.GetString("MemberInfo");
     var memberInfoJson = memberInfo != null ? JsonSerializer.Serialize(memberInfo) : "null";
@@ -314,7 +317,7 @@
             }
 
             // 加載已喜歡的飯店 ID
-            const memberId = '@memberID'; // 取得實際的會員ID
+            const memberId = '@displayMemberId'; // 取得實際的會員ID
             window.memberId = memberId; // 確保在其他函數中可以訪問 memberId
             const likedHotels = await getLikedHotels(memberId);
 
@@ -927,7 +930,7 @@
 
         }
 
-        console.warn("1233333333333333");
+
 
 
 
@@ -940,8 +943,18 @@
 
         // 切換最愛狀態的函數
         async function toggleFavorite(event, hotelId) {
+            const displayMemberId = '@displayMemberId';
+
             event.stopPropagation();  // 防止點擊事件傳遞到其他元素
             event.preventDefault();   // 阻止默認的跳轉行為
+
+
+            if (!displayMemberId) {
+                window.location.href = window.location.origin + '/Member/Login';
+                return;
+            }
+   
+
             const icon = event.currentTarget;
             const isLiked = icon.classList.toggle("liked");
 
