@@ -9,14 +9,20 @@ namespace PrjFunNowWeb.Controllers
         public IActionResult GetMemberId()
         {
 
-            var userId = HttpContext.Session.GetString("MemberID"); 
-            if (string.IsNullOrEmpty(userId))
+ 
+            var userID = HttpContext.Session.GetString("MemberID");
+            if (string.IsNullOrEmpty(userID))
             {
-                return Unauthorized(); 
+
+                userID = HttpContext.Session.GetString("GoogleMemberID");
+                if (string.IsNullOrEmpty(userID))
+                {
+                    return RedirectToAction("Login", "Member");
+                }
             }
 
-       
-            return Ok(new { MemberID = userId });
+
+            return Ok(new { MemberID = userID });
 
         }
     }

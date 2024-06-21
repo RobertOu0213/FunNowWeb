@@ -255,6 +255,49 @@
             display: none;
         }
     </style>
+    @* 廣告模態框 *@
+    <style>
+        /* 模態框背景 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+
+        /* 模態框內容 */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        /* 關閉按鈕樣式 */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+            .close:hover,
+            .close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            }
+    </style>
 }
 
 @section Scripts{   
@@ -713,10 +756,44 @@
         }
     </script>
 
+    @* 廣告模態框 *@
+    <script>
+        // 獲取模態框
+        var modal = document.getElementById("myModal");
+
+        // 獲取 <span> 元素，這個元素用來關閉模態框
+        var span = document.getElementsByClassName("close")[0];
+
+        // 當頁面加載時，打開模態框
+        window.onload = function () {
+            modal.style.display = "block";
+        }
+
+        // 當用戶點擊 <span> (x)，關閉模態框
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        // 當用戶在模態框外點擊時，關閉模態框
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+
 
 }
 
 <!--================Header Area ===================-->
+<!-- 模態框 -->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <img src="~/image/ming_img/花蓮廣告1.jpg" alt="Popup Image" style="max-width: 100%; height: auto;" data-city="花蓮縣" class="city-image">
+    </div>
+</div>
+
 <!--================搜尋訂房欄(固定式) Area =================-->
 <!-- 橫幅區域 -->
 <section class="banner_area">
@@ -856,10 +933,10 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/臺北市.jpg" data-city="臺北市" class="city-image" />
+                        <img src="~/image/ming_img/台北市.jpg" data-city="台北市" class="city-image" />
                     </div>
                     <a href="#">
-                        <h4 class="sec_h4">臺北市</h4>
+                        <h4 class="sec_h4">台北市</h4>
                     </a>
                     <h5>
                         共有888間

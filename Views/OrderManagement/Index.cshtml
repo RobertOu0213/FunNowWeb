@@ -1,5 +1,8 @@
 ﻿@{
-    Layout = "_Layout_OrderManagement";
+    Layout = "_Layout";
+    var memberID = Context.Session.GetString("MemberID");
+    var googleMemberId = Context.Session.GetString("GoogleMemberID");
+    var displayMemberId = !string.IsNullOrEmpty(googleMemberId) ? googleMemberId : memberID;
 }
 <!DOCTYPE html>
 <html lang="zh-Hant">
@@ -18,78 +21,11 @@
         <div class="content-wrapper">
             <div class="sidebar">
                 <ul>
-                    <li>
-                        <a href="#" alt="管理訂單">
-                            <div class="icon"><i class="fa-solid fa-calendar-days"></i></div>
-                            <div class="text"><span>管理訂單</span></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" alt="所有訂單">
-                            <div class="icon"><i class="fa-solid fa-briefcase"></i></div>
-                            <div class="text"><span>所有訂單</span></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" alt="住宿">
-                            <div class="icon"><i class="fa-solid fa-building"></i></div>
-                            <div class="text"><span>住宿</span></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" alt="機票">
-                            <div class="icon"><i class="fa-solid fa-plane"></i></div>
-                            <div class="text"><span>機票</span></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" alt="活動體驗">
-                            <div class="icon"><i class="fa-solid fa-person-skiing-nordic"></i></div>
-                            <div class="text"><span>活動體驗</span></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" alt="住宿訊息">
-                            <div class="icon"><i class="fa-solid fa-comment-dots"></i></div>
-                            <div class="text"><span>住宿訊息</span></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" alt="住宿評鑑">
-                            <div class="icon"><i class="fa-solid fa-star"></i></div>
-                            <div class="text"><span>住宿評鑑</span></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" alt="AgodaVIP">
-                            <div class="icon"><i class="fa-solid fa-crown"></i></div>
-                            <div class="text"><span>Agoda客服</span></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" alt="A金回饋">
-                            <div class="icon"><i class="fa-solid fa-money-check-dollar"></i></div>
-                            <div class="text"><span>A金回饋</span></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" alt="現金回饋">
-                            <div class="icon"><i class="fa-solid fa-sack-dollar"></i></div>
-                            <div class="text"><span>現金回饋</span></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" alt="PointsMAX">
-                            <div class="icon"><i class="fa-solid fa-piggy-bank"></i></div>
-                            <div class="text"><span>PointsMAX</span></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" alt="個人資料">
-                            <div class="icon"><i class="fa-solid fa-user"></i></div>
-                            <div class="text"><span>個人資料</span></div>
-                        </a>
-                    </li>
+                    <li><a href="/OrderManagement/Index" class="fa-solid fa-calendar-days" alt="管理訂單"><span>管理訂單</span></a></li>
+                    <li><a href="/Home/Index2" class="fa-solid fa-building" alt="住宿"><span>尋找住宿</span></a></li>
+                    <li><a href="/OrderManagement/HotelMessenge" class="fa-solid fa-comment-dots" alt="住宿訊息"><span>住宿訊息</span></a></li>
+                    <li><a href="/Comment/Angular_membercomment" class="fa-solid fa-star" alt="住宿評鑑"><span>住宿評鑑</span></a></li>
+                    <li><a href="/Member/MemberInformation" class="fa-solid fa-user" alt="個人資料"><span>個人資料</span></a></li>
                 </ul>
             </div>
             <div class="content">
@@ -124,6 +60,9 @@
     </div>
     <script src="https://kit.fontawesome.com/091893cea4.js" crossorigin="anonymous"></script>
     <script defer>
+        var memberId = '@displayMemberId';
+        console.log(memberId);
+
         document.addEventListener('DOMContentLoaded', () => {
             const ongoingTab = document.getElementById('ongoingTab');
             const completedTab = document.getElementById('completedTab');
@@ -178,36 +117,35 @@
                         }
 
                         htmlContent += `
-                        <div class="order-card" data-order-id="${order.orderId}">
-                            <div class="order-card-header">
-                                        <a href="/OrderManagement/OrderdETAIL?orderId=${order.orderId}" class="order-number" data-order-id="${order.orderId}">訂單編號: ${order.orderId}</a>
-                                <div class="order-date">預訂日期: ${new Date(order.createdAt).toLocaleDateString()}</div>
-                            </div>
-                            <div class="order-card-body">
-                                <div class="hotel-image">
-                                    <img src="${hotelImage}" alt="Hotel Image">
+                            <div class="order-card" data-order-id="${order.orderId}">
+                                <div class="order-card-header">
+                                    <a href="/OrderManagement/OrderDetail?orderId=${order.orderId}" class="order-number" data-order-id="${order.orderId}">訂單編號: ${order.orderId}</a>
+                                    <div class="order-date">預訂日期: ${new Date(order.createdAt).toLocaleDateString()}</div>
                                 </div>
-                                <div class="order-info">
-                                    <h3>${hotelName}</h3>
-                                    <p class="date-range">${checkInDate} - ${checkOutDate}</p>
-                                    <p class="guest-info">${guestLastName} ${guestFirstName}</p>
-                                    <p class="guest-info">${guestEmail}</p>
+                                <div class="order-card-body">
+                                    <div class="hotel-image">
+                                        <img src="${hotelImage}" alt="Hotel Image">
+                                    </div>
+                                    <div class="order-info">
+                                        <h3>${hotelName}</h3>
+                                        <p class="date-range">${checkInDate} - ${checkOutDate}</p>
+                                        <p class="guest-info">${guestLastName} ${guestFirstName}</p>
+                                        <p class="guest-info">${guestEmail}</p>
+                                    </div>
+                                    <div class="price">NT$${order.totalPrice}</div>
                                 </div>
-                                <div class="price">NT$${order.totalPrice}</div>
+                                <div class="order-card-footer">
+                                    <div class="order-status">已確認</div>
+                                    <div class="${buttonClass}"><a href="#">${buttonText}</a></div>
+                                </div>
                             </div>
-                            <div class="order-card-footer">
-                                <div class="order-status">已確認</div>
-                                <div class="${buttonClass}"><a href="#">${buttonText}</a></div>
-                            </div>
-                        </div>
-                    `;
+                            `;
                     });
                 } else {
                     htmlContent = '<p>暫無訂單數據可顯示。</p>';
                 }
                 return htmlContent;
             }
-
 
             function createPagination(totalOrders, pageSize, currentPage) {
                 if (totalOrders <= pageSize) {
@@ -225,7 +163,8 @@
                 pagination.innerHTML = paginationHTML;
             }
 
-            function loadTabContent(url, activeTab) {
+            function loadTabContent(status, activeTab) {
+                const url = `https://localhost:7103/api/Orders/ByMemberAndStatus/${memberId}/${status}/${currentPage}/${pageSize}`;
                 fetch(url)
                     .then(response => {
                         if (!response.ok) {
@@ -245,25 +184,24 @@
                         document.querySelectorAll('.order-card, .order-number').forEach(element => {
                             element.addEventListener('click', (event) => {
                                 const orderId = event.currentTarget.getAttribute('data-order-id');
-                                window.location.href = `/OrderManagement/OrderdETAIL?orderId=${orderId}`;
+                                window.location.href = `/OrderManagement/OrderDetail?orderId=${orderId}`;
                             });
                         });
                     })
                     .catch(error => {
                         console.error('資料載入失敗:', error);
                         tabContent.innerHTML = `
-                        <h3>目前沒有任何即將到來的預訂</h3>
-                        <p>開始計劃下一次的旅行吧！</p>
-                        <div class="buttons">
-                            <a href="#">找住宿？</a>
-                            <a href="#">找機票</a>
-                            <a href="#">找活動體驗</a>
-                        </div>
-                    `;
+                                <h3>目前沒有任何即將到來的預訂</h3>
+                                <p>開始計劃下一次的旅行吧！</p>
+                                <div class="buttons">
+                                    <a href="#">找住宿？</a>
+                                    <a href="#">找機票</a>
+                                    <a href="#">找活動體驗</a>
+                                </div>
+                            `;
                         pagination.innerHTML = ''; // 清除分頁
                     });
             }
-
 
             function onPageClick(event) {
                 const target = event.target;
@@ -271,41 +209,41 @@
                     currentPage = parseInt(target.dataset.page);
                     const activeTab = document.querySelector('.tab__link.active').id;
 
-                    let url;
+                    let status;
                     if (activeTab === 'ongoingTab') {
-                        url = `https://localhost:7103/api/Orders/ByMemberAndStatus/1/1/${currentPage}/${pageSize}`;
+                        status = 1;
                     } else if (activeTab === 'completedTab') {
-                        url = `https://localhost:7103/api/Orders/ByMemberAndStatus/1/2/${currentPage}/${pageSize}`;
+                        status = 2;
                     } else if (activeTab === 'cancelledTab') {
-                        url = `https://localhost:7103/api/Orders/ByMemberAndStatus/1/3/${currentPage}/${pageSize}`;
+                        status = 3;
                     }
 
-                    loadTabContent(url, activeTab);
+                    loadTabContent(status, activeTab);
                 }
             }
 
             ongoingTab.addEventListener('click', () => {
                 setActiveTab(ongoingTab);
                 currentPage = 1;
-                loadTabContent(`https://localhost:7103/api/Orders/ByMemberAndStatus/1/1/${currentPage}/${pageSize}`, 'ongoingTab');
+                loadTabContent(1, 'ongoingTab');
             });
 
             completedTab.addEventListener('click', () => {
                 setActiveTab(completedTab);
                 currentPage = 1;
-                loadTabContent(`https://localhost:7103/api/Orders/ByMemberAndStatus/1/2/${currentPage}/${pageSize}`, 'completedTab');
+                loadTabContent(2, 'completedTab');
             });
 
             cancelledTab.addEventListener('click', () => {
                 setActiveTab(cancelledTab);
                 currentPage = 1;
-                loadTabContent(`https://localhost:7103/api/Orders/ByMemberAndStatus/1/3/${currentPage}/${pageSize}`, 'cancelledTab');
+                loadTabContent(3, 'cancelledTab');
             });
 
             pagination.addEventListener('click', onPageClick);
 
             setActiveTab(ongoingTab);
-            loadTabContent(`https://localhost:7103/api/Orders/ByMemberAndStatus/1/1/${currentPage}/${pageSize}`, 'ongoingTab');
+            loadTabContent(1, 'ongoingTab');
         });
     </script>
 
