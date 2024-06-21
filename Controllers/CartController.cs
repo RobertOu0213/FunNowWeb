@@ -145,7 +145,7 @@ namespace PrjFunNowWeb.Controllers
                          { "CustomField2",  "" },
                          { "ReturnURL",  $"{website}/Payment/thankyou" },
                          //{ "OrderResultURL", $"{website}/Home/Index" },
-                         { "ClientBackURL",  $"{website}/Payment/thankyou2" },
+                         { "ClientBackURL",  $"{website}/Payment/thankyou" },
                          { "MerchantID",  "3002607" },
                          { "PaymentType",  "aio" },
                          { "ChoosePayment",  "ALL" },
@@ -178,7 +178,7 @@ namespace PrjFunNowWeb.Controllers
                     Email = member?.Email,
                     Phone = member?.Phone,
                     HotelID = (int)od.Room?.Hotel?.HotelId,
-                    //GuestNumber = od.GuestNumber,
+                    GuestNumber = od.GuestNumber,
                     EcpayParameters = ecpayParameters
                 }).ToList();
 
