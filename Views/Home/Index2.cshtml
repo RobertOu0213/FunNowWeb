@@ -663,17 +663,24 @@
                     commentsCount = "N/A"; // 如果获取评论数失败，显示N/A
                 }
 
-                let ratingDescription;
-                if (totalAverageScore >= 9) {
-                    ratingDescription = "超讚";
-                } else if (totalAverageScore >= 7) {
-                    ratingDescription = "很讚";
-                } else if (totalAverageScore >= 5) {
-                    ratingDescription = "很好";
-                } else if (totalAverageScore >= 3) {
-                    ratingDescription = "尚可";
+                //在使用totalAverageScore進行比較時，確保它是數字類型：
+                totalAverageScore = parseFloat(await getHotelScore(hotelId));
+
+
+                if (!isNaN(totalAverageScore)) {
+                    if (totalAverageScore >= 9) {
+                        ratingDescription = "超讚";
+                    } else if (totalAverageScore >= 7) {
+                        ratingDescription = "很讚";
+                    } else if (totalAverageScore >= 5) {
+                        ratingDescription = "很好";
+                    } else if (totalAverageScore >= 3) {
+                        ratingDescription = "尚可";
+                    } else {
+                        ratingDescription = "低於預期";
+                    }
                 } else {
-                    ratingDescription = "低於預期";
+                    ratingDescription = "N/A";
                 }
 
                 console.log(`Hotel ID: ${hotelId}, Total Average Score: ${totalAverageScore}`); // 添加日志
@@ -705,45 +712,39 @@
                                                         </div>
                                                         <div class="col-lg-5 col-sm-10 hotel-details">
                                                             <h3>${hotelName}</h3>
-                                                            <p>${generateStars(levelStar)}級飯店</p>
+                                                            <p>${generateStars(levelStar)}</p>
                                                             <span style="color:blue">${hotelAddress}</span>
                                                             <h6>此住宿提供:</h6>
                                                             ${hotelEquipmentNames.map(name => `<h5 style="border: 1px solid black; display: inline-block;">${name}</h5>`).join('')}
                                                             <br>
                                                             <h6 style="color:green">${levelStar}星級飯店最優價</h6>
                                                             <h6 style="color:red">昨天起已收到${levelStar}張訂單</h6>
-                                                        </div>                                                        
-
-                                                                    <div class="col-lg-3 col-sm-12 hotel-pricing">
-                                                                        <div class="rating">
-                                                                            <div class="rating-text">
-                                                                                <span class="rating-count">很出色</span>
-                                                                                <span class="rating-count">2,446篇評鑑</span>
-                                                                            </div>
-                                                                            <span class="rating-score">${totalAverageScore}</span>
-                                                                        </div>
-                                                                        <br>
-                                                                        <h6 style="border: 1px solid red; display:inline-block; background-color: red; color:white">優惠只剩1間</h6>
-                                                                        <h6 style="color:gray">每晚價格(不連稅及其他費用)</h6>
-                                                                        <br><br>
-                                                                        <h3>NT$${hotelPrice}</h3>
-
-                                                                                     <div class="checkbox-container" >
-                                                                                                <div class="form-check" onclick="event.stopPropagation()">
-                                                                                                            <input class="form-check-input" type="checkbox" id="${hotelId}" data-hotel-id="${hotelId}">
-                                                                                                            <label class="form-check-label" for="${hotelId}">
-                                                                                                        比較
-                                                                                                    </label>
-                                                                                                </div>
-                                                                                                </div>
-                                                                    </div>
-
-                                                                </div>
-                                                                  </a>
-
-                                                                </div>
-                                                    </div>
-                                                `;
+                                                        </div>                                                       
+                                                        <div class="col-lg-3 col-sm-12 hotel-pricing">
+                                                            <div class="rating">
+                                                               <div class="rating-text">
+                                                                      <span class="rating-count">${ratingDescription}</span>
+                                                                      <span class="rating-count">${commentsCount}篇評鑑</span>
+                                                               </div>
+                                                               <span class="rating-score">${totalAverageScore}</span>
+                                                            </div>
+                                                            <br>
+                                                            <h6 style="border: 1px solid red; display:inline-block; background-color: red; color:white">優惠只剩${availableRooms}間</h6>
+                                                            <h6 style="color:gray">每晚價格(不連稅及其他費用)</h6>
+                                                            <br><br>
+                                                            <h3>NT$${hotelPrice}</h3>
+                                                            <div class="checkbox-container" >
+                                                                  <div class="form-check" onclick="event.stopPropagation()">
+                                                                      <input class="form-check-input" type="checkbox" id="${hotelId}" data-hotel-id="${hotelId}">
+                                                                      <label class="form-check-label" for="${hotelId}">比較</label>                                                                                                        
+                                                                 </div>
+                                                            </div>
+                                                       </div>
+                                                  </div>
+                                              </a>
+                                           </div>
+                                        </div>  
+                 `;
             }));
 
 
