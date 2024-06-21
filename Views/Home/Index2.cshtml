@@ -33,17 +33,17 @@
 
                 <!--//價格搜尋拉霸start-->
                 <div class="slider-container" style="margin: 10px">
-                    <div class="range-slider" id="rangeSlider" min="1" max="10000">
+                    <div class="range-slider" id="rangeSlider" min="1" max="1000000">
                         <div class="slider-handle lower-handle" id="lowerHandle"></div>
                         <div class="slider-handle upper-handle" id="upperHandle"></div>
                     </div>
                     <div class="label-container">
                         <span id="lowerLabel">下限：1</span>
-                        <span id="upperLabel">上限：10000</span>
+                        <span id="upperLabel">上限：1000000</span>
                     </div>
                     <div class="input-container">
                         <input type="number" id="lowerInput" value="1" style="margin-right: 10px;" class="no-spinner">
-                        <input type="number" id="upperInput" value="10000" class="no-spinner">
+                        <input type="number" id="upperInput" value="1000000" class="no-spinner">
                     </div>
                 </div>
                 <!--//價格搜尋拉霸end-->
@@ -308,7 +308,7 @@
             const searchHotelJson = sessionStorage.getItem("searchHotel");
             if (searchHotelJson) {
                 const searchHotel = JSON.parse(searchHotelJson);
-                // console.log(searchHotel);
+                console.log(searchHotel);
                 //解析並加載飯店資訊
                 await loadHotels(searchHotel);
             } else {
@@ -580,7 +580,7 @@
             }
             const data = await response.json();
 
-            console.log(`Hotel ID: ${hotelId}, Score Data: `, data); // 添加日志
+  
             return data.totalAverageScore.toFixed(1); // 确保这里使用的是 totalAverageScore，并格式化为小数点后一位
         }
 
@@ -592,7 +592,7 @@
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
-                console.log(data); // 確認返回的數據結構
+
                 return data.totalComments; // 確保返回的數據屬性名稱與後端一致
             } catch (error) {
                 console.error(`Error fetching comments count for hotel ID ${hotelId}:`, error);
@@ -679,9 +679,7 @@
                     ratingDescription = "低於預期";
                 }
 
-                console.log(`Hotel ID: ${hotelId}, Total Average Score: ${totalAverageScore}`); // 添加日志
-                console.log(`Hotel Images: ${hotelImages}`); // 調試輸出圖片 URL
-                console.log(`Comments Count: ${commentsCount}`); // 調試輸出評論數
+
 
                 const mainImage = hotelImages[0] ? `https://localhost:7284/image/${hotelImages[0]}` : '';
                 const smallImages = hotelImages.slice(1, 4).map(img => img ? `https://localhost:7284/image/${img}` : '');
@@ -767,7 +765,7 @@
             }
 
             function getImageUrl(imagePath) {
-                console.log(imagePath)
+
                 if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
                     return imagePath;
                 } else {
@@ -792,14 +790,14 @@
                 event.stopPropagation();
                 // 其他操作...
 
-                console.log('form check input clicked');
+
 
             });
 
 
             function updateUI() {
                 const compareDatas = buildCompareDatas();
-                console.warn(compareDatas);
+
 
                 const accordionContainer = document.querySelector('#collapseOne .card-body .row .col-9');
 
@@ -825,7 +823,7 @@
 
                 // 更新展開收合區塊中的照片容器
                 compareDatas.forEach(hotel => {
-                    console.log('hotel：', hotel)
+
 
                     // 0620 hotelImages !!!! 教官撈回來的data變成陣列了,且hotelImage改為hotelImages複數
                     const { hotelImages, hotelId } = hotel;
