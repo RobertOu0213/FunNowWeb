@@ -44,7 +44,7 @@
 
                 <div class="main-content">
 
-                    <div class="card mb-3 ms-3 " style="background-image: linear-gradient(to right, #028bf7, #bee1f7); display: block;" id="showName">
+                    <div class="card mb-3 ms-3 " style="background-image: linear-gradient(to right, #ff4a56, #faa100,#ffd539); display: block;" id="showName">
                         <div class="card-body " style="padding-bottom: 0px; display: flex; align-items: center;  ">
 
                             <div class="profileImgContainer">
@@ -57,12 +57,12 @@
                             <div style="width:650px">
                                 <div class="row">
                                     <h5 class="card-label mb-3" style="width:433px;">英文姓名</h5>
-                                    <button class="edit col-3 " style="padding-left:89px;background-color:transparent;" id="PhotoEditBtn" onclick="document.getElementById('imageUpload').click();">編輯圖片</button>
+                                    <button class="edit col-3 " style="padding-left:89px;background-color:transparent; " id="PhotoEditBtn" onclick="document.getElementById('imageUpload').click();">編輯圖片</button>
                                     <input type="file" id="imageUpload" style="display:none;" accept="image/*" />
                                 </div>
                                 <div class="row">
                                     <p class="card-textt col-8"><span id="memberName"></span></p>
-                                    <button class="edit col-3 " style="padding-left:76px;background-color:transparent;" id="NameEditBtn">編輯姓名</button>
+                                    <button class="edit col-3 " style="padding-left:75px;background-color:transparent;" id="NameEditBtn">編輯姓名</button>
                                 </div>
                             </div>
                         </div>
@@ -536,46 +536,45 @@
 
         //【一開始載入的時候出現會員資料】
         document.addEventListener("DOMContentLoaded", function () {
-
-            var googleMemberFirstName = '@googleMemberFirstName';
-            var googleMemberEmail = '@googleMemberEmail';
-            var googleMemberId = '@googleMemberId';
-            var memberID = '@memberID';
-
+            
             var memberNameElement = document.getElementById("memberName");
             var memberEmailElement = document.getElementById("memberEmail");
             var memberPhoneElement = document.getElementById("memberPhone");
             var memberPwdElement = document.getElementById("memberPwd");
             var pwdCardElement = document.getElementById("showPwd");
             var nameEditBtnElement = document.getElementById("NameEditBtn");
+  
+            var googleMemberId = '@googleMemberId';
+            var memberID = '@memberID';
 
+
+            if (googleMemberId) 
+            {
+                if (pwdCardElement) pwdCardElement.style.display = "none";
+                console.log("這是會員查詢資料:Google登入" + googleMemberId);
+            }
+
+            let LoginmemberID;
+            if (memberID) {
+                LoginmemberID = memberID;
+            } else {
+                LoginmemberID = googleMemberId;
+            }
 
             // 如果都沒有值，顯示未登入，基本上不會用到
-            if (!googleMemberId && !googleMemberFirstName && !memberID) {
+            if (!LoginmemberID) 
+            {
                 // 其他情況，如未登入或資料缺失
                 if (memberNameElement) memberNameElement.innerText = "尚未登入無法取得會員資料";
                 if (memberEmailElement) memberEmailElement.innerText = "尚未登入無法取得會員資料";
                 if (memberPhoneElement) memberPhoneElement.innerText = "尚未登入無法取得會員資料";
                 if (memberPwdElement) memberPwdElement.innerText = "尚未登入無法取得會員資料";
-
             }
-            // 判斷若有googlememberID，顯示googlemember內容
-            else if (googleMemberId && googleMemberFirstName) {
-                if (memberNameElement) memberNameElement.innerText = googleMemberFirstName;
-                if (memberEmailElement) memberEmailElement.innerText = googleMemberEmail;
-                if (memberPhoneElement) memberPhoneElement.innerText = "使用第三方登入者尚未設定手機號碼";
-                if (pwdCardElement) pwdCardElement.style.display = "none";
-                // if (nameEditBtnElement) {
-                //     nameEditBtnElement.innerText = "";
-                //     nameEditBtnElement.disabled = true;
-                // }
-                console.log("這是會員查詢資料:Google登入" + googleMemberId + googleMemberFirstName);
+            else 
+            {
+                fetchMemberData(LoginmemberID);
             }
-            // 若以上都沒有才顯示member內容
-            else if (memberID) {
-                fetchMemberData(memberID);
-            }
-
+            
         });
         async function fetchMemberData(memberID) {
             try {
@@ -598,8 +597,17 @@
                         }
                     }
 
+                    let lastName;
+                    if (data.lastName === null) {
+                        lastName = "";
+                    }
+                    else 
+                    {
+                        lastName = data.lastName;
+                    }
+
                     if (document.getElementById("memberName")) {
-                        document.getElementById("memberName").innerText = `${data.firstName}\xa0${data.lastName}`;
+                        document.getElementById("memberName").innerText = `${data.firstName}\xa0${lastName}`;
                     }
                     if (document.getElementById("memberEmail")) {
                         document.getElementById("memberEmail").innerText = data.email;
@@ -680,12 +688,20 @@
                         // 更新兩個圖片元素的 src
                         const profileImg = document.getElementById('profileImg');
                         const fullPreviewImg = document.getElementById('fullPreviewImg');
-                        if (profileImg) profileImg.src = data.imageUrl;
-                        if (fullPreviewImg) fullPreviewImg.src = data.imageUrl;
+                        
 
                         // 可選：強制瀏覽器重新載入圖片（避免快取）
-                        if (profileImg) profileImg.src = data.imageUrl + '?t=' + new Date().getTime();
-                        if (fullPreviewImg) fullPreviewImg.src = data.imageUrl + '?t=' + new Date().getTime();
+                        if (profileImg) 
+                        {
+                            console.log('Updating profileImg src');
+                            profileImg.src = data.imageUrl + '?t=' + new Date().getTime();
+                        }
+                            
+                        if (fullPreviewImg) 
+                        {
+                            console.log('Updating fullPreviewImg src');
+                            fullPreviewImg.src = data.imageUrl + '?t=' + new Date().getTime();
+                        }
                     }
                 } 
                 else 
