@@ -1,5 +1,8 @@
 ﻿@{
     ViewData["Title"] = "Customerservice";
+    var memberID = Context.Session.GetString("MemberID");
+    var googleMemberId = Context.Session.GetString("GoogleMemberID");
+    var displayMemberId = !string.IsNullOrEmpty(googleMemberId) ? googleMemberId : memberID;
 }
 
 <!DOCTYPE html>
@@ -111,9 +114,10 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.18/signalr.min.js"></script>
     <script>
+        var memberId = '@displayMemberId';
         document.addEventListener("DOMContentLoaded", function () {
             function generateUniqueId() {
-                return 'guest_' + Math.random().toString(36).substr(2, 9);
+                return 'guest'+ memberId +'_' + Math.random().toString(36).substr(2, 9);
             }
 
             const userId = generateUniqueId();
@@ -132,7 +136,7 @@
                 });
 
             connection.on("UpdSelfID", function (id) {
-                document.getElementById("SelfID").textContent = id;
+                document.getElementById("${memberId}").textContent = id;
             });
 
             connection.on("UpdContent", function (msg) {
@@ -159,8 +163,7 @@
                 const messageInput = document.getElementById("message");
                 const message = messageInput.value.trim();
                 if (message) {
-                    const selfID = document.getElementById("SelfID").textContent;
-                    connection.invoke("SendMessage", selfID, message, "客服人員").catch(err => {
+                    connection.invoke("SendMessage", userId, message, "客服人員").catch(err => {
                         console.error('發送錯誤: ' + err.toString());
                         alert('發送錯誤: ' + err.toString());
                     });
