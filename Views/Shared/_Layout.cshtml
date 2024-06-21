@@ -61,35 +61,191 @@
         .d-flex.align-items-center input {
             flex-grow: 1; /* 確保輸入框佔據剩餘空間 */
         }
-        .a.postt:hover 
+  
+
+  .navbar {
+    height: 70px;
+    padding: 0 15px;
+     box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 8px 2px;
+
+}
+
+.navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.navbar-logo {
+    height: 40px;
+    border-radius: 12px;
+}
+
+.nav-btn {
+    margin-right: 10px;
+    padding: 5px 10px;
+    border: 1px solid #fe4a55;
+    color: #fe4a55;
+    margin-top:8px;
+    font-size:14px;
+}
+
+            .nav-btn:hover
+            {
+                background-color: #fe4a55;
+                color:white;
+            }
+
+.nav-btn-primary 
+{
+    background-color: #00023c;
+    color: white;
+     margin-top: 8px;
+     border-color: #00023c;
+}
+
+            .nav-btn-primary:hover
+            {
+                background-color: white;
+                color: #00023c;
+                border-color: #00023c;
+            
+            }
+
+        .member-nav {
+            display: flex;
+            align-items: center;
+        }
+
+        .member-nav-item {
+            margin-right: 10px; /* 為每個元素添加右邊距 */
+        }
+
+            .member-nav-item:last-child {
+                margin-right: 0; /* 移除最後一個元素的右邊距 */
+            }
+.post-link {
+    color: #fe4a55;
+    border: 1px solid #fe4a55;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 14px;
+    white-space: nowrap; /* 防止文字換行 */
+}
+
+        .post-link:hover 
         {
             background-color: #fe4a55;
-            color: white ;
+            color:white;
         }
 
-        .NNavProfileImg 
-        {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin: 15px 0px 15px 10px;
+.fa-cart-shopping {
+    font-size: 24px;
+    color: #00023c;
+}
+
+        .cart-icon {
+            position: relative;
+            display: inline-block;
         }
 
-        .NNavLogoutButton 
-        {
+            .cart-icon i {
+                transition: opacity 0.3s ease;
+            }
+
+            .cart-icon::before {
+                content: "\f218"; /* fa-cart-arrow-down 的 Unicode */
+                font-family: "Font Awesome 5 Free";
+                font-weight: 900;
+                position: absolute;
+                top: 50%;
+                left: 60%;
+                transform: translate(-50%, -50%);
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                font-size: 24px;
+                color: #00023c;
+                margin-right:0px; 
+                padding-left:30px";
+            }
+
+            .cart-icon:hover i {
+                opacity: 0;
+            }
+
+            .cart-icon:hover::before {
+                opacity: 1;
+            }
+
+
+  
+.NNavProfileImg {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+   margin-right: 8px; /* 在圖像和文字之間添加一些間距 */
+
+}
+
+ 
+
+        .NNavLogoutButton {
+            white-space: nowrap; /* 防止文字換行 */
+            border: solid 1px #00013d;
+            border-radius:4px;
             background-color:transparent;
-            border: solid 1px #00013e;
-            border-radius:3px;
-            color: #00013e;
-            padding: 9px 15px 9px 15px;
-            font-size: 14px;
+            margin-top:10px;
+            font-size:14px;
+            padding:5px 10px 5px 10px;
         }
 
-        .NNavLogoutButton:hover 
-        {
-          background-color: #00013e;
-          color: white
+            .NNavLogoutButton:hover
+            {
+                background-color: #00013d;
+                color:white;
+            }
+
+        .dropdown-toggle.no-caret::after {
+            display: none;
         }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            white-space: nowrap; /* 防止文字換行 */
+        }
+
+        #NavMemberName 
+        {
+            overflow: hidden;
+            text-overflow: ellipsis; /* 如果文字太長，使用省略號 */
+            max-width: 150px; /* 設置最大寬度，根據需要調整 */
+            color: #00013d;
+        }
+
+   @@media (max-width: 991px) {
+    #MemberContent, #guestContent {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .nav-btn, .post-link {
+        margin-bottom: 10px;
+    }
+
+            .member-nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .member-nav-item {
+                margin-right: 0;
+                margin-bottom: 10px; /* 在垂直排列時添加底部邊距 */
+            }
+
+                .member-nav-item:last-child {
+                    margin-bottom: 0; /* 移除最後一個元素的底部邊距 */
+                }
+}
     </style>
 
 
@@ -102,79 +258,45 @@
     <header class="header_area">
         <!-- 導航欄 -->
         <div class="container-fluid" style="padding: 0;">
-            <nav class="navbar navbar-expand-lg navbar-light" style="height: 60px;">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <a class="navbar-brand logo_h" href="/home/index" style="padding:5px;">
-                    <img src="~/image/ming_img/newnewLogo.png" style="height: 40px; border-radius: 12px; margin-bottom:5px" />
-                </a>
-                <a class="btn btn-danger" href="/Member/Login">登入</a>
-                <div id="MemberContent" style=" display: none; padding-left:500px;">
-                    <ul class="nav navbar-nav menu_nav ml-auto">
-                        <li style="margin-top:27px">
-                            <a href="/HostManage/Home"
-                               style="color:#fe4a55; border:solid 1px #fe4a55; border-radius:4px; background-color:transparent; padding:13px; font-size:14px;"
-                               class="postt">刊登家中空房</a>
-                        </li>
-                        <li style="margin:0px;margin-top:27px; margin-left:20px;">
-                            <a href="/Cart/cartItems">
-                                <i class="fa-solid fa-cart-shopping" style="font-size: 24px; color:#00023c"></i>
-                            </a>
-                        </li>
+            <nav class="navbar navbar-expand-lg">
+                <div class="navbar-container d-flex justify-content-between align-items-center w-100">
+                    <!-- Logo -->
+                    <a class="navbar-brand logo_h" href="/home/index">
+                        <img src="~/image/ming_img/newnewLogo.png" alt="Logo" class="navbar-logo">
+                    </a>
 
-                        <li class="nav-item submenu dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                <img id="NNavProfileImg" class="NNavProfileImg" src="https://cdn2.ettoday.net/images/1457/d1457772.jpg" />
+                    <!-- Navbar content -->
+                    <div id="MemberContent" class="d-none align-items-center member-nav">
+                        <a href="/HostManage/Home" class="nav-item nav-link post-link member-nav-item" style="margin-right:0px"><i class="fa-solid fa-house" style="margin-right:3px"></i>刊登家中空房</a>
+                        <a href="/Cart/cartItems" class="nav-item nav-link member-nav-item cart-icon" style="margin-right:0px; padding-left:30px">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                        </a>
+                        <div class="nav-item dropdown member-nav-item">
+                            <a href="#" class="nav-link dropdown-toggle no-caret d-flex align-items-center" data-toggle="dropdown">
+                                <img id="NNavProfileImg" class="NNavProfileImg mr-2" src="https://cdn2.ettoday.net/images/1457/d1457772.jpg" alt="Profile">
+                                <span id="NavMemberName"></span>
                             </a>
-                            <ul class="dropdown-menu">
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-controller="OrderManagement" asp-action="Index">會員訂單</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/OrderManagement/HotelMessenge">住宿訊息</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-controller="HotelsFavorites" asp-action="HotelsFavoritesList">我的最愛</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Comment" asp-action="Angular_membercomment">評論</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-controller="MemberInformationn" asp-action="Memberinformationn">個人資料管理</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li style="margin-top:27px;margin-left:0px" id="NavMemberName"></li>
-                        <li><button class="btn NNavLogoutButton" style="margin-right:40px; margin-top:21px;" id="NNavLogoutButton">我要登出</button></li>
-                    </ul>
-                </div>
-                <div class="col-3" style=" margin-left: 5em;" id="guestContent" style=" display: none">
-                    <button class="btn" style="border:solid 1px #fe4a55; margin-right:1em; color:#fe4a55;" onclick="location.href='@Url.Action("Login", "Member")'">
-                        點我登入
-                    </button>
-                    <button class="btn" style="border:solid 1px #fe4a55; margin-right:1em; color:#fe4a55;" onclick="location.href='@Url.Action("Register", "Member")'">
-                        點我註冊
-                    </button>
-                    <button class="btn" style="background-color:#fe4a55;color:white; border:none;" onclick="location.href='@Url.Action("Index", "Home")'">
-                        先逛逛首頁
-                    </button>
-                </div>
-     @*            <div id="guestContent" style="display: none; margin-top:10px">
-                    <label>歡迎路過客～哎呀~我發現你還沒登入！！！ 趕緊 <a class="btn btn-danger"  href="/Member/Login">登入</a>來探索更多精彩內容!!!</label>
-                </div>
-                <div id="memberContent" style="display: none;">
-                    <label>歡迎我們尊貴的會員ID是<span id="memberId"></span>號的<span id="memberFirstName"></span>完成登入</label>
-                    <button id="logoutButton" class="btn btn-primary">登出</button>
-                </div> *@
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="/OrderManagement/Index">我的訂單</a>
+                                <a class="dropdown-item" href="/OrderManagement/HotelMessenge">我的訊息</a>
+                                <a class="dropdown-item" href="/HotelsFavorites/HotelsFavoritesList">我的最愛</a>
+                                <a class="dropdown-item" href="/Comment/Angular_membercomment">我的評論</a>
+                                <a class="dropdown-item" asp-controller="MemberInformationn" asp-action="Memberinformationn">個人資料管理</a>
+                            </div>
+                        </div>
+                        <button class="btn NNavLogoutButton member-nav-item" id="NNavLogoutButton">我要登出<i class="fa-solid fa-right-from-bracket" style="margin-left:5px"></i></button>
+                    </div>
 
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                
+                            <!-- Guest content -->
+                            <div id="guestContent" class="d-none align-items-center">
+                        <a href="@Url.Action("Login", "Member")" class="btn nav-btn"><i class="fa-solid fa-door-open" style="margin-right:3px"></i>我要登入</a>
+                        <a href="@Url.Action("Register", "Member")" class="btn nav-btn"><i class="fa-solid fa-address-card" style="margin-right:3px"></i>我是新朋友</a>
+                        <a href="@Url.Action("Index", "Home")" class="btn nav-btn nav-btn-primary">先逛逛首頁<i class="fa-solid fa-car-side" style="margin-left:5px"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </nav>
-           
         </div>
         <!-- Date picker and booking button 浮動訂房欄 -->
         <div class="container-fluid booking-area" style="background-color: #20274d; padding: 20px;">
@@ -344,79 +466,58 @@
     <script>
         //決定nav bar的會員資訊是否顯示
         document.addEventListener("DOMContentLoaded", function () {
-           
             var NavGoogleMemberId = '@googleMemberId';
             var NavMemberID = '@memberID';
-
             let NavLoginmemberID;
 
-            if (NavMemberID) 
-            {
+            if (NavMemberID) {
                 NavLoginmemberID = NavMemberID;
-            } 
-            else 
-            {
+            } else {
                 NavLoginmemberID = NavGoogleMemberId;
             }
 
-            // 如果都沒有登入
-            if (!NavLoginmemberID) 
-            {
-                if (document.getElementById("MemberContent") && document.getElementById("guestContent")) 
-                {
-                    document.getElementById("guestContent").style.display = "block";
+            const memberContent = document.getElementById("MemberContent");
+            const guestContent = document.getElementById("guestContent");
 
+            if (!NavLoginmemberID) {
+                // 未登入
+                if (guestContent) {
+                    guestContent.classList.remove('d-none');
+                    guestContent.classList.add('d-flex');
                 }
-            }
-            else//如果有登入
-            {
-                if (document.getElementById("MemberContent") && document.getElementById("guestContent")) 
-                {
-                    document.getElementById("MemberContent").style.display = "block";
+            } else {
+                // 已登入
+                if (memberContent) {
+                    memberContent.classList.remove('d-none');
+                    memberContent.classList.add('d-flex');
                     fetchMemberData(NavLoginmemberID);
                 }
-                    
             }
-
         });
 
         async function fetchMemberData(NavLoginmemberID) {
-               
             try {
                 const NavResponse = await fetch(`https://localhost:7103/api/Members/searchByID?ID=${NavLoginmemberID}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-
                 });
-                if (NavResponse.ok) 
-                {
-                    const NavData = await NavResponse.json(); // 將回應內容解析為 JSON
+                if (NavResponse.ok) {
+                    const NavData = await NavResponse.json();
+                    let NavLastName = NavData.lastName || "";
 
-                    let NavLastName;
-                    if (NavData.lastName === null) 
-                    {
-                        NavLastName = "";
-                    }
-                    else 
-                    {
-                        NavLastName = NavData.lastName;
+                    const navMemberName = document.getElementById("NavMemberName");
+                    if (navMemberName) {
+                        navMemberName.innerText = `${NavData.firstName}\xa0${NavLastName}`;
                     }
 
-                    if (document.getElementById("NavMemberName")) 
-                    {
-                        document.getElementById("NavMemberName").innerText = `${NavData.firstName}\xa0${NavLastName}`;
-                    }
-                    if (NavData.image && NavData.image !== null && NavData.image !== "") 
-                    {
+                    if (NavData.image) {
                         const NNavProfileImg = document.getElementById("NNavProfileImg");
                         if (NNavProfileImg) NNavProfileImg.src = NavData.image;
                     }
-
-                } else 
-                {
-                    const errorText = await response.text();
+                } else {
+                    const errorText = await NavResponse.text();
                     console.error('查詢失敗:', errorText);
                     alert('查詢失敗，請稍後再試');
                 }
@@ -425,7 +526,6 @@
                 alert(`發生錯誤，請稍後再試。錯誤信息: ${error.message}`);
             }
         }
-
 
         //點下登出按鈕，把session的資料清空，也把google登入的session清空
         document.getElementById("NNavLogoutButton").addEventListener("click", function () 

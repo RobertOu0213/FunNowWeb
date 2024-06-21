@@ -9,141 +9,142 @@
     
     @await RenderSectionAsync("Styles", required: false)
 
-
-
-<style>
-
-    nav 
-    {
-        display: flex;
-        align-items: center;
-        height: 4.5em;
-        box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 8px 2px;
-        background-color: #FFFFFF;
-        width: 100%;
-        font-family: Arial, sans-serif; /* 使用Arial字體 */
-    }
-
- 
-        nav.logo 
-        {
-            margin-left: 20em;
-            
+      <style>
+        .form-control, .btn {
+            margin-bottom: 10px;
         }
 
-            nav .logo img {
-                width: 15%;
-                margin-left: 3em;
-            }
-
-  
-       
-        
-
-  /*           nav .user-container button {
-                display: flex;
-                align-items: center;
-                border: 1px solid #ddd;
-                border-radius: 20px;
-                padding: 5px 10px;
-                background-color: white;
-                cursor: pointer;
-                font-size: 16px;
-                font-weight: bold;
-                color: black;
-            }
-
-                nav .user-container button .avatar {
-                    background-color: #7d4bcb;
-                    color: white;
-                    border-radius: 50%;
-                    width: 32px;
-                    height: 32px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 16px;
-                    margin-right: 10px;
-                }
-
-                nav .user-container button span {
-                    margin-right: 20px;
-                }
-
-                nav .user-container button i {
-                    color: black;
-                } */
-
-    /*     nav .modal {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            z-index: 1;
+        .d-flex.align-items-center label {
+            color: white;
+            margin-bottom: 0;
+            margin-right: 3px; /* 減少標籤與輸入框之間的間距 */
+            white-space: nowrap; /* 確保標籤不換行 */
         }
 
-            nav .modal .modal-content {
-                background-color: #fefefe;
-                margin-top: 10px;
-                padding: 20px;
-                border: 1px solid #888;
-                width: 100%;
-                max-width: 300px;
-                text-align: center;
-                border-radius: 10px;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        .d-flex.align-items-center input {
+            flex-grow: 1; /* 確保輸入框佔據剩餘空間 */
+        }
+
+        .navbar {
+            height: 70px;
+            padding: 0 15px;
+            box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 8px 2px;
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .navbar-logo {
+            height: 40px;
+            border-radius: 12px;
+        }
+
+        .nav-btn {
+            margin-right: 10px;
+            padding: 5px 10px;
+            border: 1px solid #fe4a55 !important;
+            color: #fe4a55 !important;
+            margin-top: 8px;
+            font-size: 14px !important;
+            text-decoration: none; /* 移除底線 */
+        }
+
+        .nav-btn:hover {
+            background-color: #fe4a55;
+            color: white!important;
+            text-decoration: none; /* 確保懸浮時不會出現底線 */
+        }
+
+        .nav-btn-primary {
+            background-color: #00023c !important;
+            color: white !important;
+            margin-top: 8px;
+            border-color: #00023c !important;
+            text-decoration: none; /* 移除底線 */
+        }
+
+        .nav-btn-primary:hover {
+            background-color: white !important;
+            color: #00023c !important;
+            border-color: #00023c !important;
+            text-decoration: none; /* 確保懸浮時不會出現底線 */
+        }
+
+        .member-nav {
+            display: flex;
+            align-items: center;
+        }
+
+        .member-nav-item {
+            margin-right: 10px; /* 為每個元素添加右邊距 */
+        }
+
+        .member-nav-item:last-child {
+            margin-right: 0; /* 移除最後一個元素的右邊距 */
+        }
+
+        .post-link {
+            color: #fe4a55;
+            border: 1px solid #fe4a55;
+            border-radius: 4px;
+            padding: 5px 10px;
+            font-size: 14px;
+            white-space: nowrap; /* 防止文字換行 */
+            text-decoration: none; /* 移除底線 */
+        }
+
+        .post-link:hover {
+            background-color: #fe4a55;
+            color: white;
+            text-decoration: none; /* 確保懸浮時不會出現底線 */
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            white-space: nowrap; /* 防止文字換行 */
+            text-decoration: none; /* 移除底線 */
+        }
+
+        #NavMemberName {
+            overflow: hidden;
+            text-overflow: ellipsis; /* 如果文字太長，使用省略號 */
+            max-width: 150px; /* 設置最大寬度，根據需要調整 */
+            color: #00013d;
+        }
+
+        @@media (max-width: 991px) {
+            #MemberContent, #guestContent {
+                flex-direction: column;
+                align-items: flex-start;
             }
-
-            nav .modal .logout-button {
-                background-color: #4CAF50;
-                color: white;
-                padding: 14px 20px;
-                margin: 8px 0;
-                border: none;
-                cursor: pointer;
-                width: 100%;
-                border-radius: 10px;
-            }
-
-                nav .modal .logout-button:hover {
-                    background-color: #45a049;
-                } */
-</style>
-
+        }
+    </style>
 </head>
+
 <body>
+    <div class="container-fluid" style="padding: 0;">
+        <nav class="navbar navbar-expand-lg">
+            <div class="navbar-container d-flex justify-content-between align-items-center w-100">
+                <!-- Logo -->
+                <a class="navbar-brand logo_h" href="/home/index">
+                    <img src="~/image/ming_img/newnewLogo.png" alt="Logo" class="navbar-logo">
+                </a>
 
-    @* 未登入nvabar *@
-    <nav>
-        <div class="logo col-8">
-            <img src="~/image/ming_img/newnewLogo.png" alt="LOGO">
-        </div>
-        <div class="col-3" style=" margin-left: 5em;">
-            <button class="btn" style="border:solid 1px #fe4a55; margin-right:1em; color:#fe4a55;" onclick="location.href='@Url.Action("Login", "Member")'">
-                點我登入
-            </button>
-            <button class="btn" style="border:solid 1px #fe4a55; margin-right:1em; color:#fe4a55;" onclick="location.href='@Url.Action("Register", "Member")'">
-                點我註冊
-            </button>
-            <button class="btn" style="background-color:#fe4a55;color:white; border:none;" onclick="location.href='@Url.Action("Index", "Home")'">
-                先逛逛首頁
-            </button>
-           
-        </div>
-
-        @*     <div id="modal" class="modal">
-        <div class="modal-content">
-        <button class="logout-button">登出</button>
-        </div>
-        </div> *@
-
-    </nav>
+                <!-- Guest content -->
+                <div id="guestContent" class="align-items-center">
+                    <a href="@Url.Action("Login", "Member")" class="btn nav-btn"><i class="fa-solid fa-door-open" style="margin-right:3px"></i>我要登入</a>
+                    <a href="@Url.Action("Register", "Member")" class="btn nav-btn"><i class="fa-solid fa-address-card" style="margin-right:3px"></i>我是新朋友</a>
+                    <a href="@Url.Action("Index", "Home")" class="btn nav-btn nav-btn-primary">先逛逛首頁<i class="fa-solid fa-car-side" style="margin-left:5px"></i></a>
+                </div>
+            </div>
+        </nav>
+    </div>
 
     @RenderBody()
     @await RenderSectionAsync("Scripts", required: false)
 
 </body>
-
-
 </html>
-

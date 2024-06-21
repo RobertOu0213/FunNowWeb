@@ -20,7 +20,7 @@ namespace PrjFunNowWeb.Controllers
 
         }
 
-        public IActionResult MemberInformationn()
+        public IActionResult Memberinformationn()
         {
             return View();
         }
