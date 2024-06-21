@@ -28,8 +28,7 @@ namespace PrjFunNowWeb.Controllers
         public IActionResult HostHotelsOdersList()
         {
 
-            // int memberId = (int)Client.Session.GetString("MemberID");         // TODO....  使用默认值0作为备选 等之後登入好了
-            //int memberId = 1;
+
             var userID = HttpContext.Session.GetString("MemberID");
             if (string.IsNullOrEmpty(userID))
             {
@@ -40,6 +39,21 @@ namespace PrjFunNowWeb.Controllers
                     return RedirectToAction("Login", "Member");
                 }
             }
+
+            var member = _context.Members
+               .Where(x => x.MemberId == Convert.ToInt32(userID))
+               .Select(x => new { x.MemberId, x.FirstName, x.LastName })
+               .FirstOrDefault();
+
+            if (member == null)
+            {
+                return NotFound("Member not found");
+            }
+
+            ViewBag.MemberID = member.MemberId;
+            ViewBag.FirstName = member.FirstName;
+            ViewBag.LastName = member.LastName;
+
 
             int memberIdValue = int.Parse(userID);
 
