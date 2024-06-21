@@ -3,5 +3,390 @@
     ViewData["Title"] = "Hoteldaily";
 }
 
-<h1>Hoteldaily</h1>
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agoda風格日曆</title>
+    <style>
+        body {
+            background-color: #f7f7f7;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+        }
+
+        .calendar-container {
+            flex: 2;
+            margin-right: 20px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+            .calendar-header select {
+                padding: 5px;
+                font-size: 16px;
+            }
+
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background-color: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+            .calendar div {
+                background-color: #fff;
+                padding: 10px;
+                text-align: center;
+            }
+
+                .calendar div.header {
+                    background-color: #f0f0f0;
+                    font-weight: bold;
+                }
+
+                .calendar div.available {
+                    cursor: pointer;
+                }
+
+                .calendar div.selected {
+                    background-color: #3581B8;
+                    color: #fff;
+                }
+
+        .price {
+            font-size: 12px;
+            color: #333;
+        }
+
+        .sidebar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+            .sidebar label {
+                margin-bottom: 10px;
+                font-weight: bold;
+            }
+
+            .sidebar input[type="text"],
+            .sidebar input[type="number"] {
+                padding: 5px;
+                font-size: 16px;
+                margin-bottom: 10px;
+                width: 100%;
+            }
+
+            .sidebar button {
+                padding: 10px;
+                font-size: 16px;
+                color: #fff;
+                background-color: #3581B8;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+        .chat-window {
+            position: fixed;
+            bottom: 0;
+            left: 20px;
+            width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 10px 10px 0 0;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-header {
+            padding: 10px;
+            background-color: #3581B8;
+            color: #fff;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-body {
+            padding: 10px;
+            height: 200px;
+            overflow-y: auto;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 10px;
+        }
+
+            .chat-input input[type="text"] {
+                flex: 1;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+            }
+
+            .chat-input button {
+                padding: 10px;
+                background-color: #3581B8;
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+                margin-left: 10px;
+                cursor: pointer;
+            }
+
+        .chat-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+            .chat-form label {
+                font-weight: bold;
+            }
+
+            .chat-form input[type="text"],
+            .chat-form input[type="email"] {
+                width: 100%;
+                padding: 8px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+            }
+
+            .chat-form textarea {
+                width: 100%;
+                padding: 8px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                resize: vertical;
+            }
+
+        #dateDetails.expanded .additional-fields {
+            display: block;
+        }
+
+        #dateDetails .additional-fields {
+            display: none;
+        }
+
+        .minimize-chat {
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <div>
+                    <label for="yearSelect">Year</label>
+                    <select id="yearSelect"></select>
+                    <label for="monthSelect">Month</label>
+                    <select id="monthSelect"></select>
+                </div>
+            </div>
+            <div class="calendar" id="calendar"></div>
+        </div>
+        <div class="sidebar">
+            <div id="dateDetails" style="display:none;">
+                <label for="selectedDate">Selected dates</label>
+                <input type="text" id="selectedDate" readonly>
+                <label for="availability">Availability</label>
+                <input type="radio" id="available" name="availability" value="available">
+                <label for="available">Available</label><br>
+                <input type="radio" id="blocked" name="availability" value="blocked">
+                <label for="blocked">Blocked</label><br>
+                <label for="price">What is the minimum price per night?</label>
+                <input type="number" id="price" value="200000" min="0">
+                <button id="discardBtn">Discard</button>
+                <button id="saveBtn">Save</button>
+            </div>
+        </div>
+    </div>
+    <div class="chat-window" id="chatWindow">
+        <divi class="chat-header">
+            <div class="fa-regular fa-comment-dots"></div>
+            Live Chat
+            <span class="minimize-chat" id="minimizeChat">-</span>
+        </divi>
+        <div class="chat-body" id="chatBody">
+            <form class="chat-form">
+                <label for="propertyName">Please let us know your Property name/ID in the message box below. Also if you have questions about bookings or payment, please include your Booking ID with your question before you begin your chat with us.</label>
+                <label for="name">姓名</label>
+                <input type="text" id="name" placeholder="您的姓名">
+                <label for="email">電子郵件</label>
+                <input type="email" id="email" placeholder="您的電子郵件">
+                <label for="query">What can we help you with?</label>
+                <textarea id="query" rows="3" placeholder="請輸入您的問題..."></textarea>
+            </form>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="chatInput" placeholder="訊息">
+            <button id="sendBtn">Send</button>
+        </div>
+    </div>
+    <script src="https://kit.fontawesome.com/091893cea4.js" crossorigin="anonymous"></script>
+    <script>
+        const yearSelect = document.getElementById("yearSelect");
+        const monthSelect = document.getElementById("monthSelect");
+        const calendar = document.getElementById("calendar");
+        const dateDetails = document.getElementById("dateDetails");
+        const selectedDateInput = document.getElementById("selectedDate");
+        const saveBtn = document.getElementById("saveBtn");
+        const discardBtn = document.getElementById("discardBtn");
+        const chatWindow = document.getElementById("chatWindow");
+        const minimizeChat = document.getElementById("minimizeChat");
+        const chatBody = document.getElementById("chatBody");
+        const chatInput = document.getElementById("chatInput");
+        const sendBtn = document.getElementById("sendBtn");
+
+        const currentYear = new Date().getFullYear();
+        const currentMonth = new Date().getMonth() + 1;
+        let selectedDate = null;
+
+        for (let i = currentYear - 5; i <= currentYear + 5; i++) {
+            const option = document.createElement("option");
+            option.value = i;
+            option.text = i;
+            if (i === currentYear) option.selected = true;
+            yearSelect.add(option);
+        }
+
+        for (let i = 1; i <= 12; i++) {
+            const option = document.createElement("option");
+            option.value = i;
+            option.text = i;
+            if (i === currentMonth) option.selected = true;
+            monthSelect.add(option);
+        }
+
+        function renderCalendar(year, month) {
+            const firstDayOfMonth = new Date(year, month - 1, 1).getDay();
+            const lastDateOfMonth = new Date(year, month, 0).getDate();
+            const lastDateOfPrevMonth = new Date(year, month - 1, 0).getDate();
+
+            calendar.innerHTML = "";
+            const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+            daysOfWeek.forEach(day => {
+                const div = document.createElement("div");
+                div.className = "header";
+                div.textContent = day;
+                calendar.appendChild(div);
+            });
+
+            for (let i = 0; i < firstDayOfMonth; i++) {
+                const div = document.createElement("div");
+                div.className = "not-current-month";
+                div.textContent = lastDateOfPrevMonth - firstDayOfMonth + i + 1;
+                calendar.appendChild(div);
+            }
+
+            for (let i = 1; i <= lastDateOfMonth; i++) {
+                const div = document.createElement("div");
+                div.className = "available";
+                div.textContent = i;
+                const price = document.createElement("div");
+                price.className = "price";
+                price.textContent = "TWD 200,000";
+                div.appendChild(price);
+                div.onclick = function () {
+                    if (selectedDate) {
+                        selectedDate.classList.remove("selected");
+                    }
+                    div.classList.add("selected");
+                    selectedDate = div;
+                    selectedDateInput.value = `${year}-${month}-${i}`;
+                    dateDetails.style.display = "block";
+                };
+                calendar.appendChild(div);
+            }
+        }
+
+        yearSelect.addEventListener("change", () => {
+            renderCalendar(yearSelect.value, monthSelect.value);
+        });
+
+        monthSelect.addEventListener("change", () => {
+            renderCalendar(yearSelect.value, monthSelect.value);
+        });
+
+        saveBtn.addEventListener("click", () => {
+            if (selectedDate) {
+                const availability = document.querySelector('input[name="availability"]:checked').value;
+                const price = document.getElementById("price").value;
+                alert(`Saved: ${selectedDateInput.value}, Availability: ${availability}, Price: TWD ${price}`);
+            } else {
+                alert("Please select a date.");
+            }
+        });
+
+        discardBtn.addEventListener("click", () => {
+            dateDetails.style.display = "none";
+        });
+
+        renderCalendar(currentYear, currentMonth);
+
+        minimizeChat.addEventListener("click", () => {
+            if (chatWindow.style.height === "30px") {
+                chatWindow.style.height = "300px";
+                chatBody.style.display = "block";
+                document.querySelector('.chat-input').style.display = "flex";
+                document.querySelector('.chat-form').style.display = "flex";
+                minimizeChat.textContent = "-";
+            } else {
+                chatWindow.style.height = "30px";
+                chatBody.style.display = "none";
+                document.querySelector('.chat-input').style.display = "none";
+                document.querySelector('.chat-form').style.display = "none";
+                minimizeChat.textContent = "+";
+            }
+        });
+
+        sendBtn.addEventListener("click", () => {
+            const message = chatInput.value.trim();
+            if (message) {
+                const div = document.createElement("div");
+                div.textContent = message;
+                chatBody.appendChild(div);
+                chatInput.value = "";
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }
+        });
+
+        chatInput.addEventListener("keypress", (event) => {
+            if (event.key === "Enter") {
+                sendBtn.click();
+            }
+        });
+    </script>
+</body>
+</html>
 
