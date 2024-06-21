@@ -715,25 +715,36 @@
                                     <h6 style="color:red">昨天起已收到${levelStar}張訂單</h6>
                                 </div>
 
-                                <div class="col-lg-3 col-sm-12 hotel-pricing">
-                                    <div class="rating">
-                                        <div class="rating-text">
-                                            <span class="rating-count">${ratingDescription}</span>
-                                            <span class="rating-count">${commentsCount}篇評鑑</span> <!-- 直接使用commentsCount -->
+                                            <div class="col-lg-3 col-sm-12 hotel-pricing">
+                                                <div class="rating">
+                                                    <div class="rating-text">
+                                                        <span class="rating-count">很出色</span>
+                                                        <span class="rating-count">2,446篇評鑑</span>
+                                                    </div>
+                                                    <span class="rating-score">${totalAverageScore}</span>
+                                                </div>
+                                                <br>
+                                                <h6 style="border: 1px solid red; display:inline-block; background-color: red; color:white">優惠只剩1間</h6>
+                                                <h6 style="color:gray">每晚價格(不連稅及其他費用)</h6>
+                                                <br><br>
+                                                <h3>NT$${hotelPrice}</h3>
+                                                <p>aaaaaaaaa</p>
+                                                             <div class="checkbox-container" >
+                                                                        <div class="form-check" onclick="event.stopPropagation()">
+                                                                                    <input class="form-check-input" type="checkbox" id="${hotelId}" data-hotel-id="${hotelId}">
+                                                                                    <label class="form-check-label" for="${hotelId}">
+                                                                                比較
+                                                                            </label>
+                                                                        </div>
+                                                                        </div>
+                                            </div>
+                                                      
                                         </div>
-                                        <span class="rating-score">${totalAverageScore}</span>
-                                    </div>
-                                    <br>
-                                            <h6 style="border: 1px solid red; display:inline-block; background-color: red; color:white">優惠只剩${availableRooms}間</h6>
-                                    <h6 style="color:gray">每晚價格(不連稅及其他費用)</h6>
-                                    <br><br>
-                                    <h3>NT$${hotelPrice}</h3>
-                                </div>
+                                          </a>
+                                             
+                                        </div>
                             </div>
-                        </a>
-                    </div>
-                </div>
-                `;
+                        `;
             }));
 
             divHotels.innerHTML = hotels.join("");
