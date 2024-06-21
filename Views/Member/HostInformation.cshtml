@@ -756,7 +756,15 @@
 
         document.getElementById("cancelBtn").addEventListener('click', async (evt) => {
             evt.preventDefault(); //防止預設行為的發生
-            
+            var googleMemberId = '@googleMemberId';
+            var memberID = '@memberID';
+
+            let LoginmemberID;
+            if (memberID) {
+                LoginmemberID = memberID;
+            } else {
+                LoginmemberID = googleMemberId;
+            }
             //重新載入一次資料庫原始的填寫會員資料
             fetchMemberData(LoginmemberID); //撈會員資料的功能
         });
