@@ -47,7 +47,6 @@
                     </div>
                 </div>
                 <!--//價格搜尋拉霸end-->
-
                 <!-- 住宿類型 -->
                 <div style="margin:20px 10px" class="form-check-container-hotel-type">
                     <p>住宿類型</p>
@@ -179,14 +178,14 @@
                     已選擇住宿 (n/5)
                 </button>
             </h2>
-            <div id="collapseOne" class="collapse" data-parent="#accordionExample" >
+            <div id="collapseOne" class="collapse" data-parent="#accordionExample">
                 <div class="card-body">
                     <div class="row d-flex flex-nowrap">
                         <div class="col-9 d-flex flex-nowrap">
                             <div class="image-container" style="position: relative; width: 200px; display: inline-block;">
-                                    <button type="button" class="close remove-image" style="position: absolute; z-index: 2; left: 80px; top: 5px;"><span aria-hidden="true">&times;</span></button>
-                                    <img src="~/image/julia/haiou.png" class="img-thumbnail float-left mx-1" style="position: relative; z-index: 1;" alt="房间图片">
-                                </div>     
+                                <button type="button" class="close remove-image" style="position: absolute; z-index: 2; left: 80px; top: 5px;"><span aria-hidden="true">&times;</span></button>
+                                <img src="~/image/julia/haiou.png" class="img-thumbnail float-left mx-1" style="position: relative; z-index: 1;" alt="房间图片">
+                            </div>
                         </div>
                         <div class="col-3 d-flex align-items-center mt-2">
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
@@ -311,7 +310,7 @@
                 const searchHotel = JSON.parse(searchHotelJson);
                 // console.log(searchHotel);
                 //解析並加載飯店資訊
-                await loadHotels(searchHotel); 
+                await loadHotels(searchHotel);
             } else {
                 console.log("searchHotel not found in sessionStorage");
             }
@@ -405,8 +404,8 @@
             // 初始化 lowerHandle 和 lowerLabel
             rangeSlider.lowerHandle.style.left = '0%';
             rangeSlider.lowerLabel.textContent = '下限：1';
-            rangeSlider.lowerInput.value = 1;        
-                        
+            rangeSlider.lowerInput.value = 1;
+
             // 綁定滑桿拖動事件
             [rangeSlider.lowerHandle, rangeSlider.upperHandle].forEach(handle => {
                 handle.addEventListener('mousedown', startDrag);
@@ -439,7 +438,7 @@
                 //event.clientX 是鼠標在頁面上的水平位置（X 坐標）  sliderRect.left 是滑桿左邊界在頁面上的水平位置（X 坐標）。
                 const value = Math.round(parseFloat(rangeSlider.slider.getAttribute('min')) + position * (parseFloat(rangeSlider.slider.getAttribute('max')) - parseFloat(rangeSlider.slider.getAttribute('min'))));
                 //(event.clientX - sliderRect.left) / sliderRect.width 計算鼠標在滑桿內的相對位置，範圍是 0 到 1 之間。當鼠標在滑桿最左端時，這個值為 0；當鼠標在滑桿最右端時，這個值為 1。
-                
+
                 // 防止下限超過上限或上限低於下限
                 if (handleType === 'lower' && value >= parseFloat(oppositeLabel.textContent.split('：')[1])) return;
                 if (handleType === 'upper' && value <= parseFloat(oppositeLabel.textContent.split('：')[1])) return;
@@ -688,67 +687,68 @@
                 const smallImages = hotelImages.slice(1, 4).map(img => img ? `https://localhost:7284/image/${img}` : '');
 
                 return `
-                <div class="col-lg-12 hotel-card" data-hotel-id="${hotelId}">
-                    <div class="row">
-                        <a href="https://localhost:7284/PgHotel/pgHotel/?hotelId=${hotelId}&checkInDate=${searchHotelForLouieee.checkInDate}&checkOutDate=${searchHotelForLouieee.checkOutDate}" class="col-lg-12 hotel-link">
-                            <div class="row">
-                                <div class="col-lg-4 col-sm-8 hotel-image-container" style="padding:0px">
-                                    <table>
-                                        <tr>
-                                            <td colspan="3" style="position: relative;">
-                                                <img src="${mainImage}" class="img-fluid" style="width:100%" />
-                                                <div class="favorite-icon-container">
-                                                    <i class="fa fa-heart favorite-icon" data-hotel-id="${hotelId}" onclick="toggleFavorite(event, ${hotelId})"></i>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            ${smallImages.map(img => `<td><img src="${img}" class="img-fluid" /></td>`).join('')}
-                                        </tr>
-                                    </table>
-                                </div>
-                                <div class="col-lg-5 col-sm-10 hotel-details">
-                                    <h3>${hotelName}</h3>
-                                    <p>${generateStars(levelStar)}級飯店</p>
-                                    <span style="color:blue">${hotelAddress}</span>
-                                    <h6>此住宿提供:</h6>
-                                    ${hotelEquipmentNames.map(name => `<h5 style="border: 1px solid black; display: inline-block;">${name}</h5>`).join('')}
-                                    <br>
-                                    <h6 style="color:green">${levelStar}星級飯店最優價</h6>
-                                    <h6 style="color:red">昨天起已收到${levelStar}張訂單</h6>
-                                </div>
+                                        <div class="col-lg-12 hotel-card" data-hotel-id="${hotelId}">
+                                            <div class="row">
+                                                <a href="https://localhost:7284/PgHotel/pgHotel/?hotelId=${hotelId}&checkInDate=${searchHotelForLouieee.checkInDate}&checkOutDate=${searchHotelForLouieee.checkOutDate}" class="col-lg-12 hotel-link">
+                                                    <div class="row">
+                                                        <div class="col-lg-4 col-sm-8 hotel-image-container" style="padding:0px">
+                                                            <table>
+                                                                <tr>
+                                                                    <td colspan="3" style="position: relative;">
+                                                                        <img src="${mainImage}" class="img-fluid" style="width:100%" />
+                                                                        <div class="favorite-icon-container">
+                                                                            <i class="fa fa-heart favorite-icon" data-hotel-id="${hotelId}" onclick="toggleFavorite(event, ${hotelId})"></i>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    ${smallImages.map(img => `<td><img src="${img}" class="img-fluid" /></td>`).join('')}
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                        <div class="col-lg-5 col-sm-10 hotel-details">
+                                                            <h3>${hotelName}</h3>
+                                                            <p>${generateStars(levelStar)}級飯店</p>
+                                                            <span style="color:blue">${hotelAddress}</span>
+                                                            <h6>此住宿提供:</h6>
+                                                            ${hotelEquipmentNames.map(name => `<h5 style="border: 1px solid black; display: inline-block;">${name}</h5>`).join('')}
+                                                            <br>
+                                                            <h6 style="color:green">${levelStar}星級飯店最優價</h6>
+                                                            <h6 style="color:red">昨天起已收到${levelStar}張訂單</h6>
+                                                        </div>                                                        
 
-                                            <div class="col-lg-3 col-sm-12 hotel-pricing">
-                                                <div class="rating">
-                                                    <div class="rating-text">
-                                                        <span class="rating-count">很出色</span>
-                                                        <span class="rating-count">2,446篇評鑑</span>
+                                                                    <div class="col-lg-3 col-sm-12 hotel-pricing">
+                                                                        <div class="rating">
+                                                                            <div class="rating-text">
+                                                                                <span class="rating-count">很出色</span>
+                                                                                <span class="rating-count">2,446篇評鑑</span>
+                                                                            </div>
+                                                                            <span class="rating-score">${totalAverageScore}</span>
+                                                                        </div>
+                                                                        <br>
+                                                                        <h6 style="border: 1px solid red; display:inline-block; background-color: red; color:white">優惠只剩1間</h6>
+                                                                        <h6 style="color:gray">每晚價格(不連稅及其他費用)</h6>
+                                                                        <br><br>
+                                                                        <h3>NT$${hotelPrice}</h3>
+
+                                                                                     <div class="checkbox-container" >
+                                                                                                <div class="form-check" onclick="event.stopPropagation()">
+                                                                                                            <input class="form-check-input" type="checkbox" id="${hotelId}" data-hotel-id="${hotelId}">
+                                                                                                            <label class="form-check-label" for="${hotelId}">
+                                                                                                        比較
+                                                                                                    </label>
+                                                                                                </div>
+                                                                                                </div>
+                                                                    </div>
+
+                                                                </div>
+                                                                  </a>
+
+                                                                </div>
                                                     </div>
-                                                    <span class="rating-score">${totalAverageScore}</span>
-                                                </div>
-                                                <br>
-                                                <h6 style="border: 1px solid red; display:inline-block; background-color: red; color:white">優惠只剩1間</h6>
-                                                <h6 style="color:gray">每晚價格(不連稅及其他費用)</h6>
-                                                <br><br>
-                                                <h3>NT$${hotelPrice}</h3>
-                                        
-                                                             <div class="checkbox-container" >
-                                                                        <div class="form-check" onclick="event.stopPropagation()">
-                                                                                    <input class="form-check-input" type="checkbox" id="${hotelId}" data-hotel-id="${hotelId}">
-                                                                                    <label class="form-check-label" for="${hotelId}">
-                                                                                比較
-                                                                            </label>
-                                                                        </div>
-                                                                        </div>
-                                            </div>
-                                                      
-                                        </div>
-                                          </a>
-                                             
-                                        </div>
-                            </div>
-                        `;
+                                                `;
             }));
+
 
             divHotels.innerHTML = hotels.join("");
 
@@ -812,9 +812,9 @@
                 } else {
                     Accordion.style.display = 'none';
                 }
-              
 
-       
+
+
                 // 清空之前的內容
                 accordionContainer.innerHTML = '';
                 document.querySelector('#myModal .table tbody').innerHTML = '';
@@ -934,10 +934,10 @@
 
 
 
-        
 
 
-    
+
+
 
 
 
@@ -990,6 +990,8 @@
             }
         }
     </script>
+
+
     <script>
         // 解決 checkbox 內容太長的問題
         document.addEventListener("DOMContentLoaded", function () {
@@ -1006,14 +1008,14 @@
             });
         });
     </script>
-  
+
 
 }
 
 @section Styles {
     @* 價格搜尋拉霸設定 *@
     <style>
-         
+
         .slider-container {
             display: flex;
             flex-direction: column;
@@ -1056,7 +1058,7 @@
 
     </style>
     @* 主搜尋欄的下拉式選單 *@
-    <style>     
+    <style>
         .navbar {
             display: flex;
             border: 1px solid #ddd;
@@ -1185,7 +1187,7 @@
 
     </style>
     @* 點擊旅館的效果 *@
-    <style>        
+    <style>
         .col-lg-4.col-sm-8 {
             height: 280px; /* 設置一個固定的高度，可根據需要調整 */
             padding: 0;
@@ -1227,7 +1229,6 @@
         .hotel-details {
             border: 1px solid #FCFCFC;
             border-right: 2px solid #F0F0F0;
-
             background-color: #fff; /* 初始背景為白色 */
             padding: 5px; /* 增加內邊距 */
             flex: 2; /* 設置 flex 屬性 */
@@ -1251,34 +1252,34 @@
     </style>
     @* index2跳轉至PGHotel專用 *@
     <style>
-        
+
         a.hotel-link {
             text-decoration: none;
             color: inherit;
         }
 
-        a.hotel-link:hover {
-            text-decoration: none;
-            color: inherit;
-        }
+            a.hotel-link:hover {
+                text-decoration: none;
+                color: inherit;
+            }
 
-        a.hotel-link:active {
-            text-decoration: none;
-            color: inherit;
-        }
+            a.hotel-link:active {
+                text-decoration: none;
+                color: inherit;
+            }
 
-        a.hotel-link:visited {
-            text-decoration: none;
-            color: inherit;
-        }
+            a.hotel-link:visited {
+                text-decoration: none;
+                color: inherit;
+            }
     </style>
     @* 廣告區 *@
     <style>
-        
+
         .ad-container {
             position: fixed;
-            right: 50px;  /* //距離頁面右側的位置 */
-            top: 49%;    /* //圖片位於頁面的高度 */
+            right: 50px; /* //距離頁面右側的位置 */
+            top: 49%; /* //圖片位於頁面的高度 */
             transform: translateY(-50%);
             width: 320px;
             z-index: 1000;
@@ -1294,7 +1295,7 @@
     </style>
     @* 我的最愛 星星 *@
     <style>
-        
+
         .hotel-card {
             margin-bottom: 10px;
             border: 1px solid #ddd;
@@ -1342,7 +1343,7 @@
         }
     </style>
     @* 評分表 *@
-    <style>        
+    <style>
         .rating {
             display: flex;
             align-items: center;
@@ -1374,8 +1375,8 @@
 
     @*     ============Accordion搬過來的CSS ==============*@
 
-<style>
-    
+    <style>
+
         .form-check-input {
             z-index: 999;
         }
@@ -1391,16 +1392,16 @@
             width: 200px; /* 根据需要调整宽度 */
         }
 
-        .image-container img {
-            height: 100%; /* 根据需要调整高度 */
-            width: 100%;
-            object-fit: cover; /* 使图片保持原始比例并裁剪以填充容器 */
-        }
+            .image-container img {
+                height: 100%; /* 根据需要调整高度 */
+                width: 100%;
+                object-fit: cover; /* 使图片保持原始比例并裁剪以填充容器 */
+            }
 
         .remove-image {
-          /*   position: relative;
-            top: 10px;
-            right: 10px; */
+            /*   position: relative;
+                    top: 10px;
+                    right: 10px; */
             position: absolute;
             z-index: 2;
             left: 80px;
@@ -1432,7 +1433,7 @@
             width: 50%;
             display: flex;
             flex-direction: column;
-            z-index:999;
+            z-index: 999;
         }
 
         .collapsible {
