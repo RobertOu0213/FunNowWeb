@@ -2,13 +2,21 @@
 @model int *@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var MemberID = Context.Session.GetString("MemberID");
+
 }
 
 @section Styles {
     <style>
 
+        #favoriteListdiv {
+            margin-top: 150px; /* 向下移动150 像素 */
+            margin-bottom: 300px;
+        }
+
+
         .container {
-            width: 80%;
+            width: 100%;
             margin-top: 50px;
         }
 
@@ -19,6 +27,8 @@
             min-width: 300px; /* 设置一个最小宽度 */
             height: 280px; /* 統一卡片高度 */
             margin-top: 25px;
+            margin-left: 15px;
+            margin-right: 15px;
         
         }
 
@@ -47,7 +57,7 @@
 
         /* 覆蓋超連結的預設樣式，使用更具体的选择器和 !important 确保应用 */
         .card a, .card a:hover, .card a:visited {
-            text-decoration: none !important; /* 移除超連結的下劃線 */
+           /* text-decoration: none !important; */         /* 移除超連結的下劃線 */
             color: inherit !important; /* 保持文字顏色與卡片一致 */
         }
 
@@ -59,7 +69,7 @@
 }
 
 
-<div class="container" id="div1">
+<div class="container" id="favoriteListdiv">
     <div class="container">
         <h3>口袋清單</h3>
         <h6 id="totalCities">n個城市清單</h6>
@@ -76,7 +86,10 @@
 @section Scripts {
     <script>
 
-        
+
+        const MemberID = '@MemberID';  // 使用单引号来确保 JavaScript 将其识别为字符串
+        console.log("============" + MemberID);
+
 
         const errorMessageContainer = document.querySelector('#errorMessageContainer');
         const hotelsContainer = document.querySelector('#hotelsContainer');
@@ -84,9 +97,9 @@
        /*  const memberId = getCurrentUserId(); */ // 獲取當前登入用戶的 ID
         // const memberId = @Model; // 從視圖模型獲取會員ID
 
-        const memberId = 1;   //先寫死
+        //const memberId = 1;   //先寫死
 
-          const url = `https://localhost:7103/api/HotelsFavorite/`+`${memberId}/FavoriteHotels`;
+        const url = `https://localhost:7103/api/HotelsFavorite/` + `${MemberID}/FavoriteHotels`;
        // const url = `https://localhost:7103/api/HotelsFavorite/1/FavoriteHotels`;
        
     
@@ -108,17 +121,18 @@
 
                     /* 點擊卡片會轉向到這個Controller/Action  =>   HotelsFavorites/HotelsFavoritesListToCity*/
                     return( `
-                    <a href="/HotelsFavorites/HotelsFavoritesListToCity?memberId=${memberId}&city=${city}&country=${country}"> 
-                            <div class="col-md-4">
-                                <div class="card">
+                                                <div class="col">
+                                        <div class="card ">
+                                                      <a href="/HotelsFavorites/HotelsFavoritesListToCity?memberId=${MemberID}&city=${city}&country=${country}">
                                                     <img src="${HotelImage}"  class="card-img-top" alt="${city}">
                                     <div class="card-body">
                                         <h5 class="card-title">${city}, ${country}</h5>
                                         <p class="card-text">${hotelCount} 間住宿</p>
                                     </div>
+                                                  </a>
                                 </div>
-                            </div>
-                            </a>
+                                 </div>
+                      
                         `)
                 });
 
