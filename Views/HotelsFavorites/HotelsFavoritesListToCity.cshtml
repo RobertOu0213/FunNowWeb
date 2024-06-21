@@ -8,6 +8,20 @@
 @section Styles {
     <style>
 
+        .rating-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .score {
+            flex-grow: 1;
+        }
+
+        .comment-count {
+            white-space: nowrap;
+        }
+
         #div1 {
             margin-top: 150px; /* 向下移动150 像素 */
             margin-bottom: 500px;
@@ -145,18 +159,20 @@
                 console.log(data);
 
                 const hotels = data.map(hotel => {
-                    const { hotelId, hotelImage, hotelName, city, country, levelStar, Rating,minimumPrice } = hotel;
+                    const { hotelId, hotelImage, hotelName, city, country, levelStar, rating, totalComments, minimumPrice } = hotel;
 
                     // 解析rating字符串以获取JSON对象   //rating 欄位是一個JSON字串，你需要使用 JSON.parse() 將這個字串轉換成JavaScript物件。
                     const ratingObj = JSON.parse(hotel.rating);
+                    const totalcommentsObj = JSON.parse(hotel.totalComments);
 
                     // 现在可以访问averageScore和totalAverageScore
                     const totalAverageScore = ratingObj.totalAverageScore;
                     const formattedScore = parseFloat(totalAverageScore.toFixed(1));
 
+                    // 现在可以访问total總則數
+                    const total = totalcommentsObj.total;
+
                     const averageScore = ratingObj.averageScore;
-
-
                     console.log("Total Average Score:", totalAverageScore);
                     console.log("formattedScore:", formattedScore);
 
@@ -189,7 +205,10 @@
                                             <h5 class="card-title">${hotelName}</h5>
                                             <p class="card-text">${city}, ${country}</p>
                                             <p>${generateStars(levelStar)}</p>
-                                                          <p class="card-text"> ${formattedScore} ${ratingDescription} </p>
+              <p class="card-text rating-info">
+            <span class="score">${formattedScore} ${ratingDescription}</span>
+            <span class="comment-count">${total} 則評論</span>
+            </p>
                                             <p class="price">$${minimumPrice} </p>
                                         </div>
                                               </a>

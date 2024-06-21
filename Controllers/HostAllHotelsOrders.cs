@@ -30,7 +30,7 @@ namespace PrjFunNowWeb.Controllers
 
             // int memberId = (int)Client.Session.GetString("MemberID");         // TODO....  使用默认值0作为备选 等之後登入好了
             //int memberId = 1;
-            var memberId = HttpContext.Session.GetString("MemberId");
+            var memberId = HttpContext.Session.GetString("MemberID");
             if (string.IsNullOrEmpty(memberId))
             {
                 // 處理 MemberId 為 null 或空字符串的情況
