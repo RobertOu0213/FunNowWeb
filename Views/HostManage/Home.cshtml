@@ -54,6 +54,7 @@
             let isReviewStr = "";
             filteredData.forEach(item => {
                 let hotelInfoUrl = baseUrl + '/' + item.hotelId;
+                let hotelDailyUrl = '/HotelMan/Hoteldaily' + '/' + item.hotelId;
 
                 let imageUrl;
                 if (item.hotelImage.startsWith('http') || item.hotelImage.startsWith('https')) {
@@ -89,7 +90,7 @@
                                     編輯物業
                                 </div>
                             </a>
-                            <a href="#"  class="${linkClass}" aria-disabled="${ariaDisabled}">
+                                <a href="${hotelDailyUrl}"  class="${linkClass}" aria-disabled="${ariaDisabled}">
                                 <div>
                                     行事曆
                                 </div>

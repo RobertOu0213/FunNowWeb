@@ -20,6 +20,7 @@
             var actionValue = ViewContext.RouteData.Values["action"];
             action = actionValue != null ? actionValue.ToString() : string.Empty;
         }
+        var hotelId = ViewData["HotelId"]; // 或者使用 ViewBag.HotelId
     }
 
 
@@ -83,12 +84,12 @@
                     </div>
                 </div>
                 <div class="d-flex align-items-center ms-3 hotelCard__connect">
-                    <a href="@Url.Action("HostHotelInfo", "HostManage")" class="">
+                    <a href="@Url.Action("HostHotelInfo", "HostManage", new { id = hotelId })" class="">
                         <div>
                             編輯物業
                         </div>
                     </a>
-                    <a href="#" class="">
+                    <a href="@Url.Action("Hoteldaily", "HotelMan", new { id = hotelId })" class="">
                         <div>
                             行事曆
                         </div>
@@ -103,21 +104,20 @@
         </div>
         <div class="d-flex">
             <aside class="left-section">
-                <div class="left-section-items">
-              
-                    <a href="@Url.Action("HostHotelInfo", "HostManage",new { id = Model.HotelId })" class="@(action == "HostHotelInfo" ? "active" : "")">
+                <div class="left-section-items" id="hoteledititems" style="@(ViewBag.HideHotelEditItems ?? false ? "display:none;" : "")">
+                    <a href="@Url.Action("HostHotelInfo", "HostManage", new { id = Model.HotelId })" class="@(action == "HostHotelInfo" ? "active" : "")">
                         <div>編輯旅館基本資料</div>
                     </a>
-                    <a href="@Url.Action("HostRoomUpdate", "HostManage",new { id = Model.HotelId })" class="@(action == "HostRoomUpdate" ? "active" : "")">
+                    <a href="@Url.Action("HostRoomUpdate", "HostManage", new { id = Model.HotelId })" class="@(action == "HostRoomUpdate" ? "active" : "")">
                         <div>編輯房間基本資料</div>
-                    </a>             
-                    <a href="@Url.Action("HostHotelPhoto", "HostManage",new { id = Model.HotelId })" class="@(action == "HostHotelPhoto" ? "active" : "")">
+                    </a>
+                    <a href="@Url.Action("HostHotelPhoto", "HostManage", new { id = Model.HotelId })" class="@(action == "HostHotelPhoto" ? "active" : "")">
                         <div>編輯旅館照片</div>
                     </a>
-                    <a href="@Url.Action("HostRoomImageUpdate", "HostManage",new { id = Model.HotelId })" class="@(action == "HostRoomImageUpdate" ? "active" : "")">
+                    <a href="@Url.Action("HostRoomImageUpdate", "HostManage", new { id = Model.HotelId })" class="@(action == "HostRoomImageUpdate" ? "active" : "")">
                         <div>編輯房間照片</div>
                     </a>
-                    <a href="@Url.Action("HostRoomCreate", "HostManage",new { id = Model.HotelId })" class="@(action == "HostRoomCreate" ? "active" : "")">
+                    <a href="@Url.Action("HostRoomCreate", "HostManage", new { id = Model.HotelId })" class="@(action == "HostRoomCreate" ? "active" : "")">
                         <div>新增房間</div>
                     </a>
                 </div>

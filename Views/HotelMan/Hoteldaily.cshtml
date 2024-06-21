@@ -1,6 +1,10 @@
 ﻿
 @{
+    ViewData["HotelId"] = Model.HotelId;
     ViewData["Title"] = "Hoteldaily";
+    Layout = "_Layout_HotelUpdate";
+
+
 }
 
 <!DOCTYPE html>
@@ -232,11 +236,11 @@
         </div>
     </div>
     <div class="chat-window" id="chatWindow">
-        <divi class="chat-header">
+        <div class="chat-header">
             <div class="fa-regular fa-comment-dots"></div>
             Live Chat
             <span class="minimize-chat" id="minimizeChat">-</span>
-        </divi>
+        </div>
         <div class="chat-body" id="chatBody">
             <form class="chat-form">
                 <label for="propertyName">Please let us know your Property name/ID in the message box below. Also if you have questions about bookings or payment, please include your Booking ID with your question before you begin your chat with us.</label>
