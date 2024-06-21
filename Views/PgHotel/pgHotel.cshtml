@@ -183,7 +183,7 @@
             </div>
             @*飯店彈出視窗*@
             <div class="modal fade" id="hotelModal" tabindex="-1" aria-labelledby="hotelModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
+                <div class="modal-dialog modal-xl">
                     <div class="modal-content">
                         <div class="modal-header">
                             <ul class="nav nav-underline">
@@ -200,7 +200,7 @@
                                     foreach (var category in categories)
                                     {
                                         var categoryName = category.First().ImageCategoryName;
-                                        <li class="nav-item">
+                                        <li class="nav-item" style="cursor:pointer;">
                                             <a class="nav-link hotel-modal-nav-link" onclick="smoothScroll('category-@category.Key')">@categoryName</a>
                                         </li>
                                     }
@@ -270,7 +270,6 @@
                         </div>
                         <div class="modal-footer d-flex justify-content-end align-items-center">
                             <h3 class="mb-0">TWD @(Model.HotelDetail.AverageRoomPrice.ToString("F2"))</h3>
-                            <button class="btn btn-primary btn-lg ml-3">查看房型</button>
                         </div>
                     </div>
                 </div>
@@ -295,7 +294,7 @@
                 </li>
             </ul>
 
-            @*房型區--自動生成*@
+            @*房型區--自動生成--*@
             <div class="container mt-5 pt-5" id="room-types" data-id="{}">
                 <h2>所有房型</h2>
                 @if (Model.HotelDetail.Rooms != null && Model.HotelDetail.Rooms.Any())
@@ -367,13 +366,11 @@
                                             <div style="margin-left: auto;">
                                                 @if (room.IsBooked)
                                                 {
-                                                    <button class="btn btn-outline-primary btn-lg addCart" data-id="@room.RoomId" disabled>加入購物車</button>
-                                                    <button class="btn btn-primary btn-lg directBuy" data-roomid="" disabled>立即下訂</button>
+                                                    <button class="btn btn-primary btn-lg addCart" data-id="@room.RoomId" disabled>加入購物車</button>
                                                 }
                                                 else
                                                 {
-                                                    <button class="btn btn-outline-primary btn-lg addCart" data-id="@room.RoomId">加入購物車</button>
-                                                    <button class="btn btn-primary btn-lg directBuy" data-roomid="">立即下訂</button>
+                                                    <button class="btn btn-primary btn-lg addCart" data-id="@room.RoomId">加入購物車</button>
                                                 }
                                             </div>
                                         </td>
@@ -399,7 +396,7 @@
 
             @*房間彈出視窗*@
             <div class="modal fade" id="roomModal" tabindex="-1" aria-labelledby="roomModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
+                <div class="modal-dialog modal-xl">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -410,8 +407,8 @@
                                     <!-- 這裡放房間圖片 -->
                                 </div>
                                 <div class="col-2">
-                                    <h2 id="room-name"></h2>
-                                    <h3>房間設備</h3>
+                                    <h3 id="room-name"></h3>
+                                    <h4>房間設備</h4>
                                     <div id="room-equipments" class="d-flex flex-column">
                                         <!-- 動態添加設備 -->
                                     </div>
@@ -420,12 +417,8 @@
                         </div>
                         <div class="modal-footer">
                             <div class="row w-100">
-                                <div class="col-9 text-end">
+                                <div class="text-end">
                                     <h3 id="room-price"></h3>
-                                </div>
-                                <div class="col-3 text-end">
-                                    <button class="btn btn-outline-primary btn-lg">加入購物車</button>
-                                    <button class="btn btn-primary btn-lg">立即下訂</button>
                                 </div>
                             </div>
                         </div>
