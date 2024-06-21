@@ -477,12 +477,10 @@
 
         // 取得今天的日期
         const today = new Date();
-        today.setHours(0, 0, 0, 0); // 設定時間為當天的0點0分0秒，避免時間因素影響
 
         // 取得明天的日期
-        const tomorrow = new Date();
+        const tomorrow = new Date(today);
         tomorrow.setDate(today.getDate() + 1);
-        tomorrow.setHours(0, 0, 0, 0);
 
         const formatDate = (date) => {
             return date.toISOString().split('T')[0];
@@ -505,16 +503,13 @@
             }
         });
 
-        // 頁面加載完成後設置預設日期
+        // 页面加载完成后设置默认日期
         document.addEventListener('DOMContentLoaded', function () {
             const startDateInput = document.getElementById('myDatepickerstart');
             const endDateInput = document.getElementById('myDatepickerend');
-            if (!startDateInput.value) {
-                startDateInput.value = formatDate(today);// 如果起始日期輸入框為空，設置為今天
-            }
-            if (!endDateInput.value) {
-                endDateInput.value = formatDate(tomorrow);
-            }
+
+            startDateInput.value = formatDate(today);  // 设置为今天
+            endDateInput.value = formatDate(tomorrow); // 设置为明天
         });
     </script>
 
