@@ -1305,13 +1305,13 @@
             const numOfSlides = slides.length; // 獲取卡片組數
 
         document.addEventListener('DOMContentLoaded', function () {
-            const hotelId = 2; // Replace with actual hotel ID
+                var hotelId = @Model.HotelDetail.HotelID;
             fetchComments(hotelId);
             fetchAverageData(hotelId);
             fetchScoresData(hotelId);
         });
             function fetchComments(hotelId) {
-                fetch(`https://localhost:7103/api/Comment/${hotelId}/ForHotelComment`)
+                fetch(`https://localhost:7103/api/Comment/$${hotelId}/ForHotelComment`)
                     .then(response => response.json())
                     .then(data => {
                         console.log('Comments Data:', data);
@@ -1322,7 +1322,7 @@
                     .catch(error => console.error('Error fetching comments:', error));
             }
         function fetchAverageData(hotelId) {
-            fetch(`https://localhost:7103/api/Comment/AverageRatingText/${hotelId}`)
+                fetch(`https://localhost:7103/api/Comment/AverageRatingText/${hotelId}`)
                 .then(response => response.json())
                 .then(data => {
                     console.log('Average Data:', data);
@@ -1332,7 +1332,7 @@
         }
 
         function fetchScoresData(hotelId) {
-            fetch(`https://localhost:7103/api/Comment/${hotelId}/AverageScores`)
+                fetch(`https://localhost:7103/api/Comment/${hotelId}/AverageScores`)
                 .then(response => response.json())
                 .then(data => {
                     console.log('Scores Data:', data);
@@ -1476,7 +1476,7 @@
             
     </script>
     @*亭蓉angular*@
-        <script src="~/dist/fun-now-angular1/main.bc83e24830b7f525.js"></script>
+        <script src="~/dist/fun-now-angular1/main.e88583051d71fbb6.js"></script>
         <script src="~/dist/fun-now-angular1/polyfills.b6cd8ceb7f42859a.js"></script>
         <script src="~/dist/fun-now-angular1/runtime.38416f8cc614bfd6.js"></script>
         <script src="~/dist/fun-now-angular1/scripts.6fe6725b87f2ceac.js"></script>
