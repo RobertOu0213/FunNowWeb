@@ -43,6 +43,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\dist\" />
+    <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
