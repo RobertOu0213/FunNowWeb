@@ -20,5 +20,9 @@ namespace PrjFunNowWeb.Controllers
         {
             return View();
         }
+        public IActionResult guest()
+        {
+            return View();
+        }
     }
 }
