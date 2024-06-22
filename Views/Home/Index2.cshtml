@@ -2,7 +2,13 @@
 @{
     ViewData["Title"] = "Home Page2";
     Layout = "_Layout_index2";
-  
+
+    var memberID = Context.Session.GetString("MemberID");
+    var googleMemberId = Context.Session.GetString("GoogleMemberID");
+    var displayMemberId = !string.IsNullOrEmpty(googleMemberId) ? googleMemberId : memberID;
+
+    var memberInfo = Context.Session.GetString("MemberInfo");
+    var memberInfoJson = memberInfo != null ? JsonSerializer.Serialize(memberInfo) : "null";
 }
 
 <br />
@@ -15,7 +21,7 @@
                 <!-- 左側篩選條件區域 -->
                 <div>
                     <a class="book_now_btn button_hover" href="#">
-                        <img src="~/image/ming_img/map.png" alt="">
+                        <img src="~/image/ming_img/map.png" alt="" style="height:80px;width:auto">
                     </a>
                 </div>
 
@@ -27,21 +33,20 @@
 
                 <!--//價格搜尋拉霸start-->
                 <div class="slider-container" style="margin: 10px">
-                    <div class="range-slider" id="rangeSlider" min="1" max="10000">
+                    <div class="range-slider" id="rangeSlider" min="1" max="1000000">
                         <div class="slider-handle lower-handle" id="lowerHandle"></div>
                         <div class="slider-handle upper-handle" id="upperHandle"></div>
                     </div>
                     <div class="label-container">
                         <span id="lowerLabel">下限：1</span>
-                        <span id="upperLabel">上限：10000</span>
+                        <span id="upperLabel">上限：1000000</span>
                     </div>
                     <div class="input-container">
                         <input type="number" id="lowerInput" value="1" style="margin-right: 10px;" class="no-spinner">
-                        <input type="number" id="upperInput" value="10000" class="no-spinner">
+                        <input type="number" id="upperInput" value="1000000" class="no-spinner">
                     </div>
                 </div>
                 <!--//價格搜尋拉霸end-->
-
                 <!-- 住宿類型 -->
                 <div style="margin:20px 10px" class="form-check-container-hotel-type">
                     <p>住宿類型</p>
@@ -131,6 +136,7 @@
 
 <!-- 右側動態廣告區域 -->
 <div class="ad-container">
+    <!-- 設置輪播 -->
     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
             <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -138,6 +144,7 @@
             <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
         </ol>
         <div class="carousel-inner">
+            <!-- 第一組輪播項，默認激活 -->
             <div class="carousel-item active">
                 <img src="~/image/ming_img/排球少年1.jfif" class="d-block w-100" alt="Ad Image 1">
                 <img src="~/image/ming_img/排球少年2.jfif" class="d-block w-100 mt-2" alt="Ad Image 2">
@@ -171,14 +178,14 @@
                     已選擇住宿 (n/5)
                 </button>
             </h2>
-            <div id="collapseOne" class="collapse" data-parent="#accordionExample" >
+            <div id="collapseOne" class="collapse" data-parent="#accordionExample">
                 <div class="card-body">
                     <div class="row d-flex flex-nowrap">
                         <div class="col-9 d-flex flex-nowrap">
                             <div class="image-container" style="position: relative; width: 200px; display: inline-block;">
-                                    <button type="button" class="close remove-image" style="position: absolute; z-index: 2; left: 80px; top: 5px;"><span aria-hidden="true">&times;</span></button>
-                                    <img src="~/image/julia/haiou.png" class="img-thumbnail float-left mx-1" style="position: relative; z-index: 1;" alt="房间图片">
-                                </div>     
+                                <button type="button" class="close remove-image" style="position: absolute; z-index: 2; left: 80px; top: 5px;"><span aria-hidden="true">&times;</span></button>
+                                <img src="~/image/julia/haiou.png" class="img-thumbnail float-left mx-1" style="position: relative; z-index: 1;" alt="房间图片">
+                            </div>
                         </div>
                         <div class="col-3 d-flex align-items-center mt-2">
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
@@ -286,18 +293,42 @@
 
     <script>
 
+        //產生漂亮星星
+        const generateStars = (stars) => {
+            let starsHtml = '';
+            for (let i = 0; i < stars; i++) {
+                starsHtml += '<i class="fa-solid fa-star"></i>';
+            }
+            return starsHtml;
+        };
 
         document.addEventListener("DOMContentLoaded", async function () {
+            //DOMContentLoaded 事件：這個事件在初始的 HTML 文檔被完全加載和解析後觸發，不必等待樣式表、圖像和子框架的完全加載。
             // 網頁加載完成後自動加載儲存在 sessionStorage 的 searchHotel 資訊
             const searchHotelJson = sessionStorage.getItem("searchHotel");
             if (searchHotelJson) {
                 const searchHotel = JSON.parse(searchHotelJson);
-                // console.log(searchHotel);
+                console.log(searchHotel);
                 //解析並加載飯店資訊
-                await loadHotels(searchHotel); 
+                await loadHotels(searchHotel);
             } else {
                 console.log("searchHotel not found in sessionStorage");
             }
+
+            // 加載已喜歡的飯店 ID
+            const memberId = '@displayMemberId'; // 取得實際的會員ID
+            window.memberId = memberId; // 確保在其他函數中可以訪問 memberId
+            const likedHotels = await getLikedHotels(memberId);
+
+            // 根據已喜歡的飯店 ID 設置紅色愛心
+            const favoriteIcons = document.querySelectorAll(".favorite-icon");
+            favoriteIcons.forEach(icon => {
+                const hotelId = icon.getAttribute("data-hotel-id");
+                if (likedHotels.includes(parseInt(hotelId))) {
+                    icon.classList.add("liked");
+                }
+            });
+
 
             // 監聽提交按鈕，獲取輸入值並發送請求
             const btnSubmit3 = document.querySelector("#buttonSubmit3");
@@ -327,11 +358,13 @@
 
             //所有指定容器內的複選框添加 change 事件監聽器，當複選框的狀態改變時，
             //觸發 updateSearchFilters 函數以更新搜尋條件並重新加載飯店資訊
-            containerSelectors.forEach(selector => {
+            containerSelectors.forEach(selector => { //遍歷 containerSelectors 數組，對每個選擇器進行以下操作
                 document.querySelectorAll(`${selector} input[type="checkbox"]`).forEach(checkbox => {
                     checkbox.addEventListener('change', updateSearchFilters);
-                });
+                });//對每個容器選擇器，選取該容器內的所有複選框，添加 change 事件監聽器
             });
+
+
 
             // 綁定排序按鈕的點擊事件
             const sortButtons = {
@@ -347,13 +380,15 @@
             // 觸發 handleSort 函數以設定排序方式並重新加載飯店資訊
             Object.keys(sortButtons).forEach(id => {
                 document.querySelector(`#${id}`).addEventListener("click", () => handleSort(...sortButtons[id]));
+                //...為使用展開運算符（Spread Operator）將數組 sortButtons[id] 展開為單獨的參數，傳遞給 handleSort 函數。
+                //例如，對於 sortBtn，sortButtons["sortBtn"] 是 ["HotelId", "asc"]，所以實際調用為 handleSort("HotelId", "asc")
             });
 
             // 設定 upperHandle 初始位置在滑動條的尾端
             const rangeSlider = {
-                lowerHandle: document.getElementById('lowerHandle'),
+                lowerHandle: document.getElementById('lowerHandle'),//滑桿的下限手柄
                 upperHandle: document.getElementById('upperHandle'),
-                slider: document.getElementById('rangeSlider'),
+                slider: document.getElementById('rangeSlider'),//滑桿的主體
                 lowerLabel: document.getElementById('lowerLabel'),
                 upperLabel: document.getElementById('upperLabel'),
                 lowerInput: document.getElementById('lowerInput'),
@@ -361,7 +396,7 @@
             };
 
             const max = parseFloat(rangeSlider.slider.getAttribute('max'));
-            const position = 100; // 百分比位置
+            const position = 100; // 百分比位置（100% 表示滑桿的最右端）
             rangeSlider.upperHandle.style.left = `${position}%`;
             rangeSlider.upperLabel.textContent = `上限：${max}`;
             rangeSlider.upperInput.value = max;
@@ -369,45 +404,51 @@
             // 初始化 lowerHandle 和 lowerLabel
             rangeSlider.lowerHandle.style.left = '0%';
             rangeSlider.lowerLabel.textContent = '下限：1';
-            rangeSlider.lowerInput.value = 1;        
-                        
+            rangeSlider.lowerInput.value = 1;
+
             // 綁定滑桿拖動事件
             [rangeSlider.lowerHandle, rangeSlider.upperHandle].forEach(handle => {
                 handle.addEventListener('mousedown', startDrag);
+                //當手柄被按下（按下滑鼠 事件）時，觸發 startDrag 函數，開始拖動手柄。
             });
 
-            let isDragging = false;
-            let currentHandle = null;
+            let isDragging = false;  //表示是否正在拖動手柄
+            let currentHandle = null; //存儲當前正在拖動的手柄。
 
             // 開始拖動的處理函數
             function startDrag(event) {
                 isDragging = true;
-                currentHandle = event.target;
-                document.addEventListener('mousemove', handleDrag);
-                document.addEventListener('mouseup', stopDrag);
+                currentHandle = event.target; //設置為當前被按下的手柄
+                document.addEventListener('mousemove', handleDrag);//當鼠標移動（mousemove 事件）時
+                document.addEventListener('mouseup', stopDrag);//當鼠標按鍵釋放（mouseup 事件）時
             }
 
             // 處理拖動邏輯的函數
             function handleDrag(event) {
-                if (!isDragging) return;
+                if (!isDragging) return;//如果 isDragging 為 false，則直接返回，不進行後續操作。這樣可以避免在未拖動時誤觸發拖動邏輯
 
                 const handleType = currentHandle === rangeSlider.lowerHandle ? 'lower' : 'upper';
+                //如果 currentHandle 等於 rangeSlider.lowerHandle，則 handleType 設為 'lower'，否則設為 'upper'。
                 const { handle, label, oppositeLabel, lowerInput, upperInput } = handleType === 'lower' ?
                     { handle: rangeSlider.lowerHandle, label: rangeSlider.lowerLabel, oppositeLabel: rangeSlider.upperLabel, lowerInput: rangeSlider.lowerInput, upperInput: rangeSlider.upperInput } :
                     { handle: rangeSlider.upperHandle, label: rangeSlider.upperLabel, oppositeLabel: rangeSlider.lowerLabel, lowerInput: rangeSlider.lowerInput, upperInput: rangeSlider.upperInput };
 
-                const sliderRect = rangeSlider.slider.getBoundingClientRect();
+                const sliderRect = rangeSlider.slider.getBoundingClientRect();  //獲取滑桿的邊界矩形，用於計算手柄位置
                 const position = Math.min(1, Math.max(0, (event.clientX - sliderRect.left) / sliderRect.width));
+                //event.clientX 是鼠標在頁面上的水平位置（X 坐標）  sliderRect.left 是滑桿左邊界在頁面上的水平位置（X 坐標）。
                 const value = Math.round(parseFloat(rangeSlider.slider.getAttribute('min')) + position * (parseFloat(rangeSlider.slider.getAttribute('max')) - parseFloat(rangeSlider.slider.getAttribute('min'))));
+                //(event.clientX - sliderRect.left) / sliderRect.width 計算鼠標在滑桿內的相對位置，範圍是 0 到 1 之間。當鼠標在滑桿最左端時，這個值為 0；當鼠標在滑桿最右端時，這個值為 1。
 
                 // 防止下限超過上限或上限低於下限
                 if (handleType === 'lower' && value >= parseFloat(oppositeLabel.textContent.split('：')[1])) return;
                 if (handleType === 'upper' && value <= parseFloat(oppositeLabel.textContent.split('：')[1])) return;
+                //split('：')[1] 的作用是將字符串根據特定的分隔符進行分割，並提取分割後的第二部分。在這個上下文中，分隔符是 ：（中文冒號），目的是提取數值部分。
 
                 handle.style.left = `${position * 100}%`;
                 label.textContent = `${handleType === 'lower' ? '下限' : '上限'}：${value}`;
                 handleType === 'lower' ? lowerInput.value = value : upperInput.value = value;
                 updateHotels(parseFloat(rangeSlider.lowerInput.value), parseFloat(rangeSlider.upperInput.value));
+                //調用 updateHotels 函數，更新酒店列表。
             }
 
             // 停止拖動的處理函數
@@ -419,23 +460,47 @@
             }
         });
 
+        // 新增取得已喜歡的飯店 ID 的函數
+        async function getLikedHotels(memberId) {
+            try {
+                const response = await fetch(`https://localhost:7103/api/HotelSearch/likedHotels/${memberId}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch liked hotels');
+                }
+                const likedHotelIds = await response.json();
+                return likedHotelIds;
+            } catch (error) {
+                console.error('Error fetching liked hotels:', error);
+                return [];
+            }
+        }
+
+
         // 檢查所有選中的 checkbox 並返回其值的列表
         function getSelectedCheckboxes(containerSelector) {
             const checkboxes = document.querySelectorAll(`${containerSelector} input[type="checkbox"]:checked`);
             return Array.from(checkboxes).map(checkbox => parseInt(checkbox.value)); // 確保值是數字類型
+            //Array.from(checkboxes)：將 NodeList 轉換為數組，這樣可以使用數組的方法。
         }
 
         // 更新搜尋篩選條件並加載飯店
         async function updateSearchFilters() {
             const searchHotelJson = sessionStorage.getItem('searchHotel');
+            //從 sessionStorage 取得儲存的搜尋飯店條件，並存儲在 searchHotelJson 變數中。
             if (searchHotelJson) {
                 const searchHotel = JSON.parse(searchHotelJson);
                 searchHotel.hotelTypes = getSelectedCheckboxes('.form-check-container-hotel-type');
+                //hotelTypes 是 searchHotel 對象中的一個屬性，用於存儲選中的飯店類型。這些類型通常是從頁面上的多選框（checkboxes）中選取的。
                 searchHotel.hotelEquipments = getSelectedCheckboxes('.form-check-container-hotel-equipment');
                 searchHotel.cities = getSelectedCheckboxes('.form-check-container-city');
                 searchHotel.roomEquipments = getSelectedCheckboxes('.form-check-container-room-equipment');
                 sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel));
                 await loadHotels(searchHotel);
+                //這兩行代碼的目的是將更新後的搜尋條件儲存在 sessionStorage 中，並使用這些條件來加載飯店資料。以下是詳細說明：
+                //sessionStorage：這是一個 Web 存儲 API，允許你在用戶瀏覽器的會話期間儲存資料。不同於 localStorage，sessionStorage 中的資料在關閉瀏覽器窗口後會被清除。
+                //setItem方法：這個方法用來將資料儲存到 sessionStorage 中。它接受兩個參數：鍵名（key）和要儲存的值（value）。
+                //JSON.stringify：這個方法將 JavaScript 對象轉換為 JSON 字符串。這樣可以將複雜的對象結構儲存在 sessionStorage 中。
+
             } else {
                 console.log('searchHotel not found in sessionStorage');
             }
@@ -515,15 +580,32 @@
             }
             const data = await response.json();
 
-            console.log(`Hotel ID: ${hotelId}, Score Data: `, data); // 添加日志
+  
             return data.totalAverageScore.toFixed(1); // 确保这里使用的是 totalAverageScore，并格式化为小数点后一位
         }
+
+        // 從後端 API 獲取指定 hotelId 的評論數和最新評論
+        async function getHotelCommentsCount(hotelId) {
+            try {
+                const response = await fetch(`https://localhost:7103/api/Comment/${hotelId}/ForHotelComment`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+
+                return data.totalComments; // 確保返回的數據屬性名稱與後端一致
+            } catch (error) {
+                console.error(`Error fetching comments count for hotel ID ${hotelId}:`, error);
+                return "N/A"; // 如果获取评论数失败，显示N/A
+            }
+        }
+
 
 
         // 从 sessionStorage 获取搜索条件(by louieee)-------------------------------------------------
         // => 扣louieee Controller, 把session的入駐日跟退訂日以query string傳過去
         function getSearchHotel() {
-            const searchHotelForLouieee = JSON.parse(sessionStorage.getItem("searchHotel"));
+            const searchHotelForLouieee = JSON.parse(sessionStorage.getItem("searchHotel"));//從瀏覽器的會話存儲中檢索先前保存的搜索條件
             return searchHotelForLouieee;
         }
         // // 在 JavaScript 中加密查询字符串(by louieee)--------------------------------------------------
@@ -540,14 +622,13 @@
         // }
 
 
-
         // 加載飯店的函數
         //異步函數，接受一個包含搜尋條件的 searchHotel 物件作為參數
         async function loadHotels(searchHotel) {
             const url = "https://localhost:7103/api/HotelSearch/indexsearch";
             const response = await fetch(url, {
                 method: "POST",
-                body: JSON.stringify(searchHotel),
+                body: JSON.stringify(searchHotel),//將 searchHotel 物件轉換為 JSON 字符串，作為請求的主體。
                 headers: { "Content-Type": "application/json" },
             });
             const data = await response.json();
@@ -563,12 +644,14 @@
             // const encryptedCheckInDate = encryptData(searchHotelForLouieee.checkInDate, secretKey);
             // const encryptedCheckOutDate = encryptData(searchHotelForLouieee.checkOutDate, secretKey);
 
-            console.log(data);
+
             // 生成並顯示飯店信息
-          
-            const hotels = await Promise.all(data.map(async hotel => {
-                const { hotelId, hotelName, hotelAddress, hotelImages, levelStar, hotelEquipmentNames, hotelPrice } = hotel;
+            const hotels = await Promise.all(data.map(async hotel => {  //Promise.all：確保所有異步操作完成後才繼續執行後續代碼。
+
+                const { hotelId, hotelName, hotelAddress, hotelImages, levelStar, hotelEquipmentNames, hotelPrice, availableRooms } = hotel;
                 let totalAverageScore;
+                let commentsCount;
+
                 try {
                     totalAverageScore = await getHotelScore(hotelId);
                 } catch (error) {
@@ -576,41 +659,61 @@
                     totalAverageScore = "N/A"; // 如果获取评分失败，显示N/A
                 }
 
-                console.log(`Hotel ID: ${hotelId}, Total Average Score: ${totalAverageScore}`); // 添加日志
-                console.log(`Hotel Images: ${hotelImages}`); // 調試輸出圖片 URL
+                try {
+                    commentsCount = await getHotelCommentsCount(hotelId);
+                } catch (error) {
+                    console.error(`Error fetching comments count for hotel ID ${hotelId}:`, error);
+                    commentsCount = "N/A"; // 如果获取评论数失败，显示N/A
+                }
+
+                let ratingDescription;
+                if (totalAverageScore >= 9) {
+                    ratingDescription = "超讚";
+                } else if (totalAverageScore >= 7) {
+                    ratingDescription = "很讚";
+                } else if (totalAverageScore >= 5) {
+                    ratingDescription = "很好";
+                } else if (totalAverageScore >= 3) {
+                    ratingDescription = "尚可";
+                } else {
+                    ratingDescription = "低於預期";
+                }
+
+
 
                 const mainImage = hotelImages[0] ? `https://localhost:7284/image/${hotelImages[0]}` : '';
                 const smallImages = hotelImages.slice(1, 4).map(img => img ? `https://localhost:7284/image/${img}` : '');
 
                 return `
-                            <div class="col-lg-12 hotel-card" data-hotel-id="${hotelId}">
-                                <div class="row">
-                                    <a href="https://localhost:7284/PgHotel/pgHotel/?hotelId=${hotel.hotelId}&checkInDate=${searchHotelForLouieee.checkInDate}&checkOutDate=${searchHotelForLouieee.checkOutDate}" class="col-lg-12 hotel-link">
-                                        <div class="row">
-                                            <div class="col-lg-4 col-sm-8 hotel-image-container" style="padding:0px">
-                                                <table>
-                                                    <tr>
-                                                        <td colspan="3" style="position: relative;">
-                                                            <img src="${mainImage}" class="img-fluid" style="width:100%" />
-                                                            <div class="favorite-icon-container">
-                                                                <i class="fa fa-heart favorite-icon" data-hotel-id="${hotelId}" onclick="toggleFavorite(event, ${hotelId})"></i>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        ${smallImages.map(img => `<td><img src="${img}" class="img-fluid" /></td>`).join('')}
-                                                    </tr>
-                                                </table>
-                                            </div>
-                                            <div class="col-lg-5 col-sm-10 hotel-details">
-                                                <h3>${hotelName}</h3>
-                                                <span>${levelStar}星級飯店 </span><span style="color:blue">${hotelAddress}</span>
-                                                <h6>此住宿提供:</h6>
-                                                ${hotelEquipmentNames.map(name => `<h5 style="border: 1px solid black; display: inline-block;">${name}</h5>`).join('')}
-                                                <br>
-                                                <h6 style="color:green">${levelStar}星級飯店最優價</h6>
-                                                <h6 style="color:red">昨天起已收到${levelStar}張訂單</h6>
-                                            </div>
+                                        <div class="col-lg-12 hotel-card" data-hotel-id="${hotelId}">
+                                            <div class="row">
+                                                <a href="https://localhost:7284/PgHotel/pgHotel/?hotelId=${hotelId}&checkInDate=${searchHotelForLouieee.checkInDate}&checkOutDate=${searchHotelForLouieee.checkOutDate}" class="col-lg-12 hotel-link">
+                                                    <div class="row">
+                                                        <div class="col-lg-4 col-sm-8 hotel-image-container" style="padding:0px">
+                                                            <table>
+                                                                <tr>
+                                                                    <td colspan="3" style="position: relative;">
+                                                                        <img src="${mainImage}" class="img-fluid" style="width:100%" />
+                                                                        <div class="favorite-icon-container">
+                                                                            <i class="fa fa-heart favorite-icon" data-hotel-id="${hotelId}" onclick="toggleFavorite(event, ${hotelId})"></i>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    ${smallImages.map(img => `<td><img src="${img}" class="img-fluid" /></td>`).join('')}
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                        <div class="col-lg-5 col-sm-10 hotel-details">
+                                                            <h3>${hotelName}</h3>
+                                                            <p>${generateStars(levelStar)}級飯店</p>
+                                                            <span style="color:blue">${hotelAddress}</span>
+                                                            <h6>此住宿提供:</h6>
+                                                            ${hotelEquipmentNames.map(name => `<h5 style="border: 1px solid black; display: inline-block;">${name}</h5>`).join('')}
+                                                            <br>
+                                                            <h6 style="color:green">${levelStar}星級飯店最優價</h6>
+                                                            <h6 style="color:red">昨天起已收到${levelStar}張訂單</h6>
+                                                        </div>                                                        
 
                                             <div class="col-lg-3 col-sm-12 hotel-pricing">
                                                 <div class="rating">
@@ -644,7 +747,10 @@
                         `;
             }));
 
+
             divHotels.innerHTML = hotels.join("");
+
+
 
             //被打勾的checkbox,產生新的compareDatas [ ] ,compareDatas [ ]裡的每個元素都是一間飯店資訊,去生成展開收合區塊中的照片容器、Modal的表格行
             function buildCompareDatas() {
@@ -659,7 +765,7 @@
             }
 
             function getImageUrl(imagePath) {
-                console.log(imagePath)
+
                 if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
                     return imagePath;
                 } else {
@@ -667,15 +773,6 @@
                 }
             }
 
-            //根據傳入的星級數 stars 生成對應數量的星級 HTML 標記。
-            //初始化一個空字串 starsHtml
-            const generateStars = (stars) => {
-                let starsHtml = '';
-                for (let i = 0; i < stars; i++) {
-                    starsHtml += '<i class="fa-solid fa-star"></i>';
-                }
-                return starsHtml;
-            };
 
             //獲取所有具有 .form-check-input 類別的 checkbox 元素。對每個 checkbox 元素註冊一個 change 事件監聽器。
             //checkbox 的勾選狀態發生變化時,就會觸發 updateUI 函式的執行。
@@ -693,14 +790,14 @@
                 event.stopPropagation();
                 // 其他操作...
 
-                console.log('form check input clicked');
+
 
             });
 
 
             function updateUI() {
                 const compareDatas = buildCompareDatas();
-                console.warn(compareDatas);
+
 
                 const accordionContainer = document.querySelector('#collapseOne .card-body .row .col-9');
 
@@ -713,9 +810,9 @@
                 } else {
                     Accordion.style.display = 'none';
                 }
-              
 
-       
+
+
                 // 清空之前的內容
                 accordionContainer.innerHTML = '';
                 document.querySelector('#myModal .table tbody').innerHTML = '';
@@ -726,7 +823,7 @@
 
                 // 更新展開收合區塊中的照片容器
                 compareDatas.forEach(hotel => {
-                    console.log('hotel：', hotel)
+
 
                     // 0620 hotelImages !!!! 教官撈回來的data變成陣列了,且hotelImage改為hotelImages複數
                     const { hotelImages, hotelId } = hotel;
@@ -802,7 +899,7 @@
                         <button type="button" class="btn btn-primary view-hotel">查看飯店</button>
                     </td>
 
-                `;
+                    `;
                     document.querySelector('#myModal .table tbody').appendChild(row);
 
 
@@ -816,12 +913,29 @@
                         updateUI();
                     });
 
+                    // 首先，從 sessionStorage 中讀取 'searchHotel' 的 JSON 字串
+                    const searchHotel = sessionStorage.getItem('searchHotel');
+                    let checkInDate = '';
+                    let checkOutDate = '';
+
+                    // 確保存儲的數據存在
+                    if (searchHotel) {
+                        // 將 JSON 字串轉換為 JavaScript 物件
+                        const searchHotelData = JSON.parse(searchHotel);
+
+                        // 從物件中獲取 checkInDate 和 checkOutDate
+                        checkInDate = searchHotelData.checkInDate;
+                        checkOutDate = searchHotelData.checkOutDate;
+
+                    }
+
                     // 為新生成的 view-hotel 按鈕添加事件監聽器
                     const viewHotelButton = row.querySelector('.view-hotel');
                     viewHotelButton.addEventListener('click', () => {
                         // 導航到相應的飯店頁面
-                        const hotelUrl = `/PgHotel/pgHotel/?hotelId=${hotelId}&checkInDate=2024-06-28&checkOutDate=2024-06-29`;
-                        window.location.href = hotelUrl;
+                      //  const hotelUrl = `/PgHotel/pgHotel/?hotelId=${hotelId}&checkInDate=2024-06-28&checkOutDate=2024-06-29`;
+                      //  window.location.href = hotelUrl;
+                        window.location.href = `${window.location.origin}/PgHotel/pgHotel/?hotelId=${hotelId}&checkInDate=${checkInDate}&checkOutDate=${checkOutDate}`;
                     });
 
 
@@ -831,21 +945,31 @@
 
         }
 
-        console.warn("1233333333333333");
 
 
 
-        
 
 
-    
+
+
+
 
 
 
         // 切換最愛狀態的函數
         async function toggleFavorite(event, hotelId) {
+            const displayMemberId = '@displayMemberId';
+
             event.stopPropagation();  // 防止點擊事件傳遞到其他元素
             event.preventDefault();   // 阻止默認的跳轉行為
+
+
+            if (!displayMemberId) {
+                window.location.href = window.location.origin + '/Member/Login';
+                return;
+            }
+   
+
             const icon = event.currentTarget;
             const isLiked = icon.classList.toggle("liked");
 
@@ -854,7 +978,7 @@
                 method: "POST",
                 body: JSON.stringify({
                     HotelId: hotelId,
-                    MemberId: 1,  // 這裡應該替換為實際的會員ID
+                    MemberId: window.memberId,  // 這裡應該替換為實際的會員ID
                     LikeStatus: isLiked
                 }),
                 headers: { "Content-Type": "application/json" },
@@ -899,14 +1023,14 @@
             });
         });
     </script>
-  
+
 
 }
 
 @section Styles {
     @* 價格搜尋拉霸設定 *@
     <style>
-         
+
         .slider-container {
             display: flex;
             flex-direction: column;
@@ -949,12 +1073,12 @@
 
     </style>
     @* 主搜尋欄的下拉式選單 *@
-    <style>     
+    <style>
         .navbar {
             display: flex;
             border: 1px solid #ddd;
             padding: 10px;
-            background-color: #f9f9f9;
+            background-color: #ffffff;
             border-radius: 8px;
         }
 
@@ -1078,7 +1202,7 @@
 
     </style>
     @* 點擊旅館的效果 *@
-    <style>        
+    <style>
         .col-lg-4.col-sm-8 {
             height: 280px; /* 設置一個固定的高度，可根據需要調整 */
             padding: 0;
@@ -1120,7 +1244,6 @@
         .hotel-details {
             border: 1px solid #FCFCFC;
             border-right: 2px solid #F0F0F0;
-
             background-color: #fff; /* 初始背景為白色 */
             padding: 5px; /* 增加內邊距 */
             flex: 2; /* 設置 flex 屬性 */
@@ -1144,34 +1267,34 @@
     </style>
     @* index2跳轉至PGHotel專用 *@
     <style>
-        
+
         a.hotel-link {
             text-decoration: none;
             color: inherit;
         }
 
-        a.hotel-link:hover {
-            text-decoration: none;
-            color: inherit;
-        }
+            a.hotel-link:hover {
+                text-decoration: none;
+                color: inherit;
+            }
 
-        a.hotel-link:active {
-            text-decoration: none;
-            color: inherit;
-        }
+            a.hotel-link:active {
+                text-decoration: none;
+                color: inherit;
+            }
 
-        a.hotel-link:visited {
-            text-decoration: none;
-            color: inherit;
-        }
+            a.hotel-link:visited {
+                text-decoration: none;
+                color: inherit;
+            }
     </style>
     @* 廣告區 *@
     <style>
-        
+
         .ad-container {
             position: fixed;
-            right: 50px;  /* //距離頁面右側的位置 */
-            top: 49%;    /* //圖片位於頁面的高度 */
+            right: 50px; /* //距離頁面右側的位置 */
+            top: 49%; /* //圖片位於頁面的高度 */
             transform: translateY(-50%);
             width: 320px;
             z-index: 1000;
@@ -1185,9 +1308,9 @@
                 margin-bottom: 15px;
             }
     </style>
-    @* 我的最愛 *@
+    @* 我的最愛 星星 *@
     <style>
-        
+
         .hotel-card {
             margin-bottom: 10px;
             border: 1px solid #ddd;
@@ -1229,9 +1352,13 @@
                 width: 32%;
                 margin: 1%;
             }
+        /* 星星图标颜色 */
+        .fa-star {
+            color: orange; /* 设置为金色，您也可以使用任何您喜欢的颜色 */
+        }
     </style>
     @* 評分表 *@
-    <style>        
+    <style>
         .rating {
             display: flex;
             align-items: center;
@@ -1263,8 +1390,8 @@
 
     @*     ============Accordion搬過來的CSS ==============*@
 
-<style>
-    
+    <style>
+
         .form-check-input {
             z-index: 999;
         }
@@ -1280,16 +1407,16 @@
             width: 200px; /* 根据需要调整宽度 */
         }
 
-        .image-container img {
-            height: 100%; /* 根据需要调整高度 */
-            width: 100%;
-            object-fit: cover; /* 使图片保持原始比例并裁剪以填充容器 */
-        }
+            .image-container img {
+                height: 100%; /* 根据需要调整高度 */
+                width: 100%;
+                object-fit: cover; /* 使图片保持原始比例并裁剪以填充容器 */
+            }
 
         .remove-image {
-          /*   position: relative;
-            top: 10px;
-            right: 10px; */
+            /*   position: relative;
+                    top: 10px;
+                    right: 10px; */
             position: absolute;
             z-index: 2;
             left: 80px;
@@ -1321,7 +1448,7 @@
             width: 50%;
             display: flex;
             flex-direction: column;
-            z-index:999;
+            z-index: 999;
         }
 
         .collapsible {

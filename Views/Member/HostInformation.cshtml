@@ -1,7 +1,14 @@
 ﻿@{
     ViewData["Title"] = "房東個人資料";
     Layout = "_Layout_HotelHome";
+
+    var memberID = Context.Session.GetString("MemberID");
+
+    var googleMemberId = Context.Session.GetString("GoogleMemberID");
+    var googleMemberFirstName = Context.Session.GetString("GoogleMemberFirstName");
+    var googleMemberEmail = Context.Session.GetString("GoogleMemberEmail");
 }
+
 
 <meta charset="utf-8" />
 
@@ -33,14 +40,19 @@
                 </div>
                 <p class="subtitle">新增相片可以加強房客印象。我們會將照片放到你的個人檔案，不論是房東或房客都可以看到。</p>
 
-                <div class="main-content">
-                    <div class="card mb-3 ms-3 ">
-                        <div class="card-body d-flex" style="padding-bottom: 0px; display: flex; align-items: center;  ">
-                            <img class="profileImg" src="https://cdn2.ettoday.net/images/1457/d1457772.jpg" style="margin-right: 20px;" />
-                            <p class="card-textt col-md-8">房東的照片非常重要，因為這是你給客人的第一印象，選一張清楚且看起來友善的照片，吸引客人下訂</p>
-                            <button class="col-md-2 btnChange">新增/變更個人照片</button>
+                <div class="card mb-3 ms-3">
+                    <div class="card-body d-flex" style="padding-bottom: 0px; display: flex; align-items: center;">
+                        <div class="profileImgContainer">
+                            <img id="profileImg" class="profileImg" src="https://cdn2.ettoday.net/images/1457/d1457772.jpg" style="margin-right: 20px;" />
+                            <div class="fullImageContainer">
+                                <img id="fullPreviewImg" src="https://cdn2.ettoday.net/images/1457/d1457772.jpg" />
+                            </div>
                         </div>
+                        <p class="card-textt col-md-8">房東的照片非常重要，因為這是你給客人的第一印象，選一張清楚且看起來友善的照片，吸引客人下訂</p>
+                        <button class="col-md-2 btnChange" onclick="document.getElementById('imageUpload').click();">新增/變更個人照片</button>
+                        <input type="file" id="imageUpload" style="display:none;" accept="image/*" />
                     </div>
+                </div>
 
                     <div class="content-header">
                         <h5>姓名</h5>
@@ -51,48 +63,27 @@
                             <div class="card-body " style="padding:20px 30px 40px 30px; display: flex; align-items: center;  ">
                                 <form class="row g-3">
                                     <div class="col-md-4">
-                                        <label for="inputFirstName" class="form-label">護照英文名</label>
-                                        <input type="text" class="form-control" id="inputFirstName" placeholder="ruby">
+                                        <label for="memberFirstName" class="form-label">護照英文名</label>
+                                        <input type="text" class="form-control" id="memberFirstName" placeholder="護照英文名">
+                                        <p id="firstNameError" class="form-text text-danger" style="display: none;">請輸入有效的名字，，限英文，不得為特殊符號或中文</p>
                                     </div>
                                     <div class="col-md-4">
-                                        <label for="inputLastName" class="form-label">護照英文姓</label>
-                                        <input type="text" class="form-control" id="inputLastName" placeholder="hsuuu">
+                                        <label for="memberLastName" class="form-label">護照英文姓</label>
+                                        <input type="text" class="form-control" id="memberLastName" placeholder="護照英文姓">
+                                        <p id="lastNameError" class="form-text text-danger" style="display: none;">請輸入有效的姓氏，限英文，不得為特殊符號或中文</p>
                                     </div>
                                     <div class="col-md-4">
-                                    </div>
-
-                                    <div class="col-md-4">
-                                        <label for="inputDisplayName" class="form-label ">顯示名稱 （非必填）</label>
-                                        <p class="subtitle" style="padding-left:0px">這個名稱將會顯示於Agoda的網站和App。</p>
-                                        <input type="text" class="form-control" id="inputDisplayName" placeholder="ruby hsuuu">
                                     </div>
 
-                                    <label for="inputBirthMonth" class="form-label mt-4 mb-1">出生年月日</label>
-                                    <div class="col-md-4">
-                                        <select id="inputBirthMonth" class="form-select">
-                                            <option selected>月</option>
-                                            <option>...</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <select id="inputBirthDate" class="form-select">
-                                            <option selected>日</option>
-                                            <option>...</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <select id="inputBirthYear" class="form-select">
-                                            <option selected>年</option>
-                                            <option>...</option>
-                                        </select>
+                                    <label for="memberBirth" class="form-label mt-4 mb-1">出生年月日</label>
+                                    <div class="col-md-8">
+                                        <input type="date" class="form-control" id="memberBirth" name="memberBirth" placeholder="請點選您的生日日期" max="@DateTime.Now.ToString("yyyy-MM-dd")">
                                     </div>
 
                                 </form>
                             </div>
                         </div>
                     </div>
-
-
 
                     <div class="content-header">
                         <h5>聯絡資訊</h5>
@@ -102,100 +93,58 @@
                         <div class="card mb-3 ms-3 ">
                             <div class="card-body " style="padding: 20px 30px 40px 30px; display: flex; align-items: center; ">
                                 <form class="row g-3">
-                                    <label for="inputBirthMonth" class="form-label mt-4 mb-1">手機號碼（選填）</label>
+                                    <label for="memberPhone" class="form-label mt-4 mb-1">手機號碼（選填）</label>
                                     <div class="col-md-4">
-                                        <select id="inputAreaCode" class="form-select">
-                                            <option selected>Taiwan(+886)</option>
-                                            <option>...</option>
-                                        </select>
+                                        <input type="text" class="form-control" id="memberPhone" name="memberPhone" placeholder="手機號碼" style="width:400px">
+                                        <p id="phoneError" class="form-text text-danger" style="display: none;">請輸入有效的手機號碼格式</p>
                                     </div>
-                                    <div class="col-md-4">
-                                        <input type="text" class="form-control" id="inputPhone" placeholder="988123456">
-                                    </div>
-                                    <div class="col-md-4">
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <label for="inputLanguage" class="form-label">偏好語言</label>
-                                        <p class="subtitle" style="padding-left:3px">FunNow will contact you in this language</p>
-                                        <select id="inputLanguage_Country" class="form-select">
-                                            <option selected>繁體中文(台灣)</option>
-                                            <option>...</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-6">
-                                    </div>
-
                                     <div>
-                                        <label for="inputEmail" class="form-label">電子信箱</label>
-                                        <p class="subtitle" style="padding-left:0px">我們將傳給你驗證信</p>
+                                        <label for="memberEmail" class="form-label">電子信箱</label>
+                                        
                                         <div>
                                             <div class="row">
                                                 <div class="col-4">
-                                                    <input type="email" class="form-control" id="colFormLabel" placeholder="rubyccww@gmail.com" disabled>
+                                                    <input type="email" class="form-control" id="memberEmail"  disabled>
                                                 </div>
                                                 <div class="col-4">
-                                                    <button class="btnChange col-auto">驗證您的電子信箱</button>
+                                                    <button class="btn btn-success col-auto" disabled="true;">您的電子信箱已經通過驗證</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
                                 </form>
                             </div>
                         </div>
                     </div>
 
-
-
                     <div class="content-header">
                         <h5>地點資訊</h5>
                     </div>
-
                     <div class="main-content">
                         <div class="card mb-3 ms-3 ">
                             <div class="card-body " style="padding: 20px 30px 40px 30px; display: flex; align-items: center; ">
                                 <form class="row g-3">
 
                                     <label for="inputLocation" class="form-label mt-4 mb-1">居住地點</label>
-                                    <div class="col-md-4">
-                                        <select id="inputCountry" class="form-select">
-                                            <option selected>Taiwan</option>
-                                            <option>...</option>
+
+                                    <div class="col-md-6">
+                                        <select id="memberCountry" class="form-select">
+                                            <option selected disabled>選擇國家</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-4">
-                                        <select id="inputCity" class="form-select">
-                                            <option selected>台北市</option>
-                                            <option>...</option>
+                                    <div class="col-md-6">
+                                        <select id="memberCity" class="form-select">
+                                            <option selected disabled>選擇城市</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-4">
-                                        <select id="inputArea" class="form-select">
-                                            <option selected>中山區</option>
-                                            <option>...</option>
-                                        </select>
+                                    
+                                
+                                    <div class="col-md-15">
+                                        <label for="memberAddress" class="form-label">完整地址（1年至少居住8個月以上）</label>
+                                        <input type="text" class="form-control" id="memberAddress" placeholder="請填寫完整地址(ex.大安區復興南路一段362號2樓)">
                                     </div>
-
-
-                                    <div class="col-md-8">
-                                        <label for="inputAddress" class="form-label">主要地址（1年至少居住8個月以上）</label>
-                                        <input type="text" class="form-control" id="inputAddress" placeholder="復興南路一段396號2樓">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label for="inputZipCode" class="form-label">郵遞區號</label>
-                                        <input type="text" class="form-control" id="inputZipCode" placeholder="104">
-                                    </div>
-
-                                    <label for="inputNation" class="form-label mt-4 mb-1">國籍</label>
-                                    <div class="col-md-4">
-                                        <select id="inputNation" class="form-select">
-                                            <option selected>Taiwan</option>
-                                            <option>...</option>
-                                        </select>
-                                    </div>
-
-                                </form>
+                                    
+                                 </form>
                             </div>
                         </div>
                     </div>
@@ -208,7 +157,7 @@
                     <div class="main-content">
                         <div class="card mb-3 ms-3 ">
                             <div class="card-body " style="padding: 40px 30px 40px 30px; display: flex; align-items: center; ">
-                                <textarea class="form-control" maxlength="1500" id="exampleFormControlTextarea1" rows="3">Hi~我是ruby</textarea>
+                                <textarea class="form-control" maxlength="1500" id="memberIntroduction" rows="3" placeholder="豐富的自我介紹會讓房客更加了解您，增加下訂機率喔!"></textarea>
                             </div>
                         </div>
                     </div>
@@ -219,10 +168,10 @@
                     <div class="col-7">
                     </div>
                     <div class="col-2" style=" width:200px; padding-left:40px">
-                        <button class="btnLast">取消</button>
+                        <button class="btnLast" id="cancelBtn">取消</button>
                     </div>
                     <div class="col-2">
-                        <button class="btnSave ">儲存</button>
+                        <button class="btnSave " id="saveBtn">儲存</button>
                     </div>
                 </div>
 
@@ -235,11 +184,6 @@
 
     </div>
     <!--============================頁尾=========================================-->
-
-    
-
-
-
 
 </body>
 
@@ -262,6 +206,8 @@
             height: 80px;
             border-radius: 50%;
             margin: 15px 10px 15px 10px;
+            position: relative;
+            display: inline-block;
         }
 
 
@@ -384,9 +330,9 @@
             padding: 8px 7px 8px 7px;
             border: 1px solid #1174a6;
             border-radius: 4px;
-            color: #1174a6;
+            color: white;
             width: 150px;
-            background-color: white;
+            background-color: #1174a6;
             font-size: 13px;
             font-weight: 600;
             letter-spacing: 1px;
@@ -394,8 +340,8 @@
         }
 
             .btnChange:hover {
-                background-color: #1174a6;
-                color: white;
+                background-color: white;
+                color: #1174a6;
             }
 
         input[type="radio"] {
@@ -455,6 +401,29 @@
             font-family: 'Microsoft JhengHei', sans-serif;
             font-size: 16px; /* 修改为您希望的字体大小 */
         }
+
+        /* 懸浮時放大顯示完整圖片 */
+     
+        .fullImageContainer {
+            display: none;
+            position: absolute;
+            top: 140%; /* 調整預覽圖片的垂直位置 */
+            left: 200px;  /* 調整預覽圖片的水平位置 */
+            z-index: 50;
+            max-width: 300px; /*調整預覽圖片的最大寬度 */
+            border: 1px solid #ccc;
+            background-color: #fff;
+            transform: scale(1.8);  /*調整預覽圖片的放大比例 */
+            transition: transform 0.2s;
+        }
+
+        .fullImageContainer img {
+                width: 100%;
+            }
+
+        .profileImgContainer:hover .fullImageContainer {
+            display: block;
+        }
     </style>
 }
 
@@ -462,8 +431,434 @@
 @section Scripts
 {
 
-
     <script>
+       
+        //【一開始載入的時候出現會員資料】
+            document.addEventListener('DOMContentLoaded', function () {
+                fetchCountries(); //載入下拉選單中的國家&城市
+
+            var googleMemberId = '@googleMemberId';
+            var memberID = '@memberID';
+
+            let LoginmemberID;
+            if (memberID) {
+                LoginmemberID = memberID;
+            } else {
+                LoginmemberID = googleMemberId;
+            }
+
+            if (LoginmemberID == null) 
+            {
+                //基本上不會用到，若沒登入就跳轉到登入頁面
+                alert("你沒登入無法查看此頁面喔!");
+                window.location.href = "/Member/Login";
+            }
+            else 
+            {
+                fetchMemberData(LoginmemberID); //撈會員資料的功能
+            }
+
+
+            // 確保在DOM完全載入後再綁定事件處理器，當國家下拉選單變動時，根據國家ID顯示相對應城市
+            const countrySelect = document.getElementById('memberCountry');
+            if (countrySelect) { // 確保元素存在
+                countrySelect.addEventListener('change', function () {
+                    //一開始尚未填寫時，要載入國家城市資料
+                    var selectedCountryId = this.value;
+                    fetchCities(selectedCountryId);
+                });
+            } else {
+                console.error('Error: countrySelect element not found.');
+            }
+        });
+
+            
+        //===================================================================================    
+      
+            //初始載入國家的資料
+            function fetchCountries() {
+            fetch('https://localhost:7103/api/HostMember/countries')
+                    .then(response => response.json())
+                    .then(data => {
+                    var countrySelect = document.getElementById('memberCountry');
+                    if (countrySelect) { // 確保元素存在
+                        data.forEach(country => {
+                            var option = document.createElement('option');
+                            option.value = country.countryId;
+                            option.textContent = country.countryName;
+                            countrySelect.appendChild(option);
+                        });
+                    } else {
+                        console.error('Error: countrySelect element not found.');
+                    }
+                })
+                .catch(error => console.error('Error fetching countries:', error));
+        }
+
+            //初始載入城市的資料
+            function fetchCities(countryId) {
+            fetch('https://localhost:7103/api/HostMember/cities?countryId=' + countryId)
+                    .then(response => response.json())
+                    .then(data => {
+                    var citySelect = document.getElementById('memberCity');
+                    if (citySelect) { // 確保元素存在
+                        citySelect.innerHTML = '<option selected disabled>選擇城市</option>';
+                        data.forEach(city => {
+                            var option = document.createElement('option');
+                            option.value = city.cityId;
+                            option.textContent = city.cityName;
+                            citySelect.appendChild(option);
+                        });
+                    } else {
+                        console.error('Error: citySelect element not found.');
+                    }
+                })
+                .catch(error => console.error('Error fetching cities:', error));
+        }
+
+
+        // 根據 cityID 查詢城市詳細信息，包括 countryID
+        async function fetchCityDetails(cityId) {
+            try {
+                const response = await fetch(`https://localhost:7103/api/HostMember/cityDetails?cityId=${cityId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                });
+
+                if (response.ok) {
+                    const cityData = await response.json();
+                    console.log(cityData);
+
+                    // 設置國家和城市選擇器的值
+                    var Country = document.getElementById("memberCountry");
+                    var City = document.getElementById("memberCity");
+
+                    if (Country && City) 
+                    {
+                        fetchCountries(); // 填充國家下拉選單
+                        const countrySelect = document.getElementById("memberCountry");
+                        if (countrySelect) {
+                            // 等待國家下拉選單填充完成
+                            await new Promise(resolve => {  //創建了一個新的 Promise 對象,並使用await 等待這個 Promise 被解決。
+                                const interval = setInterval(() => { //創建了一個每隔 100 毫秒執行一次的定時器。
+                                    if (countrySelect.options.length > 1) { //國家下拉選單是否已經包含超過一個選項(預設的 "選擇國家" 選項)。
+                                        clearInterval(interval); //如果國家下拉選單已經填充完成，清除定時器,並調用 resolve(); 來解決 Promise。
+                                        resolve();
+                                    }
+                                }, 100); //如果國家下拉選單還沒有填充完成,則定時器會每隔 100 毫秒繼續檢查一次,直到填充完成。
+                            });
+
+                            countrySelect.value = cityData.countryId; // 設置選擇的國家
+
+                            fetchCities(cityData.countryId); // 填充城市下拉選單
+
+                            const citySelect = document.getElementById("memberCity");
+                            if (citySelect) {
+                                // 等待城市下拉選單填充完成
+                                await new Promise(resolve => {
+                                    const interval = setInterval(() => {
+                                        if (citySelect.options.length > 1) {
+                                            clearInterval(interval);
+                                            resolve();
+                                        }
+                                    }, 100);
+                                });
+
+                                citySelect.value = cityId; // 設置選擇的城市
+                            }
+                        }
+                    }
+                } else {
+                    const errorText = await response.text();
+                    console.error('查詢城市詳細信息失敗:', errorText);
+                    alert('查詢城市詳細信息失敗，請稍後再試');
+                }
+            } catch (error) {
+                console.error('查詢城市詳細信息發生錯誤:', error);
+                alert(`查詢城市詳細信息發生錯誤，請稍後再試。錯誤信息: ${error.message}`);
+            }
+        }
+
+        //=================================================================================
+
+        // 格式化日期為 YYYY-MM-DD
+        function formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2)
+                month = '0' + month;
+            if (day.length < 2)
+                day = '0' + day;
+
+            return [year, month, day].join('-');
+        }
+
+      //============================================================================================
+     
+        //撈會員資料的功能
+        async function fetchMemberData(LoginmemberID) {
+
+
+        var FirstName = document.getElementById("memberFirstName");
+        var LastName = document.getElementById("memberLastName");
+        var Birth = document.getElementById("memberBirth");
+        var Phone = document.getElementById("memberPhone");
+        var Email = document.getElementById("memberEmail");
+        var Country = document.getElementById("memberCountry");
+        var City = document.getElementById("memberCity");
+        var Address = document.getElementById("memberAddress");
+        var Introduction = document.getElementById("memberIntroduction");
+        var ProfileImg = document.getElementById("profileImg"); 
+
+            try {
+                const response = await fetch(`https://localhost:7103/api/Members/searchByID?ID=${LoginmemberID}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                });
+
+                if (response.ok) {
+                    const data = await response.json(); // 將回應內容解析為 JSON
+                    console.log(data);
+
+                    if (FirstName) {
+                        FirstName.value = data.firstName;
+                    }
+                    if (LastName) {
+                        LastName.value = data.lastName;
+                    }
+                    if (Birth) {
+                        Birth.value = data.birthday ? formatDate(new Date(data.birthday)) : formatDate(new Date()); // 使用 new Date(data.birthday) 將字串轉換為日期對象
+                    }
+                    if (Phone) {
+                        Phone.value = data.phone;
+                    }
+                    if (Email) {
+                        Email.value = data.email;
+                    }
+                    // 根據 cityID 查詢城市詳細信息，包括 countryID
+                    if (data.cityId) {
+                        await fetchCityDetails(data.cityId); // 修改：添加 await 並確保函數返回 Promise
+                    }
+                    if (Address) {
+                        Address.value = data.memberAddress;
+                    }
+                    if (Introduction) {
+                        Introduction.value = data.introduction;
+                    }
+                    if (ProfileImg && data.image) {
+                        ProfileImg.src = data.image; // 更新圖片顯示
+                        document.getElementById('fullPreviewImg').src = data.image; // 更新放大預覽圖片
+                    }
+
+                } else {
+                    const errorText = await response.text();
+                    console.error('查詢失敗:', errorText);
+                    alert('查詢失敗，請稍後再試');
+                }
+            } catch (error) {
+                console.error('發生錯誤:', error);
+                alert(`發生錯誤，請稍後再試。錯誤信息: ${error.message}`);
+            }
+        }
+
+        //========進行欄位驗證================================================================================================================
+
+        // 驗證輸入的值只能包含英文字
+        function isValidName(name) {
+            var regex = /^[A-Za-z]+$/;
+            return regex.test(name);
+        }
+
+        // 驗證 FirstNameInput 欄位
+        document.getElementById("memberFirstName").addEventListener("blur", function () {
+            var input = this.value.trim();
+            var error = document.getElementById("firstNameError");
+            if (input === "") {
+                error.textContent = "該欄位不得為空白";
+                error.style.display = "block";
+                this.classList.add("border", "border-danger");
+            } else if (!isValidName(input)) {
+                error.textContent = "請輸入有效的名字，限英文，不得為特殊符號或中文";
+                error.style.display = "block";
+                this.classList.add("border", "border-danger");
+            } else {
+                error.style.display = "none";
+                this.classList.remove("border", "border-danger");
+            }
+
+        });
+
+        // 驗證 LastNameInput 欄位
+        document.getElementById("memberLastName").addEventListener("blur", function () {
+            var input = this.value.trim();
+            var error = document.getElementById("lastNameError");
+            if (input === "") {
+                error.textContent = "該欄位不得為空白";
+                error.style.display = "block";
+                this.classList.add("border", "border-danger");
+            } else if (!isValidName(input)) {
+                error.textContent = "請輸入有效的姓氏，限英文，不得為特殊符號或中文";
+                error.style.display = "block";
+                this.classList.add("border", "border-danger");
+            } else {
+                error.style.display = "none";
+                this.classList.remove("border", "border-danger");
+            }
+
+        });
+
+        // 驗證輸入的值是否為有效的手機號碼格式
+        function isValidPhone(phone) {
+            var regex = /^09\d{8}$/; // 台灣手機號碼格式為 "09xxxxxxxx"
+            return regex.test(phone);
+        }
+
+        // 監聽 PhoneInput 欄位的 blur 事件
+        const phoneInput = document.getElementById("memberPhone");
+        const phoneError = document.getElementById("phoneError");
+
+        phoneInput.addEventListener("blur", function () {
+            var input = this.value.trim();
+            if (input === "") {
+                phoneError.style.display = "none";
+                this.classList.remove("border", "border-danger");
+            } else if (!isValidPhone(input)) {
+                phoneError.style.display = "block";
+                this.classList.add("border", "border-danger");
+            } else {
+                phoneError.style.display = "none";
+                this.classList.remove("border", "border-danger");
+            }
+        });
+
+//====即時顯示圖片==========================================================================
+
+        document.getElementById("imageUpload").addEventListener('change', function (evt) {
+            var file = evt.target.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('profileImg').src = e.target.result;
+                    document.getElementById('fullPreviewImg').src = e.target.result; // 更新放大預覽圖片
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+//================按下取消鈕//=================================================
+
+        document.getElementById("cancelBtn").addEventListener('click', async (evt) => {
+            evt.preventDefault(); //防止預設行為的發生
+            var googleMemberId = '@googleMemberId';
+            var memberID = '@memberID';
+
+            let LoginmemberID;
+            if (memberID) {
+                LoginmemberID = memberID;
+            } else {
+                LoginmemberID = googleMemberId;
+            }
+            //重新載入一次資料庫原始的填寫會員資料
+            fetchMemberData(LoginmemberID); //撈會員資料的功能
+        });
+ //============按下儲存鈕==================================================
+
+        document.getElementById("saveBtn").addEventListener('click', async (evt) => {
+            evt.preventDefault(); //防止預設行為的發生
+
+            var googleMemberId = '@googleMemberId';
+            var memberID = '@memberID';
+
+            let LoginmemberID;
+            if (memberID) {
+                LoginmemberID = memberID;
+            } else {
+                LoginmemberID = googleMemberId;
+            }
+
+            // 檢查是不是有紅框錯誤
+            const redBorderElements = document.querySelectorAll('.border-danger');
+            if (redBorderElements.length > 0) {
+                alert('有紅框處尚未修改，請再次確認');
+                return;
+            }
+
+            // 收集使用者填寫的資料
+            const inpFirstName = document.querySelector('#memberFirstName').value;
+            const inpLastName = document.querySelector('#memberLastName').value;
+            const inpBirth = document.querySelector('#memberBirth').value;
+
+            const inpPhoneElement = document.querySelector('#memberPhone');
+            const inpPhone = inpPhoneElement.value.trim() !== "" ? inpPhoneElement.value : null;
+
+            const inpCityElement = document.querySelector('#memberCity');
+            const inpCity = inpCityElement.selectedIndex > 0 ? inpCityElement.value : null;
+
+            const inpAddressElement = document.querySelector('#memberAddress');
+            const inpAddress = inpAddressElement.value.trim() !== "" ? inpAddressElement.value : null;
+
+            const inpIntroElement = document.querySelector('#memberIntroduction');
+            const inpIntro = inpIntroElement.value.trim() !== "" ? inpIntroElement.value : null;
+
+            const memberData = {
+                "firstName": inpFirstName,
+                "lastName": inpLastName,
+                "birthday": inpBirth,
+                "phone": inpPhone,
+                "cityID": inpCity,
+                "memberAddress": inpAddress,
+                "introduction": inpIntro,
+            };
+
+            const formData = new FormData();
+            formData.append('imageFile', document.getElementById('imageUpload').files[0]);
+            for (const key in memberData) {
+                formData.append(key, memberData[key]);
+            }
+
+            //發送API請求
+            try {
+                const response = await fetch(`/HostMemberEdit/${LoginmemberID}`, {
+                    method: 'PUT',
+                    body: formData,
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    alert('修改成功！');
+
+                    const profileImg = document.getElementById('profileImg');
+                    const originalStyles = profileImg.getAttribute('style'); // 儲存原有的樣式
+                    const originalClasses = profileImg.className; // 儲存原有的類別
+
+                    profileImg.removeAttribute('style'); // 移除所有內聯樣式
+                    profileImg.className = ''; // 移除所有 CSS 類別
+                    profileImg.src = result.ImageUrl; // 設定新的圖片 URL
+
+                    profileImg.setAttribute('style', originalStyles); // 還原原有的樣式
+                    profileImg.className = originalClasses; // 還原原有的類別
+
+                    document.getElementById('fullPreviewImg').src = result.ImageUrl; // 更新完整圖片
+                    fetchMemberData(LoginmemberID); //再重撈一次會員資料的功能
+                }
+                else {
+                    alert('儲存失敗，請洽客服人員');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+            
+
+
+
 
 
 

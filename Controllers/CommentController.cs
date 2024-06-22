@@ -7,8 +7,11 @@ namespace PrjFunNowWeb.Controllers
     {
      
 
-        public IActionResult Angular_comment_page() //目前沒用
+        public IActionResult Angular_comment_page(int hotelId, DateTime checkInDate, DateTime checkOutDate) 
         {
+            ViewBag.HotelId = hotelId;
+            ViewBag.CheckInDate = checkInDate;
+            ViewBag.CheckOutDate = checkOutDate;
             return View();
         }
 
@@ -30,12 +33,20 @@ namespace PrjFunNowWeb.Controllers
         }
 
 
-        public IActionResult Angular_commentform_page()
+        public IActionResult Angular_membercommentform(int commentID, string hotelName, string roomtypeName, string checkinDate, string checkoutDate, int roomId, int memberId, int nights)
         {
+            ViewBag.CommentID = commentID;
+            ViewBag.HotelName = hotelName;
+            ViewBag.RoomtypeName = roomtypeName;
+            ViewBag.CheckinDate = checkinDate;
+            ViewBag.CheckoutDate = checkoutDate;
+            ViewBag.RoomId = roomId;
+            ViewBag.MemberId = memberId;
+            ViewBag.Nights = nights;
             return View();
         }
 
-        public IActionResult Angular_plaform() //目前沒用
+        public IActionResult Angular_plaform() 
         {
             return View();
         }

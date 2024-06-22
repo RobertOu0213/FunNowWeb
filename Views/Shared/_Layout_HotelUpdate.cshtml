@@ -27,24 +27,36 @@
     <nav>
         <div class="nav__container">
             <div class="row">
-                <div class="col ps-5">
-                    <img src="~/ou/image/funnow_logo_horizontal_orange.png" class="w-75" />
-                </div>
+                <a href="@Url.Action("Home","HostManage")" class="col ps-5">
+                    <img src="~/image/ming_img/newnewLogo.png" class="w-100" />
+                </a>
 
                 <div class="col-8 pe-5 me-5">
                     <a href="@Url.Action("Home","HostManage")"><div class="items"><i class="fa-solid fa-house me-2"></i>物業清單</div></a>
-                    <a href="#"><div class="items"><i class="fa-solid fa-square-check me-2"></i>預訂</div></a>
-                    <a href="#"><div class="items"><i class="fa-solid fa-comment-dots me-2"></i>訊息</div></a>
-                    <a href="#"><div class="items"><i class="fa-solid fa-person me-2"></i>個人資料</div></a>
+                    <a href="@Url.Action("HostHotelsOdersList","HostAllHotelsOrders")"><div class="items"><i class="fa-solid fa-square-check me-2"></i>預訂</div></a>
+                    <a href="@Url.Action("HotelMessenage","HotelMan")"><div class="items"><i class="fa-solid fa-comment-dots me-2"></i>訊息</div></a>
+                    <a href="/member/HostInformation/"><div class="items"><i class="fa-solid fa-person me-2"></i>個人資料</div></a>
                 </div>
 
                 <div class="col-2 ps-5">
-                    <a href="#">
-                        <img class="avatar" />
-                        <span>Oliver</span>
-                        <span>Ou</span>
-                        <i class="fa-solid fa-caret-down"></i>
-                    </a>
+                    <div class="user-container">
+                        @{
+                            var firstInitial = string.IsNullOrEmpty(ViewBag.LastName) ? "" : ViewBag.LastName.Substring(0, 1) + ".";
+                            var avatar = string.IsNullOrEmpty(ViewBag.LastName) ? "" : ViewBag.LastName.Substring(0, 1);
+                        }
+                        <button type="button" id="avatarButton">
+                            <div class="avatar">@avatar</div>
+                            <span>@ViewBag.FirstName</span><span>@firstInitial</span>
+                            <i class="fas fa-caret-down"></i>
+                        </button>
+                    </div>
+
+                    <div id="modal" class="modal">
+                        <div class="modal-arrow"></div>
+                        <div class="modal-content">
+                            <button id="logoutBtn" class="logout-button">登出</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -94,16 +106,16 @@
                 <div class="left-section-items">
               
                     <a href="@Url.Action("HostHotelInfo", "HostManage",new { id = Model.HotelId })" class="@(action == "HostHotelInfo" ? "active" : "")">
-                        <div>旅館基本資料</div>
+                        <div>編輯旅館基本資料</div>
                     </a>
                     <a href="@Url.Action("HostRoomUpdate", "HostManage",new { id = Model.HotelId })" class="@(action == "HostRoomUpdate" ? "active" : "")">
-                        <div>房間基本資料</div>
+                        <div>編輯房間基本資料</div>
                     </a>             
                     <a href="@Url.Action("HostHotelPhoto", "HostManage",new { id = Model.HotelId })" class="@(action == "HostHotelPhoto" ? "active" : "")">
-                        <div>旅館照片</div>
+                        <div>編輯旅館照片</div>
                     </a>
                     <a href="@Url.Action("HostRoomImageUpdate", "HostManage",new { id = Model.HotelId })" class="@(action == "HostRoomImageUpdate" ? "active" : "")">
-                        <div>房間照片</div>
+                        <div>編輯房間照片</div>
                     </a>
                     <a href="@Url.Action("HostRoomCreate", "HostManage",new { id = Model.HotelId })" class="@(action == "HostRoomCreate" ? "active" : "")">
                         <div>新增房間</div>
@@ -125,6 +137,21 @@
     @*  jQuery *@
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    <script defer>
+        $('#avatarButton').on('click', function () {
+            $('#modal').toggle();
+        });
+
+        $(document).on('click', function (event) {
+            if (!$(event.target).closest('#avatarButton').length && !$(event.target).closest('#modal').length) {
+                $('#modal').hide();
+            }
+        });
+
+        $('#logoutBtn').on('click', function () {
+            window.location.href = "@Url.Action("Logout", "Member")";
+        });
+    </script>
 </body>
 </html>
 

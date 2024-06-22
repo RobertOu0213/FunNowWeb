@@ -328,9 +328,9 @@ button:focus {
   border-radius: 0px;
 }
 
-.navbar {
-  background: #fff;
-  padding: 0px 25px;
+.navbar { /*//layout頭頂*/
+    background: #fefbed;
+    padding: 0px 25px;
 }
 
 .navbar .logo_h {

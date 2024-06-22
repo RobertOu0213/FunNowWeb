@@ -1,7 +1,10 @@
 ﻿@model IEnumerable<PrjFunNowWeb.ViewModels.OrderViewModel>
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+
     var MemberID = Context.Session.GetString("MemberID");
+    var googleMemberId = Context.Session.GetString("GoogleMemberID");
+    var displayMemberId = !string.IsNullOrEmpty(googleMemberId) ? googleMemberId : MemberID;
 
 }
 
@@ -58,7 +61,7 @@
 
         /* 文字置中 */
         /*.card-body {
-                            text-align: left;*/ /* 將內部文字置中 */
+                                    text-align: left;*/ /* 將內部文字置中 */
         /*font-size: 0.9rem;*/ /* 缩小字体大小，您可以根据需要调整这个值 */
         /*padding: 10px;*/ /* 添加内边距以确保美观 */
         /*}*/
@@ -117,35 +120,24 @@
         <h3 id="cityandCountry">城市,國家</h3>
     </div>
 
-<div class="container">
-    <div class="row" id="hotelsContainer">
+    <div class="container">
+        <div class="row" id="hotelsContainer">
+        </div>
     </div>
 </div>
-</div>
 
-@section Scripts {  
-        <script>
+@section Scripts {
+    <script>
 
-        const MemberID = '@MemberID';  // 使用单引号来确保 JavaScript 将其识别为字符串
-        console.log("============" + MemberID);
-
+        const MemberID = '@displayMemberId';  
         const hotelsContainer = document.querySelector('#hotelsContainer');
         const cityCountryLabel = document.querySelector('#cityandCountry');
-
         // 使用 URLSearchParams 解析 URL 中的參數
         const urlParams = new URLSearchParams(window.location.search);
-        const memberId = urlParams.get('MemberID') ;  // 從 URL 參數獲取 memberId，如果無， || 1 默認為1
         const cityName = urlParams.get('city');  // 從 URL 參數獲取城市名稱
         const countryName = urlParams.get('country');  // 從 URL 參數獲取國家名稱
-        console.log("City: ", cityName);  // 应显示 "大阪"
-        console.log("Country: ", decodeURIComponent(countryName));  // 应显示 "日本"
-
-        // const url = `https://localhost:7103/api/HotelsFavorite/`+`${memberId}/FavoriteHotels/encodeURIComponent${cityName}`;
         const url = `https://localhost:7103/api/HotelsFavorite/` + `${MemberID}/FavoriteHotels/${cityName}`;
 
-      //  const url = `https://localhost:7103/api/HotelsFavorite/`+`1/FavoriteHotels/${cityName}`;
-
-        console.log(url);
 
         const loadFavoriteHotels = async () => {
             try {
@@ -168,13 +160,14 @@
                     // 现在可以访问averageScore和totalAverageScore
                     const totalAverageScore = ratingObj.totalAverageScore;
                     const formattedScore = parseFloat(totalAverageScore.toFixed(1));
+                    const averageScore = ratingObj.averageScore;
+                    console.log("Total Average Score:", totalAverageScore);
+                    console.log("formattedScore:", formattedScore);
 
                     // 现在可以访问total總則數
                     const total = totalcommentsObj.total;
 
-                    const averageScore = ratingObj.averageScore;
-                    console.log("Total Average Score:", totalAverageScore);
-                    console.log("formattedScore:", formattedScore);
+                
 
                     //formattedScore 小數點後的平均評分對應文字
                     let ratingDescription;
@@ -187,42 +180,63 @@
                     } else if (formattedScore >= 3) {
                         ratingDescription = "尚可";
                     } else {
-                        ratingDescription = "低於預期";
+                        ratingDescription = "差";
                     }
                     console.log("Average Score Details:", averageScore);
                     const HotelImage = getImageUrl(hotelImage);
                     console.log(HotelImage);
-                    /* 在卡片元素上設置一個 data-hotel-id 屬性,用於存儲酒店 ID */
+                    /* <div class="card" data-hotel-id="${hotelId}">  在卡片元素上設置一個 data-hotel-id 屬性,用於存儲酒店 ID */
+
                     // https://localhost:7284/PgHotel/pgHotel/?hotelId=2&checkInDate=2024-06-19&checkOutDate=2024-06-20
                     // <a href="/PgHotel/pgHotel/?hotelId=${hotelId}&checkInDate=${2024-06-19}&checkOutDate=${2024-06-20}" >
+                    //window.location.href = window.location.origin + '/Member/Login';
+                    //window.location.href = window.location.origin + '/PgHotel/pgHotel/?hotelId=${hotelId}&checkInDate=${}&checkOutDate=${}';
+
+                    // 首先，從 sessionStorage 中讀取 'searchHotel' 的 JSON 字串
+                    const searchHotel = sessionStorage.getItem('searchHotel');
+                    let checkInDate = '';
+                    let checkOutDate = '';
+
+                    // 確保存儲的數據存在
+                    if (searchHotel) 
+                    {
+                        // 將 JSON 字串轉換為 JavaScript 物件
+                        const searchHotelData = JSON.parse(searchHotel);
+
+                        // 從物件中獲取 checkInDate 和 checkOutDate
+                        checkInDate = searchHotelData.checkInDate;
+                        checkOutDate = searchHotelData.checkOutDate;
+
+                    }
+
 
                     return (`
-                                 <div class="col-md-3">
-                                      <div class="card" data-hotel-id="${hotelId}">
-                                                  <a href="/PgHotel/pgHotel/?hotelId=${hotelId}&checkInDate=2024-06-28&checkOutDate=2024-06-29">
-                                        <img src="${HotelImage}"  alt="Image of ${hotelName}" class="card-img-top">
-                                        <div class="card-body">
-                                            <h5 class="card-title">${hotelName}</h5>
-                                            <p class="card-text">${city}, ${country}</p>
-                                            <p>${generateStars(levelStar)}</p>
-              <p class="card-text rating-info">
-            <span class="score">${formattedScore} ${ratingDescription}</span>
-            <span class="comment-count">${total} 則評論</span>
-            </p>
-                                            <p class="price">$${minimumPrice} </p>
-                                        </div>
-                                              </a>
-                             <i class="fa-solid fa-heart love-button"></i>
-                                   </div>                        
-                           </div>
-                                
-                            `);
+                                         <div class="col-md-3">
+                                              <div class="card" data-hotel-id="${hotelId}">
+                                                        <a href="${window.location.origin}/PgHotel/pgHotel/?hotelId=${hotelId}&checkInDate=${checkInDate}&checkOutDate=${checkOutDate}">
+                                                <img src="${HotelImage}"  alt="Image of ${hotelName}" class="card-img-top">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">${hotelName}</h5>
+                                                    <p class="card-text">${city}, ${country}</p>
+                                                    <p>${generateStars(levelStar)}</p>
+                      <p class="card-text rating-info">
+                    <span class="score">${formattedScore} ${ratingDescription}</span>
+                    <span class="comment-count">${total} 則評論</span>
+                    </p>
+                                                    <p class="price">$${minimumPrice} </p>
+                                                </div>
+                                                      </a>
+                                     <i class="fa-solid fa-heart love-button"></i>
+                                           </div>
+                                   </div>
+
+                                    `);
                 });
                 hotelsContainer.innerHTML = hotels.join('');
-               // cityCountryLabel.textContent = `${cityName}, ${countryName}`;  // 更新標籤顯示正確的城市和國家
+                // cityCountryLabel.textContent = `${cityName}, ${countryName}`;  // 更新標籤顯示正確的城市和國家
                 cityCountryLabel.textContent = `${decodeURIComponent(cityName)}, ${decodeURIComponent(countryName)}`;
 
-                  //須放在loadFavoriteHotels裡面,因為動態生成每張card,愛心按鈕跟著生成
+                //須放在loadFavoriteHotels裡面,因為動態生成每張card,愛心按鈕跟著生成
                 //獲取所有愛心按鈕元素
                 const loveButtons = document.querySelectorAll('.love-button');
 
@@ -246,16 +260,16 @@
             return starsHtml;
         };
 
-         loadFavoriteHotels();
+        loadFavoriteHotels();
 
-     
+
         // 處理愛心按鈕點擊事件
         async function handleLoveButtonClick(event) {
             const loveButton = event.currentTarget;
             const card = loveButton.closest('.card');  // 獲取包含該按鈕的卡片元素
             const hotelId = card ? card.dataset.hotelId : undefined;   // 假設您在卡片元素上設置了 data-hotel-id 屬性
 
-            //MemberID is String, 
+            //MemberID is String,
             //const MemberID = MemberID; // 假設會員 ID 為 1，您可以根據實際情況獲取會員 ID                                                         //TODO.....
 
             const numericMemberId = Number(MemberID);
@@ -275,10 +289,9 @@
                 const response = await fetch(url);
                 console.log(`按下愛心後的狀態: ${response.status}`);
 
-                if (response.ok) 
-                {
+                if (response.ok) {
                     // 如果請求成功，則從 DOM 中移除該卡片元素
-                  //  card.remove();
+                    //  card.remove();
                     loadFavoriteHotels();
                 } else {
                     console.error('Failed to update like status:', response.status);

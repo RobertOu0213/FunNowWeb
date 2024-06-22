@@ -89,9 +89,14 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const connection = new signalR.HubConnectionBuilder().withUrl("https://localhost:7103/chatHub").build();
+
             connection.start()
                 .then(() => console.log("Hub 連線完成"))
-                .catch(err => alert('連線錯誤: ' + err.toString()));
+                .catch(err => {
+                    console.error('連線錯誤: ' + err.toString());
+                    alert('連線錯誤: ' + err.toString());
+                });
+
             connection.on("UpdList", function (jsonList) {
                 const list = JSON.parse(jsonList);
                 const idList = document.getElementById("IDList");
@@ -103,9 +108,11 @@
                     idList.appendChild(listItem);
                 });
             });
+
             connection.on("UpdSelfID", function (id) {
                 document.getElementById("SelfID").textContent = id;
             });
+
             connection.on("UpdContent", function (msg) {
                 const contentList = document.getElementById("Content");
                 const listItem = document.createElement("li");
@@ -113,15 +120,18 @@
                 listItem.textContent = msg;
                 contentList.appendChild(listItem);
             });
+
             document.getElementById("sendButton").addEventListener("click", function () {
                 const selfID = document.getElementById("SelfID").textContent;
                 const message = document.getElementById("message").value;
                 const sendToID = document.getElementById("sendToID").value;
                 connection.invoke("SendMessage", selfID, message, sendToID).catch(err => {
+                    console.error('傳送錯誤: ' + err.toString());
                     alert('傳送錯誤: ' + err.toString());
                 });
             });
         });
+
     </script>
 </body>
 </html>

@@ -6,9 +6,9 @@
 
 <div class="search__container">
     <div class="search__container__search">
-        <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="搜尋房源名稱或編號" aria-label="Search">
-            <button class="btn btn-outline-primary" type="submit">Search</button>
+        <form class="d-flex" id="searchForm">
+            <input class="form-control me-2" type="search" id="searchInput" placeholder="搜尋房源名稱或編號" aria-label="Search">
+            <img src="~/ou/image/magnifying.png" alt="Search" id="searchIcon">
         </form>
     </div>
    <div class="me-3">
@@ -38,10 +38,15 @@
 
 @section Scripts {
     <script defer>
-        const userId = "@ViewBag.UserID";
+        const userId = @ViewBag.MemberID;
 
         async function fetchAndDisplayHotels(isActive) {
-            const res = await fetch(`https://localhost:7103/api/HostManage?userId=${userId}`);
+            const query = $('#searchInput').val();
+            let url = `https://localhost:7103/api/HostManage?userId=${userId}`;
+            if (query) {
+                url += `&query=${query}`;
+            }
+            const res = await fetch(url);
             const data = await res.json();
             const filteredData = data.filter(item => item.isActive === isActive);
             const baseUrl = window.location.origin + '/HostManage/HostHotelInfo';
@@ -124,8 +129,14 @@
             setActiveTab(false);
         })
 
-        fetchAndDisplayHotels(false);
-        setActiveTab(false);
+        $('#searchForm').on('submit', async (e) => {
+            e.preventDefault();
+            const isActive = $('#showActive').hasClass('active');
+            await fetchAndDisplayHotels(isActive);
+        });
+
+        fetchAndDisplayHotels(true);
+        setActiveTab(true);
 
     </script>
 }

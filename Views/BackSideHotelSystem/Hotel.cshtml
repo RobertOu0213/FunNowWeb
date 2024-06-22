@@ -1,77 +1,8 @@
 ﻿@{
     ViewData["Title"] = "Hotel";
+    Layout= "_Layout_platform";
 }
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark gradient-custom">
-    <!-- Container wrapper -->
-    <div class="container-fluid">
-        <!-- Navbar brand -->
-        <a class="navbar-brand" href="#">FunNow</a>
-
-        <!-- Toggle button -->
-        <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
-                data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-            <i class="fas fa-bars text-light"></i>
-        </button>
-
-        <!-- Collapsible wrapper -->
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <!-- Left links -->
-            <ul class="navbar-nav me-auto d-flex flex-row mt-3 mt-lg-0">
-                <li class="nav-item text-center mx-2 mx-lg-1">
-                    <a class="nav-link" href="#!">
-                        <div>
-                            <i class="fa-solid fa-user mb-1"></i>
-                            <span class="badge rounded-pill badge-notification bg-dark"></span>
-                        </div>
-                        會員
-                    </a>
-                </li>
-                <li class="nav-item text-center mx-2 mx-lg-1">
-                    <a class="nav-link" href="#!">
-                        <div>
-                            <i class="fa-solid fa-house mb-1"></i>
-                            <span class="badge rounded-pill badge-notification bg-dark">2</span>
-                        </div>
-                        房東
-                    </a>
-                </li>
-                <li class="nav-item text-center mx-2 mx-lg-1">
-                    <a class="nav-link" href="#!">
-                        <div>
-                            <i class="fa-solid fa-face-smile mb-1"></i>
-                            <span class="badge rounded-pill badge-notification bg-dark">11</span>
-                        </div>
-                        評論
-                    </a>
-                </li>
-                <li class="nav-item text-center mx-2 mx-lg-1">
-                    <a class="nav-link" href="#!">
-                        <div>
-                            <i class="fa-solid fa-comment mb-1"></i>
-                            <span class="badge rounded-pill badge-notification bg-dark">1</span>
-                        </div>
-                        訊息
-                    </a>
-                </li>
-                <li class="nav-item text-center mx-2 mx-lg-1">
-                    <a class="nav-link" href="#!">
-                        <div>
-                            <i class="fa-solid fa-chart-line mb-1"></i>
-                            <span class="badge rounded-pill badge-notification bg-dark"></span>
-                        </div>
-                        數據分析
-                    </a>
-                </li>
-            </ul>
-            <!-- Left links -->
-        </div>
-        <!-- Collapsible wrapper -->
-    </div>
-    <!-- Container wrapper -->
-</nav>
 <!-- Navbar -->
 <div class="container">
     <h3 class="m-3">飯店審核管理</h3>
@@ -98,7 +29,8 @@
             <input type="text" class="form-control display" id="searchBar" aria-label="" placeholder="輸入文字">
         </span>
     </div>
-    <div>
+    <div class="ms-1">
+        <!-- 修改這裡的class從ms-5改為ms-1 -->
         <input type="button" class="btn btn-outline-primary display" id="searchBtn" value="搜尋" onclick="searchHotels()">
     </div>
     <div class="ms-2">
@@ -111,8 +43,8 @@
         <thead>
             <tr>
                 <td>編號</td>
-                <td>飯店名稱</td>
-                <td>飯店類型</td>
+                <td class="room-name" >飯店名稱</td>
+                <td class="room-type">飯店類型</td>
                 <td>地址</td>
                 <td>電話</td>
                 <td>飯店狀態</td>
@@ -143,7 +75,7 @@
                         <thead>
                             <tr>
                                 <td>房間編號</td>
-                                <td>房型</td>
+                                <td >房型</td>
                                 <td>房間價格</td>
                                 <td>房間大小</td>
                                 <td>房間描述</td>
@@ -177,7 +109,7 @@
         /*navbar*/
 
         .container {
-            width: 70%;
+            width: 80%;
         }
 
         .filterborder {
@@ -193,12 +125,33 @@
         .hotelList .btn {
             font-size: 14px;
         }
+
+        .room-type {
+            width: 10%; 
+        }
+
+        .room-name {
+            width: 20%;
+            max-width: 20%; /* 固定寬度 */
+            word-wrap: break-word; /* 強制換行 */
+            word-break: break-all; /* 強制換行 */
+        }
+
+        .room-address {
+            width: 20%;
+            max-width: 20%; /* 固定寬度 */
+            word-wrap: break-word; /* 強制換行 */
+            word-break: break-all; /* 強制換行 */
+        }
+
+
     </style>
 }
 
 @section Scripts {
     <script>
         let allHotels = [];
+        let currentHotelID = null; // 確保 currentHotelID 已正確定義
 
         // 獲取飯店資訊並更新顯示
         function fetchHotels() {
@@ -220,21 +173,21 @@
             hotelList.forEach(item => {
                 let status = item.hotelIsActive ? "已上架" : "待審核";
                 let actionButton = item.hotelIsActive
-                    ? `<td><button class="btn btn-danger" onclick="toggleHotelStatus(${item.hotelID})">下架飯店</button></td>`
-                    : `<td><button class="btn btn-primary" onclick="toggleHotelStatus(${item.hotelID})">上架飯店</button></td>`;
+                    ? `<td class="room-type"><button class="btn btn-danger" onclick="toggleHotelStatus(${item.hotelID})">下架飯店</button></td>`
+                    : `<td class="room-type"><button class="btn btn-primary " onclick="toggleHotelStatus(${item.hotelID})">上架飯店</button></td>`;
 
                 tableStr += `
-                                    <tr data-hotel-id="${item.hotelID}">
-                                        <td>${item.hotelID}</td>
-                                        <td>${item.hotelName}</td>
-                                        <td>${item.hotelTypeName}</td>
-                                        <td>${item.hotelAddress}</td>
-                                        <td>${item.hotelPhone}</td>
-                                        <td>${status}</td>
-                                        <td><button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="loadRooms(${item.hotelID})">詳細內容</button></td>
-                                        ${actionButton}
-                                    </tr>
-                                `;
+                            <tr data-hotel-id="${item.hotelID}">
+                                <td>${item.hotelID}</td>
+                                 <td class="room-name"">${item.hotelName}</td>
+                                <td>${item.hotelTypeName}</td>
+                                <td class="room-address">${item.hotelAddress}</td>
+                                <td>${item.hotelPhone}</td>
+                                <td>${status}</td>
+                                <td class="room-type"><button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="loadRooms(${item.hotelID})">詳細內容</button></td>
+                                ${actionButton}
+                            </tr>
+                        `;
             });
 
             document.getElementById('hotelContainer').innerHTML = tableStr;
@@ -262,6 +215,7 @@
 
         // 獲取並顯示房間資訊
         function loadRooms(hotelID) {
+            currentHotelID = hotelID; // 設置當前飯店ID
             fetch(`https://localhost:7103/api/BackSideHotel/${hotelID}/rooms`)
                 .then(response => response.json())
                 .then(data => {
@@ -276,24 +230,40 @@
         function updateRoomDisplay(roomList) {
             let roomTableStr = "";
             roomList.forEach(item => {
-                let roomStatus = item.roomStatus ? "可預訂" : "已滿";
                 let actionButton = item.roomStatus
-                    ? '<td><button class="btn btn-danger" onclick="deactivateRoom()">下架房間</button></td>'
-                    : '<td><button class="btn btn-primary" onclick="activateRoom()">上架房間</button></td>';
+                    ? `<td><button class="btn btn-danger" onclick="toggleRoomStatus(${item.roomID})">下架房間</button></td>`
+                    : `<td><button class="btn btn-primary" onclick="toggleRoomStatus(${item.roomID})">上架房間</button></td>`;
 
                 roomTableStr += `
-                                    <tr>
-                                        <td>${item.roomID}</td>
-                                        <td>${item.roomType}</td>
-                                        <td>${item.roomPrice}</td>
-                                        <td>${item.roomSize} 平方公尺</td>
-                                        <td>${item.description}</td>
-                                        ${actionButton}
-                                    </tr>
-                                `;
+                            <tr>
+                                <td>${item.roomID}</td>
+                                <td>${item.roomType}</td>
+                                <td>${item.roomPrice}</td>
+                                <td>${item.roomSize} 平方公尺</td>
+                                <td>${item.description}</td>
+                                ${actionButton}
+                            </tr>
+                        `;
             });
 
             document.getElementById('roomContainer').innerHTML = roomTableStr;
+        }
+
+        // 切換房間的RoomStatus狀態
+        function toggleRoomStatus(roomID) {
+            fetch(`https://localhost:7103/api/BackSideHotel/rooms/${roomID}/toggleStatus`, {
+                method: 'PUT'
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    // 更新房間狀態後重新加載房間資訊
+                    loadRooms(currentHotelID); // 確保當前飯店ID（currentHotelID）已在其他地方定義
+                })
+                .catch(error => {
+                    console.error('Error toggling room status:', error);
+                });
         }
 
         // 搜索飯店
@@ -368,6 +338,3 @@
         });
     </script>
 }
-
-
-
