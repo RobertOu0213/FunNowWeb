@@ -218,8 +218,6 @@ namespace PrjFunNowWeb.Controllers
             catch (Exception ex)
             {
                 await transaction.RollbackAsync();
-
-
                 return StatusCode(500, new { success = false, message = "Internal server error." });
             }
         }
