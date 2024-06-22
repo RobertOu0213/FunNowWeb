@@ -203,7 +203,7 @@
                 });
 
                 try {
-                    let response = await fetch('@Url.Action("thankyou", "Payment")', {
+                    let response = await fetch('@Url.Action("addOrder", "Payment")', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'

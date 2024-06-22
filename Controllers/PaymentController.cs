@@ -18,12 +18,12 @@ namespace PrjFunNowWeb.Controllers
         }
 
         [HttpPost]
-        public IActionResult thankyou([FromBody] COrderViewModel orderIn)
+        public IActionResult addOrder([FromBody] COrderViewModel orderIn)
         {
             using var transaction = _context.Database.BeginTransaction();
             try
             {
-                if(orderIn == null)
+                if (orderIn == null)
                 {
                     return BadRequest("OrderDetailsId is required");
                 }
@@ -52,7 +52,7 @@ namespace PrjFunNowWeb.Controllers
                 _context.Orders.Add(order);
                 _context.SaveChanges();
 
-           
+
                 var orderId = order.OrderId;
 
 
@@ -117,7 +117,7 @@ namespace PrjFunNowWeb.Controllers
 
                 transaction.Commit();
 
-                return Ok(new { success = true, message="Order 資料表新增成功", data= orderDto });
+                return Ok(new { success = true, message = "Order 資料表新增成功", data = orderDto });
 
                 //var orderDetails = _context.OrderDetails
                 //.Where(od => orderIn.OrderDetailsID.Contains(od.OrderDetailId))
@@ -173,8 +173,31 @@ namespace PrjFunNowWeb.Controllers
         }
 
 
-        public IActionResult thankyou2()
+        public IActionResult thankyou()
         {
+
+            var userID = HttpContext.Session.GetString("MemberID");
+            if (string.IsNullOrEmpty(userID))
+            {
+
+                userID = HttpContext.Session.GetString("GoogleMemberID");
+                if (string.IsNullOrEmpty(userID))
+                {
+                    return RedirectToAction("Login", "Member");
+                }
+            }
+            var member = _context.Members
+               .Where(x => x.MemberId == Convert.ToInt32(userID))
+               .Select(x => new { x.MemberId, x.FirstName, x.LastName })
+               .FirstOrDefault();
+
+            if (member == null)
+            {
+                return NotFound("Member not found");
+            }
+            ViewBag.MemberID = member.MemberId;
+            ViewBag.FirstName = member.FirstName;
+            ViewBag.LastName = member.LastName;
             return View();
         }
 

@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Authorization;
 using PrjFunNowWebApi.Models;
 namespace PrjFunNowWeb.Controllers
 {
-
     public class CartController : Controller
     {
         private readonly FunNowContext _context;
@@ -26,7 +25,6 @@ namespace PrjFunNowWeb.Controllers
             var userID = HttpContext.Session.GetString("MemberID");
             if (string.IsNullOrEmpty(userID))
             {
-
                 userID = HttpContext.Session.GetString("GoogleMemberID");
                 if (string.IsNullOrEmpty(userID))
                 {
@@ -74,7 +72,6 @@ namespace PrjFunNowWeb.Controllers
 
    
             TempData["OrderDetailsId"] = JsonSerializer.Serialize(orderDetailsId);
-
             var redirectUrl = Url.Action("PaymentPage", "Cart");
             return Json(new { success = true, redirectUrl });
         }
@@ -95,7 +92,6 @@ namespace PrjFunNowWeb.Controllers
           
             try
             {
-
 
                 var orderDetailsIdJson = TempData["OrderDetailsId"] as string;
 
@@ -124,7 +120,8 @@ namespace PrjFunNowWeb.Controllers
                 var firstOrderDetail = orderDetails.FirstOrDefault();
                 if (firstOrderDetail == null)
                 {
-                    return NotFound("Order details not found");
+                    
+                    return RedirectToAction("cartItems", "Cart");
                 }
 
                 var totalAmount = orderDetails.Sum(od =>Convert.ToInt32((od.Room?.RoomPrice ?? 0) * (od.CheckOutDate - od.CheckInDate).Days));
@@ -145,7 +142,7 @@ namespace PrjFunNowWeb.Controllers
                          { "CustomField2",  "" },
                          { "ReturnURL",  $"{website}/Payment/thankyou" },
                          //{ "OrderResultURL", $"{website}/Home/Index" },
-                         { "ClientBackURL",  $"{website}/Payment/thankyou2" },
+                         { "ClientBackURL",  $"{website}/Payment/thankyou" },
                          { "MerchantID",  "3002607" },
                          { "PaymentType",  "aio" },
                          { "ChoosePayment",  "ALL" },
@@ -178,7 +175,7 @@ namespace PrjFunNowWeb.Controllers
                     Email = member?.Email,
                     Phone = member?.Phone,
                     HotelID = (int)od.Room?.Hotel?.HotelId,
-                    //GuestNumber = od.GuestNumber,
+                    GuestNumber = od.GuestNumber,
                     EcpayParameters = ecpayParameters
                 }).ToList();
 
