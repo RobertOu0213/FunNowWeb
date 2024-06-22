@@ -5,17 +5,25 @@ namespace PrjFunNowWeb.Controllers
 {
     public class CommentController : Controller
     {
-     
 
-        public IActionResult Angular_comment_page(int hotelId, DateTime checkInDate, DateTime checkOutDate) 
+
+        public IActionResult Angular_comment_page(int hotelId, DateTime checkInDate, DateTime checkOutDate)
         {
+            var memberID = HttpContext.Session.GetString("MemberID");
+            var googleMemberID = HttpContext.Session.GetString("GoogleMemberID");
+
+            // 决定使用哪个ID
+            var finalMemberID = !string.IsNullOrEmpty(memberID) ? memberID : googleMemberID;
+
             ViewBag.HotelId = hotelId;
             ViewBag.CheckInDate = checkInDate;
             ViewBag.CheckOutDate = checkOutDate;
+            ViewBag.MemberID = finalMemberID;
+
             return View();
         }
 
-        public IActionResult Angular_membercomment()
+            public IActionResult Angular_membercomment()
         {
             var memberID = HttpContext.Session.GetString("MemberID");
             var googleMemberID = HttpContext.Session.GetString("GoogleMemberID");
