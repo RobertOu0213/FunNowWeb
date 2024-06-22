@@ -477,12 +477,10 @@
 
         // 取得今天的日期
         const today = new Date();
-        today.setHours(0, 0, 0, 0); // 設定時間為當天的0點0分0秒，避免時間因素影響
 
         // 取得明天的日期
-        const tomorrow = new Date();
+        const tomorrow = new Date(today);
         tomorrow.setDate(today.getDate() + 1);
-        tomorrow.setHours(0, 0, 0, 0);
 
         const formatDate = (date) => {
             return date.toISOString().split('T')[0];
@@ -505,16 +503,13 @@
             }
         });
 
-        // 頁面加載完成後設置預設日期
+        // 页面加载完成后设置默认日期
         document.addEventListener('DOMContentLoaded', function () {
             const startDateInput = document.getElementById('myDatepickerstart');
             const endDateInput = document.getElementById('myDatepickerend');
-            if (!startDateInput.value) {
-                startDateInput.value = formatDate(today);// 如果起始日期輸入框為空，設置為今天
-            }
-            if (!endDateInput.value) {
-                endDateInput.value = formatDate(tomorrow);
-            }
+
+            startDateInput.value = formatDate(today);  // 设置为今天
+            endDateInput.value = formatDate(tomorrow); // 设置为明天
         });
     </script>
 
@@ -1001,7 +996,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/海濱度假村區.jpg" data-city="海濱度假村區" class="city-image" />
+                        <img src="~/image/ming_img/海濱度假村區.jpg" data-city="度假屋" class="city-image" />
                     </div>
                     <a href="#">
                         <h4 class="sec_h4">海濱度假村區</h4>
@@ -1015,7 +1010,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/森林小屋區.jpg" data-city="森林小屋區" class="city-image" />
+                        <img src="~/image/ming_img/森林小屋區.jpg" data-city="小木屋" class="city-image" />
                     </div>
                     <a href="#">
                         <h4 class="sec_h4">森林小屋區</h4>
@@ -1029,7 +1024,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/山間度假村區.jpg" data-city="山間度假村區" class="city-image" />
+                        <img src="~/image/ming_img/山間度假村區.jpg" data-city="登山度假屋" class="city-image" />
                     </div>
                     <a href="#">
                         <h4 class="sec_h4">山間度假村區</h4>
@@ -1043,7 +1038,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/城市精品酒店區.jpg" data-city="城市精品酒店區" class="city-image" />
+                        <img src="~/image/ming_img/城市精品酒店區.jpg" data-city="飯店" class="city-image" />
                     </div>
                     <a href="#">
                         <h4 class="sec_h4">城市精品酒店區</h4>
@@ -1059,7 +1054,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/農莊民宿區.jpg" data-city="農莊民宿區" class="city-image" />
+                        <img src="~/image/ming_img/農莊民宿區.jpg" data-city="農場民宿" class="city-image" />
                     </div>
                     <a href="#">
                         <h4 class="sec_h4">農莊民宿區</h4>
@@ -1073,7 +1068,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/湖畔度假村區.jpg" data-city="湖畔度假村區" class="city-image" />
+                        <img src="~/image/ming_img/湖畔度假村區.jpg" data-city="度假村" class="city-image" />
                     </div>
                     <a href="#">
                         <h4 class="sec_h4">湖畔度假村區</h4>
@@ -1087,7 +1082,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/沙漠綠洲區.jpg" data-city="沙漠綠洲區" class="city-image" />
+                        <img src="~/image/ming_img/沙漠綠洲區.jpg" data-city="旅舍" class="city-image" />
                     </div>
                     <a href="#">
                         <h4 class="sec_h4">沙漠綠洲區</h4>
@@ -1101,7 +1096,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="accomodation_item text-center">
                     <div class="hotel_img">
-                        <img src="~/image/ming_img/島嶼度假村區.jpg" data-city="島嶼度假村區" class="city-image" />
+                        <img src="~/image/ming_img/島嶼度假村區.jpg" data-city="度假村" class="city-image" />
                     </div>
                     <a href="#">
                         <h4 class="sec_h4">島嶼度假村區</h4>
