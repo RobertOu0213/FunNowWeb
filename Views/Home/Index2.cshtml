@@ -715,36 +715,36 @@
                                                             <h6 style="color:red">昨天起已收到${levelStar}張訂單</h6>
                                                         </div>                                                        
 
-                                                                    <div class="col-lg-3 col-sm-12 hotel-pricing">
-                                                                        <div class="rating">
-                                                                            <div class="rating-text">
-                                                                                <span class="rating-count">很出色</span>
-                                                                                <span class="rating-count">2,446篇評鑑</span>
-                                                                            </div>
-                                                                            <span class="rating-score">${totalAverageScore}</span>
-                                                                        </div>
-                                                                        <br>
-                                                                        <h6 style="border: 1px solid red; display:inline-block; background-color: red; color:white">優惠只剩1間</h6>
-                                                                        <h6 style="color:gray">每晚價格(不連稅及其他費用)</h6>
-                                                                        <br><br>
-                                                                        <h3>NT$${hotelPrice}</h3>
-
-                                                                                     <div class="checkbox-container" >
-                                                                                                <div class="form-check" onclick="event.stopPropagation()">
-                                                                                                            <input class="form-check-input" type="checkbox" id="${hotelId}" data-hotel-id="${hotelId}">
-                                                                                                            <label class="form-check-label" for="${hotelId}">
-                                                                                                        比較
-                                                                                                    </label>
-                                                                                                </div>
-                                                                                                </div>
-                                                                    </div>
-
-                                                                </div>
-                                                                  </a>
-
-                                                                </div>
+                                            <div class="col-lg-3 col-sm-12 hotel-pricing">
+                                                <div class="rating">
+                                                    <div class="rating-text">
+                                                        <span class="rating-count">很出色</span>
+                                                        <span class="rating-count">2,446篇評鑑</span>
                                                     </div>
-                                                `;
+                                                    <span class="rating-score">${totalAverageScore}</span>
+                                                </div>
+                                                <br>
+                                                <h6 style="border: 1px solid red; display:inline-block; background-color: red; color:white">優惠只剩1間</h6>
+                                                <h6 style="color:gray">每晚價格(不連稅及其他費用)</h6>
+                                                <br><br>
+                                                <h3>NT$${hotelPrice}</h3>
+                                               
+                                                             <div class="checkbox-container" >
+                                                                        <div class="form-check" onclick="event.stopPropagation()">
+                                                                                    <input class="form-check-input" type="checkbox" id="${hotelId}" data-hotel-id="${hotelId}">
+                                                                                    <label class="form-check-label" for="${hotelId}">
+                                                                                比較
+                                                                            </label>
+                                                                        </div>
+                                                                        </div>
+                                            </div>
+                                                      
+                                        </div>
+                                          </a>
+                                             
+                                        </div>
+                            </div>
+                        `;
             }));
 
 
@@ -899,7 +899,7 @@
                         <button type="button" class="btn btn-primary view-hotel">查看飯店</button>
                     </td>
 
-                `;
+                    `;
                     document.querySelector('#myModal .table tbody').appendChild(row);
 
 
@@ -913,12 +913,29 @@
                         updateUI();
                     });
 
+                    // 首先，從 sessionStorage 中讀取 'searchHotel' 的 JSON 字串
+                    const searchHotel = sessionStorage.getItem('searchHotel');
+                    let checkInDate = '';
+                    let checkOutDate = '';
+
+                    // 確保存儲的數據存在
+                    if (searchHotel) {
+                        // 將 JSON 字串轉換為 JavaScript 物件
+                        const searchHotelData = JSON.parse(searchHotel);
+
+                        // 從物件中獲取 checkInDate 和 checkOutDate
+                        checkInDate = searchHotelData.checkInDate;
+                        checkOutDate = searchHotelData.checkOutDate;
+
+                    }
+
                     // 為新生成的 view-hotel 按鈕添加事件監聽器
                     const viewHotelButton = row.querySelector('.view-hotel');
                     viewHotelButton.addEventListener('click', () => {
                         // 導航到相應的飯店頁面
-                        const hotelUrl = `/PgHotel/pgHotel/?hotelId=${hotelId}&checkInDate=2024-06-28&checkOutDate=2024-06-29`;
-                        window.location.href = hotelUrl;
+                      //  const hotelUrl = `/PgHotel/pgHotel/?hotelId=${hotelId}&checkInDate=2024-06-28&checkOutDate=2024-06-29`;
+                      //  window.location.href = hotelUrl;
+                        window.location.href = `${window.location.origin}/PgHotel/pgHotel/?hotelId=${hotelId}&checkInDate=${checkInDate}&checkOutDate=${checkOutDate}`;
                     });
 
 
