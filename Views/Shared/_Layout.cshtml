@@ -389,28 +389,28 @@
     </script>
 
 
-    <script>
-        //如果莫名出錯應該是這一段有錯
-        document.addEventListener('DOMContentLoaded', function () {
-            // 監聽滾動事件
-            window.addEventListener('scroll', function () {
-                var floatingContainer = document.querySelector('.floating-container');
-                if (!floatingContainer) {
-                    console.warn('No floating container found.');
-                    return; // 如果沒有找到 floating-container 元素，直接返回
-                }
-                var scrollPosition = window.scrollY || window.pageYOffset;
+    // <script>
+    //     //如果莫名出錯應該是這一段有錯
+    //     document.addEventListener('DOMContentLoaded', function () {
+    //         // 監聽滾動事件
+    //         window.addEventListener('scroll', function () {
+    //             var floatingContainer = document.querySelector('.floating-container');
+    //             if (!floatingContainer) {
+    //                 console.warn('No floating container found.');
+    //                 return; // 如果沒有找到 floating-container 元素，直接返回
+    //             }
+    //             var scrollPosition = window.scrollY || window.pageYOffset;
 
-                // 如果滾動至頁面中間，顯示浮動容器，否則隱藏
-                if (scrollPosition > (window.innerHeight / 2)) {
-                    floatingContainer.style.display = 'block';
-                }
-                // else {
-                //     floatingContainer.style.display = 'none';
-                // }
-            });
-        });
-    </script>
+    //             // 如果滾動至頁面中間，顯示浮動容器，否則隱藏
+    //             if (scrollPosition > (window.innerHeight / 2)) {
+    //                 floatingContainer.style.display = 'block';
+    //             }
+    //             // else {
+    //             //     floatingContainer.style.display = 'none';
+    //             // }
+    //         });
+    //     });
+    // </script>
 
     <script>
         $(document).ready(function () {
