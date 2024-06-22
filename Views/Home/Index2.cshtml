@@ -668,6 +668,7 @@
                 headers: { "Content-Type": "application/json" },
             });
             const data = await response.json();
+           
 
             const divHotels = document.querySelector("#showhotels");
             divHotels.innerHTML = "";
@@ -795,6 +796,7 @@
             function buildCompareDatas() {
                 const checkedHotelIds = Array.from(document.querySelectorAll('.form-check-input:checked'))
                     .map(checkbox => checkbox.getAttribute('data-hotel-id'));
+          
                 const compareDatas = [];
                 for (const id of checkedHotelIds) {
                     const result = data.filter(value => value.hotelId === parseInt(id));
@@ -911,6 +913,7 @@
                     const HotelImage = getImageUrl(hotelImages[0]);
                     const ratingscore = JSON.parse(totalAverageScore);
                     const formattedScore = parseFloat(ratingscore.toFixed(1));
+        
                     //formattedScore 小數點後的平均評分對應文字
                     let ratingDescription;
                     if (formattedScore >= 9) {
@@ -1011,7 +1014,7 @@
                 LikeStatus: isLiked
             };
 
-            console.log('Sending payload:', payload); // 添加日志输出
+
 
             const response = await fetch(url, {
                 method: "POST",
