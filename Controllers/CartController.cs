@@ -178,7 +178,7 @@ namespace PrjFunNowWeb.Controllers
                     Email = member?.Email,
                     Phone = member?.Phone,
                     HotelID = (int)od.Room?.Hotel?.HotelId,
-                    //GuestNumber = od.GuestNumber,
+                    GuestNumber = od.GuestNumber,
                     EcpayParameters = ecpayParameters
                 }).ToList();
 
