@@ -513,7 +513,7 @@
                     formData.append('roomData', JSON.stringify(roomData));
                     formData.append('MemberId', userId);
 
-                    const url = "https://localhost:7103/api/HotelCreate";
+                    const url = '@Url.Content("~/HotelCreate/PostHotel")';
                     const res = await fetch(url, {
                         method: "POST",
                         body: formData
@@ -525,8 +525,6 @@
                         sessionStorage.removeItem('tRoom');
                         showModal();
 
-                  
-                        // sessionStorage.clear();
                     } else {
                         throw new Error(`HTTP error! status: ${res.status}`);
                     }
