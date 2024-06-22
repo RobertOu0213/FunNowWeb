@@ -25,7 +25,6 @@ namespace PrjFunNowWeb.Controllers
             var userID = HttpContext.Session.GetString("MemberID");
             if (string.IsNullOrEmpty(userID))
             {
-
                 userID = HttpContext.Session.GetString("GoogleMemberID");
                 if (string.IsNullOrEmpty(userID))
                 {
