@@ -23,6 +23,9 @@ using System;
 using DotNetEnv;
 using PrjFunNowWeb.Models.DTO;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Metrics;
+using System.Globalization;
+using TinyPinyin;
 
 namespace PrjFunNowWeb.Controllers
 {
@@ -97,6 +100,18 @@ namespace PrjFunNowWeb.Controllers
         //    return View("ForgotPassword");
         //}
 
+        // 判斷字符串是否包含中文字符
+        private bool IsChinese(string input)
+        {
+            foreach (char c in input)
+            {
+                if (char.GetUnicodeCategory(c) == UnicodeCategory.OtherLetter)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
 
         //第三方登入的頁面
@@ -130,6 +145,12 @@ namespace PrjFunNowWeb.Controllers
             var phone = claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.MobilePhone)?.Value;
             var birthday = claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.DateOfBirth)?.Value;
 
+            // 假設FirstName為中文時，需要轉換成羅馬拼音
+            if (IsChinese(name))
+            {
+                name = PinyinHelper.GetPinyin(name);
+            }
+
             // 檢查使用者是否已經存在於資料庫中
             var existingMember = _context.Members.FirstOrDefault(m => m.Email == email);
             if (existingMember == null) // 如果不存在則創建新的使用者
@@ -139,8 +160,8 @@ namespace PrjFunNowWeb.Controllers
                     // 放你想從google拿到的使用者資訊
                     Email = email,
                     FirstName = name,
-                    Phone = "google登入不用設定手機號碼",
-                    Password = "google登入不用設定密碼",
+                    Phone = "google登入尚未設定手機號碼",
+                    Password = "google登入尚未設定密碼",
                 };
                 _context.Members.Add(newMember); //直接幫這些用google登入的使用者註冊進資料庫
                 _context.SaveChanges();
@@ -175,6 +196,8 @@ namespace PrjFunNowWeb.Controllers
                     return View("Login");
             }
         }
+
+        
 
         //處理登出 
         public IActionResult Logout()
