@@ -1,17 +1,18 @@
 ﻿
 @{
-    ViewData["Title"] = "Angular_plaform";
+    ViewData["Title"] = "Angular_reportform";
+    var memberID = Context.Session.GetString("MemberID");
+
 }
 
 
-@{
-    Layout = "~/Views/Shared/_Layout_platform.cshtml";
-}
+
 
 @section Styles {
     <link href="~/css/joanna_css/styles.b13b175880f4995b.css" rel="stylesheet" />
+    
 }
-<platformcomment-element></platformcomment-element>
+<reportform-element member-id="@memberID"></reportform-element>
 
 @section Scripts {
     <script src="~/dist/fun-now-angular1/main.065fbaaab029b880.js"></script>
