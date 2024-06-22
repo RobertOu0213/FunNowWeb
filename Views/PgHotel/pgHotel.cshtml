@@ -1116,13 +1116,6 @@
                 const roomID = $(this).data('roomid');
                 const searchHotel = JSON.parse(sessionStorage.getItem('searchHotel'));
 
-                //是否有登入寫在後端
-                // const memberID = getMemberID();
-                // if (!memberID) {
-                //     window.location.href = '/login';
-                //     return;
-                // }
-
                 const orderDetail = {
                     MemberID: 1,
                     RoomID: roomID,
@@ -1192,8 +1185,6 @@
         }
 
             
-
-
 
         function showCartModal(data) {
 
@@ -1284,7 +1275,7 @@
 
         //飯店彈出視窗-下滑到指定類別的圖片
         function smoothScroll(targetId) {
-            console.log(targetId);
+
             const targetEle = document.getElementById(targetId);
             const modal = document.querySelector('.col-9.scrollable-container');
             if (targetEle) {
@@ -1314,7 +1305,7 @@
                 fetch(`https://localhost:7103/api/Comment/$${hotelId}/ForHotelComment`)
                     .then(response => response.json())
                     .then(data => {
-                        console.log('Comments Data:', data);
+
                         allData = data;
                         document.getElementById('totalCommentcounts').innerText = data.totalComments;
                         renderComments(data.topComments);
@@ -1325,7 +1316,7 @@
                 fetch(`https://localhost:7103/api/Comment/AverageRatingText/${hotelId}`)
                 .then(response => response.json())
                 .then(data => {
-                    console.log('Average Data:', data);
+  
                     renderAverage(data);
                 })
                 .catch(error => console.error('Error fetching average data:', error));
@@ -1335,7 +1326,7 @@
                 fetch(`https://localhost:7103/api/Comment/${hotelId}/AverageScores`)
                 .then(response => response.json())
                 .then(data => {
-                    console.log('Scores Data:', data);
+
                     renderScores(data);
                 })
                 .catch(error => console.error('Error fetching scores data:', error));
@@ -1374,7 +1365,7 @@
             //進度條
             function renderScores(data) {
                 const scoresContainer = document.getElementById('averageScoresContainer');
-                console.log('Scores Data:', data);
+
                 scoresContainer.innerHTML = `
                             <div class="column">
                                                         ${renderScore('舒適度', data.averageScore.comfortScore)}
@@ -1410,7 +1401,7 @@
             }
 
             function renderAverage(data) {
-                console.log('Average Data:', data); // Log the average data
+                // console.log('Average Data:', data); // Log the average data
                 document.getElementById('totalAverageScore').innerText = data.averageScore.toFixed(1);
                 document.getElementById('ratingText').innerText = data.ratingText;
             }

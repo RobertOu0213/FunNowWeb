@@ -23,6 +23,9 @@ using System;
 using DotNetEnv;
 using PrjFunNowWeb.Models.DTO;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Metrics;
+using System.Globalization;
+using TinyPinyin;
 
 namespace PrjFunNowWeb.Controllers
 {
@@ -97,6 +100,18 @@ namespace PrjFunNowWeb.Controllers
         //    return View("ForgotPassword");
         //}
 
+        // 判斷字符串是否包含中文字符
+        private bool IsChinese(string input)
+        {
+            foreach (char c in input)
+            {
+                if (char.GetUnicodeCategory(c) == UnicodeCategory.OtherLetter)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
 
         //第三方登入的頁面
@@ -130,6 +145,12 @@ namespace PrjFunNowWeb.Controllers
             var phone = claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.MobilePhone)?.Value;
             var birthday = claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.DateOfBirth)?.Value;
 
+            // 假設FirstName為中文時，需要轉換成羅馬拼音
+            if (IsChinese(name))
+            {
+                name = PinyinHelper.GetPinyin(name);
+            }
+
             // 檢查使用者是否已經存在於資料庫中
             var existingMember = _context.Members.FirstOrDefault(m => m.Email == email);
             if (existingMember == null) // 如果不存在則創建新的使用者
@@ -139,8 +160,8 @@ namespace PrjFunNowWeb.Controllers
                     // 放你想從google拿到的使用者資訊
                     Email = email,
                     FirstName = name,
-                    Phone = "google登入不用設定手機號碼",
-                    Password = "google登入不用設定密碼",
+                    Phone = "google登入尚未設定手機號碼",
+                    Password = "google登入尚未設定密碼",
                 };
                 _context.Members.Add(newMember); //直接幫這些用google登入的使用者註冊進資料庫
                 _context.SaveChanges();
@@ -176,6 +197,8 @@ namespace PrjFunNowWeb.Controllers
             }
         }
 
+        
+
         //處理登出 
         public IActionResult Logout()
         {
@@ -204,115 +227,115 @@ namespace PrjFunNowWeb.Controllers
 
 
 
-        public IActionResult HostInformation()
-        {
+        //public IActionResult HostInformation()
+        //{
 
-            var userID = HttpContext.Session.GetString("MemberID");
-            if (string.IsNullOrEmpty(userID))
-            {
+        //    var userID = HttpContext.Session.GetString("MemberID");
+        //    if (string.IsNullOrEmpty(userID))
+        //    {
 
-                userID = HttpContext.Session.GetString("GoogleMemberID");
-                if (string.IsNullOrEmpty(userID))
-                {
-                    return RedirectToAction("Login", "Member");
-                }
-            }
-            else
-            {
-                var existingMember = _context.Members
-                    .Where(x => x.MemberId == Convert.ToInt32(userID))
-                    .FirstOrDefault();
+        //        userID = HttpContext.Session.GetString("GoogleMemberID");
+        //        if (string.IsNullOrEmpty(userID))
+        //        {
+        //            return RedirectToAction("Login", "Member");
+        //        }
+        //    }
+        //    else
+        //    {
+        //        var existingMember = _context.Members
+        //            .Where(x => x.MemberId == Convert.ToInt32(userID))
+        //            .FirstOrDefault();
 
-                if (existingMember == null)
-                {
-                    return NotFound("Member not found");
-                }
-            }
+        //        if (existingMember == null)
+        //        {
+        //            return NotFound("Member not found");
+        //        }
+        //    }
 
-            var member = _context.Members
-                .Where(x => x.MemberId == Convert.ToInt32(userID))
-                .Select(x => new { x.MemberId, x.FirstName, x.LastName })
-                .FirstOrDefault();
+        //    var member = _context.Members
+        //        .Where(x => x.MemberId == Convert.ToInt32(userID))
+        //        .Select(x => new { x.MemberId, x.FirstName, x.LastName })
+        //        .FirstOrDefault();
 
-            if (member == null)
-            {
-                return NotFound("Member not found");
-            }
+        //    if (member == null)
+        //    {
+        //        return NotFound("Member not found");
+        //    }
 
-            ViewBag.MemberID = member.MemberId;
-            ViewBag.FirstName = member.FirstName;
-            ViewBag.LastName = member.LastName;
+        //    ViewBag.MemberID = member.MemberId;
+        //    ViewBag.FirstName = member.FirstName;
+        //    ViewBag.LastName = member.LastName;
 
-            return View();
-        }
+        //    return View();
+        //}
 
 
-        //修改房東所有個人資料
-        [HttpPut("HostMemberEdit/{id}")]
-        public async Task<IActionResult> HostMemberEdit(int id, [FromForm] HostMemberEditDTO edit, IFormFile imageFile)
-        {
-            var member = await _context.Members.FindAsync(id);
-            if (member == null)
-            {
-                return BadRequest("一開始資料庫就沒有這個會員");
-            }
+        ////修改房東所有個人資料
+        //[HttpPut("HostMemberEdit/{id}")]
+        //public async Task<IActionResult> HostMemberEdit(int id, [FromForm] HostMemberEditDTO edit, IFormFile imageFile)
+        //{
+        //    var member = await _context.Members.FindAsync(id);
+        //    if (member == null)
+        //    {
+        //        return BadRequest("一開始資料庫就沒有這個會員");
+        //    }
 
-            member.FirstName = edit.FirstName;
-            member.LastName = edit.LastName;
-            member.Phone = edit.Phone;
-            member.Birthday = edit.Birthday;
-            member.CityId = edit.CityId;
-            member.MemberAddress = edit.MemberAddress;
-            member.Introduction = edit.Introduction;
+        //    member.FirstName = edit.FirstName;
+        //    member.LastName = edit.LastName;
+        //    member.Phone = edit.Phone;
+        //    member.Birthday = edit.Birthday;
+        //    member.CityId = edit.CityId;
+        //    member.MemberAddress = edit.MemberAddress;
+        //    member.Introduction = edit.Introduction;
 
-            if (imageFile != null && imageFile.Length > 0)
-            {
-                var extension = Path.GetExtension(imageFile.FileName);
-                var fileName = $"{Guid.NewGuid()}{extension}";
-                var filePath = Path.Combine(_env.WebRootPath, "image", fileName);
+        //    if (imageFile != null && imageFile.Length > 0)
+        //    {
+        //        var extension = Path.GetExtension(imageFile.FileName);
+        //        var fileName = $"{Guid.NewGuid()}{extension}";
+        //        var filePath = Path.Combine(_env.WebRootPath, "image", fileName);
 
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await imageFile.CopyToAsync(stream);
-                }
+        //        using (var stream = new FileStream(filePath, FileMode.Create))
+        //        {
+        //            await imageFile.CopyToAsync(stream);
+        //        }
 
-                member.Image = $"/image/{fileName}";
-            }
+        //        member.Image = $"/image/{fileName}";
+        //    }
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!MemberExists(id))
-                {
-                    return BadRequest("你在把更新資料存進資料庫時找不到這個會員了");
-                }
-                else
-                {
-                    throw;
-                }
-            }
+        //    try
+        //    {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!MemberExists(id))
+        //        {
+        //            return BadRequest("你在把更新資料存進資料庫時找不到這個會員了");
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
 
-            return Ok(new { Message = "會員資料修改成功", ImageUrl = member.Image });
-        }
+        //    return Ok(new { Message = "會員資料修改成功", ImageUrl = member.Image });
+        //}
 
-        private bool MemberExists(int id)
-        {
-            return _context.Members.Any(e => e.MemberId == id);
-        }
+        //private bool MemberExists(int id)
+        //{
+        //    return _context.Members.Any(e => e.MemberId == id);
+        //}
 
-        public class HostMemberEditDTO
-        {
-            public string FirstName { get; set; }
-            public string LastName { get; set; }
-            public string Phone { get; set; }
-            public DateTime? Birthday { get; set; }
-            public int? CityId { get; set; }
-            public string MemberAddress { get; set; }
-            public string Introduction { get; set; }
-        }
+        //public class HostMemberEditDTO
+        //{
+        //    public string FirstName { get; set; }
+        //    public string LastName { get; set; }
+        //    public string Phone { get; set; }
+        //    public DateTime? Birthday { get; set; }
+        //    public int? CityId { get; set; }
+        //    public string MemberAddress { get; set; }
+        //    public string Introduction { get; set; }
+        //}
 
 
        

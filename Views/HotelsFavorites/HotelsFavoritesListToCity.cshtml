@@ -160,13 +160,14 @@
                     // 现在可以访问averageScore和totalAverageScore
                     const totalAverageScore = ratingObj.totalAverageScore;
                     const formattedScore = parseFloat(totalAverageScore.toFixed(1));
+                    const averageScore = ratingObj.averageScore;
+                    console.log("Total Average Score:", totalAverageScore);
+                    console.log("formattedScore:", formattedScore);
 
                     // 现在可以访问total總則數
                     const total = totalcommentsObj.total;
 
-                    const averageScore = ratingObj.averageScore;
-                    console.log("Total Average Score:", totalAverageScore);
-                    console.log("formattedScore:", formattedScore);
+                
 
                     //formattedScore 小數點後的平均評分對應文字
                     let ratingDescription;
@@ -179,19 +180,40 @@
                     } else if (formattedScore >= 3) {
                         ratingDescription = "尚可";
                     } else {
-                        ratingDescription = "低於預期";
+                        ratingDescription = "差";
                     }
                     console.log("Average Score Details:", averageScore);
                     const HotelImage = getImageUrl(hotelImage);
                     console.log(HotelImage);
-                    /* 在卡片元素上設置一個 data-hotel-id 屬性,用於存儲酒店 ID */
+                    /* <div class="card" data-hotel-id="${hotelId}">  在卡片元素上設置一個 data-hotel-id 屬性,用於存儲酒店 ID */
+
                     // https://localhost:7284/PgHotel/pgHotel/?hotelId=2&checkInDate=2024-06-19&checkOutDate=2024-06-20
                     // <a href="/PgHotel/pgHotel/?hotelId=${hotelId}&checkInDate=${2024-06-19}&checkOutDate=${2024-06-20}" >
+                    //window.location.href = window.location.origin + '/Member/Login';
+                    //window.location.href = window.location.origin + '/PgHotel/pgHotel/?hotelId=${hotelId}&checkInDate=${}&checkOutDate=${}';
+
+                    // 首先，從 sessionStorage 中讀取 'searchHotel' 的 JSON 字串
+                    const searchHotel = sessionStorage.getItem('searchHotel');
+                    let checkInDate = '';
+                    let checkOutDate = '';
+
+                    // 確保存儲的數據存在
+                    if (searchHotel) 
+                    {
+                        // 將 JSON 字串轉換為 JavaScript 物件
+                        const searchHotelData = JSON.parse(searchHotel);
+
+                        // 從物件中獲取 checkInDate 和 checkOutDate
+                        checkInDate = searchHotelData.checkInDate;
+                        checkOutDate = searchHotelData.checkOutDate;
+
+                    }
+
 
                     return (`
                                          <div class="col-md-3">
                                               <div class="card" data-hotel-id="${hotelId}">
-                                                          <a href="/PgHotel/pgHotel/?hotelId=${hotelId}&checkInDate=2024-06-28&checkOutDate=2024-06-29">
+                                                        <a href="${window.location.origin}/PgHotel/pgHotel/?hotelId=${hotelId}&checkInDate=${checkInDate}&checkOutDate=${checkOutDate}">
                                                 <img src="${HotelImage}"  alt="Image of ${hotelName}" class="card-img-top">
                                                 <div class="card-body">
                                                     <h5 class="card-title">${hotelName}</h5>

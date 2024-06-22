@@ -59,5 +59,18 @@ namespace PrjFunNowWeb.Controllers
             ViewBag.MemberID = !string.IsNullOrEmpty(googleMemberId) ? googleMemberId : memberId;
             return View();
         }
+        public IActionResult Customerservice()
+        {
+            var memberId = HttpContext.Session.GetString("MemberID");
+            var googleMemberId = HttpContext.Session.GetString("GoogleMemberID");
+
+            if (string.IsNullOrEmpty(memberId) && string.IsNullOrEmpty(googleMemberId))
+            {
+                return RedirectToAction("Login", "Member");
+            }
+
+            ViewBag.MemberID = !string.IsNullOrEmpty(googleMemberId) ? googleMemberId : memberId;
+            return View();
+        }
     }
 }

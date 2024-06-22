@@ -1,0 +1,319 @@
+﻿@using System.Text.Json
+
+@{
+    var memberID = Context.Session.GetString("MemberID");
+    var googleMemberId = Context.Session.GetString("GoogleMemberID");
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/9bbb5484f7.js" crossorigin="anonymous"></script>
+   
+
+    <style>
+        .navbar {
+            height: 70px;
+            padding: 0 15px;
+            box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 8px 2px;
+        }
+
+        .navbar-container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .navbar-logo {
+            height: 40px;
+            border-radius: 12px;
+        }
+
+        .nav-btn {
+            margin-right: 10px;
+            padding: 5px 10px;
+            border: 1px solid #fe4a55;
+            color: #fe4a55;
+            margin-top: 8px;
+            font-size: 14px;
+        }
+
+        .nav-btn:hover {
+            background-color: #fe4a55;
+            color: white;
+        }
+
+        .nav-btn-primary {
+            background-color: #00023c;
+            color: white;
+            margin-top: 8px;
+            border-color: #00023c;
+        }
+
+        .nav-btn-primary:hover {
+            background-color: white;
+            color: #00023c;
+            border-color: #00023c;
+        }
+
+        .member-nav {
+            display: flex;
+            align-items: center;
+        }
+
+        .member-nav-item {
+            margin-right: 10px;
+        }
+
+        .member-nav-item:last-child {
+            margin-right: 0;
+        }
+
+        .post-link {
+            color: #fe4a55 !important;
+            border: 1px solid #fe4a55;
+            border-radius: 4px;
+            padding: 5px 10px;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .post-link:hover {
+            background-color: #fe4a55;
+            color: white !important;
+        }
+
+        .fa-cart-shopping {
+            font-size: 24px;
+            color: #00023c;
+        }
+
+        .cart-icon {
+            position: relative;
+            display: inline-block;
+        }
+
+        .cart-icon i {
+            transition: opacity 0.3s ease;
+        }
+
+        .cart-icon::before {
+            content: "\f218";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            position: absolute;
+            top: 50%;
+            left: 60%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            font-size: 24px;
+            color: #00023c;
+            margin-right: 0px;
+        }
+
+        .cart-icon:hover i {
+            opacity: 0;
+        }
+
+        .cart-icon:hover::before {
+            opacity: 1;
+        }
+
+        .NNavProfileImg {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .NNavLogoutButton {
+            white-space: nowrap;
+            border: solid 1px #00013d !important;
+            border-radius: 4px;
+            background-color: transparent;
+            margin-top: 10px;
+            font-size: 14px;
+            padding: 5px 10px 5px 10px;
+        }
+
+        .NNavLogoutButton:hover {
+            background-color: #00013d;
+            color: white !important;
+        }
+
+        .dropdown-toggle.no-caret::after {
+            display: none;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+        }
+
+        #NavMemberName {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 150px;
+            color: #00013d;
+        }
+
+        @@media (max-width: 991px) {
+            #MemberContent, #guestContent {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .nav-btn, .post-link {
+                margin-bottom: 10px;
+            }
+
+            .member-nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .member-nav-item {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+
+            .member-nav-item:last-child {
+                margin-bottom: 0;
+            }
+        }
+    </style>
+
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <header class="header_area">
+        <div class="container-fluid" style="padding: 0;">
+            <nav class="navbar navbar-expand-lg">
+                <div class="navbar-container d-flex justify-content-between align-items-center w-100">
+                    <a class="navbar-brand logo_h" href="/home/index">
+                        <img src="~/image/ming_img/newnewLogo.png" alt="Logo" class="navbar-logo">
+                    </a>
+
+                    <div id="MemberContent" class="d-none align-items-center member-nav">
+                        <a href="/HostManage/Home" target="_blank" class="nav-item nav-link post-link member-nav-item" style="margin-right:0px"><i class="fa-solid fa-house" style="margin-right:3px"></i>刊登家中空房</a>
+                        <a href="/Cart/cartItems" class="nav-item nav-link member-nav-item cart-icon" style="margin-right:0px; padding-left:30px">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                        </a>
+                        <div class="nav-item dropdown member-nav-item">
+                            <a href="#" class="nav-link dropdown-toggle no-caret d-flex align-items-center" data-toggle="dropdown">
+                                <img id="NNavProfileImg" class="NNavProfileImg mr-2" src="https://cdn2.ettoday.net/images/1457/d1457772.jpg" alt="Profile">
+                                <span id="NavMemberName"></span>
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="/OrderManagement/Index">我的訂單</a>
+                                <a class="dropdown-item" href="/OrderManagement/HotelMessenge">我的訊息</a>
+                                <a class="dropdown-item" href="/HotelsFavorites/HotelsFavoritesList">我的最愛</a>
+                                <a class="dropdown-item" href="/Comment/Angular_membercomment">我的評論</a>
+                                <a class="dropdown-item" asp-controller="MemberInformationn" asp-action="Memberinformationn">個人資料管理</a>
+                            </div>
+                        </div>
+                        <button class="btn NNavLogoutButton member-nav-item" id="NNavLogoutButton">我要登出<i class="fa-solid fa-right-from-bracket" style="margin-left:5px"></i></button>
+                    </div>
+
+                    <div id="guestContent" class="d-none align-items-center">
+                        <a href="@Url.Action("Login", "Member")" class="btn nav-btn"><i class="fa-solid fa-door-open" style="margin-right:3px"></i>我要登入</a>
+                        <a href="@Url.Action("Register", "Member")" class="btn nav-btn"><i class="fa-solid fa-address-card" style="margin-right:3px"></i>我是新朋友</a>
+                        <a href="@Url.Action("Index", "Home")" class="btn nav-btn nav-btn-primary">先逛逛首頁<i class="fa-solid fa-car-side" style="margin-left:5px"></i></a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div>
+        @RenderBody()
+    </div>
+
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+
+            var NavGoogleMemberId = '@googleMemberId';
+            var NavMemberID = '@memberID';
+            let NavLoginmemberID;
+
+            if (NavMemberID) {
+                NavLoginmemberID = NavMemberID;
+            } else {
+                NavLoginmemberID = NavGoogleMemberId;
+            }
+
+            const memberContent = document.getElementById("MemberContent");
+            const guestContent = document.getElementById("guestContent");
+
+            if (!NavLoginmemberID) {
+                if (guestContent) {
+                    guestContent.classList.remove('d-none');
+                    guestContent.classList.add('d-flex');
+                }
+            } else {
+                if (memberContent) 
+                {
+                    memberContent.classList.remove('d-none');
+                    memberContent.classList.add('d-flex');
+                    fetchMemberDataNav(NavLoginmemberID);
+                     
+                } else 
+                {
+                    console.log("memberContent not found");
+                }
+            }
+        });
+
+        async function fetchMemberDataNav(NavLoginmemberID) {
+
+            try {
+                
+                const NavResponse = await fetch(`https://localhost:7103/api/HostMember/searchByID?ID=${NavLoginmemberID}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                });
+               
+                if (NavResponse.ok) {
+                    const NavData = await NavResponse.json();
+                    let NavLastName = NavData.lastName || "";
+
+                    const navMemberName = document.getElementById("NavMemberName");
+                    if (navMemberName) {
+                        navMemberName.innerText = `${NavData.firstName}\xa0${NavLastName}`;
+                       
+                    }
+
+                    if (NavData.image) 
+                    {
+                        const NNavProfileImg = document.getElementById("NNavProfileImg");
+                        if (NNavProfileImg) NNavProfileImg.src = NavData.image;
+                       
+                    }
+                } else {
+                    const errorText = await NavResponse.text();
+                    console.error('查詢失敗:', errorText);
+                    alert('查詢失敗，請稍後再試');
+                }
+            } catch (error) {
+                console.error('發生錯誤:', error);
+                alert(`發生錯誤，請稍後再試。錯誤信息: ${error.message}`);
+            }
+        }
+
+        document.getElementById("NNavLogoutButton").addEventListener("click", function () {
+            window.location.href = "@Url.Action("Logout", "Member")";
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

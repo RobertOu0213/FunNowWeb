@@ -15,11 +15,11 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 <script src="https://kit.fontawesome.com/091893cea4.js" crossorigin="anonymous"></script>
-
+<title>FunNow-房東個人資料管理</title>
 
 
 <body>
-   
+
 
     <!--============================主要內容=========================================-->
     <div class="container justify-content-center align-items-center" style="margin-top:50px;>
@@ -54,134 +54,132 @@
                     </div>
                 </div>
 
-                    <div class="content-header">
-                        <h5>姓名</h5>
-                    </div>
+                <div class="content-header">
+                    <h5>姓名</h5>
+                </div>
 
-                    <div class="main-content">
-                        <div class="card mb-3 ms-3 ">
-                            <div class="card-body " style="padding:20px 30px 40px 30px; display: flex; align-items: center;  ">
-                                <form class="row g-3">
-                                    <div class="col-md-4">
-                                        <label for="memberFirstName" class="form-label">護照英文名</label>
-                                        <input type="text" class="form-control" id="memberFirstName" placeholder="護照英文名">
-                                        <p id="firstNameError" class="form-text text-danger" style="display: none;">請輸入有效的名字，，限英文，不得為特殊符號或中文</p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label for="memberLastName" class="form-label">護照英文姓</label>
-                                        <input type="text" class="form-control" id="memberLastName" placeholder="護照英文姓">
-                                        <p id="lastNameError" class="form-text text-danger" style="display: none;">請輸入有效的姓氏，限英文，不得為特殊符號或中文</p>
-                                    </div>
-                                    <div class="col-md-4">
-                                    </div>
+                <div class="main-content">
+                    <div class="card mb-3 ms-3 ">
+                        <div class="card-body " style="padding:20px 30px 40px 30px; display: flex; align-items: center;  ">
+                            <form class="row g-3" onsubmit="return false;">
+                                <div class="col-md-4">
+                                    <label for="memberFirstName" class="form-label">護照英文名</label>
+                                    <input type="text" class="form-control" id="memberFirstName" placeholder="護照英文名">
+                                    <p id="firstNameError" class="form-text text-danger" style="display: none;">請輸入有效的名字，，限英文，不得為特殊符號或中文</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="memberLastName" class="form-label">護照英文姓</label>
+                                    <input type="text" class="form-control" id="memberLastName" placeholder="護照英文姓">
+                                    <p id="lastNameError" class="form-text text-danger" style="display: none;">請輸入有效的姓氏，限英文，不得為特殊符號或中文</p>
+                                </div>
+                                <div class="col-md-4">
+                                </div>
 
-                                    <label for="memberBirth" class="form-label mt-4 mb-1">出生年月日</label>
-                                    <div class="col-md-8">
-                                        <input type="date" class="form-control" id="memberBirth" name="memberBirth" placeholder="請點選您的生日日期" max="@DateTime.Now.ToString("yyyy-MM-dd")">
-                                    </div>
+                                <label for="memberBirth" class="form-label mt-4 mb-1">出生年月日</label>
+                                <div class="col-md-8">
+                                    <input type="date" class="form-control" id="memberBirth" name="memberBirth" placeholder="請點選您的生日日期" max="@DateTime.Now.ToString("yyyy-MM-dd")">
+                                </div>
 
-                                </form>
-                            </div>
+                            </form>
                         </div>
                     </div>
+                </div>
 
-                    <div class="content-header">
-                        <h5>聯絡資訊</h5>
-                    </div>
+                <div class="content-header">
+                    <h5>聯絡資訊</h5>
+                </div>
 
-                    <div class="main-content">
-                        <div class="card mb-3 ms-3 ">
-                            <div class="card-body " style="padding: 20px 30px 40px 30px; display: flex; align-items: center; ">
-                                <form class="row g-3">
-                                    <label for="memberPhone" class="form-label mt-4 mb-1">手機號碼（選填）</label>
-                                    <div class="col-md-4">
-                                        <input type="text" class="form-control" id="memberPhone" name="memberPhone" placeholder="手機號碼" style="width:400px">
-                                        <p id="phoneError" class="form-text text-danger" style="display: none;">請輸入有效的手機號碼格式</p>
-                                    </div>
+                <div class="main-content">
+                    <div class="card mb-3 ms-3 ">
+                        <div class="card-body " style="padding: 20px 30px 40px 30px; display: flex; align-items: center; ">
+                            <form class="row g-3" onsubmit="return false;">
+                                <label for="memberPhone" class="form-label mt-4 mb-1">手機號碼（選填）</label>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="memberPhone" name="memberPhone" placeholder="手機號碼" style="width:400px">
+                                    <p id="phoneError" class="form-text text-danger" style="display: none;">請輸入有效的手機號碼格式</p>
+                                </div>
+                                <div>
+                                    <label for="memberEmail" class="form-label">電子信箱</label>
+
                                     <div>
-                                        <label for="memberEmail" class="form-label">電子信箱</label>
-                                        
-                                        <div>
-                                            <div class="row">
-                                                <div class="col-4">
-                                                    <input type="email" class="form-control" id="memberEmail"  disabled>
-                                                </div>
-                                                <div class="col-4">
-                                                    <button class="btn btn-success col-auto" disabled="true;">您的電子信箱已經通過驗證</button>
-                                                </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <input type="email" class="form-control" id="memberEmail" disabled>
+                                            </div>
+                                            <div class="col-4">
+                                                <button class="btn btn-success col-auto" disabled="true;">您的電子信箱已經通過驗證</button>
                                             </div>
                                         </div>
                                     </div>
-                                </form>
-                            </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
+                </div>
 
-                    <div class="content-header">
-                        <h5>地點資訊</h5>
-                    </div>
-                    <div class="main-content">
-                        <div class="card mb-3 ms-3 ">
-                            <div class="card-body " style="padding: 20px 30px 40px 30px; display: flex; align-items: center; ">
-                                <form class="row g-3">
+                <div class="content-header">
+                    <h5>地點資訊</h5>
+                </div>
+                <div class="main-content">
+                    <div class="card mb-3 ms-3 ">
+                        <div class="card-body " style="padding: 20px 30px 40px 30px; display: flex; align-items: center; ">
+                            <form class="row g-3" onsubmit="return false;">
 
-                                    <label for="inputLocation" class="form-label mt-4 mb-1">居住地點</label>
+                                <label for="inputLocation" class="form-label mt-4 mb-1">居住地點</label>
 
-                                    <div class="col-md-6">
-                                        <select id="memberCountry" class="form-select">
-                                            <option selected disabled>選擇國家</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <select id="memberCity" class="form-select">
-                                            <option selected disabled>選擇城市</option>
-                                        </select>
-                                    </div>
-                                    
-                                
-                                    <div class="col-md-15">
-                                        <label for="memberAddress" class="form-label">完整地址（1年至少居住8個月以上）</label>
-                                        <input type="text" class="form-control" id="memberAddress" placeholder="請填寫完整地址(ex.大安區復興南路一段362號2樓)">
-                                    </div>
-                                    
-                                 </form>
-                            </div>
-                        </div>
-                    </div>
+                                <div class="col-md-6">
+                                    <select id="memberCountry" class="form-select">
+                                        <option selected disabled>選擇國家</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <select id="memberCity" class="form-select">
+                                        <option selected disabled>選擇城市</option>
+                                    </select>
+                                </div>
 
 
-                    <div class="content-header">
-                        <h5>介紹一下自己</h5>
-                    </div>
+                                <div class="col-md-15">
+                                    <label for="memberAddress" class="form-label">完整地址（1年至少居住8個月以上）</label>
+                                    <input type="text" class="form-control" id="memberAddress" placeholder="請填寫完整地址(ex.大安區復興南路一段362號2樓)">
+                                </div>
 
-                    <div class="main-content">
-                        <div class="card mb-3 ms-3 ">
-                            <div class="card-body " style="padding: 40px 30px 40px 30px; display: flex; align-items: center; ">
-                                <textarea class="form-control" maxlength="1500" id="memberIntroduction" rows="3" placeholder="豐富的自我介紹會讓房客更加了解您，增加下訂機率喔!"></textarea>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
 
 
-                <div class="row d-flex">
-                    <div class="col-7">
-                    </div>
-                    <div class="col-2" style=" width:200px; padding-left:40px">
-                        <button class="btnLast" id="cancelBtn">取消</button>
-                    </div>
-                    <div class="col-2">
-                        <button class="btnSave " id="saveBtn">儲存</button>
-                    </div>
+                <div class="content-header">
+                    <h5>介紹一下自己</h5>
                 </div>
 
+                <div class="main-content">
+                    <div class="card mb-3 ms-3 ">
+                        <div class="card-body " style="padding: 40px 30px 40px 30px; display: flex; align-items: center; ">
+                            <textarea class="form-control" maxlength="1500" id="memberIntroduction" rows="3" placeholder="豐富的自我介紹會讓房客更加了解您，增加下訂機率喔!"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            </div> <!--表單內容的結尾-->
+
+            <div class="row d-flex">
+                <div class="col-7">
+                </div>
+                <div class="col-2" style=" width:200px; padding-left:40px">
+                    <button class="btnLast" id="cancelBtn">取消</button>
+                </div>
+                <div class="col-2">
+                    <button class="btnSave " id="saveBtn" type="button">儲存</button>
+                </div>
+            </div>
 
 
-        </div> <!--container的結尾-->
+        </div> <!--表單內容的結尾-->
 
 
+    </div> <!--container的結尾-->
     </div>
     <!--============================頁尾=========================================-->
 
@@ -403,21 +401,21 @@
         }
 
         /* 懸浮時放大顯示完整圖片 */
-     
+
         .fullImageContainer {
             display: none;
             position: absolute;
             top: 140%; /* 調整預覽圖片的垂直位置 */
-            left: 200px;  /* 調整預覽圖片的水平位置 */
+            left: 200px; /* 調整預覽圖片的水平位置 */
             z-index: 50;
             max-width: 300px; /*調整預覽圖片的最大寬度 */
             border: 1px solid #ccc;
             background-color: #fff;
-            transform: scale(1.8);  /*調整預覽圖片的放大比例 */
+            transform: scale(1.8); /*調整預覽圖片的放大比例 */
             transition: transform 0.2s;
         }
 
-        .fullImageContainer img {
+            .fullImageContainer img {
                 width: 100%;
             }
 
@@ -432,10 +430,10 @@
 {
 
     <script>
-       
+
         //【一開始載入的時候出現會員資料】
-            document.addEventListener('DOMContentLoaded', function () {
-                fetchCountries(); //載入下拉選單中的國家&城市
+        document.addEventListener('DOMContentLoaded', function () {
+            fetchCountries(); //載入下拉選單中的國家&城市
 
             var googleMemberId = '@googleMemberId';
             var memberID = '@memberID';
@@ -447,14 +445,12 @@
                 LoginmemberID = googleMemberId;
             }
 
-            if (LoginmemberID == null) 
-            {
+            if (LoginmemberID == null) {
                 //基本上不會用到，若沒登入就跳轉到登入頁面
                 alert("你沒登入無法查看此頁面喔!");
                 window.location.href = "/Member/Login";
             }
-            else 
-            {
+            else {
                 fetchMemberData(LoginmemberID); //撈會員資料的功能
             }
 
@@ -472,14 +468,14 @@
             }
         });
 
-            
-        //===================================================================================    
-      
-            //初始載入國家的資料
-            function fetchCountries() {
+
+        //===================================================================================
+
+        //初始載入國家的資料
+        function fetchCountries() {
             fetch('https://localhost:7103/api/HostMember/countries')
-                    .then(response => response.json())
-                    .then(data => {
+                .then(response => response.json())
+                .then(data => {
                     var countrySelect = document.getElementById('memberCountry');
                     if (countrySelect) { // 確保元素存在
                         data.forEach(country => {
@@ -495,11 +491,11 @@
                 .catch(error => console.error('Error fetching countries:', error));
         }
 
-            //初始載入城市的資料
-            function fetchCities(countryId) {
+        //初始載入城市的資料
+        function fetchCities(countryId) {
             fetch('https://localhost:7103/api/HostMember/cities?countryId=' + countryId)
-                    .then(response => response.json())
-                    .then(data => {
+                .then(response => response.json())
+                .then(data => {
                     var citySelect = document.getElementById('memberCity');
                     if (citySelect) { // 確保元素存在
                         citySelect.innerHTML = '<option selected disabled>選擇城市</option>';
@@ -535,8 +531,7 @@
                     var Country = document.getElementById("memberCountry");
                     var City = document.getElementById("memberCity");
 
-                    if (Country && City) 
-                    {
+                    if (Country && City) {
                         fetchCountries(); // 填充國家下拉選單
                         const countrySelect = document.getElementById("memberCountry");
                         if (countrySelect) {
@@ -598,22 +593,22 @@
             return [year, month, day].join('-');
         }
 
-      //============================================================================================
-     
+        //============================================================================================
+
         //撈會員資料的功能
         async function fetchMemberData(LoginmemberID) {
 
 
-        var FirstName = document.getElementById("memberFirstName");
-        var LastName = document.getElementById("memberLastName");
-        var Birth = document.getElementById("memberBirth");
-        var Phone = document.getElementById("memberPhone");
-        var Email = document.getElementById("memberEmail");
-        var Country = document.getElementById("memberCountry");
-        var City = document.getElementById("memberCity");
-        var Address = document.getElementById("memberAddress");
-        var Introduction = document.getElementById("memberIntroduction");
-        var ProfileImg = document.getElementById("profileImg"); 
+            var FirstName = document.getElementById("memberFirstName");
+            var LastName = document.getElementById("memberLastName");
+            var Birth = document.getElementById("memberBirth");
+            var Phone = document.getElementById("memberPhone");
+            var Email = document.getElementById("memberEmail");
+            var Country = document.getElementById("memberCountry");
+            var City = document.getElementById("memberCity");
+            var Address = document.getElementById("memberAddress");
+            var Introduction = document.getElementById("memberIntroduction");
+            var ProfileImg = document.getElementById("profileImg");
 
             try {
                 const response = await fetch(`https://localhost:7103/api/Members/searchByID?ID=${LoginmemberID}`, {
@@ -738,7 +733,7 @@
             }
         });
 
-//====即時顯示圖片==========================================================================
+        //====即時顯示圖片==========================================================================
 
         document.getElementById("imageUpload").addEventListener('change', function (evt) {
             var file = evt.target.files[0];
@@ -752,7 +747,7 @@
             }
         });
 
-//================按下取消鈕//=================================================
+        //================按下取消鈕//=================================================
 
         document.getElementById("cancelBtn").addEventListener('click', async (evt) => {
             evt.preventDefault(); //防止預設行為的發生
@@ -768,19 +763,19 @@
             //重新載入一次資料庫原始的填寫會員資料
             fetchMemberData(LoginmemberID); //撈會員資料的功能
         });
- //============按下儲存鈕==================================================
+        //============按下儲存鈕==================================================
 
         document.getElementById("saveBtn").addEventListener('click', async (evt) => {
+            
             evt.preventDefault(); //防止預設行為的發生
+            
 
-            var googleMemberId = '@googleMemberId';
-            var memberID = '@memberID';
-
-            let LoginmemberID;
-            if (memberID) {
-                LoginmemberID = memberID;
-            } else {
-                LoginmemberID = googleMemberId;
+            // 確保 LoginmemberID 是有效的
+            let LoginmemberID = '@memberID' || '@googleMemberId';
+            if (!LoginmemberID) {
+                alert('無法識別會員ID，請重新登入');
+                window.location.href = "/Member/Login";
+                return;
             }
 
             // 檢查是不是有紅框錯誤
@@ -802,10 +797,10 @@
             const inpCity = inpCityElement.selectedIndex > 0 ? inpCityElement.value : null;
 
             const inpAddressElement = document.querySelector('#memberAddress');
-            const inpAddress = inpAddressElement.value.trim() !== "" ? inpAddressElement.value : null;
+            const inpAddress = inpAddressElement.value.trim() !== "" ? inpAddressElement.value :"";
 
             const inpIntroElement = document.querySelector('#memberIntroduction');
-            const inpIntro = inpIntroElement.value.trim() !== "" ? inpIntroElement.value : null;
+            const inpIntro = inpIntroElement.value.trim() !== "" ? inpIntroElement.value : "";
 
             const memberData = {
                 "firstName": inpFirstName,
@@ -832,35 +827,84 @@
 
                 if (response.ok) {
                     const result = await response.json();
-                    alert('修改成功！');
 
-                    const profileImg = document.getElementById('profileImg');
-                    const originalStyles = profileImg.getAttribute('style'); // 儲存原有的樣式
-                    const originalClasses = profileImg.className; // 儲存原有的類別
+                    // 使用 setTimeout 來延遲顯示成功消息，給瀏覽器時間更新 DOM
+                    setTimeout(() => {
+                        alert('修改成功！');
+                    }, 100);
 
-                    profileImg.removeAttribute('style'); // 移除所有內聯樣式
-                    profileImg.className = ''; // 移除所有 CSS 類別
-                    profileImg.src = result.ImageUrl; // 設定新的圖片 URL
-
-                    profileImg.setAttribute('style', originalStyles); // 還原原有的樣式
-                    profileImg.className = originalClasses; // 還原原有的類別
-
-                    document.getElementById('fullPreviewImg').src = result.ImageUrl; // 更新完整圖片
-                    fetchMemberData(LoginmemberID); //再重撈一次會員資料的功能
                 }
-                else {
-                    alert('儲存失敗，請洽客服人員');
+                else 
+                {
+                    const errorData = await response.json();
+                    alert(`儲存失敗：${errorData.message || '請洽客服人員'}`);
                 }
             } catch (error) {
                 console.error('Error:', error);
             }
         });
-            
 
+        //====關於儲存後更新頁面的各種函數=======
 
+        function updatePageWithMemberData(data) {
+            const elements = {
+                firstName: document.getElementById("memberFirstName"),
+                lastName: document.getElementById("memberLastName"),
+                birth: document.getElementById("memberBirth"),
+                phone: document.getElementById("memberPhone"),
+                email: document.getElementById("memberEmail"),
+                country: document.getElementById("memberCountry"),
+                city: document.getElementById("memberCity"),
+                address: document.getElementById("memberAddress"),
+                introduction: document.getElementById("memberIntroduction"),
+                profileImg: document.getElementById("profileImg"),
+                fullPreviewImg: document.getElementById("fullPreviewImg")
+            };
 
+            if (elements.firstName) elements.firstName.value = data.firstName;
+            if (elements.lastName) elements.lastName.value = data.lastName;
+            if (elements.birth) elements.birth.value = data.birthday ? formatDate(new Date(data.birthday)) : '';
+            if (elements.phone) elements.phone.value = data.phone || '';
+            if (elements.email) elements.email.value = data.email;
+            if (elements.address) elements.address.value = data.memberAddress || '';
+            if (elements.introduction) elements.introduction.value = data.introduction || '';
 
+            // 更新照片
+            if (data.imageUrl) {
+                if (elements.profileImg) {
+                    elements.profileImg.src = data.imageUrl;
+                }
+                if (elements.fullPreviewImg) {
+                    elements.fullPreviewImg.src = data.imageUrl;
+                }
+            }
 
+            // 更新國家和城市選擇器
+            if (data.cityId) {
+                updateCountryAndCity(data.cityId);
+            }
+        }
+
+        async function updateCountryAndCity(cityId) {
+            try {
+                const cityData = await fetchCityDetails(cityId);
+                const countrySelect = document.getElementById("memberCountry");
+                const citySelect = document.getElementById("memberCity");
+
+                if (countrySelect && citySelect) {
+                    // 設置國家
+                    countrySelect.value = cityData.countryId;
+
+                    // 獲取並填充城市
+                    await fetchCities(cityData.countryId);
+
+                    // 設置城市
+                    citySelect.value = cityId;
+                }
+            } catch (error) {
+                console.error('更新國家和城市選擇器時出錯:', error);
+            }
+        }
 
     </script>
 }

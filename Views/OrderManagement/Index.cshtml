@@ -7,6 +7,8 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
+    @Html.Partial("~/Views/OrderManagement/Customerservice.cshtml")
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>範例頁面</title>
@@ -25,7 +27,7 @@
                     <li><a href="/Home/Index2" class="fa-solid fa-building" alt="住宿"><span>尋找住宿</span></a></li>
                     <li><a href="/OrderManagement/HotelMessenge" class="fa-solid fa-comment-dots" alt="住宿訊息"><span>住宿訊息</span></a></li>
                     <li><a href="/Comment/Angular_membercomment" class="fa-solid fa-star" alt="住宿評鑑"><span>住宿評鑑</span></a></li>
-                    <li><a href="/Member/MemberInformation" class="fa-solid fa-user" alt="個人資料"><span>個人資料</span></a></li>
+                    <li><a asp-controller="MemberInformationn" asp-action="Memberinformationn"  class="fa-solid fa-user" alt="個人資料"><span>個人資料</span></a></li>
                 </ul>
             </div>
             <div class="content">

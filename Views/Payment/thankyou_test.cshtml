@@ -1,22 +1,23 @@
-﻿@{
-    ViewData["Title"] = "thankyou";
+﻿
+@{
+    ViewData["Title"] = "thankyou_test";
     Layout = "_Layout_Order";
-
+    @model PrjFunNowWeb.Models.ViewModel.CThankyouViewModel
 }
 
 <main>
     <section class="left-section">
         <div class="contact-info p-4">
             <div class="contact-info-static mb-2">
-                <div class="mb-2 d-flex align-items-center">
+                <div class="mb-2 d-flex align-items-center" >
                     <img src="~/ou/image/checksign.png" alt="..." /><span style="font-size:1.5em; font-weight:700; display:inline-block; margin-left:10px;">感謝您的預訂</span>
                 </div>
                 <div class="mb-3">
-      @*               @foreach (var item in Model.OrderDetails)
+                    @foreach (var item in Model.OrderDetails)
                     {
                         <div>預定編號 : <strong>@item.OrderDetailID</strong></div>
-                    } *@
-
+                    }
+                 
                 </div>
                 <div class="d-flex justify-content-between">
                     <div style="width:100%;">
@@ -34,7 +35,7 @@
     </section>
 
 
- @*    <section class="right-section">
+    <section class="right-section">
         <div class="reservation-container mb-3">
             <div class="reservation-container-title">預訂成功</div>
             @foreach (var item in Model.OrderDetails)
@@ -100,7 +101,7 @@
                 含稅與附加費用
             </div>
         </div>
-    </section> *@
+    </section>
 
 </main>
 
@@ -111,37 +112,36 @@
 @section Scripts {
     <script>
 
+  
+            $(document).ready(function () {
+                async function fetchRatings() {
+                    const elements = $('.hotelContainer');
+                    const promises = elements.map(async function () {
+                        const element = $(this);
+                        const hotelId = element.data('hotel-id');
+             
+                        try {
+                            const response = await fetch(`https://localhost:7103/api/Comment/AverageRatingText/${hotelId}`);
+                            if (!response.ok) {
+                                throw new Error(response.statusText);
+                            }
+                            const data = await response.json();
+      
+                            element.find('.averageScore').text(Math.round(data.averageScore));
+                            element.find('.ratingText').text(data.ratingText);
+                        } catch (error) {
+                            console.error(error);
+                        }
+                    }); 
 
-        // $(document).ready(function () {
-        //     async function fetchRatings() {
-        //         const elements = $('.hotelContainer');
-        //         const promises = elements.map(async function () {
-        //             const element = $(this);
-        //             const hotelId = element.data('hotel-id');
+                    await Promise.all(promises);
+                }
 
-        //             try {
-        //                 const response = await fetch(`https://localhost:7103/api/Comment/AverageRatingText/${hotelId}`);
-        //                 if (!response.ok) {
-        //                     throw new Error(response.statusText);
-        //                 }
-        //                 const data = await response.json();
-
-        //                 element.find('.averageScore').text(Math.round(data.averageScore));
-        //                 element.find('.ratingText').text(data.ratingText);
-        //             } catch (error) {
-        //                 console.error(error);
-        //             }
-        //         });
-
-        //         await Promise.all(promises);
-        //     }
-
-        //     fetchRatings();
-        // });
+                fetchRatings();
+            });
 
 
 
 
     </script>
 }
-

@@ -1,0 +1,570 @@
+﻿@{
+    ViewData["HotelId"] = Model.HotelId;
+    ViewData["Title"] = "Hoteldaily";
+    Layout = "_Layout_HotelUpdate";
+}
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agoda風格日曆</title>
+    <style>
+        body {
+            background-color: #f7f7f7;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+        }
+
+        .calendar-container {
+            flex: 2;
+            margin-right: 20px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+            .calendar-header select {
+                padding: 5px;
+                font-size: 16px;
+            }
+
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background-color: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+            .calendar div {
+                background-color: #fff;
+                padding: 10px;
+                text-align: center;
+                position: relative;
+                height: 150px; /* 固定格子高度 */
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+
+                .calendar div.header {
+                    background-color: #f0f0f0;
+                    font-weight: bold;
+                }
+
+                .calendar div.available {
+                    cursor: pointer;
+                    background-color: #d4edda;
+                }
+
+                .calendar div.booked {
+                    background-color: #ffcccc;
+                }
+
+                .calendar div.past {
+                    background-color: #e0e0e0;
+                    color: #999;
+                    cursor: not-allowed;
+                }
+
+                .calendar div.null-guest {
+                    background-color: #e0e0e0;
+                    color: #999;
+                    cursor: pointer;
+                }
+
+                .calendar div.past::after {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: linear-gradient(135deg, transparent 45%, black 45%, black 55%, transparent 55%);
+                    background-size: 10px 10px; /* 調整斜線大小 */
+                }
+
+        .price {
+            font-size: 12px;
+            color: #333;
+        }
+
+        .room-name {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .sidebar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+            .sidebar label {
+                margin-bottom: 10px;
+                font-weight: bold;
+            }
+
+            .sidebar input[type="text"],
+            .sidebar input[type="number"] {
+                padding: 5px;
+                font-size: 16px;
+                margin-bottom: 10px;
+                width: 100%;
+            }
+
+            .sidebar button {
+                padding: 10px;
+                font-size: 16px;
+                color: #fff;
+                background-color: #3581B8;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+        .chat-window {
+            position: fixed;
+            bottom: 0;
+            left: 20px;
+            width: 300px;
+            height: 300px;
+            border: 1px solid #ddd;
+            border-radius: 10px 10px 0 0;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            z-index: 1000; /* Add this line */
+        }
+
+        .chat-header {
+            padding: 10px;
+            background-color: #3581B8;
+            color: #fff;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1001; /* Add this line */
+        }
+
+        .chat-body {
+            flex: 1;
+            padding: 10px;
+            height: 200px;
+            overflow-y: auto;
+            z-index: 1001; /* Add this line */
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 10px;
+        }
+
+            .chat-input input[type="text"] {
+                flex: 1;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+            }
+
+            .chat-input button {
+                padding: 10px;
+                background-color: #3581B8;
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+                margin-left: 10px;
+                cursor: pointer;
+            }
+
+        .chat-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+            .chat-form label {
+                font-weight: bold;
+            }
+
+            .chat-form input[type="text"],
+            .chat-form input[type="email"] {
+                width: 100%;
+                padding: 8px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+            }
+
+            .chat-form textarea {
+                width: 100%;
+                padding: 8px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                resize: vertical;
+            }
+
+        #dateDetails.expanded .additional-fields {
+            display: block;
+        }
+
+        #dateDetails .additional-fields {
+            display: none;
+        }
+
+        .minimize-chat {
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <div>
+                    <label for="yearSelect">Year</label>
+                    <select id="yearSelect"></select>
+                    <label for="monthSelect">Month</label>
+                    <select id="monthSelect"></select>
+                </div>
+            </div>
+            <div class="calendar" id="calendar"></div>
+        </div>
+        <div class="sidebar">
+            <div id="dateDetails" style="display:none;">
+                <label for="selectedDate">Selected dates</label>
+                <input type="text" id="selectedDate" readonly>
+                <label for="availability-available">Availability</label>
+                <input type="radio" id="availability-available" name="availability" value="available">
+                <label for="availability-available">Available</label><br>
+                <input type="radio" id="availability-blocked" name="availability" value="blocked">
+                <label for="availability-blocked">Blocked</label><br>
+                <label for="price">What is the minimum price per night?</label>
+                <input type="number" id="price" readonly>
+                <button id="discardBtn">Discard</button>
+                <button id="saveBtn">Save</button>
+            </div>
+        </div>
+    </div>
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <div class="fa-regular fa-comment-dots"></div>
+            Live Chat
+            <span class="minimize-chat" id="minimizeChat">-</span>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <form class="chat-form">
+                <label for="propertyName">Please let us know your Property name/ID in the message box below. Also if you have questions about bookings or payment, please include your Booking ID with your question before you begin your chat with us.</label>
+                <label for="name">姓名</label>
+                <input type="text" id="name" placeholder="您的姓名">
+                <label for="email">電子郵件</label>
+                <input type="email" id="email" placeholder="您的電子郵件">
+                <label for="query">What can we help you with?</label>
+                <textarea id="query" rows="3" placeholder="請輸入您的問題..."></textarea>
+            </form>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="chatInput" placeholder="訊息">
+            <button id="sendBtn">Send</button>
+        </div>
+    </div>
+    <script src="https://kit.fontawesome.com/091893cea4.js" crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const yearSelect = document.getElementById("yearSelect");
+            const monthSelect = document.getElementById("monthSelect");
+            const calendar = document.getElementById("calendar");
+            const dateDetails = document.getElementById("dateDetails");
+            const selectedDateInput = document.getElementById("selectedDate");
+            const saveBtn = document.getElementById("saveBtn");
+            const discardBtn = document.getElementById("discardBtn");
+            const chatWindow = document.getElementById("chatWindow");
+            const minimizeChat = document.getElementById("minimizeChat");
+            const chatBody = document.getElementById("chatBody");
+            const chatInput = document.getElementById("chatInput");
+            const sendBtn = document.getElementById("sendBtn");
+
+            const currentYear = new Date().getFullYear();
+            const currentMonth = new Date().getMonth() + 1;
+            let selectedDate = null;
+            let selectedOrderDetail = null;
+            let orderDetails = [];
+
+            function populateYearMonthSelectors() {
+                yearSelect.innerHTML = '';
+                monthSelect.innerHTML = '';
+
+                // 添加今年和明年選項
+                [currentYear, currentYear + 1].forEach(year => {
+                    const option = document.createElement("option");
+                    option.value = year;
+                    option.text = year;
+                    yearSelect.add(option);
+                });
+
+                // 添加月份選項
+                updateMonthOptions(currentYear);
+            }
+
+            function updateMonthOptions(year) {
+                monthSelect.innerHTML = '';
+
+                const startMonth = year == currentYear ? currentMonth : 1;
+                const endMonth = year == currentYear + 1 ? 12 : 12;
+
+                for (let i = startMonth; i <= endMonth; i++) {
+                    const option = document.createElement("option");
+                    option.value = i;
+                    option.text = i;
+                    monthSelect.add(option);
+                }
+            }
+
+            async function fetchOrderDetails(hotelId) {
+                try {
+                    const response = await fetch(`https://localhost:7103/api/HotelDaily/details/${hotelId}`);
+                    if (!response.ok) throw new Error("Failed to fetch order details");
+                    orderDetails = await response.json();
+                    renderCalendar(yearSelect.value, monthSelect.value);
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+
+            function renderCalendar(year, month) {
+                const firstDayOfMonth = new Date(year, month - 1, 1).getDay();
+                const lastDateOfMonth = new Date(year, month, 0).getDate();
+                const lastDateOfPrevMonth = new Date(year, month - 1, 0).getDate();
+                const today = new Date();
+                const todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+                calendar.innerHTML = "";
+                const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+                daysOfWeek.forEach(day => {
+                    const div = document.createElement("div");
+                    div.className = "header";
+                    div.textContent = day;
+                    calendar.appendChild(div);
+                });
+
+                for (let i = 0; i < firstDayOfMonth; i++) {
+                    const div = document.createElement("div");
+                    div.className = "not-current-month";
+                    div.textContent = lastDateOfPrevMonth - firstDayOfMonth + i + 1;
+                    calendar.appendChild(div);
+                }
+
+                for (let i = 1; i <= lastDateOfMonth; i++) {
+                    const date = new Date(year, month - 1, i);
+                    const div = document.createElement("div");
+                    div.textContent = i;
+
+                    const orderDetail = orderDetails.find(od => {
+                        const checkInDate = new Date(od.checkInDate);
+                        const checkOutDate = new Date(od.checkOutDate);
+                        return date >= checkInDate && date < checkOutDate;
+                    });
+
+                    if (date < todayDate) {
+                        div.className = "past";
+                    } else if (orderDetail && orderDetail.guestNumber === 0) {
+                        div.className = "null-guest";
+                        div.innerHTML = `
+                        ${i}
+                        <div class="room-name">封鎖</div>
+                        <div class="price">TWD ${orderDetail.roomPrice}</div>
+                        `;
+                        div.style.backgroundColor = "gray";
+                    } else if (orderDetail) {
+                        div.className = "booked";
+                        const roomName = document.createElement("div");
+                        roomName.className = "room-name";
+                        roomName.textContent = orderDetail.roomName;
+                        const price = document.createElement("div");
+                        price.className = "price";
+                        price.textContent = `TWD ${orderDetail.roomPrice}`;
+                        div.appendChild(roomName);
+                        div.appendChild(price);
+                    } else {
+                        div.className = "available";
+                        const roomName = document.createElement("div");
+                        roomName.className = "room-name";
+                        roomName.textContent = "可預訂";
+                        const price = document.createElement("div");
+                        price.className = "price";
+                        price.textContent = "TWD 200,000";
+                        div.appendChild(roomName);
+                        div.appendChild(price);
+                    }
+
+                    if (date >= todayDate && (!orderDetail || orderDetail.guestNumber === 0)) {
+                        div.onclick = function () {
+                            if (selectedDate) {
+                                selectedDate.classList.remove("selected");
+                            }
+                            div.classList.add("selected");
+                            selectedDate = div;
+                            selectedDateInput.value = `${year}-${month}-${i}`;
+                            dateDetails.style.display = "block";
+                            selectedOrderDetail = orderDetail;
+
+                            if (orderDetail) {
+                                document.getElementById("price").value = orderDetail.roomPrice;
+                            } else {
+                                document.getElementById("price").value = 200000;
+                            }
+                        };
+                    }
+
+                    calendar.appendChild(div);
+                }
+
+                // 確保在日曆格子生成之後更新“封鎖”狀態
+                updateBlockedDays(year, month, firstDayOfMonth);
+            }
+
+            function updateBlockedDays(year, month, firstDayOfMonth) {
+                orderDetails.forEach(order => {
+                    if (order.guestNumber === 0) {
+                        const checkInDate = new Date(order.checkInDate);
+                        console.log(`Processing order with guestNumber 0 for date: ${checkInDate}`);
+                        if (checkInDate.getFullYear() === year && checkInDate.getMonth() + 1 === month) {
+                            const day = checkInDate.getDate();
+                            // 正確的日曆格子選取方式
+                            const index = day + firstDayOfMonth + 7; // 加7以考慮標題行
+                            const div = calendar.querySelector(`div:nth-child(${index})`);
+                            console.log(`Updating calendar for day: ${day} at index: ${index}`);
+                            if (div) {
+                                div.className = "null-guest";
+                                div.style.backgroundColor = "gray"; // 將格子塗成灰色
+                                div.innerHTML = `
+                                ${day}
+                                <div class="room-name">封鎖</div>
+                                <div class="price">TWD ${order.roomPrice}</div>
+                                `;
+                            } else {
+                                console.log(`Could not find div for day: ${day} at index: ${index}`);
+                            }
+                        }
+                    }
+                });
+            }
+
+            async function saveDateDetails(hotelId, formattedDate, availability) {
+                let apiUrl;
+                let method;
+                if (availability === "blocked") {
+                    apiUrl = `https://localhost:7103/api/HotelDaily/addDetail?hotelId=${hotelId}&date=${formattedDate}`;
+                    method = 'POST';
+                } else if (availability === "available") {
+                    apiUrl = `https://localhost:7103/api/HotelDaily/deleteDetail?hotelId=${hotelId}&date=${formattedDate}`;
+                    method = 'DELETE';
+                }
+
+                try {
+                    const response = await fetch(apiUrl, { method: method });
+                    if (!response.ok) throw new Error("Failed to save details");
+                    alert(`Saved: ${selectedDateInput.value}, Availability: ${availability}`);
+                    fetchOrderDetails(hotelId);
+                } catch (error) {
+                    alert("Failed to save. Please try again.");
+                }
+            }
+
+            saveBtn.addEventListener("click", () => {
+                if (selectedDate) {
+                    const hotelId = @ViewData["HotelId"];
+                    const date = new Date(selectedDateInput.value);
+                    date.setDate(date.getDate() + 1);
+                    const formattedDate = date.toISOString().split('T')[0];
+                    const availability = document.querySelector('input[name="availability"]:checked').value;
+
+                    saveDateDetails(hotelId, formattedDate, availability);
+                } else {
+                    alert("Please select a date.");
+                }
+            });
+
+            discardBtn.addEventListener("click", () => {
+                dateDetails.style.display = "none";
+            });
+
+            minimizeChat.addEventListener("click", () => {
+                if (chatWindow.style.height === "30px") {
+                    chatWindow.style.height = "300px";
+                    chatBody.style.display = "block";
+                    document.querySelector('.chat-input').style.display = "flex";
+                    document.querySelector('.chat-form').style.display = "flex";
+                    minimizeChat.textContent = "-";
+                } else {
+                    chatWindow.style.height = "30px";
+                    chatBody.style.display = "none";
+                    document.querySelector('.chat-input').style.display = "none";
+                    document.querySelector('.chat-form').style.display = "none";
+                    minimizeChat.textContent = "+";
+                }
+            });
+
+            sendBtn.addEventListener("click", () => {
+                const message = chatInput.value.trim();
+                if (message) {
+                    const div = document.createElement("div");
+                    div.textContent = message;
+                    chatBody.appendChild(div);
+                    chatInput.value = "";
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                }
+            });
+
+            chatInput.addEventListener("keypress", (event) => {
+                if (event.key === "Enter") {
+                    sendBtn.click();
+                }
+            });
+
+            yearSelect.addEventListener("change", () => {
+                updateMonthOptions(yearSelect.value);
+                renderCalendar(yearSelect.value, monthSelect.value);
+            });
+
+            monthSelect.addEventListener("change", () => {
+                renderCalendar(yearSelect.value, monthSelect.value);
+            });
+
+            populateYearMonthSelectors();
+            fetchOrderDetails(@ViewData["HotelId"]);
+        });
+
+
+
+    </script>
+</body>
+</html>
