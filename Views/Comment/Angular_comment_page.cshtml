@@ -1,9 +1,9 @@
 ﻿@{
     ViewData["Title"] = "Angular_comment_page";
-    var hotelId = ViewBag.HotelID;
+    var hotelId = ViewBag.HotelId;
     var checkInDate = ViewBag.CheckInDate.ToString("yyyy-MM-dd");
     var checkOutDate = ViewBag.CheckOutDate.ToString("yyyy-MM-dd");
-   
+    var memberID = ViewBag.MemberID;
 }
 
 @{
@@ -15,21 +15,19 @@
 }
 
 
-
 <comments-element hotel-id="@hotelId"
                   checkin-date="'@checkInDate'"
-                  checkout-date="'@checkOutDate'">
+                  checkout-date="'@checkOutDate'"
+                  member-id="@memberID">
 </comments-element>
 
 @section Scripts {
-    <script src="~/dist/fun-now-angular1/main.6b4a79497cf4c9ce.js"></script>
+    <script src="~/dist/fun-now-angular1/main.bc83e24830b7f525.js"></script>
     <script src="~/dist/fun-now-angular1/polyfills.b6cd8ceb7f42859a.js"></script>
     <script src="~/dist/fun-now-angular1/runtime.38416f8cc614bfd6.js"></script>
     <script src="~/dist/fun-now-angular1/scripts.6fe6725b87f2ceac.js"></script>
-        console.log('Hotel ID: @hotelId');
-        console.log('Check-In Date: @checkInDate');
-        console.log('Check-Out Date: @checkOutDate');
-    </script>
+       
+   
 
     
 }

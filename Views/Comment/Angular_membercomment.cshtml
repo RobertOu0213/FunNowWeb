@@ -254,15 +254,23 @@
     <div class="content-wrapper">
         <div class="sidebar">
             <ul>
-                <li><a href="/OrderManagement/Index" class="fa-solid fa-calendar-days" alt="管理訂單"><span>管理訂單</span></a></li>
-                <li><a href="/Home/Index2" class="fa-solid fa-building" alt="住宿"><span>尋找住宿</span></a></li>
-                <li><a href="/OrderManagement/HotelMessenge" class="fa-solid fa-comment-dots" alt="住宿訊息"><span>住宿訊息</span></a></li>
-                <li><a href="/Comment/Angular_membercomment" class="fa-solid fa-star" alt="住宿評鑑"><span>住宿評鑑</span></a></li>
-                <li><a href="/Member/MemberInformation" class="fa-solid fa-user" alt="個人資料"><span>個人資料</span></a></li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="OrderManagement" asp-action="Index">會員訂單</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/OrderManagement/HotelMessenge">住宿訊息</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="HotelsFavorites" asp-action="HotelsFavoritesList">我的最愛</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Comment" asp-action="Angular_membercomment">評論</a>
+                </li>
+                <li><a asp-controller="MemberInformationn" asp-action="Memberinformationn" class="fa-solid fa-user" alt="個人資料"><span>個人資料</span></a></li>
             </ul>
         </div>
         <div class="content1">
-
+            
             <member-comment-element member-id="@memberID" (navigateToForm)="onNavigateToForm($event)"> </member-comment-element>
            
         </div>
@@ -280,7 +288,7 @@
 
 
 @section Scripts {
-        <script src="~/dist/fun-now-angular1/main.6b4a79497cf4c9ce.js"></script>
+        <script src="~/dist/fun-now-angular1/main.bc83e24830b7f525.js"></script>
         <script src="~/dist/fun-now-angular1/polyfills.b6cd8ceb7f42859a.js"></script>
         <script src="~/dist/fun-now-angular1/runtime.38416f8cc614bfd6.js"></script>
         <script src="~/dist/fun-now-angular1/scripts.6fe6725b87f2ceac.js"></script>
