@@ -8,6 +8,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&family=Comic+Sans+MS&family=Orbitron:wght@700&family=Playfair+Display:wght@600&family=Nunito:wght@600&display=swap" rel="stylesheet">
+
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>飯店客服對話框</title>
@@ -255,30 +258,47 @@
             width: 100%;
         }
 
-        @*===============*@
-
-  /* 更改聊天室背景顏色 */
-.smartchatbox-content {
-    background-color: #f5f5f5;
+/* -------------快問快答的css--------------*/
+    .chat-navbar {
+    background-color: #0078d4;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
 }
 
-/* 機器人回覆氣泡樣式 */
-.smartchatbox-content .message-bubble .message-content {
-    background-color: #e6f7ff; /* 水藍色 */
-    border-radius: 20px;
-    padding: 10px 15px;
+.myText {
+    font-family: 'Nunito', sans-serif;               /*font-family: 'Comic Sans MS', cursive;*/    /*font-family: 'Nunito', sans-serif;*/
+    color:whitesmoke;
+    font-size: 25px;
+    font-weight: 600;
+    padding-top: 15px; /* 將文字往下移動 */
 }
 
-/* 發送按鈕樣式 */
-.smartchatbox-content .input-container button {
-    background-color: #4da6ff; /* 水藍色 */ 
+.chat-logo {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    margin-left: auto; /* 这会将 logo 推到右边 */
+    margin-right: 10px; /* 给 logo 一些右边距 */
 }
 
-.smartchatbox-content .input-sum:hover {
-    background-color: #2c89e6;
+.chat-logo img {
+    height: 50px;
+    width: auto;
+    max-width: none;
+    object-fit: contain;
 }
 
-
+.minimize-chat {
+    background-color: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1.2em;
+}
 
 
 
@@ -301,22 +321,18 @@
             <button data-chat="email-chat">發電郵給住宿</button>
         </div>
 
-        <div class="chatbox-content">
-            <iframe src='https://webchat.botframework.com/embed/0619-chatbot-bot?s=h5kAoRobqWU.jQiq7j_QBmyzbGFmlLI4L75VMWID74v2P_LUOrJ6KYs' style='min-width: 400px; width: 100%; min-height: 500px;'></iframe>
-            @*   <span id="chatbox-title">快問快答 (測試版)</span>
-                <button class="btn btn-light btn-sm minimize-chat">-</button> *@
-            </div>
-            <div class="chatbox-body">
-                <div class="system-message" id="chatbox-quick">
-                    本對話由AI生成並將被記錄,可能會出現不準確的情況。請勿輸入任何個人或敏感資訊。有關我們使用生成式AI的詳情,請參閱我們的
-                    <a href="/info/termsofuse.html" target="_blank">使用條款</a>。
-                </div>
-                <div class="chat-messages" id="quick-messages"></div>
-                <div class="input-container">
-                    <textarea id="quick-input" placeholder="輸入訊息..."></textarea>
-                    <button onclick="">發送</button>
-                </div>
-            </div>
+<div class="chatbox-content">
+    <div class="chat-navbar">
+        <p class="myText">FunHelper</p>
+        <div class="chat-logo">
+            <img src="~/image/julia/queenbot.png" alt="平台 Logo">
+        </div>
+        <button class="minimize-chat">-</button>
+    </div>
+    <iframe src='https://webchat.botframework.com/embed/0619-chatbot-bot?s=h5kAoRobqWU.jQiq7j_QBmyzbGFmlLI4L75VMWID74v2P_LUOrJ6KYs' style='min-width: 400px; width: 100%; min-height: 500px;'></iframe>
+</div>
+
+      
         </div>
 
         <div class="email-chat-content">
