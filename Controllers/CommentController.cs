@@ -58,5 +58,10 @@ namespace PrjFunNowWeb.Controllers
            
             return Json(comments);
         }
+
+        public IActionResult Angular_reportform()
+        {      
+            return View();
+        }
     }
 }

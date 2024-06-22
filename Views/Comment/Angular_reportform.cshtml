@@ -1,47 +1,37 @@
 ﻿
 @{
-    ViewData["Title"] = "pgBack_Member";
+    ViewData["Title"] = "Angular_reportform";
+    var memberID = Context.Session.GetString("MemberID");
+
 }
-@{
-    Layout = "~/Views/Shared/_Layout_platform.cshtml";
-}
 
 
 
-<pgback-member-element></pgback-member-element>
 
 @section Styles {
-    <style>
-
-      
-    </style>
+    <link href="~/css/joanna_css/styles.b13b175880f4995b.css" rel="stylesheet" />
+    
 }
-
-
-
-
-
+<reportform-element member-id="@memberID"></reportform-element>
 
 @section Scripts {
     <script src="~/dist/fun-now-angular1/main.6b4a79497cf4c9ce.js"></script>
     <script src="~/dist/fun-now-angular1/polyfills.b6cd8ceb7f42859a.js"></script>
     <script src="~/dist/fun-now-angular1/runtime.38416f8cc614bfd6.js"></script>
     <script src="~/dist/fun-now-angular1/scripts.6fe6725b87f2ceac.js"></script>
+
     <script>
+
+
+
+
+
+
+
+
+
+
+
 
     </script>
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
