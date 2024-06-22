@@ -1,26 +1,35 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Angular_comment_page";
+    var hotelId = ViewBag.HotelID;
+    var checkInDate = ViewBag.CheckInDate.ToString("yyyy-MM-dd");
+    var checkOutDate = ViewBag.CheckOutDate.ToString("yyyy-MM-dd");
 }
 
- 
+@{
+    Layout = "_Layout_index2";
+}
 
 @section Styles {
     <link href="~/css/joanna_css/styles.b13b175880f4995b.css" rel="stylesheet" />
 }
-<iframe src="http://localhost:4200/comment" style="width: 100%; height:900px; border: none;"></iframe>
+
+
+
+<comments-element hotel-id="@hotelId"
+                  checkin-date="'@checkInDate'"
+                  checkout-date="'@checkOutDate'">
+</comments-element>
 
 @section Scripts {
-
+    <script src="~/dist/fun-now-angular1/main.effa90667889b35c.js"></script>
+    <script src="~/dist/fun-now-angular1/polyfills.b6cd8ceb7f42859a.js"></script>
+    <script src="~/dist/fun-now-angular1/runtime.48f9e552146618a8.js"></script>
+    <script src="~/dist/fun-now-angular1/scripts.6fe6725b87f2ceac.js"></script>
     <script>
-
-        // // 確保Angular應用程序已經加載完畢後進行導航
-        // document.addEventListener('DOMContentLoaded', function () {
-        //     // 使用Angular路由導航到特定組件
-        //     window.location.href = '#/membercomment'; // 注意這裡使用了Hash路由
-        // });
-
-        // document.getElementById('navigateButton').addEventListener('click', function () {
-        //     window.location.href = 'http://localhost:4200/';
+        console.log('Hotel ID: @hotelId');
+        console.log('Check-In Date: @checkInDate');
+        console.log('Check-Out Date: @checkOutDate');
     </script>
+
+    
 }

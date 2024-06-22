@@ -34,9 +34,15 @@ namespace PrjFunNowWeb.Controllers
             var userID = HttpContext.Session.GetString("MemberID");
             if (string.IsNullOrEmpty(userID))
             {
-
-                return RedirectToAction("Login", "Member");
+                userID = HttpContext.Session.GetString("GoogleMemberID");
+                if (string.IsNullOrEmpty(userID))
+                {
+                    return RedirectToAction("Login", "Member");
+                }
             }
+
+
+
 
             ViewBag.UserID = userID;
             return View();

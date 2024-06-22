@@ -60,19 +60,24 @@ namespace PrjFunNowWeb.Controllers
                 {
                     // 顯示錯誤訊息用的
                     var errorMessage = await response.Content.ReadAsStringAsync();
-                    //return StatusCode((int)response.StatusCode, errorMessage);
-                    return BadRequest();
+                    return StatusCode((int)response.StatusCode, errorMessage);
+                   
                 }
 
                 var responseData = await response.Content.ReadAsStringAsync();
                 var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseData);
 
-
-                // 將memberID和token存在Session中
-                HttpContext.Session.SetString("MemberID", loginResponse.memberID.ToString());
-                HttpContext.Session.SetString("Token", loginResponse.token);
-
-                return Ok(loginResponse);
+                if (loginResponse != null)
+                {
+                    // 將memberID和token存在Session中
+                    HttpContext.Session.SetString("MemberID", loginResponse.memberID.ToString());
+                    HttpContext.Session.SetString("Token", loginResponse.token);
+                    return Ok(loginResponse);
+                }
+                else
+                {
+                    return BadRequest("無效的回應格式");
+                }
             }
         }
 
@@ -192,19 +197,57 @@ namespace PrjFunNowWeb.Controllers
         }
 
         
-        public IActionResult MemberInformation()
-        {
-            return View();
-        }
+        //public IActionResult MemberInformation()
+        //{
+        //    return View();
+        //}
+
+
 
         public IActionResult HostInformation()
         {
-           
+
+            var userID = HttpContext.Session.GetString("MemberID");
+            if (string.IsNullOrEmpty(userID))
+            {
+
+                userID = HttpContext.Session.GetString("GoogleMemberID");
+                if (string.IsNullOrEmpty(userID))
+                {
+                    return RedirectToAction("Login", "Member");
+                }
+            }
+            else
+            {
+                var existingMember = _context.Members
+                    .Where(x => x.MemberId == Convert.ToInt32(userID))
+                    .FirstOrDefault();
+
+                if (existingMember == null)
+                {
+                    return NotFound("Member not found");
+                }
+            }
+
+            var member = _context.Members
+                .Where(x => x.MemberId == Convert.ToInt32(userID))
+                .Select(x => new { x.MemberId, x.FirstName, x.LastName })
+                .FirstOrDefault();
+
+            if (member == null)
+            {
+                return NotFound("Member not found");
+            }
+
+            ViewBag.MemberID = member.MemberId;
+            ViewBag.FirstName = member.FirstName;
+            ViewBag.LastName = member.LastName;
+
             return View();
         }
 
 
-        //修改會員所有資料
+        //修改房東所有個人資料
         [HttpPut("HostMemberEdit/{id}")]
         public async Task<IActionResult> HostMemberEdit(int id, [FromForm] HostMemberEditDTO edit, IFormFile imageFile)
         {
@@ -271,6 +314,8 @@ namespace PrjFunNowWeb.Controllers
             public string Introduction { get; set; }
         }
 
+
+       
 
 
     }

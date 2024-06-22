@@ -4,6 +4,9 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
 
 .header {
@@ -42,46 +45,9 @@ body {
 
 .container {
     display: flex;
-    justify-content: center;
-    padding: 20px;
+    height: calc(100vh - 60px); /* Adjust height based on header */
+    width: 100%;
 }
-
-.content-wrapper {
-    width: 1200px;
-    display: flex;
-}
-
-.sidebar {
-    width: 200px;
-    background-color: #fff;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-    height: 635px;
-    padding-top: 20px;
-    position: absolute;
-    border-radius: 10px;
-}
-
-    .sidebar ul {
-        list-style-type: none;
-        padding: 0;
-    }
-
-        .sidebar ul li {
-            padding: 5px 20px;
-            border-bottom: 1px solid #eee;
-            border-radius: 10px;
-        }
-
-            .sidebar ul li:hover {
-                background-color: #f4f4f4;
-            }
-
-            .sidebar ul li a {
-                text-decoration: none;
-                color: #333;
-                display: flex;
-                align-items: center;
-            }
 
 .icon {
     width: 40px;
@@ -101,92 +67,250 @@ body {
     font-size: 16px;
 }
 
-.content {
-    margin-left: 270px;
-    padding: 20px;
-    background-color: #fff;
+.content-wrapper {
     flex: 1;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    border-radius: 10px;
-}
-
-.content-header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+    padding: 0; /* 移除 padding */
 }
 
-    .content-header h2 {
+.main-content {
+    display: flex;
+    flex: 5;
+    padding: 20px;
+}
+
+.messages {
+    flex: 1; /* 調整左邊部分比例 */
+    margin-right: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.message-list {
+    border: 1px solid #eee;
+    border-radius: 10px;
+    background-color: #fff;
+    overflow-y: auto;
+    flex: 1;
+    padding: 10px;
+}
+
+    .message-list ul {
+        list-style-type: none;
+        padding: 0;
         margin: 0;
     }
 
-    .content-header .actions {
-        display: flex;
-        align-items: center;
-    }
-
-        .content-header .actions input {
-            padding: 5px;
-            margin-left: 10px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
+        .message-list ul li {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
         }
 
-.tabs {
+            .message-list ul li.selected {
+                background-color: #e6f7ff;
+            }
+
+.message-item {
     display: flex;
-    border-bottom: 2px solid #eee;
+    flex-direction: column;
+    flex: 1;
+    width: 100%; /* Make element fill the parent's width */
+}
+
+.message-body {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 100%; /* Make element fill the parent's width */
+}
+
+    .message-body img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+
+    .message-body h3 {
+        margin: 0;
+        font-size: 16px;
+        color: #333;
+    }
+
+    .message-body p {
+        margin: 0;
+        font-size: 14px;
+        color: #555;
+    }
+
+.message-date {
+    position: absolute;
+    right: 10px;
+    top: 0;
+    font-size: 12px;
+    color: #999;
+}
+
+.chat-details {
+    flex: 2; /* 調整右邊部分比例 */
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+    .chat-details .content-header {
+        padding: 20px;
+        border-bottom: 1px solid #eee;
+    }
+
+        .chat-details .content-header h2 {
+            margin: 0;
+        }
+
+    .chat-details .chat-content {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column; /* 改為垂直排列 */
+        justify-content: flex-start; /* 改為頂端對齊 */
+        align-items: flex-start; /* 改為左側對齊 */
+        color: #999;
+        font-size: 18px;
+    }
+
+
+    .chat-details .chat-input {
+        display: flex;
+        padding: 20px;
+        border-top: 1px solid #eee;
+        background-color: #fafafa;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+        .chat-details .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            margin-right: 10px;
+        }
+
+        .chat-details .chat-input button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+            .chat-details .chat-input button:hover {
+                background-color: #0056b3;
+            }
+
+/* 設定側邊欄的樣式 */
+.sidebar {
+    width: 250px; /* 設定寬度為250px */
+    background-color: #fff; /* 設定背景為白色 */
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1); /* 添加陰影效果 */
+    height: calc(100vh - 60px); /* 設定高度為視窗高度減去60px */
+    padding-top: 20px; /* 設定頂部內邊距為20px */
+    border-radius: 10px;
+}
+
+    /* 設定側邊欄中的列表樣式 */
+    .sidebar ul {
+        list-style-type: none; /* 移除列表項的樣式 */
+        padding: 0; /* 移除內邊距 */
+    }
+
+        /* 設定側邊欄中的每個列表項樣式 */
+        .sidebar ul li {
+            padding: 15px 20px; /* 設定內邊距 */
+            border-bottom: 1px solid #eee; /* 添加底部邊框 */
+            border-radius: 10px;
+        }
+
+            /* 設定側邊欄中的每個列表項在懸停時的樣式 */
+            .sidebar ul li:hover {
+                background-color: #eff4fd; /* 設定背景顏色 */
+            }
+
+            /* 設定側邊欄中的鏈接樣式 */
+            .sidebar ul li a {
+                text-decoration: none; /* 移除鏈接的下劃線 */
+                color: #333; /* 設定文本顏色為深灰色 */
+                display: flex; /* 使用彈性盒子布局 */
+                align-items: center; /* 垂直居中對齊子元素 */
+            }
+
+                .sidebar ul li a:hover {
+                    color: #3170e7;
+                }
+
+                /* 設定側邊欄中的鏈接圖像樣式 */
+                .sidebar ul li a img {
+                    margin-right: 10px; /* 設定右側外邊距為10px */
+                }
+
+/*聊天詳細內容css*/
+.chat-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.chat-message {
+    display: flex;
+    flex-direction: column;
     margin-bottom: 20px;
+    max-width: 60%;
 }
 
-    .tabs div {
-        padding: 10px 20px;
-        cursor: pointer;
+    .chat-message.sent {
+        align-self: flex-end;
+        text-align: right;
     }
 
-        .tabs div.active {
-            border-bottom: 2px solid #007bff;
-            color: #007bff;
-        }
+    .chat-message.received {
+        align-self: flex-start;
+        text-align: left;
+    }
 
-.tab__link {
-    color: #000;
-    padding: 10px 20px;
-    text-decoration: none;
-    cursor: pointer;
-    display: inline-block;
+.message-content {
+    padding: 10px 15px;
+    border-radius: 10px;
+    background-color: #f1f1f1;
 }
 
-    .tab__link.active {
-        font-weight: bold;
-        border-bottom: 2px solid #007bff;
-        color: #007bff;
-    }
-
-.main-content {
-    text-align: center;
-    padding: 50px 0;
+.sent .message-content {
+    background-color: #d1ecf1;
 }
 
-    .main-content h3 {
-        margin: 0 0 20px;
-    }
+.received .message-content {
+    background-color: #f8d7da;
+}
 
-    .main-content img {
-        width: 100px;
-        margin-bottom: 20px;
-    }
+.message-time {
+    display: block;
+    font-size: 12px;
+    color: #999;
+    margin-top: 5px;
+}
 
-    .main-content .buttons a {
-        display: inline-block;
-        margin: 10px;
-        padding: 10px 20px;
-        background-color: #007bff;
-        color: #fff;
-        border-radius: 5px;
-        text-decoration: none;
-    }
+.sent .message-time {
+    text-align: right;
+}
 
-        .main-content .buttons a:hover {
-            background-color: #0056b3;
-        }
+.received .message-time {
+    text-align: left;
+}
+

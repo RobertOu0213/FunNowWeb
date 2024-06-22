@@ -53,7 +53,7 @@
                 <div class="navbar-collapse offset collapse" id="navbarSupportedContent">
                     <ul class="nav navbar-nav menu_nav ml-auto">
                         <li class="nav-item active">
-                            <a class="nav-link" href="index.html" style="color:red;">刊登家中空房</a>
+                            <a class="nav-link" href="/HostManage/Home" target="_blank" style="color:red;">刊登家中空房</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="about.html">
@@ -74,13 +74,19 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="blog.html">會員資料</a>
+                                    <a class="nav-link" asp-controller="OrderManagement" asp-action="Index">會員訂單</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="OrderManagement" asp-action="HotelMessenge/">住宿訊息</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Member" asp-action="MemberInformation">會員資料</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" asp-controller="Comment" asp-action="Angular_membercomment">評論</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="blog-single.html">我的最愛</a>
+                                    <a class="nav-link" asp-controller="HotelsFavorites" asp-action="HotelsFavoritesList">我的最愛</a>
                                 </li>
                             </ul>
                         </li>

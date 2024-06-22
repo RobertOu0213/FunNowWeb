@@ -16,5 +16,9 @@ namespace PrjFunNowWeb.Controllers
         {
             return View();
         }
+        public IActionResult CSCustomerService()
+        {
+            return View();
+        }
     }
 }

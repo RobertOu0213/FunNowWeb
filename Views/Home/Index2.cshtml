@@ -2,7 +2,10 @@
 @{
     ViewData["Title"] = "Home Page2";
     Layout = "_Layout_index2";
+
     var memberID = Context.Session.GetString("MemberID");
+    var googleMemberId = Context.Session.GetString("GoogleMemberID");
+    var displayMemberId = !string.IsNullOrEmpty(googleMemberId) ? googleMemberId : memberID;
 
     var memberInfo = Context.Session.GetString("MemberInfo");
     var memberInfoJson = memberInfo != null ? JsonSerializer.Serialize(memberInfo) : "null";
@@ -30,17 +33,17 @@
 
                 <!--//價格搜尋拉霸start-->
                 <div class="slider-container" style="margin: 10px">
-                    <div class="range-slider" id="rangeSlider" min="1" max="10000">
+                    <div class="range-slider" id="rangeSlider" min="1" max="1000000">
                         <div class="slider-handle lower-handle" id="lowerHandle"></div>
                         <div class="slider-handle upper-handle" id="upperHandle"></div>
                     </div>
                     <div class="label-container">
                         <span id="lowerLabel">下限：1</span>
-                        <span id="upperLabel">上限：10000</span>
+                        <span id="upperLabel">上限：1000000</span>
                     </div>
                     <div class="input-container">
                         <input type="number" id="lowerInput" value="1" style="margin-right: 10px;" class="no-spinner">
-                        <input type="number" id="upperInput" value="10000" class="no-spinner">
+                        <input type="number" id="upperInput" value="1000000" class="no-spinner">
                     </div>
                 </div>
                 <!--//價格搜尋拉霸end-->
@@ -331,8 +334,9 @@
             }
 
             // 加載已喜歡的飯店 ID
-            const memberId = '@memberID'; // 取得實際的會員ID，確保這部分已經正確替換
-            window.memberId = memberId;
+            const memberId = '@displayMemberId'; // 取得實際的會員ID
+            window.memberId = memberId; // 確保在其他函數中可以訪問 memberId
+            const likedHotels = await getLikedHotels(memberId);
 
             // 確保 memberId 存在後再呼叫 getLikedHotels
             if (memberId) {
@@ -604,7 +608,7 @@
             }
             const data = await response.json();
 
-            console.log(`Hotel ID: ${hotelId}, Score Data: `, data); // 添加日志
+  
             return data.totalAverageScore.toFixed(1); // 确保这里使用的是 totalAverageScore，并格式化为小数点后一位
         }
 
@@ -616,7 +620,7 @@
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
-                console.log(data); // 確認返回的數據結構
+
                 return data.totalComments; // 確保返回的數據屬性名稱與後端一致
             } catch (error) {
                 console.error(`Error fetching comments count for hotel ID ${hotelId}:`, error);
@@ -710,9 +714,7 @@
                     ratingDescription = "N/A";
                 }
 
-                console.log(`Hotel ID: ${hotelId}, Total Average Score: ${totalAverageScore}`); // 添加日志
-                console.log(`Hotel Images: ${hotelImages}`); // 調試輸出圖片 URL
-                console.log(`Comments Count: ${commentsCount}`); // 調試輸出評論數
+
 
                 const mainImage = hotelImages[0] ? `https://localhost:7284/image/${hotelImages[0]}` : '';
                 const smallImages = hotelImages.slice(1, 4).map(img => img ? `https://localhost:7284/image/${img}` : '');
@@ -794,7 +796,7 @@
             }
 
             function getImageUrl(imagePath) {
-                console.log(imagePath)
+
                 if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
                     return imagePath;
                 } else {
@@ -819,14 +821,14 @@
                 event.stopPropagation();
                 // 其他操作...
 
-                console.log('form check input clicked');
+
 
             });
 
 
             function updateUI() {
                 const compareDatas = buildCompareDatas();
-                console.warn(compareDatas);
+
 
                 const accordionContainer = document.querySelector('#collapseOne .card-body .row .col-9');
 
@@ -852,7 +854,7 @@
 
                 // 更新展開收合區塊中的照片容器
                 compareDatas.forEach(hotel => {
-                    console.log('hotel：', hotel)
+
 
                     // 0620 hotelImages !!!! 教官撈回來的data變成陣列了,且hotelImage改為hotelImages複數
                     const { hotelImages, hotelId } = hotel;
@@ -861,7 +863,7 @@
                     const imageContainer = document.createElement('div');
                     imageContainer.className = 'image-container';
 
-
+                    //這段怪怪的,之後再改成老師教的方法
                     const closeButton = document.createElement('button');
                     closeButton.type = 'button';
                     closeButton.className = 'close remove-image';
@@ -901,22 +903,36 @@
                     const HotelImage = getImageUrl(hotelImages[0]);
                     const ratingscore = JSON.parse(totalAverageScore);
                     const formattedScore = parseFloat(ratingscore.toFixed(1));
-
+                    //formattedScore 小數點後的平均評分對應文字
+                    let ratingDescription;
+                    if (formattedScore >= 9) {
+                        ratingDescription = "超讚";
+                    } else if (formattedScore >= 7) {
+                        ratingDescription = "很讚";
+                    } else if (formattedScore >= 5) {
+                        ratingDescription = "很好";
+                    } else if (formattedScore >= 3) {
+                        ratingDescription = "尚可";
+                    } else {
+                        ratingDescription = "低於預期";
+                    }
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                                  <td><img src="${HotelImage}" class="card-img-top" alt="房間圖片"></td>
-                                  <td>${hotelName}</td>
-                                  <td>${cityName}</td>
-                                  <td>${generateStars(levelStar)}</td>
-                                  <td>${hotelEquipmentNames.join(', ')}</td>
-                                  <td>${formattedScore}</td>
-                                  <td>${hotelPrice}</td>
-                                  <td>
-                                      <button type="button" class="btn btn-primary">查看飯店</button>
-                                      <button type="button" class="btn btn-secondary remove-row">移除</button>
-                                  </td>
-                              `;
+                    <td><img src="${HotelImage}" class="card-img-top" alt="房間圖片"></td>
+                    <td>${hotelName}</td>
+                    <td>${cityName}</td>
+                    <td>${generateStars(levelStar)}</td>
+                    <td>${hotelEquipmentNames.join(', ')}</td>
+                     <td>${formattedScore}/10 ${ratingDescription}</td>
+                    <td>$${hotelPrice}</td>
+                    <td>
+                        <button type="button" class="btn btn-secondary remove-row">移除</button>
+                        <button type="button" class="btn btn-primary view-hotel">查看飯店</button>
+                    </td>
+
+                `;
                     document.querySelector('#myModal .table tbody').appendChild(row);
+
 
 
                     //  為新生成的remove-row 按鈕添加一個點擊事件監聽器,
@@ -927,26 +943,39 @@
                         checkbox.checked = false;
                         updateUI();
                     });
+
+                    // 為新生成的 view-hotel 按鈕添加事件監聽器
+                    const viewHotelButton = row.querySelector('.view-hotel');
+                    viewHotelButton.addEventListener('click', () => {
+                        // 導航到相應的飯店頁面
+                        const hotelUrl = `/PgHotel/pgHotel/?hotelId=${hotelId}&checkInDate=2024-06-28&checkOutDate=2024-06-29`;
+                        window.location.href = hotelUrl;
+                    });
+
+
                 });
             }
-            // 為新生成的 view-hotel 按鈕添加事件監聽器
-            // const viewHotelButton = row.querySelector('.view-hotel');
-            // viewHotelButton.addEventListener('click', () => {
-            //     // 導航到相應的飯店頁面
-            //     const hotelUrl = `/Hotels/Details/${hotelId}`;
-            //     window.location.href = hotelUrl;
-            // });
+            
 
         }
 
 
-        console.warn("1233333333333333");
 
 
         // 切換最愛狀態的函數
         async function toggleFavorite(event, hotelId) {
-            event.stopPropagation();
-            event.preventDefault();
+            const displayMemberId = '@displayMemberId';
+
+            event.stopPropagation();  // 防止點擊事件傳遞到其他元素
+            event.preventDefault();   // 阻止默認的跳轉行為
+
+
+            if (!displayMemberId) {
+                window.location.href = window.location.origin + '/Member/Login';
+                return;
+            }
+   
+
             const icon = event.currentTarget;
             const isLiked = !icon.classList.contains("liked");
 
