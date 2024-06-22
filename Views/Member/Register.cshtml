@@ -13,7 +13,7 @@
    
 
     <!--表單欄-->
-    <div class="container" style="margin-top:50px;">
+    <div class="container" style="margin-top:20px;">
         <div id="dd"></div>
         <div class="row justify-content-center align-items-center">
             <div class="col-lg-5 " style="min-width: 350px; max-width: 500px;">
@@ -46,7 +46,7 @@
                                 <label for="PasswordInput" class="form-label" style="font-size:15px">密碼</label>
                                 <div class="input-group">
                                     <input type="password" class="form-control" id="PasswordInput" name="Password" placeholder="密碼" style="border-right:none;">
-                                    <span class="input-group-text" id="togglePasswordIcon" style="background-color:white; border-left:none;">
+                                    <span class="input-group-text" id="togglePasswordIcon" style="background-color:white; border-left:none;height:38.5px;">
                                         <i class="fa-solid fa-eye-slash"></i>
                                     </span>
                                 </div>
@@ -56,7 +56,7 @@
                                 <label for="RecheckPasswordInput" class="form-label" style="font-size:15px">確認密碼</label>
                                 <div class="input-group">
                                     <input type="password" class="form-control" id="RecheckPasswordInput" placeholder="確認密碼" style="border-right:none;">
-                                    <span class="input-group-text" id="toggleRecheckPasswordIcon" style="background-color:white; border-left:none;">
+                                    <span class="input-group-text" id="toggleRecheckPasswordIcon" style="background-color:white; border-left:none;height:38.5px;">
                                         <i class="fa-solid fa-eye-slash"></i>
                                     </span>
                                 </div>
@@ -199,7 +199,33 @@
                 text-decoration: underline;
             }
 
+   .spinner 
+   {
+    border: 10px solid #f3f3f3;
+    border-top: 5px solid #3498db;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    animation: spin 1s linear infinite;
+  }
 
+  @@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
     </style>
 }
 
@@ -243,6 +269,9 @@
                 "password": inpPwd,
             };
 
+            // 顯示等待動畫
+            showLoadingAnimation();
+
             //發送API請求
             try {
                 const url = 'https://localhost:7103/api/Members';
@@ -254,11 +283,15 @@
                 }
             });
 
+ 
             const messageElement = document.getElementById('message');
 
             if (response.ok) 
             {
-               alert('註冊成功！帳號驗證信已寄至您的信箱，請至信箱查收～ ps若沒收到請檢查垃圾郵件！');
+              // 隱藏等待動畫
+              hideLoadingAnimation();
+
+              alert('註冊成功！帳號驗證信已寄至您的信箱，請至信箱查收～ ps若沒收到請檢查垃圾郵件！');
                window.location.href = "/Member/Login";
             }
             else 
@@ -270,6 +303,9 @@
             }
             } catch (error) 
             {
+                // 隱藏等待動畫
+                hideLoadingAnimation();
+
                 console.error('Error:', error);
                 const messageElement = document.getElementById('message');
                 messageElement.textContent = "錯誤發生，請再試一次!";
@@ -277,7 +313,31 @@
             }
         });
 
-        //【姓名欄位驗證】
+        //===等待動畫相關==========================
+        // 顯示等待動畫的函數
+        function showLoadingAnimation() {
+            // 創建加載動畫元素
+            const loadingOverlay = document.createElement('div');
+            loadingOverlay.className = 'loading-overlay';
+            loadingOverlay.id = 'loading-animation';
+
+            const spinner = document.createElement('div');
+            spinner.className = 'spinner';
+
+            loadingOverlay.appendChild(spinner);
+            document.body.appendChild(loadingOverlay);
+        }
+
+        // 隱藏等待動畫的函數
+        function hideLoadingAnimation() {
+            const loadingElement = document.getElementById('loading-animation');
+            if (loadingElement) {
+                loadingElement.remove();
+            }
+        }
+
+
+        //===【姓名欄位驗證】=============================================
         // 驗證輸入的值只能包含英文字
         function isValidName(name) {
             var regex = /^[A-Za-z]+$/;
@@ -418,7 +478,7 @@
                     body: JSON.stringify({ email: email })
                 });
                 const data = await response.json();
-                if (data.message === "YES") {
+                if (data.message === "YES" || data.message === "NoVerify") {
                     resultElementY.style.display = "block";
                     emailInput.classList.add("border", "border-danger");
                 } else {
