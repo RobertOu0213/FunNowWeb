@@ -306,12 +306,15 @@
         }
 
         function updateUI(dialog) {
+            // console.log(dialog);
             const leftPanelBottom = document.getElementById('leftPanelBottom');
             const rightPanelTop = document.getElementById('rightPanelTop');
+            const memberImageUrl = getImageUrl(dialog.memberImage);
+           
 
             const leftPanelContent = `
                     <div class="customer-info" onclick="handleCustomerInfoClick('${dialog.memberId}', '${dialog.calltoMemberId}', '${dialog.createAt}')">
-                        <img src="${dialog.memberImage}" alt="客人照片">
+                        <img src="${memberImageUrl}" alt="客人照片">
                         <div>
                             <span>姓名: ${dialog.firstName} ${dialog.lastName}</span>
                             <span>訊息: ${dialog.detail}</span>
@@ -386,6 +389,17 @@
 
                 input.value = '';
                 messagesList.scrollTop = messagesList.scrollHeight;
+            }
+        }
+
+        function getImageUrl(imagePath) {
+            if (imagePath == null) {
+                return null;
+            }
+            if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
+                return imagePath;
+            } else {
+                return window.location.origin + '/image/' + imagePath;
             }
         }
 

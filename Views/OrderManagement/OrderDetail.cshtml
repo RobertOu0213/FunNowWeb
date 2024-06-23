@@ -70,32 +70,34 @@
 
                 const orderDetailsContent = document.getElementById('order-details-content');
                 data.orderDetails.forEach(detail => {
+                    const hotelImagesHTML = detail.hotelImages.map(image => `<img src="${getImageUrl(image)}" alt="Hotel Image" />`).join('');
+                    const roomImagesHTML = detail.roomImages.map(image => `<img src="${getImageUrl(image)}" alt="Room Image" />`).join('');
                     const detailHTML = `
-                                        <div class="hotel-info">
-                                            <h3>${detail.hotelName}</h3>
-                                            <p>地址: ${detail.hotelAddress}</p>
-                                            <p>電話: ${detail.hotelPhone}</p>
-                                            <p>類型: ${detail.hotelTypeName}</p>
-                                            <div>圖片: ${detail.hotelImages.map(image => `<img src="${image}" alt="Hotel Image" />`).join('')}</div>
-                                            <!-- 其他飯店信息 -->
-                                        </div>
-                                        <div class="stay-info">
-                                            <p>入住: ${new Date(detail.checkInDate).toLocaleDateString()}</p>
-                                            <p>退房: ${new Date(detail.checkOutDate).toLocaleDateString()}</p>
-                                            <!-- 其他入住信息 -->
-                                        </div>
-                                        <div class="room-info">
-                                            <p>房型: ${detail.roomTypeName}</p>
-                                            <div>圖片: ${detail.roomImages.map(image => `<img src="${image}" alt="Room Image" />`).join('')}</div>
-                                            <p>設備: ${detail.roomEquipmentNames.join(', ')}</p>
-                                            <!-- 其他房間信息 -->
-                                        </div>
-                                        <div class="guest-info">
-                                            <p>姓名: ${data.guestLastName} ${data.guestFirstName}</p>
-                                            <p>電子郵件: ${data.guestEmail}</p>
-                                            <!-- 其他旅客信息 -->
-                                        </div>
-                                    `;
+                                <div class="hotel-info">
+                                    <h3>${detail.hotelName}</h3>
+                                    <p>地址: ${detail.hotelAddress}</p>
+                                    <p>電話: ${detail.hotelPhone}</p>
+                                    <p>類型: ${detail.hotelTypeName}</p>
+                                     <div>圖片: ${hotelImagesHTML}</div>
+                                    <!-- 其他飯店信息 -->
+                                </div>
+                                <div class="stay-info">
+                                    <p>入住: ${new Date(detail.checkInDate).toLocaleDateString()}</p>
+                                    <p>退房: ${new Date(detail.checkOutDate).toLocaleDateString()}</p>
+                                    <!-- 其他入住信息 -->
+                                </div>
+                                <div class="room-info">
+                                    <p>房型: ${detail.roomTypeName}</p>
+                                    <div>圖片: ${roomImagesHTML}</div>
+                                    <p>設備: ${detail.roomEquipmentNames.join(', ')}</p>
+                                    <!-- 其他房間信息 -->
+                                </div>
+                                <div class="guest-info">
+                                    <p>姓名: ${data.guestLastName} ${data.guestFirstName}</p>
+                                    <p>電子郵件: ${data.guestEmail}</p>
+                                    <!-- 其他旅客信息 -->
+                                </div>
+                            `;
                     const detailContainer = document.createElement('div');
                     detailContainer.innerHTML = detailHTML;
                     orderDetailsContent.appendChild(detailContainer);
@@ -107,6 +109,17 @@
                                         <!-- 其他價格信息 -->
                                     </div>
                                 `;
+            }
+
+            function getImageUrl(imagePath) {
+                if (imagePath == null) {
+                    return null;
+                }
+                if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
+                    return imagePath;
+                } else {
+                    return window.location.origin + '/image/' + imagePath;
+                }
             }
         });
     </script>
