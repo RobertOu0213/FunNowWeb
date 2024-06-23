@@ -21,6 +21,7 @@ namespace PrjFunNowWeb.Controllers
             ViewBag.MemberID = finalMemberID;
 
             return View();
+           
         }
 
             public IActionResult Angular_membercomment()

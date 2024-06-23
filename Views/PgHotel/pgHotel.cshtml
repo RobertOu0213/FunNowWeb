@@ -431,14 +431,17 @@
                 <h2>評論</h2>
                 <div class="round-edge-container">
 
-                    <hotel-comment-element></hotel-comment-element>
+                    <hotel-comment-element hotel-id="@Model.HotelDetail.HotelID"
+                                           checkin-date="@Model.HotelDetail.CheckInDate"
+                                           checkout-date="@Model.HotelDetail.CheckOutDate">
+                    </hotel-comment-element>
                     <a href="@Url.Action("Angular_comment_page", "Comment", new {
                        hotelId = Model.HotelDetail.HotelID,
                        checkInDate = Model.HotelDetail.CheckInDate,
                        checkOutDate =Model.HotelDetail.CheckOutDate
                       })" class="d-flex justify-content-center">顯示更多評論</a>
-                </div>                                        
-         
+                </div>
+               
                 
              @*設施區*@
             <div id="hotel-equips">
@@ -1297,186 +1300,169 @@
 </script>
 <script>
         //亭蓉評論載入
-        let allData = {};
-        let currentSlide = 0;
-        const carouselContainer = document.querySelector('.carousel-container');
-        const carousel = document.querySelector('.carousel');
-        const slides = document.querySelectorAll('.carousel-slide');
-            const numOfSlides = slides.length; // 獲取卡片組數
+        // let allData = {};
+        // let currentSlide = 0;
+        // const carouselContainer = document.querySelector('.carousel-container');
+        // const carousel = document.querySelector('.carousel');
+        // const slides = document.querySelectorAll('.carousel-slide');
+        //     const numOfSlides = slides.length; // 獲取卡片組數
 
-        document.addEventListener('DOMContentLoaded', function () {
-            const hotelId = 2; // Replace with actual hotel ID
-            fetchComments(hotelId);
-            fetchAverageData(hotelId);
-            fetchScoresData(hotelId);
-        });
-            function fetchComments(hotelId) {
-                fetch(`https://localhost:7103/api/Comment/${hotelId}/ForHotelComment`)
-                    .then(response => response.json())
-                    .then(data => {
+        // document.addEventListener('DOMContentLoaded', function () {
+        //         var hotelId = @Model.HotelDetail.HotelID;
+        //     fetchComments(hotelId);
+        //     fetchAverageData(hotelId);
+        //     fetchScoresData(hotelId);
+        // });
+        //     function fetchComments(hotelId) {
+        //         fetch(`https://localhost:7103/api/Comment/$${hotelId}/ForHotelComment`)
+        //             .then(response => response.json())
+        //             .then(data => {
 
-                        allData = data;
-                        document.getElementById('totalCommentcounts').innerText = data.totalComments;
-                        renderComments(data.topComments);
-                    })
-                    .catch(error => console.error('Error fetching comments:', error));
-            }
-        function fetchAverageData(hotelId) {
-            fetch(`https://localhost:7103/api/Comment/AverageRatingText/${hotelId}`)
-                .then(response => response.json())
-                .then(data => {
+        //                 allData = data;
+        //                 document.getElementById('totalCommentcounts').innerText = data.totalComments;
+        //                 renderComments(data.topComments);
+        //             })
+        //             .catch(error => console.error('Error fetching comments:', error));
+        //     }
+        // function fetchAverageData(hotelId) {
+        //         fetch(`https://localhost:7103/api/Comment/AverageRatingText/${hotelId}`)
+        //         .then(response => response.json())
+        //         .then(data => {
   
-                    renderAverage(data);
-                })
-                .catch(error => console.error('Error fetching average data:', error));
-        }
+        //             renderAverage(data);
+        //         })
+        //         .catch(error => console.error('Error fetching average data:', error));
+        // }
 
-        function fetchScoresData(hotelId) {
-            fetch(`https://localhost:7103/api/Comment/${hotelId}/AverageScores`)
-                .then(response => response.json())
-                .then(data => {
+        // function fetchScoresData(hotelId) {
+        //         fetch(`https://localhost:7103/api/Comment/${hotelId}/AverageScores`)
+        //         .then(response => response.json())
+        //         .then(data => {
 
-                    renderScores(data);
-                })
-                .catch(error => console.error('Error fetching scores data:', error));
-        }
+        //             renderScores(data);
+        //         })
+        //         .catch(error => console.error('Error fetching scores data:', error));
+        // }
 
            
-            function renderComments(comments) {
-                const carousel = document.getElementById('carousel');
-                carousel.innerHTML = '';
+        //     function renderComments(comments) {
+        //         const carousel = document.getElementById('carousel');
+        //         carousel.innerHTML = '';
 
-                const chunks = getChunks(comments, 3);
-                chunks.forEach((chunk, chunkIndex) => {
-                    const slideDiv = document.createElement('div');
-                    slideDiv.classList.add('carousel-slide');
-                    chunk.forEach((comment, commentIndex) => {
-                        const commentCard = document.createElement('div');
-                        commentCard.classList.add('comment-card', 'card', 'mb-2');
-                        commentCard.style.backgroundColor = '#f0f2f5';
-                        commentCard.innerHTML = `
-                            <div class="card-body">
-                                <p>${truncateText(comment.commentText, 24)}</p>
-                                <div class="d-flex justify-content-between">
-                                    <div class="d-flex flex-row align-items-center">
-                                        <span class="fa fa-user"></span>
-                                        <p class="small mb-0 ms-2">${comment.firstName || 'Anonymous'}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                        slideDiv.appendChild(commentCard);
-                    });
-                    carousel.appendChild(slideDiv);
-                });
-            }
+        //         const chunks = getChunks(comments, 3);
+        //         chunks.forEach((chunk, chunkIndex) => {
+        //             const slideDiv = document.createElement('div');
+        //             slideDiv.classList.add('carousel-slide');
+        //             chunk.forEach((comment, commentIndex) => {
+        //                 const commentCard = document.createElement('div');
+        //                 commentCard.classList.add('comment-card', 'card', 'mb-2');
+        //                 commentCard.style.backgroundColor = '#f0f2f5';
+        //                 commentCard.innerHTML = `
+        //                     <div class="card-body">
+        //                         <p>${truncateText(comment.commentText, 24)}</p>
+        //                         <div class="d-flex justify-content-between">
+        //                             <div class="d-flex flex-row align-items-center">
+        //                                 <span class="fa fa-user"></span>
+        //                                 <p class="small mb-0 ms-2">${comment.firstName || 'Anonymous'}</p>
+        //                             </div>
+        //                         </div>
+        //                     </div>
+        //                 `;
+        //                 slideDiv.appendChild(commentCard);
+        //             });
+        //             carousel.appendChild(slideDiv);
+        //         });
+        //     }
 
-            //進度條
-            function renderScores(data) {
-                const scoresContainer = document.getElementById('averageScoresContainer');
+        //     //進度條
+        //     function renderScores(data) {
+        //         const scoresContainer = document.getElementById('averageScoresContainer');
 
-                scoresContainer.innerHTML = `
-                            <div class="column">
-                                                        ${renderScore('舒適度', data.averageScore.comfortScore)}
-                                                        ${renderScore('清潔度', data.averageScore.cleanlinessScore)}
-                                                        ${renderScore('員工', data.averageScore.staffScore)}
-                                                        ${renderScore('設施', data.averageScore.facilitiesScore)}
-                            </div>
-                            <div class="column">
-                                                        ${renderScore('性價比', data.averageScore.valueScore)}
-                                                        ${renderScore('地點', data.averageScore.locationScore)}
-                                                        ${renderScore('免費WiFi', data.averageScore.freeWifiScore)}
-                            </div>
-                        `;
-            }
+        //         scoresContainer.innerHTML = `
+        //                     <div class="column">
+        //                                                 ${renderScore('舒適度', data.averageScore.comfortScore)}
+        //                                                 ${renderScore('清潔度', data.averageScore.cleanlinessScore)}
+        //                                                 ${renderScore('員工', data.averageScore.staffScore)}
+        //                                                 ${renderScore('設施', data.averageScore.facilitiesScore)}
+        //                     </div>
+        //                     <div class="column">
+        //                                                 ${renderScore('性價比', data.averageScore.valueScore)}
+        //                                                 ${renderScore('地點', data.averageScore.locationScore)}
+        //                                                 ${renderScore('免費WiFi', data.averageScore.freeWifiScore)}
+        //                     </div>
+        //                 `;
+        //     }
 
-            function renderScore(label, score) {
-                if (score === undefined) {
-                    console.error(`${label} is undefined`);
-                    return '';
-                }
-                const scoreHTML = `
-                    <div class="row m-2">
-                        <div class="col">
-                            <span>${label}</span>
-                            <span>${score.toFixed(1)}</span>
-                            <div class="progress2">
-                                <div class="progress-bar2" style="width: ${score * 10}%"></div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                return scoreHTML;
-            }
+        //     function renderScore(label, score) {
+        //         if (score === undefined) {
+        //             console.error(`${label} is undefined`);
+        //             return '';
+        //         }
+        //         const scoreHTML = `
+        //             <div class="row m-2">
+        //                 <div class="col">
+        //                     <span>${label}</span>
+        //                     <span>${score.toFixed(1)}</span>
+        //                     <div class="progress2">
+        //                         <div class="progress-bar2" style="width: ${score * 10}%"></div>
+        //                     </div>
+        //                 </div>
+        //             </div>
+        //         `;
+        //         return scoreHTML;
+        //     }
 
-            function renderAverage(data) {
-                // console.log('Average Data:', data); // Log the average data
-                document.getElementById('totalAverageScore').innerText = data.averageScore.toFixed(1);
-                document.getElementById('ratingText').innerText = data.ratingText;
-            }
+        //     function renderAverage(data) {
+        //         // console.log('Average Data:', data); // Log the average data
+        //         document.getElementById('totalAverageScore').innerText = data.averageScore.toFixed(1);
+        //         document.getElementById('ratingText').innerText = data.ratingText;
+        //     }
 
 
-        function getChunks(array, size) {
-            const chunks = [];
-            for (let i = 0; i < array.length; i += size) {
-                chunks.push(array.slice(i, i + size));
-            }
-            return chunks;
-        }
-
-        function truncateText(text, limit) {
-            return text.length > limit ? text.substring(0, limit) + '...' : text;
-        }
-
-        // function nextSlide() {
-        //     const slides = document.querySelectorAll('.carousel-slide');
-        //     currentSlide = (currentSlide + 1) % slides.length;
-        //     updateSlidePosition();
-        // }
-            
-        // function prevSlide() {
-        //     const slides = document.querySelectorAll('.carousel-slide');
-        //     currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-        //     updateSlidePosition();
+        // function getChunks(array, size) {
+        //     const chunks = [];
+        //     for (let i = 0; i < array.length; i += size) {
+        //         chunks.push(array.slice(i, i + size));
+        //     }
+        //     return chunks;
         // }
 
-            
-        // function updateSlidePosition() {
-        //     const carousel = document.getElementById('carousel');
-        //     carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+        // function truncateText(text, limit) {
+        //     return text.length > limit ? text.substring(0, limit) + '...' : text;
         // }
 
+       
 
-            function nextSlide() {
-                const slides = document.querySelectorAll('.carousel-slide');
-                if (currentSlide < slides.length - 1) {
-                    currentSlide++;
-                } else {
-                    currentSlide = 0;
-                }
-                updateSlidePosition();
-            }
+        //     function nextSlide() {
+        //         const slides = document.querySelectorAll('.carousel-slide');
+        //         if (currentSlide < slides.length - 1) {
+        //             currentSlide++;
+        //         } else {
+        //             currentSlide = 0;
+        //         }
+        //         updateSlidePosition();
+        //     }
 
-            function prevSlide() {
-                const slides = document.querySelectorAll('.carousel-slide');
-                if (currentSlide > 0) {
-                    currentSlide--;
-                } else {
-                    currentSlide = slides.length - 1;
-                }
-                updateSlidePosition();
-            }
+        //     function prevSlide() {
+        //         const slides = document.querySelectorAll('.carousel-slide');
+        //         if (currentSlide > 0) {
+        //             currentSlide--;
+        //         } else {
+        //             currentSlide = slides.length - 1;
+        //         }
+        //         updateSlidePosition();
+        //     }
 
-            function updateSlidePosition() {
-                const carousel = document.getElementById('carousel');
-                const slideWidth = carousel.clientWidth; // 获取每个slide的宽度
-                carousel.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
-            }
+        //     function updateSlidePosition() {
+        //         const carousel = document.getElementById('carousel');
+        //         const slideWidth = carousel.clientWidth; // 获取每个slide的宽度
+        //         carousel.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
+        //     }
             
             
     </script>
     @*亭蓉angular*@
-        <script src="~/dist/fun-now-angular1/main.bc83e24830b7f525.js"></script>
+        <script src="~/dist/fun-now-angular1/main.1e20e34a501edfe9.js"></script>
         <script src="~/dist/fun-now-angular1/polyfills.b6cd8ceb7f42859a.js"></script>
         <script src="~/dist/fun-now-angular1/runtime.38416f8cc614bfd6.js"></script>
         <script src="~/dist/fun-now-angular1/scripts.6fe6725b87f2ceac.js"></script>
