@@ -16,8 +16,6 @@ main {
 }
 
 .cartLists {
-    /* outline: 5px solid black;*/
-    height: 500px;
     margin: 0 auto;
     flex-grow: 2;
     flex-shrink: 1;
@@ -26,8 +24,6 @@ main {
 }
 
 .totalPrice {
-    /*outline: 5px solid black;*/
-    height: 500px;
     margin: 0 auto;
     flex-grow: 1;
     flex-shrink: 1;
@@ -64,9 +60,10 @@ main {
 }
 
 .cartRoom-basicInfo-image-img {
-    width: 68px;
-    height: 90px;
-    overflow: clip;
+    width: 80px;
+    height: 92px;
+    object-fit: cover;
+    border-radius: 3px;
 }
 
 .cartRoom-basicInfo-content {
@@ -287,4 +284,9 @@ nav {
             }
         }
     }
+}
+
+
+.yellowStar {
+    color: #ECC43A;
 }

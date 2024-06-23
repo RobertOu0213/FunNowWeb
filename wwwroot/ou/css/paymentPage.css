@@ -344,3 +344,7 @@ main {
   left: 0;
   z-index: 999;
 }
+
+.yellowStar {
+  color: #ECC43A;
+}

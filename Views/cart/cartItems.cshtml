@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "預定清單";
+    ViewData["Title"] = "購物車";
    
 }
 
@@ -216,7 +216,7 @@
             orderDetailDtos.forEach(item => {
                 let stars = "";
                 for (let i = 0; i < item.levelStar; i++) {
-                    stars += `<i class="fa-solid fa-star"></i> `;
+                    stars += `<i class="fa-solid fa-star yellowStar"></i> `;
                 }
 
                 const days = getDaysBetweenDates(item.checkInDate, item.checkOutDate);
@@ -336,13 +336,8 @@
                 $('.totalPrice .inactive .cartCheck-container-div2 span').text('0項');
             }
 
-
-
         }
 
-
-
     </script>
-
 
 }
