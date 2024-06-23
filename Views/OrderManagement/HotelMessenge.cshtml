@@ -85,10 +85,11 @@
 
                     uniqueDialogs.forEach(dialog => {
                         const card = document.createElement('li');
+                        const hotelImageUrl = getImageUrl(dialog.hotelImage);
                         card.innerHTML = `
                             <div class="message-item">
                                 <div class="message-body">
-                                    <img src="${dialog.hotelImage}" alt="${dialog.hotelName}">
+                                    <img src="${hotelImageUrl}" alt="${dialog.hotelName}">
                                     <div>
                                         <br>
                                         <h3>${dialog.hotelName}</h3>
@@ -194,6 +195,18 @@
                         fetchChatDetails(senderId, receiverId, new Date());
                     })
                     .catch(error => console.error('Error sending message:', error));
+            }
+
+
+            function getImageUrl(imagePath) {
+                if (imagePath == null) {
+                    return null;
+                }
+                if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
+                    return imagePath;
+                } else {
+                    return window.location.origin + '/image/' + imagePath;
+                }
             }
 
             sendButton.addEventListener('click', function () {

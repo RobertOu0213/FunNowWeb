@@ -461,14 +461,16 @@
                     }
                 </div>
             </div>
+               
             @* 周邊區 *@
             <div class="hotel-detail-container" id="hotel-map">
                 <h2>飯店周邊</h2>
                 <div class="row round-edge-container" >
                     <div class="col-8 p-0" style="position: relative;">
-                        <div id="openstreet-map" style="height: 500px; width: 100%;"></div>
+                         <div id="openstreet-map" style="height: 500px; width: 100%;"></div>
                     </div>
                     <div class="col-4">
+                           
                         <div class="hotel-info">
                             <div class="hotel-header">
                                 <h3 id="hotel-name">@Model.HotelDetail.HotelName</h3>
@@ -756,11 +758,9 @@
         }
 
         #openstreet-map {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
+                height: 500px;
+                width: 100%;
+                position: relative;
         }
 
         .similar-hotel.hover {
@@ -853,76 +853,84 @@
                 var similarHotels = document.querySelectorAll(".similar-hotel");
                 var markers = [];
 
+                // 默认经纬度位置
+                const defaultLatitude = 0.0;
+                const defaultLongitude = 0.0;
+
                 similarHotels.forEach(function (hotel) {
                     var similarHotelLatitude = parseFloat(hotel.querySelector(".hotel-latitude").value);
                     var similarHotelLongitude = parseFloat(hotel.querySelector(".hotel-longitude").value);
                     var similarHotelName = hotel.querySelector(".hotel-name").textContent;
 
-                    if (!isNaN(similarHotelLatitude) && !isNaN(similarHotelLongitude)) {
-                        var similarHotelMarker = L.marker([similarHotelLatitude, similarHotelLongitude], {
-                            title: similarHotelName,
-                            opacity: 1.0
-                        }).addTo(map);
-
-                        similarHotelMarker.bindPopup("<b>" + similarHotelName + "</b>");
-                        markers.push({ marker: similarHotelMarker, element: hotel });
-
-                        let polyline;
-
-                        // 添加地标的悬停事件
-                        similarHotelMarker.on('mouseover', function () {
-                            similarHotelMarker.openPopup();
-                            hotel.classList.add('hover');
-
-                            // 计算距离
-                            var distance = calculateDistance(hotelLatitude, hotelLongitude, similarHotelLatitude, similarHotelLongitude);
-                            similarHotelMarker.bindPopup("<b>" + similarHotelName + "</b><br>與當前飯店距離: " + distance.toFixed(2) + "公里").openPopup();
-
-                            // 绘制路线
-                            polyline = L.polyline([
-                                [hotelLatitude, hotelLongitude],
-                                [similarHotelLatitude, similarHotelLongitude]
-                            ], { color: 'blue' }).addTo(map);
-
-                            // 滚动到对应的饭店列表项
-                            hotel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                        });
-
-                        similarHotelMarker.on('mouseout', function () {
-                            similarHotelMarker.closePopup();
-                            if (polyline) {
-                                map.removeLayer(polyline);
-                            }
-                            hotel.classList.remove('hover');
-                        });
-
-                        // 右侧列表的悬停事件
-                        hotel.addEventListener("mouseenter", function () {
-                            similarHotelMarker.openPopup();
-                            hotel.classList.add('hover');
-
-                            // 计算距离
-                            var distance = calculateDistance(hotelLatitude, hotelLongitude, similarHotelLatitude, similarHotelLongitude);
-                            similarHotelMarker.bindPopup("<b>" + similarHotelName + "</b><br>與當前飯店距離: " + distance.toFixed(2) + "公里").openPopup();
-
-                            // 绘制路线
-                            polyline = L.polyline([
-                                [hotelLatitude, hotelLongitude],
-                                [similarHotelLatitude, similarHotelLongitude]
-                            ], { color: 'blue' }).addTo(map);
-
-                            // 滚动到对应的饭店列表项
-                            hotel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                        });
-
-                        hotel.addEventListener("mouseleave", function () {
-                            similarHotelMarker.closePopup();
-                            if (polyline) {
-                                map.removeLayer(polyline);
-                            }
-                            hotel.classList.remove('hover');
-                        });
+                    // 如果经纬度为 0.0，使用默认位置
+                    if (similarHotelLatitude === 0.0 && similarHotelLongitude === 0.0) {
+                        similarHotelLatitude = defaultLatitude;
+                        similarHotelLongitude = defaultLongitude;
                     }
+
+                    var similarHotelMarker = L.marker([similarHotelLatitude, similarHotelLongitude], {
+                        title: similarHotelName,
+                        opacity: 1.0
+                    }).addTo(map);
+
+                    similarHotelMarker.bindPopup("<b>" + similarHotelName + "</b>");
+                    markers.push({ marker: similarHotelMarker, element: hotel });
+
+                    let polyline;
+
+                    // 添加地标的悬停事件
+                    similarHotelMarker.on('mouseover', function () {
+                        similarHotelMarker.openPopup();
+                        hotel.classList.add('hover');
+
+                        // 计算距离
+                        var distance = calculateDistance(hotelLatitude, hotelLongitude, similarHotelLatitude, similarHotelLongitude);
+                        similarHotelMarker.bindPopup("<b>" + similarHotelName + "</b><br>與當前飯店距離: " + distance.toFixed(2) + "公里").openPopup();
+
+                        // 绘制路线
+                        polyline = L.polyline([
+                            [hotelLatitude, hotelLongitude],
+                            [similarHotelLatitude, similarHotelLongitude]
+                        ], { color: 'blue' }).addTo(map);
+
+                        // 滚动到对应的饭店列表项
+                        hotel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    });
+
+                    similarHotelMarker.on('mouseout', function () {
+                        similarHotelMarker.closePopup();
+                        if (polyline) {
+                            map.removeLayer(polyline);
+                        }
+                        hotel.classList.remove('hover');
+                    });
+
+                    // 右侧列表的悬停事件
+                    hotel.addEventListener("mouseenter", function () {
+                        similarHotelMarker.openPopup();
+                        hotel.classList.add('hover');
+
+                        // 计算距离
+                        var distance = calculateDistance(hotelLatitude, hotelLongitude, similarHotelLatitude, similarHotelLongitude);
+                        similarHotelMarker.bindPopup("<b>" + similarHotelName + "</b><br>與當前飯店距離: " + distance.toFixed(2) + "公里").openPopup();
+
+                        // 绘制路线
+                        polyline = L.polyline([
+                            [hotelLatitude, hotelLongitude],
+                            [similarHotelLatitude, similarHotelLongitude]
+                        ], { color: 'blue' }).addTo(map);
+
+                        // 滚动到对应的饭店列表项
+                        hotel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    });
+
+                    hotel.addEventListener("mouseleave", function () {
+                        similarHotelMarker.closePopup();
+                        if (polyline) {
+                            map.removeLayer(polyline);
+                        }
+                        hotel.classList.remove('hover');
+                    });
                 });
 
                 // 添加悬停事件监听器
@@ -939,6 +947,7 @@
                         item.element.classList.remove('hover');
                     });
                 });
+
 
         //==================================使用OPENSTREETMAP=====================================
 
