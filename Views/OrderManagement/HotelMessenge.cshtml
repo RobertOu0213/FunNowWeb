@@ -1,6 +1,6 @@
 ﻿@{
     ViewData["Title"] = "HotelMessenge";
-    Layout = "_Layout";
+    Layout = "_Layout_NoHover";
     var memberID = Context.Session.GetString("MemberID");
     var googleMemberId = Context.Session.GetString("GoogleMemberID");
     var displayMemberId = !string.IsNullOrEmpty(googleMemberId) ? googleMemberId : memberID;
@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="/Ting/css/HotelMessenge.css">
 </head>
 <body>
-    <div class="header">
+   @*  <div class="header">
         <div class="logo">
             <img src="logo.png" alt="Logo">
             <span>Hotel管理系統</span>
@@ -25,7 +25,7 @@
             <a href="#">訂單管理</a>
             <a href="#">客服中心</a>
         </div>
-    </div>
+    </div> *@
     <div class="container">
         <!--============================側邊導航欄=========================================-->
         <div class="sidebar">
@@ -154,9 +154,9 @@
                             const message = document.createElement('div');
                             message.classList.add('chat-message');
                             if (dialog.memberId === memberId) {
-                                message.classList.add('received');
-                            } else {
                                 message.classList.add('sent');
+                            } else {
+                                message.classList.add('received');
                             }
                             message.innerHTML = `
                                 <div class="message-content">

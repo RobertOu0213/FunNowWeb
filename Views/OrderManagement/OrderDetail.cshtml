@@ -1,6 +1,6 @@
 ﻿@{
     ViewData["Title"] = "OrderDetail";
-    Layout = "_Layout";
+    Layout = "_Layout_NoHover";
     var memberID = Context.Session.GetString("MemberID");
     var googleMemberId = Context.Session.GetString("GoogleMemberID");
     var displayMemberId = !string.IsNullOrEmpty(googleMemberId) ? googleMemberId : memberID;
@@ -29,11 +29,13 @@
                     <li><a href="/Member/MemberInformation" class="fa-solid fa-user" alt="個人資料"><span>個人資料</span></a></li>
                 </ul>
             </div>
-            <div class="content-orderdetail" id="order-details-content">
+            <div class="content" id="order-details-content">
                 <div class="order-confirmation-card" id="order-confirmation-card">
                     <!-- 訂單確認卡片內容 -->
                 </div>
-                
+                <div id="price-info">
+                    <!-- 價格信息 -->
+                </div>
             </div>
         </div>
     </div>
@@ -61,10 +63,10 @@
 
             function populateOrderDetails(data) {
                 document.getElementById('order-confirmation-card').innerHTML = `
-                            <h2>已確認</h2>
-                            <p>訂單編號: ${data.orderId}</p>
-                            <!-- 其他訂單確認信息 -->
-                        `;
+                                    <h2>已確認</h2>
+                                    <p>訂單編號: ${data.orderId}</p>
+                                    <!-- 其他訂單確認信息 -->
+                                `;
 
                 const orderDetailsContent = document.getElementById('order-details-content');
                 data.orderDetails.forEach(detail => {
@@ -102,11 +104,11 @@
                 });
 
                 document.getElementById('price-info').innerHTML = `
-                            <div>
-                                <p>總價: NT$${data.totalPrice}</p>
-                                <!-- 其他價格信息 -->
-                            </div>
-                        `;
+                                    <div>
+                                        <p>總價: NT$${data.totalPrice}</p>
+                                        <!-- 其他價格信息 -->
+                                    </div>
+                                `;
             }
 
             function getImageUrl(imagePath) {

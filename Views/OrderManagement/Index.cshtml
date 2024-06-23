@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = "_Layout";
+    Layout = "_Layout_NoHover";
     var memberID = Context.Session.GetString("MemberID");
     var googleMemberId = Context.Session.GetString("GoogleMemberID");
     var displayMemberId = !string.IsNullOrEmpty(googleMemberId) ? googleMemberId : memberID;

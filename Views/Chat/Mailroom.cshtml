@@ -1,5 +1,9 @@
-﻿@{
+﻿@model int
+@{
     ViewData["Title"] = "Mailroom";
+    var memberID = Context.Session.GetString("MemberID");
+    var googleMemberId = Context.Session.GetString("GoogleMemberID");
+    var displayMemberId = !string.IsNullOrEmpty(googleMemberId) ? googleMemberId : memberID;
 }
 
 
@@ -367,6 +371,12 @@
         const chatOptions = document.querySelector('.chat-options');
         const chatboxContent = document.querySelector('.chatbox-content');
         const emailChatContent = document.querySelector('.email-chat-content');
+        // 將 memberId 和 displayMemberId 傳遞給 JavaScript 變數
+        const hotelID = '@Model';
+        const displayMemberId = '@displayMemberId';
+
+        
+
 
         chatboxButton.addEventListener('click', function () {
             if (chatOptions.style.display === 'none' || chatOptions.style.display === '') {
@@ -408,6 +418,51 @@
         });
 
         function sendMessage(type) {
+            console.log("DisplayMemberID: " + displayMemberId );
+            fetch(`https://localhost:7103/api/Hotels/GetMemberIdByHotelId/${hotelID}`)
+                .then(response => {
+                    if (!response.ok) {
+                        return response.text().then(error => { throw new Error(error); });
+                    }
+                    return response.text(); // 解析為文本
+                })
+                .then(data => {
+                    console.log('Member ID:', data); // 這裡的 data 會是回傳的 MemberId
+                    const memberId = parseInt(data, 10); // 解析為數字
+                    if (isNaN(memberId)) {
+                        throw new Error('Invalid Member ID');
+                    }
+
+                    // 獲取輸入的 email
+                    const emailInput = document.getElementById('inputemail').value;
+
+                    // 構建發送消息的 API URL
+                    const sendMessageUrl = `https://localhost:7103/api/Websocket/sendMessage?senderId=${displayMemberId}&receiverId=${memberId}`;
+
+                    // 發送消息
+                    return fetch(sendMessageUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            message: emailInput
+                        })
+                    });
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.text().then(error => { throw new Error(error); });
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    console.log('Message sent successfully:', data);
+                })
+                .catch(error => {
+                    console.error('Error:', error.message);
+                });
+
             let input;
             let messagesContainer;
             let memberEmail = "leo10117212000@gmail.com";
