@@ -131,6 +131,34 @@ main {
   font-size: 0.8em;
   background-color: #EBF0FC;
 }
+.cartRoom-bookingInfo.expired {
+  background-color: #efefef;
+}
+.cartRoom-bookingInfo.expired input[type=checkbox] {
+  pointer-events: none;
+}
+.cartRoom-bookingInfo .text-opacity {
+  opacity: 0.5;
+}
+.cartRoom-bookingInfo .alertMain {
+  font-weight: 600;
+  color: rgb(194, 39, 0);
+  font-size: 14px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: baseline;
+  margin-right: 3em;
+}
+.cartRoom-bookingInfo .alertMain .soldout {
+  margin-left: 0.5em;
+}
+.cartRoom-bookingInfo .alertSub {
+  font-weight: 400;
+  color: rgb(194, 39, 0);
+  font-size: 14px;
+  display: flex;
+  justify-content: flex-end;
+}
 
 .cartRoom-bookingInfo-div4 {
   display: flex;
@@ -141,7 +169,7 @@ main {
 }
 
 .cartRoom-bookingInfo-div4 :first-child {
-  font-size: 0.3em;
+  font-size: 0.5em;
   margin-right: 2px;
 }
 

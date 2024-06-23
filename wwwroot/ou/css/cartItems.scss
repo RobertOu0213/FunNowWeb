@@ -130,7 +130,41 @@ main {
     border-top: 1px solid #D5D9E2;
     padding: 5px;
     font-size: 0.8em;
-    background-color: #EBF0FC
+    background-color: #EBF0FC;
+
+    &.expired {
+        background-color: #efefef;
+
+        input[type="checkbox"] {
+            pointer-events: none;
+        }
+    }
+
+    .text-opacity {
+        opacity: 0.5;
+    }
+
+    .alertMain {
+        font-weight: 600;
+        color: rgb(194, 39, 0);
+        font-size: 14px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: baseline;
+        margin-right: 3em;
+
+        .soldout {
+            margin-left: 0.5em;
+        }
+    }
+
+    .alertSub {
+        font-weight: 400;
+        color: rgb(194, 39, 0);
+        font-size: 14px;
+        display: flex;
+        justify-content: flex-end;
+    }
 }
 
 .cartRoom-bookingInfo-div4 {
@@ -142,7 +176,7 @@ main {
 }
 
 .cartRoom-bookingInfo-div4 :first-child {
-    font-size: 0.3em;
+    font-size: 0.5em;
     margin-right: 2px;
 }
 
