@@ -97,7 +97,7 @@ namespace PrjFunNowWeb.Controllers
 
                 if (string.IsNullOrEmpty(orderDetailsIdJson))
                 {
-                    return BadRequest("OrderDetailsId is required");
+                    return RedirectToAction("cartItems", "Cart");
                 }
 
                 var orderDetailsId = JsonSerializer.Deserialize<List<int>>(orderDetailsIdJson);
