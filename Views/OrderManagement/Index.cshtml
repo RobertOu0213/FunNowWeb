@@ -103,6 +103,8 @@
                             }
                         }
 
+                        const hotelImageUrl = getImageUrl(hotelImage);
+
                         const currentDate = new Date();
                         const stayCompleted = checkOutDate && new Date(checkOutDate) < currentDate;
 
@@ -124,7 +126,7 @@
                                 </div>
                                 <div class="order-card-body">
                                     <div class="hotel-image">
-                                        <img src="${hotelImage}" alt="Hotel Image">
+                                      <img src="${hotelImageUrl}" alt="Hotel Image">
                                     </div>
                                     <div class="order-info">
                                         <h3>${hotelName}</h3>
@@ -219,6 +221,17 @@
                     }
 
                     loadTabContent(status, activeTab);
+                }
+            }
+
+            function getImageUrl(imagePath) {
+                if (imagePath == null) {
+                    return null;
+                }
+                if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
+                    return imagePath;
+                } else {
+                    return window.location.origin + '/image/' + imagePath;
                 }
             }
 
