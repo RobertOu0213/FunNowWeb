@@ -378,17 +378,46 @@
         });
 
         function sendMessage(type) {
-            console.log("DisplayMemberID: " + displayMemberId);
-            fetch(`/Chat/GetMemberIdByHotelId?hotelId=${hotelID}`)
+            console.log("DisplayMemberID: " + displayMemberId );
+            fetch(`https://localhost:7103/api/Hotels/GetMemberIdByHotelId/${hotelID}`)
                 .then(response => {
                     if (!response.ok) {
-                        return response.json().then(error => { throw new Error(error.Message); });
+                        return response.text().then(error => { throw new Error(error); });
                     }
-                    return response.json();
+                    return response.text(); // 解析為文本
                 })
                 .then(data => {
-                    console.log('Member ID:', data.MemberId);
-                    // 在這裡使用 data.MemberId 做其他事情
+                    console.log('Member ID:', data); // 這裡的 data 會是回傳的 MemberId
+                    const memberId = parseInt(data, 10); // 解析為數字
+                    if (isNaN(memberId)) {
+                        throw new Error('Invalid Member ID');
+                    }
+
+                    // 獲取輸入的 email
+                    const emailInput = document.getElementById('inputemail').value;
+
+                    // 構建發送消息的 API URL
+                    const sendMessageUrl = `https://localhost:7103/api/Websocket/sendMessage?senderId=${displayMemberId}&receiverId=${memberId}`;
+
+                    // 發送消息
+                    return fetch(sendMessageUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            message: emailInput
+                        })
+                    });
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.text().then(error => { throw new Error(error); });
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    console.log('Message sent successfully:', data);
                 })
                 .catch(error => {
                     console.error('Error:', error.message);

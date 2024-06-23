@@ -14,30 +14,7 @@ namespace PrjFunNowWeb.Controllers
         {
             return View();
         }
-        private readonly FunNowContext _context;
-
-        public ChatController(FunNowContext context)
-        {
-            _context = context;
-        }
-
-        [HttpGet]
-        public IActionResult GetMemberIdByHotelId(int hotelId)
-        {
-            // 添加調試輸出
-            Console.WriteLine($"Received hotelId: {hotelId}");
-
-            var hotel = _context.Hotels.FirstOrDefault(h => h.HotelId == hotelId);
-            if (hotel == null)
-            {
-                Console.WriteLine("Hotel not found");
-                return NotFound(new { Message = "Hotel not found" });
-            }
-
-            var memberId = hotel.MemberId;
-            Console.WriteLine($"Found memberId: {memberId}");
-            return Ok(new { MemberId = memberId });
-        }
+        
         public IActionResult Mailroom()
         {
             var memberId = HttpContext.Session.GetString("MemberID");
