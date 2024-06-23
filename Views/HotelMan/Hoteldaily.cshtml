@@ -389,8 +389,7 @@
 
                     const orderDetail = orderDetails.find(od => {
                         const checkInDate = new Date(od.checkInDate);
-                        const checkOutDate = new Date(od.checkOutDate);
-                        return date >= checkInDate && date < checkOutDate;
+                        return date.toDateString() === checkInDate.toDateString();
                     });
 
                     if (date < todayDate) {
@@ -425,7 +424,7 @@
                         div.appendChild(price);
                     }
 
-                    if (date >= todayDate && (!orderDetail || orderDetail.guestNumber === 0)) {
+                    if (date >= todayDate) {
                         div.onclick = function () {
                             if (selectedDate) {
                                 selectedDate.classList.remove("selected");
@@ -441,41 +440,17 @@
                             } else {
                                 document.getElementById("price").value = 200000;
                             }
+
+                            if (orderDetail && orderDetail.guestNumber === 0) {
+                                document.getElementById("availability-blocked").checked = true;
+                            } else {
+                                document.getElementById("availability-available").checked = true;
+                            }
                         };
                     }
 
                     calendar.appendChild(div);
                 }
-
-                // 確保在日曆格子生成之後更新“封鎖”狀態
-                updateBlockedDays(year, month, firstDayOfMonth);
-            }
-
-            function updateBlockedDays(year, month, firstDayOfMonth) {
-                orderDetails.forEach(order => {
-                    if (order.guestNumber === 0) {
-                        const checkInDate = new Date(order.checkInDate);
-                        console.log(`Processing order with guestNumber 0 for date: ${checkInDate}`);
-                        if (checkInDate.getFullYear() === year && checkInDate.getMonth() + 1 === month) {
-                            const day = checkInDate.getDate();
-                            // 正確的日曆格子選取方式
-                            const index = day + firstDayOfMonth + 7; // 加7以考慮標題行
-                            const div = calendar.querySelector(`div:nth-child(${index})`);
-                            console.log(`Updating calendar for day: ${day} at index: ${index}`);
-                            if (div) {
-                                div.className = "null-guest";
-                                div.style.backgroundColor = "gray"; // 將格子塗成灰色
-                                div.innerHTML = `
-                                ${day}
-                                <div class="room-name">封鎖</div>
-                                <div class="price">TWD ${order.roomPrice}</div>
-                                `;
-                            } else {
-                                console.log(`Could not find div for day: ${day} at index: ${index}`);
-                            }
-                        }
-                    }
-                });
             }
 
             async function saveDateDetails(hotelId, formattedDate, availability) {
@@ -492,7 +467,7 @@
                 try {
                     const response = await fetch(apiUrl, { method: method });
                     if (!response.ok) throw new Error("Failed to save details");
-                    alert(`Saved: ${selectedDateInput.value}, Availability: ${availability}`);
+                    alert(`Saved: ${formattedDate}, Availability: ${availability}`);
                     fetchOrderDetails(hotelId);
                 } catch (error) {
                     alert("Failed to save. Please try again.");
@@ -500,12 +475,16 @@
             }
 
             saveBtn.addEventListener("click", () => {
+                console.log("Save button clicked");  // 調試信息
                 if (selectedDate) {
                     const hotelId = @ViewData["HotelId"];
-                    const date = new Date(selectedDateInput.value);
-                    date.setDate(date.getDate() + 1);
+                    const dateValue = selectedDateInput.value;
+                    console.log("Selected date:", dateValue);  // 調試信息
+                    const date = new Date(dateValue);
+                    date.setDate(date.getDate() + 1);  // 增加一天
                     const formattedDate = date.toISOString().split('T')[0];
                     const availability = document.querySelector('input[name="availability"]:checked').value;
+                    console.log("Formatted date:", formattedDate, "Availability:", availability);  // 調試信息
 
                     saveDateDetails(hotelId, formattedDate, availability);
                 } else {
@@ -562,8 +541,6 @@
             populateYearMonthSelectors();
             fetchOrderDetails(@ViewData["HotelId"]);
         });
-
-
 
     </script>
 </body>
