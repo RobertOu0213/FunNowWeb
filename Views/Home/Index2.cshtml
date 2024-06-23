@@ -27,12 +27,11 @@
                     </a>
                 </div>
 
-
-                <!-- 模態框 -->
-                <div id="myModal" class="modal">
+                <!-- 地圖找房模態框 -->
+                <div id="mapModal" class="modal">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <span class="close">&times;</span>
+                            <span class="close" id="mapClose">&times;</span>
                             <h2>地圖找房</h2>
                         </div>
                         <div class="modal-body">
@@ -1009,7 +1008,7 @@
     @* //地圖找圖功能 *@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            var modal = document.getElementById("myModal");
+            var modal = document.getElementById("mapModal");
             var btn = document.getElementById("mapBtn");
             var span = document.getElementsByClassName("close")[0];
 
@@ -1465,9 +1464,9 @@
         }
     </style>
     @* 地圖找房 *@
-    <style>
-        /* 模態框樣式 */
-        .modal {
+    <style> 
+        /* 地圖找房模態框樣式 */
+        #mapModal .modal {
             display: none;
             position: fixed;
             z-index: 1050;
@@ -1479,7 +1478,7 @@
             background-color: rgba(0,0,0,0.8);
         }
 
-        .modal-content {
+        #mapModal .modal-content {
             position: absolute;
             background-color: #fefefe;
             margin: auto;
@@ -1495,7 +1494,7 @@
             animation-duration: 0.4s;
         }
 
-        .close {
+        #mapModal .close {
             color: white;
             float: right;
             font-size: 18px; /* 調整關閉按鈕大小 */
@@ -1503,28 +1502,29 @@
             margin-right: 10px;
         }
 
-            .close:hover,
-            .close:focus {
+            #mapModal .close:hover,
+            #mapModal .close:focus {
                 color: #000;
                 text-decoration: none;
                 cursor: pointer;
             }
 
-        .modal-header {
+        #mapModal .modal-header {
             padding: 2px 16px;
             background-color: #5cb85c;
             color: white;
         }
 
-        .modal-body {
+        #mapModal .modal-body {
             padding: 2px 16px;
         }
 
-        .modal-footer {
+        #mapModal .modal-footer {
             padding: 2px 16px;
             background-color: #5cb85c;
             color: white;
         }
+
     </style>
 
 
