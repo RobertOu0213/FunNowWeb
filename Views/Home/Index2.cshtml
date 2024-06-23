@@ -682,8 +682,9 @@
                     ratingDescription = "N/A";
                 }
 
-                const mainImage = hotelImages[0] ? `https://localhost:7284/image/${hotelImages[0]}` : '';
-                const smallImages = hotelImages.slice(1, 4).map(img => img ? `https://localhost:7284/image/${img}` : '');
+
+                const mainImage = hotelImages[0] ? getImageUrl(hotelImages[0]) : '';
+                const smallImages = hotelImages.slice(1, 4).map(img => img ? getImageUrl(img) : '');
 
                 return `
                         <div class="col-lg-12 hotel-card" data-hotel-id="${hotelId}">
@@ -972,6 +973,17 @@
                 await loadHotels(searchHotel);
             } else {
                 console.log('searchHotel not found in sessionStorage');
+            }
+        }
+
+        function getImageUrl(imagePath) {
+            if (imagePath == null) {
+                return null;
+            }
+            if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
+                return imagePath;
+            } else {
+                return window.location.origin + '/image/' + imagePath;
             }
         }
     </script>
