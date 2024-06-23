@@ -19,11 +19,29 @@
         <div class="row mb_30">
             <div class="col-lg-3 col-sm-6">
                 <!-- 左側篩選條件區域 -->
+
+                <!-- 地圖找房按鈕 -->
                 <div>
-                    <a class="book_now_btn button_hover" href="#">
+                    <a class="book_now_btn button_hover" href="#" id="mapBtn">
                         <img src="~/image/ming_img/map.png" alt="" style="height:80px;width:auto">
                     </a>
                 </div>
+
+                <!-- 模態框 -->
+                <div id="myModal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <span class="close">&times;</span>
+                            <h2>地圖找房</h2>
+                        </div>
+                        <div class="modal-body">
+                            <div id="map" style="width: 100%; height: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+
 
                 <div>
                     <input type="text" id="search-input4" class="form-control" placeholder="搜尋關鍵字" onkeydown="handleKeyDownIndex2(event)">
@@ -1050,7 +1068,6 @@
         }
     </script>
 
-
     <script>
         // 解決 checkbox 內容太長的問題
         document.addEventListener("DOMContentLoaded", function () {
@@ -1068,7 +1085,91 @@
         });
     </script>
 
+    @* //地圖找圖功能 *@
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var modal = document.getElementById("myModal");
+            var btn = document.getElementById("mapBtn");
+            var span = document.getElementsByClassName("close")[0];
 
+            btn.onclick = function () {
+                modal.style.display = "block";
+                initMap();
+            }
+
+            span.onclick = function () {
+                modal.style.display = "none";
+            }
+
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+        });
+
+        function initMap() {
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 12,
+                center: { lat: 25.0330, lng: 121.5654 } // 台北市中心
+            });
+
+            fetch('https://localhost:7103/api/HotelSearch')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data); // 檢查返回的數據
+                    data.forEach(hotel => {
+                        var lat = parseFloat(hotel.latitude);
+                        var lng = parseFloat(hotel.longitude);
+
+                        if (!isNaN(lat) && !isNaN(lng)) {
+                            var marker = new google.maps.Marker({
+                                position: { lat: lat, lng: lng },
+                                map: map,
+                                title: `${hotel.hotelName} - NT$${hotel.hotelPrice}`,
+                                icon: '/image/ming_img/hotel_icon.png' // 確認圖示路徑正確
+                            });
+
+                            var infowindowContent = `
+                                    <div>
+                                        <strong>${hotel.hotelName}</strong><br>
+                                        平均價格: NT$${hotel.hotelPrice}<br>
+                                        <img src="https://localhost:7284/image/${hotel.hotelImages[0]}" style="width: 100px; height: auto;"> <!-- 顯示旅館照片 -->
+                                    </div>
+                                `;
+
+                            var infowindow = new google.maps.InfoWindow({
+                                content: infowindowContent
+                            });
+
+                            marker.addListener('click', function () {
+                                infowindow.open(map, marker);
+                            });
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching hotel data:', error);
+                });
+        }
+    </script>
+
+
+
+
+
+
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAyKcSGzZi4LQsJEvbJOw3Kh8q_9uhtRvw&callback=initMap" async defer></script>
+
+
+
+    
 }
 
 @section Styles {
@@ -1431,6 +1532,69 @@
             line-height: 1.2;
         }
     </style>
+    @* 地圖找房 *@
+    <style>
+        /* 模態框樣式 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1050;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            position: absolute;
+            background-color: #fefefe;
+            margin: auto;
+            padding: 0;
+            border: 1px solid #888;
+            width: 80%;
+            height: 80%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation-name: animatetop;
+            animation-duration: 0.4s;
+        }
+
+        .close {
+            color: white;
+            float: right;
+            font-size: 18px; /* 調整關閉按鈕大小 */
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+            .close:hover,
+            .close:focus {
+                color: #000;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+        .modal-header {
+            padding: 2px 16px;
+            background-color: #5cb85c;
+            color: white;
+        }
+
+        .modal-body {
+            padding: 2px 16px;
+        }
+
+        .modal-footer {
+            padding: 2px 16px;
+            background-color: #5cb85c;
+            color: white;
+        }
+    </style>
+
 
     @*     ============Accordion搬過來的CSS ==============*@
 
