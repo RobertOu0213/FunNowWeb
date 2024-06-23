@@ -1,5 +1,9 @@
-﻿@{
+﻿@model int
+@{
     ViewData["Title"] = "Mailroom";
+    var memberID = Context.Session.GetString("MemberID");
+    var googleMemberId = Context.Session.GetString("GoogleMemberID");
+    var displayMemberId = !string.IsNullOrEmpty(googleMemberId) ? googleMemberId : memberID;
 }
 
 
@@ -327,6 +331,12 @@
         const chatOptions = document.querySelector('.chat-options');
         const chatboxContent = document.querySelector('.chatbox-content');
         const emailChatContent = document.querySelector('.email-chat-content');
+        // 將 memberId 和 displayMemberId 傳遞給 JavaScript 變數
+        const hotelID = '@Model';
+        const displayMemberId = '@displayMemberId';
+
+        
+
 
         chatboxButton.addEventListener('click', function () {
             if (chatOptions.style.display === 'none' || chatOptions.style.display === '') {
@@ -368,6 +378,22 @@
         });
 
         function sendMessage(type) {
+            console.log("DisplayMemberID: " + displayMemberId);
+            fetch(`/Chat/GetMemberIdByHotelId?hotelId=${hotelID}`)
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(error => { throw new Error(error.Message); });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Member ID:', data.MemberId);
+                    // 在這裡使用 data.MemberId 做其他事情
+                })
+                .catch(error => {
+                    console.error('Error:', error.message);
+                });
+
             let input;
             let messagesContainer;
             let memberEmail = "leo10117212000@gmail.com";
