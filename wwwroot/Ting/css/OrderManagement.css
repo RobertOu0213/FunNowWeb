@@ -235,6 +235,7 @@ body {
     display: flex;
     align-items: center;
     padding: 20px;
+    gap: 20px; /* 增加间距 */
 }
 
 .hotel-image img {
@@ -245,8 +246,11 @@ body {
 }
 
 .order-info {
-    flex-grow: 1;
+    display: flex;
+    flex-direction: row; /* 橫向排列 */
+    align-items: center; /* 垂直置中 */
     padding-left: 20px;
+    gap: 15px; /* 增加间距 */
 }
 
     .order-info h3 {
@@ -256,7 +260,7 @@ body {
     }
 
     .order-info p {
-        margin: 5px 0;
+        margin: 0;
         font-size: 14px;
         color: #6c757d;
     }
@@ -265,6 +269,7 @@ body {
     font-size: 18px;
     font-weight: bold;
     color: #333;
+    margin-left: auto; /* 将价格推到最右边 */
 }
 
 .order-card-footer {
@@ -327,25 +332,46 @@ body {
 .hotel-info,
 .stay-info,
 .room-info,
-.guest-info,
 .price-info {
-    background-color: #fff;
+    background-color: #f9f9f9;
     border-radius: 10px;
     padding: 20px;
     margin-bottom: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.3s ease-in-out;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
     .order-confirmation-card:hover,
     .hotel-info:hover,
     .stay-info:hover,
     .room-info:hover,
-    .guest-info:hover,
     .price-info:hover {
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     }
 
+.guest-info {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    color: #333; /* 深色以增加对比度 */
+}
+
+    .guest-info:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    /* 顧客姓名的正式風格 */
+    .guest-info .customer-name {
+        font-size: 18px; /* 增加字體大小 */
+        font-weight: 600; /* 加粗字體 */
+        color: #333; /* 深色字體 */
+        margin: 0;
+    }
     .order-confirmation-card h2,
     .hotel-info h3 {
         margin: 0 0 10px;
@@ -375,7 +401,6 @@ body {
     .hotel-info p,
     .stay-info p,
     .room-info p,
-    .guest-info p,
     .price-info p {
         margin: 5px 0;
         color: #555;
@@ -385,7 +410,6 @@ body {
 .hotel-info,
 .stay-info,
 .room-info,
-.guest-info,
 .price-info {
     border-left: 5px solid #007bff;
     padding-left: 15px;
