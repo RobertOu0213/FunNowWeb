@@ -27,6 +27,7 @@
                     </a>
                 </div>
 
+
                 <!-- 模態框 -->
                 <div id="myModal" class="modal">
                     <div class="modal-content">
@@ -1108,6 +1109,13 @@
             }
         });
 
+        const searchHotelForLouieee = getSearchHotel();
+
+        function getSearchHotel() {
+            const searchHotelForLouieee = JSON.parse(sessionStorage.getItem("searchHotel")); //從瀏覽器的會話存儲中檢索先前保存的搜索條件
+            return searchHotelForLouieee;
+        }
+
         function initMap() {
             var map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 12,
@@ -1139,7 +1147,7 @@
                                     <div>
                                         <strong>${hotel.hotelName}</strong><br>
                                         平均價格: NT$${hotel.hotelPrice}<br>
-                                        <img src="https://localhost:7284/image/${hotel.hotelImages[0]}" style="width: 100px; height: auto;"> <!-- 顯示旅館照片 -->
+                                        <img src="https://localhost:7284/image/${hotel.hotelImages[0]}" style="width: 100px; height: auto;" class="hotel-image" data-hotel-id="${hotel.hotelId}"> <!-- 顯示旅館照片 -->
                                     </div>
                                 `;
 
@@ -1152,16 +1160,20 @@
                             });
                         }
                     });
+
+                    // 添加圖片點擊事件
+                    document.addEventListener('click', function (event) {
+                        if (event.target.classList.contains('hotel-image')) {
+                            var hotelId = event.target.getAttribute('data-hotel-id');
+                            window.location.href = `https://localhost:7284/PgHotel/pgHotel/?hotelId=${hotelId}&checkInDate=${searchHotelForLouieee.checkInDate}&checkOutDate=${searchHotelForLouieee.checkOutDate}`;
+                        }
+                    });
                 })
                 .catch(error => {
                     console.error('Error fetching hotel data:', error);
                 });
         }
     </script>
-
-
-
-
 
 
 
