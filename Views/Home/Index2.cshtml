@@ -320,8 +320,7 @@
 @section Scripts {
 
     <script>
-
-        //維持最愛紅心
+        // 維持最愛紅心
         async function applyFavoriteStatus() {
             const memberId = window.memberId;
             if (!memberId) {
@@ -339,7 +338,7 @@
             });
         }
 
-        //產生漂亮星星
+        // 產生漂亮星星
         const generateStars = (stars) => {
             let starsHtml = '';
             for (let i = 0; i < stars; i++) {
@@ -349,12 +348,12 @@
         };
 
         document.addEventListener("DOMContentLoaded", async function () {
-            //DOMContentLoaded 事件：這個事件在初始的 HTML 文檔被完全加載和解析後觸發，不必等待樣式表、圖像和子框架的完全加載。
+            // DOMContentLoaded 事件：這個事件在初始的 HTML 文檔被完全加載和解析後觸發，不必等待樣式表、圖像和子框架的完全加載。
             // 網頁加載完成後自動加載儲存在 sessionStorage 的 searchHotel 資訊
             const searchHotelJson = sessionStorage.getItem("searchHotel");
             if (searchHotelJson) {
                 const searchHotel = JSON.parse(searchHotelJson);
-                //解析並加載飯店資訊
+                // 解析並加載飯店資訊
                 await loadHotels(searchHotel);
             } else {
                 console.log("searchHotel not found in sessionStorage");
@@ -378,7 +377,6 @@
             } else {
                 console.log('Member ID not found');
             }
-
 
             // 監聽提交按鈕，獲取輸入值並發送請求
             const btnSubmit3 = document.querySelector("#buttonSubmit3");
@@ -406,15 +404,13 @@
                 '.form-check-container-room-equipment'
             ];
 
-            //所有指定容器內的複選框添加 change 事件監聽器，當複選框的狀態改變時，
-            //觸發 updateSearchFilters 函數以更新搜尋條件並重新加載飯店資訊
-            containerSelectors.forEach(selector => { //遍歷 containerSelectors 數組，對每個選擇器進行以下操作
+            // 所有指定容器內的複選框添加 change 事件監聽器，當複選框的狀態改變時，
+            // 觸發 updateSearchFilters 函數以更新搜尋條件並重新加載飯店資訊
+            containerSelectors.forEach(selector => {
                 document.querySelectorAll(`${selector} input[type="checkbox"]`).forEach(checkbox => {
                     checkbox.addEventListener('change', updateSearchFilters);
-                });//對每個容器選擇器，選取該容器內的所有複選框，添加 change 事件監聽器
+                });
             });
-
-
 
             // 綁定排序按鈕的點擊事件
             const sortButtons = {
@@ -426,19 +422,17 @@
                 hotDealBtn: ["deal", "desc"],
             };
 
-            //為每個排序按鈕添加點擊事件監聽器，當按鈕被點擊時，
+            // 為每個排序按鈕添加點擊事件監聽器，當按鈕被點擊時，
             // 觸發 handleSort 函數以設定排序方式並重新加載飯店資訊
             Object.keys(sortButtons).forEach(id => {
                 document.querySelector(`#${id}`).addEventListener("click", () => handleSort(...sortButtons[id]));
-                //...為使用展開運算符（Spread Operator）將數組 sortButtons[id] 展開為單獨的參數，傳遞給 handleSort 函數。
-                //例如，對於 sortBtn，sortButtons["sortBtn"] 是 ["HotelId", "asc"]，所以實際調用為 handleSort("HotelId", "asc")
             });
 
             // 設定 upperHandle 初始位置在滑動條的尾端
             const rangeSlider = {
-                lowerHandle: document.getElementById('lowerHandle'),//滑桿的下限手柄
+                lowerHandle: document.getElementById('lowerHandle'),
                 upperHandle: document.getElementById('upperHandle'),
-                slider: document.getElementById('rangeSlider'),//滑桿的主體
+                slider: document.getElementById('rangeSlider'),
                 lowerLabel: document.getElementById('lowerLabel'),
                 upperLabel: document.getElementById('upperLabel'),
                 lowerInput: document.getElementById('lowerInput'),
@@ -459,46 +453,40 @@
             // 綁定滑桿拖動事件
             [rangeSlider.lowerHandle, rangeSlider.upperHandle].forEach(handle => {
                 handle.addEventListener('mousedown', startDrag);
-                //當手柄被按下（按下滑鼠 事件）時，觸發 startDrag 函數，開始拖動手柄。
             });
 
-            let isDragging = false;  //表示是否正在拖動手柄
-            let currentHandle = null; //存儲當前正在拖動的手柄。
+            let isDragging = false;
+            let currentHandle = null;
 
             // 開始拖動的處理函數
             function startDrag(event) {
                 isDragging = true;
-                currentHandle = event.target; //設置為當前被按下的手柄
-                document.addEventListener('mousemove', handleDrag);//當鼠標移動（mousemove 事件）時
-                document.addEventListener('mouseup', stopDrag);//當鼠標按鍵釋放（mouseup 事件）時
+                currentHandle = event.target;
+                document.addEventListener('mousemove', handleDrag);
+                document.addEventListener('mouseup', stopDrag);
             }
 
             // 處理拖動邏輯的函數
             function handleDrag(event) {
-                if (!isDragging) return;//如果 isDragging 為 false，則直接返回，不進行後續操作。這樣可以避免在未拖動時誤觸發拖動邏輯
+                if (!isDragging) return;
 
                 const handleType = currentHandle === rangeSlider.lowerHandle ? 'lower' : 'upper';
-                //如果 currentHandle 等於 rangeSlider.lowerHandle，則 handleType 設為 'lower'，否則設為 'upper'。
                 const { handle, label, oppositeLabel, lowerInput, upperInput } = handleType === 'lower' ?
                     { handle: rangeSlider.lowerHandle, label: rangeSlider.lowerLabel, oppositeLabel: rangeSlider.upperLabel, lowerInput: rangeSlider.lowerInput, upperInput: rangeSlider.upperInput } :
                     { handle: rangeSlider.upperHandle, label: rangeSlider.upperLabel, oppositeLabel: rangeSlider.lowerLabel, lowerInput: rangeSlider.lowerInput, upperInput: rangeSlider.upperInput };
 
-                const sliderRect = rangeSlider.slider.getBoundingClientRect();  //獲取滑桿的邊界矩形，用於計算手柄位置
+                const sliderRect = rangeSlider.slider.getBoundingClientRect();
                 const position = Math.min(1, Math.max(0, (event.clientX - sliderRect.left) / sliderRect.width));
-                //event.clientX 是鼠標在頁面上的水平位置（X 坐標）  sliderRect.left 是滑桿左邊界在頁面上的水平位置（X 坐標）。
                 const value = Math.round(parseFloat(rangeSlider.slider.getAttribute('min')) + position * (parseFloat(rangeSlider.slider.getAttribute('max')) - parseFloat(rangeSlider.slider.getAttribute('min'))));
-                //(event.clientX - sliderRect.left) / sliderRect.width 計算鼠標在滑桿內的相對位置，範圍是 0 到 1 之間。當鼠標在滑桿最左端時，這個值為 0；當鼠標在滑桿最右端時，這個值為 1。
 
                 // 防止下限超過上限或上限低於下限
                 if (handleType === 'lower' && value >= parseFloat(oppositeLabel.textContent.split('：')[1])) return;
                 if (handleType === 'upper' && value <= parseFloat(oppositeLabel.textContent.split('：')[1])) return;
-                //split('：')[1] 的作用是將字符串根據特定的分隔符進行分割，並提取分割後的第二部分。在這個上下文中，分隔符是 ：（中文冒號），目的是提取數值部分。
 
                 handle.style.left = `${position * 100}%`;
                 label.textContent = `${handleType === 'lower' ? '下限' : '上限'}：${value}`;
                 handleType === 'lower' ? lowerInput.value = value : upperInput.value = value;
                 updateHotels(parseFloat(rangeSlider.lowerInput.value), parseFloat(rangeSlider.upperInput.value));
-                //調用 updateHotels 函數，更新酒店列表。
             }
 
             // 停止拖動的處理函數
@@ -509,10 +497,8 @@
                 document.removeEventListener('mouseup', stopDrag);
             }
 
-            //維持最愛紅心
+            // 維持最愛紅心
             await applyFavoriteStatus();
-
-
         });
 
         // 新增取得已喜歡的飯店 ID 的函數
@@ -530,32 +516,23 @@
             }
         }
 
-
         // 檢查所有選中的 checkbox 並返回其值的列表
         function getSelectedCheckboxes(containerSelector) {
             const checkboxes = document.querySelectorAll(`${containerSelector} input[type="checkbox"]:checked`);
             return Array.from(checkboxes).map(checkbox => parseInt(checkbox.value)); // 確保值是數字類型
-            //Array.from(checkboxes)：將 NodeList 轉換為數組，這樣可以使用數組的方法。
         }
 
         // 更新搜尋篩選條件並加載飯店
         async function updateSearchFilters() {
             const searchHotelJson = sessionStorage.getItem('searchHotel');
-            //從 sessionStorage 取得儲存的搜尋飯店條件，並存儲在 searchHotelJson 變數中。
             if (searchHotelJson) {
                 const searchHotel = JSON.parse(searchHotelJson);
                 searchHotel.hotelTypes = getSelectedCheckboxes('.form-check-container-hotel-type');
-                //hotelTypes 是 searchHotel 對象中的一個屬性，用於存儲選中的飯店類型。這些類型通常是從頁面上的多選框（checkboxes）中選取的。
                 searchHotel.hotelEquipments = getSelectedCheckboxes('.form-check-container-hotel-equipment');
                 searchHotel.cities = getSelectedCheckboxes('.form-check-container-city');
                 searchHotel.roomEquipments = getSelectedCheckboxes('.form-check-container-room-equipment');
                 sessionStorage.setItem('searchHotel', JSON.stringify(searchHotel));
                 await loadHotels(searchHotel);
-                //這兩行代碼的目的是將更新後的搜尋條件儲存在 sessionStorage 中，並使用這些條件來加載飯店資料。以下是詳細說明：
-                //sessionStorage：這是一個 Web 存儲 API，允許你在用戶瀏覽器的會話期間儲存資料。不同於 localStorage，sessionStorage 中的資料在關閉瀏覽器窗口後會被清除。
-                //setItem方法：這個方法用來將資料儲存到 sessionStorage 中。它接受兩個參數：鍵名（key）和要儲存的值（value）。
-                //JSON.stringify：這個方法將 JavaScript 對象轉換為 JSON 字符串。這樣可以將複雜的對象結構儲存在 sessionStorage 中。
-
             } else {
                 console.log('searchHotel not found in sessionStorage');
             }
@@ -589,20 +566,20 @@
         // 處理搜索關鍵字的函數，會被觸發
         async function handleSearchKeywordEnter() {
             const searchHotel = {
-                keyword: document.querySelector("#search-input4").value, // 獲取搜索關鍵字
-                checkInDate: document.querySelector("#myDatepickerstart3").value, // 獲取入住日期
-                checkOutDate: document.querySelector("#myDatepickerend3").value, // 獲取退房日期
-                roomnum: parseInt(document.querySelector("#rooms3").value), // 獲取房間數量並轉換為整數
-                adults: parseInt(document.querySelector("#adults3").value), // 獲取成人數量並轉換為整數
-                children: 0, // 固定值，設為0
-                sortBy: null, // 排序方式，暫時設為空
-                sortType: null, // 排序類型，暫時設為空
-                lowerPrice: parseInt(document.querySelector("#lowerInput").value), // 獲取最低價格並轉換為整數
-                upperPrice: parseInt(document.querySelector("#upperInput").value), // 獲取最高價格並轉換為整數
-                hotelTypes: getSelectedCheckboxes('.form-check-container-hotel-type'), // 獲取選中的酒店類型
-                hotelEquipments: getSelectedCheckboxes('.form-check-container-hotel-equipment'), // 獲取選中的酒店設備
-                cities: getSelectedCheckboxes('.form-check-container-city'), // 獲取選中的城市
-                roomEquipments: getSelectedCheckboxes('.form-check-container-room-equipment') // 獲取選中的房間設備
+                keyword: document.querySelector("#search-input4").value,
+                checkInDate: document.querySelector("#myDatepickerstart3").value,
+                checkOutDate: document.querySelector("#myDatepickerend3").value,
+                roomnum: parseInt(document.querySelector("#rooms3").value),
+                adults: parseInt(document.querySelector("#adults3").value),
+                children: 0,
+                sortBy: null,
+                sortType: null,
+                lowerPrice: parseInt(document.querySelector("#lowerInput").value),
+                upperPrice: parseInt(document.querySelector("#upperInput").value),
+                hotelTypes: getSelectedCheckboxes('.form-check-container-hotel-type'),
+                hotelEquipments: getSelectedCheckboxes('.form-check-container-hotel-equipment'),
+                cities: getSelectedCheckboxes('.form-check-container-city'),
+                roomEquipments: getSelectedCheckboxes('.form-check-container-room-equipment')
             };
 
             // 將搜索條件存儲到 sessionStorage 中
@@ -625,7 +602,7 @@
             }
         }
 
-        //取得飯店評分API的函式
+        // 取得飯店評分API的函式
         async function getHotelScore(hotelId) {
             const url = `https://localhost:7103/api/Comment/${hotelId}/AverageScores`;
             const response = await fetch(url);
@@ -634,9 +611,7 @@
                 throw new Error('Failed to fetch hotel scores');
             }
             const data = await response.json();
-
-  
-            return data.totalAverageScore.toFixed(1); // 确保这里使用的是 totalAverageScore，并格式化为小数点后一位
+            return data.totalAverageScore.toFixed(1); // 確保這裡使用的是 totalAverageScore，並格式化為小數點後一位
         }
 
         // 從後端 API 獲取指定 hotelId 的評論數和最新評論
@@ -647,7 +622,6 @@
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
-
                 return data.totalComments; // 確保返回的數據屬性名稱與後端一致
             } catch (error) {
                 console.error(`Error fetching comments count for hotel ID ${hotelId}:`, error);
@@ -655,56 +629,23 @@
             }
         }
 
-
-
-        // 从 sessionStorage 获取搜索条件(by louieee)-------------------------------------------------
-        // => 扣louieee Controller, 把session的入駐日跟退訂日以query string傳過去
-        function getSearchHotel() {
-            const searchHotelForLouieee = JSON.parse(sessionStorage.getItem("searchHotel"));//從瀏覽器的會話存儲中檢索先前保存的搜索條件
-            return searchHotelForLouieee;
-        }
-        // // 在 JavaScript 中加密查询字符串(by louieee)--------------------------------------------------
-        // function encryptData(data, key) {
-        //     //生成密钥和IV：
-        //     const keyBytes = CryptoJS.enc.Utf8.parse(key);
-        //     const iv = CryptoJS.lib.WordArray.random(16);
-        //     //加密数据：
-        //     const encrypted = CryptoJS.AES.encrypt(data, keyBytes, { iv: iv });
-        //     //将IV和加密后的数据合并，并转换为Base64编码：
-        //     const encryptedData = iv.concat(encrypted.ciphertext).toString(CryptoJS.enc.Base64);
-        //     //确保加密数据URL安全：
-        //     return encodeURIComponent(encryptedData);
-        // }
-
-
         // 加載飯店的函數
-        //異步函數，接受一個包含搜尋條件的 searchHotel 物件作為參數
         async function loadHotels(searchHotel) {
             const url = "https://localhost:7103/api/HotelSearch/indexsearch";
             const response = await fetch(url, {
                 method: "POST",
-                body: JSON.stringify(searchHotel),//將 searchHotel 物件轉換為 JSON 字符串，作為請求的主體。
+                body: JSON.stringify(searchHotel),
                 headers: { "Content-Type": "application/json" },
             });
             const data = await response.json();
-           
 
             const divHotels = document.querySelector("#showhotels");
             divHotels.innerHTML = "";
 
             const searchHotelForLouieee = getSearchHotel();
-            /* const secretKey = "my_secret_key123";  */// 使用一个安全的密钥, 确保长度为16字节(by louieee)
 
-            // 將參數轉為string後加密 => 再作為查詢字串以網址傳遞(by louieee)
-            // const encryptedHotelId = encryptData(hotel.hotelId.toString(), secretKey);
-            // const encryptedCheckInDate = encryptData(searchHotelForLouieee.checkInDate, secretKey);
-            // const encryptedCheckOutDate = encryptData(searchHotelForLouieee.checkOutDate, secretKey);
-
-
-            // 生成並顯示飯店信息
-            const hotels = await Promise.all(data.map(async hotel => {  //Promise.all：確保所有異步操作完成後才繼續執行後續代碼。
-
-                const { hotelId, hotelName, hotelAddress, hotelImages, levelStar, hotelEquipmentNames, hotelPrice, availableRooms, hotelOrderCount, } = hotel;
+            const hotels = await Promise.all(data.map(async hotel => {
+                const { hotelId, hotelName, hotelAddress, hotelImages, levelStar, hotelEquipmentNames, hotelPrice, availableRooms, hotelOrderCount } = hotel;
                 let totalAverageScore;
                 let commentsCount;
 
@@ -722,10 +663,9 @@
                     commentsCount = "N/A"; // 如果获取评论数失败，显示N/A
                 }
 
-                //在使用totalAverageScore進行比較時，確保它是數字類型：
-                totalAverageScore = parseFloat(await getHotelScore(hotelId));
+                totalAverageScore = parseFloat(totalAverageScore);
 
-
+                let ratingDescription;
                 if (!isNaN(totalAverageScore)) {
                     if (totalAverageScore >= 9) {
                         ratingDescription = "超讚";
@@ -742,80 +682,76 @@
                     ratingDescription = "N/A";
                 }
 
-
-
                 const mainImage = hotelImages[0] ? `https://localhost:7284/image/${hotelImages[0]}` : '';
                 const smallImages = hotelImages.slice(1, 4).map(img => img ? `https://localhost:7284/image/${img}` : '');
 
                 return `
-                            <div class="col-lg-12 hotel-card" data-hotel-id="${hotelId}">
-                                <div class="row">
-                                    <a href="https://localhost:7284/PgHotel/pgHotel/?hotelId=${hotelId}&checkInDate=${searchHotelForLouieee.checkInDate}&checkOutDate=${searchHotelForLouieee.checkOutDate}" class="col-lg-12 hotel-link">
-                                        <div class="row">
-                                            <div class="col-lg-4 col-sm-8 hotel-image-container" style="padding:0px">
-                                                <table>
-                                                    <tr>
-                                                        <td colspan="3" style="position: relative;">
-                                                            <img src="${mainImage}" class="img-fluid" style="width:100%" />
-                                                            <div class="favorite-icon-container">
-                                                                <i class="fa fa-heart favorite-icon" data-hotel-id="${hotelId}" onclick="toggleFavorite(event, ${hotelId})"></i>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        ${smallImages.map(img => `<td><img src="${img}" class="img-fluid" /></td>`).join('')}
-                                                    </tr>
-                                                </table>
-                                            </div>
-                                            <div class="col-lg-5 col-sm-10 hotel-details">
-                                                <h3>${hotelName}</h3>
-                                                <p>${generateStars(levelStar)}</p>
-                                                <span style="color:blue">${hotelAddress}</span>
-                                                <h6>此住宿提供:</h6>
-                                                ${hotelEquipmentNames.map(name => `<h5 style="border: 1px solid black; display: inline-block;">${name}</h5>`).join('')}
-                                                <br>
-                                                <h6 style="color:green">${levelStar}星級飯店最優價</h6>
-                                                <h6 style="color:red">昨天起已收到${hotelOrderCount}張訂單</h6>
-                                            </div>
-                                            <div class="col-lg-3 col-sm-12 hotel-pricing">
-                                                <div class="rating">
-                                                   <div class="rating-text">
-                                                          <span class="rating-count">${ratingDescription}</span>
-                                                          <span class="rating-count">${commentsCount}篇評鑑</span>
-                                                   </div>
-                                                   <span class="rating-score">${totalAverageScore}</span>
+                        <div class="col-lg-12 hotel-card" data-hotel-id="${hotelId}">
+                            <div class="row">
+                                <a href="https://localhost:7284/PgHotel/pgHotel/?hotelId=${hotelId}&checkInDate=${searchHotelForLouieee.checkInDate}&checkOutDate=${searchHotelForLouieee.checkOutDate}" class="col-lg-12 hotel-link">
+                                    <div class="row">
+                                        <div class="col-lg-4 col-sm-8 hotel-image-container" style="padding:0px">
+                                            <table>
+                                                <tr>
+                                                    <td colspan="3" style="position: relative;">
+                                                        <img src="${mainImage}" class="img-fluid" style="width:100%" />
+                                                        <div class="favorite-icon-container">
+                                                            <i class="fa fa-heart favorite-icon" data-hotel-id="${hotelId}" onclick="toggleFavorite(event, ${hotelId})"></i>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    ${smallImages.map(img => `<td><img src="${img}" class="img-fluid" /></td>`).join('')}
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div class="col-lg-5 col-sm-10 hotel-details">
+                                            <h3>${hotelName}</h3>
+                                            <p>${generateStars(levelStar)}</p>
+                                            <span style="color:blue">${hotelAddress}</span>
+                                            <h6>此住宿提供:</h6>
+                                            ${hotelEquipmentNames.map(name => `<h5 style="border: 1px solid black; display: inline-block;">${name}</h5>`).join('')}
+                                            <br>
+                                            <h6 style="color:green">${levelStar}星級飯店最優價</h6>
+                                            <h6 style="color:red">昨天起已收到${hotelOrderCount}張訂單</h6>
+                                        </div>
+                                        <div class="col-lg-3 col-sm-12 hotel-pricing">
+                                            <div class="rating">
+                                                <div class="rating-text">
+                                                    <span class="rating-count">${ratingDescription}</span>
+                                                    <span class="rating-count">${commentsCount}篇評鑑</span>
                                                 </div>
-                                                <br>
-                                                <h6 style="border: 1px solid red; display:inline-block; background-color: red; color:white">優惠只剩${availableRooms}間</h6>
-                                                <h6 style="color:gray">每晚價格(不連稅及其他費用)</h6>
-                                                <br><br>
-                                                <h3>NT$${hotelPrice}</h3>
-                                                <div class="checkbox-container">
-                                                    <div class="form-check" onclick="event.stopPropagation()">
-                                                        <input class="form-check-input" type="checkbox" id="${hotelId}" data-hotel-id="${hotelId}">
-                                                        <label class="form-check-label" for="${hotelId}">比較</label>
-                                                    </div>
+                                                <span class="rating-score">${totalAverageScore}</span>
+                                            </div>
+                                            <br>
+                                            <h6 style="border: 1px solid red; display:inline-block; background-color: red; color:white">優惠只剩${availableRooms}間</h6>
+                                            <h6 style="color:gray">每晚價格(不連稅及其他費用)</h6>
+                                            <br><br>
+                                            <h3>NT$${hotelPrice}</h3>
+                                            <div class="checkbox-container">
+                                                <div class="form-check" onclick="event.stopPropagation()">
+                                                    <input class="form-check-input" type="checkbox" id="${hotelId}" data-hotel-id="${hotelId}">
+                                                    <label class="form-check-label" for="${hotelId}">比較</label>
                                                 </div>
-                                           </div>
-                                      </div>
-                                  </a>
-                               </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
                             </div>
-                        `;
+                        </div>
+                    `;
             }));
-
 
             divHotels.innerHTML = hotels.join("");
 
-            //維持最愛紅心
+            // 維持最愛紅心
             await applyFavoriteStatus();
 
-
-            //被打勾的checkbox,產生新的compareDatas [ ] ,compareDatas [ ]裡的每個元素都是一間飯店資訊,去生成展開收合區塊中的照片容器、Modal的表格行
+            // 被打勾的checkbox,產生新的compareDatas [ ] ,compareDatas [ ]裡的每個元素都是一間飯店資訊,去生成展開收合區塊中的照片容器、Modal的表格行
             function buildCompareDatas() {
                 const checkedHotelIds = Array.from(document.querySelectorAll('.form-check-input:checked'))
                     .map(checkbox => checkbox.getAttribute('data-hotel-id'));
-          
+
                 const compareDatas = [];
                 for (const id of checkedHotelIds) {
                     const result = data.filter(value => value.hotelId === parseInt(id));
@@ -825,7 +761,6 @@
             }
 
             function getImageUrl(imagePath) {
-
                 if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
                     return imagePath;
                 } else {
@@ -833,35 +768,28 @@
                 }
             }
 
-
-            //獲取所有具有 .form-check-input 類別的 checkbox 元素。對每個 checkbox 元素註冊一個 change 事件監聽器。
-            //checkbox 的勾選狀態發生變化時,就會觸發 updateUI 函式的執行。
             document.querySelectorAll('.form-check-input').forEach(checkbox => {
                 checkbox.addEventListener('change', updateUI);
             });
-
 
             // 獲取 checkbox 容器元素
             const checkboxContainer = document.querySelector('.checkbox-container');
 
             // 為 checkbox 容器元素添加點擊事件處理程序
-            checkboxContainer.addEventListener('click', function (event) {
-                // 阻止事件冒泡
-                event.stopPropagation();
-                // 其他操作...
-
-
-
-            });
-
+            if (checkboxContainer) {
+                checkboxContainer.addEventListener('click', function (event) {
+                    // 阻止事件冒泡
+                    event.stopPropagation();
+                    // 其他操作...
+                });
+            }
 
             function updateUI() {
                 const compareDatas = buildCompareDatas();
 
-
                 const accordionContainer = document.querySelector('#collapseOne .card-body .row .col-9');
 
-                // // 顯示或隱藏 Accordion
+                // 顯示或隱藏 Accordion
                 const Accordion = document.querySelector('#container1');
 
                 // 根據 compareDatas 的長度決定是否顯示 Accordion
@@ -870,8 +798,6 @@
                 } else {
                     Accordion.style.display = 'none';
                 }
-
-
 
                 // 清空之前的內容
                 accordionContainer.innerHTML = '';
@@ -883,16 +809,12 @@
 
                 // 更新展開收合區塊中的照片容器
                 compareDatas.forEach(hotel => {
-
-
-                    // 0620 hotelImages !!!! 教官撈回來的data變成陣列了,且hotelImage改為hotelImages複數
                     const { hotelImages, hotelId } = hotel;
                     const HotelImage = getImageUrl(hotelImages[0]);
 
                     const imageContainer = document.createElement('div');
                     imageContainer.className = 'image-container';
 
-                    //這段怪怪的,之後再改成老師教的方法
                     const closeButton = document.createElement('button');
                     closeButton.type = 'button';
                     closeButton.className = 'close remove-image';
@@ -906,7 +828,6 @@
 
                     const img = document.createElement('img');
                     img.src = getImageUrl(hotelImages[0]);
-                    // img.className = 'card-img-top';
                     img.className = 'img-thumbnail float-left mx-1';
                     img.alt = '房間圖片';
                     img.style.position = 'relative';
@@ -932,7 +853,7 @@
                     const HotelImage = getImageUrl(hotelImages[0]);
                     const ratingscore = JSON.parse(totalAverageScore);
                     const formattedScore = parseFloat(ratingscore.toFixed(1));
-        
+
                     //formattedScore 小數點後的平均評分對應文字
                     let ratingDescription;
                     if (formattedScore >= 9) {
@@ -948,22 +869,19 @@
                     }
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                    <td><img src="${HotelImage}" class="card-img-top" alt="房間圖片"></td>
-                    <td>${hotelName}</td>
-                    <td>${cityName}</td>
-                    <td>${generateStars(levelStar)}</td>
-                    <td>${hotelEquipmentNames.join(', ')}</td>
-                     <td>${formattedScore}/10 ${ratingDescription}</td>
-                    <td>$${hotelPrice}</td>
-                    <td>
-                        <button type="button" class="btn btn-secondary remove-row">移除</button>
-                        <button type="button" class="btn btn-primary view-hotel">查看飯店</button>
-                    </td>
-
-                    `;
+                            <td><img src="${HotelImage}" class="card-img-top" alt="房間圖片"></td>
+                            <td>${hotelName}</td>
+                            <td>${cityName}</td>
+                            <td>${generateStars(levelStar)}</td>
+                            <td>${hotelEquipmentNames.join(', ')}</td>
+                            <td>${formattedScore}/10 ${ratingDescription}</td>
+                            <td>$${hotelPrice}</td>
+                            <td>
+                                <button type="button" class="btn btn-secondary remove-row">移除</button>
+                                <button type="button" class="btn btn-primary view-hotel">查看飯店</button>
+                            </td>
+                        `;
                     document.querySelector('#myModal .table tbody').appendChild(row);
-
-
 
                     //  為新生成的remove-row 按鈕添加一個點擊事件監聽器,
                     // 當按鈕被點擊時,它會找到對應的 checkbox, 將其勾選狀態設置為 false (取消勾選),然後重新呼叫 updateUI 函式來更新 UI。
@@ -987,27 +905,20 @@
                         // 從物件中獲取 checkInDate 和 checkOutDate
                         checkInDate = searchHotelData.checkInDate;
                         checkOutDate = searchHotelData.checkOutDate;
-
                     }
 
                     // 為新生成的 view-hotel 按鈕添加事件監聽器
                     const viewHotelButton = row.querySelector('.view-hotel');
                     viewHotelButton.addEventListener('click', () => {
                         // 導航到相應的飯店頁面
-                      //  const hotelUrl = `/PgHotel/pgHotel/?hotelId=${hotelId}&checkInDate=2024-06-28&checkOutDate=2024-06-29`;
-                      //  window.location.href = hotelUrl;
                         window.location.href = `${window.location.origin}/PgHotel/pgHotel/?hotelId=${hotelId}&checkInDate=${checkInDate}&checkOutDate=${checkOutDate}`;
                     });
-
-
                 });
             }
-            
 
+            // 維持最愛紅心
+            await applyFavoriteStatus();
         }
-
-
-
 
         // 切換最愛狀態的函數
         async function toggleFavorite(event, hotelId) {
@@ -1016,12 +927,10 @@
             event.stopPropagation();  // 防止點擊事件傳遞到其他元素
             event.preventDefault();   // 阻止默認的跳轉行為
 
-
             if (!displayMemberId) {
                 window.location.href = window.location.origin + '/Member/Login';
                 return;
             }
-   
 
             const icon = event.currentTarget;
             const isLiked = !icon.classList.contains("liked");
@@ -1032,8 +941,6 @@
                 MemberId: window.memberId,
                 LikeStatus: isLiked
             };
-
-
 
             const response = await fetch(url, {
                 method: "POST",
@@ -1068,6 +975,7 @@
             }
         }
     </script>
+
 
     <script>
         // 解決 checkbox 內容太長的問題
