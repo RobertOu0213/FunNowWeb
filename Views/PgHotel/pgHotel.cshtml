@@ -466,7 +466,7 @@
             <div class="hotel-detail-container" id="hotel-map">
                 <h2>飯店周邊</h2>
                 <div class="row round-edge-container" >
-                    <div class="col-8 p-0" style="position: relative;">
+                    <div class="col-8 p-0" style="position: relative; z-index:1;">
                          <div id="openstreet-map" style="height: 500px; width: 100%;"></div>
                     </div>
                     <div class="col-4">
@@ -1293,7 +1293,6 @@
 
         //飯店彈出視窗-下滑到指定類別的圖片
         function smoothScroll(targetId) {
-            console.log(targetId);
             const targetEle = document.getElementById(targetId);
             const modal = document.querySelector('.col-9.scrollable-container');
             if (targetEle) {
