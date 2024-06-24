@@ -38,5 +38,9 @@
   {
     "outputFile": "wwwroot/ou/css/paymentPage.css",
     "inputFile": "wwwroot/ou/css/paymentPage.scss"
+  },
+  {
+    "outputFile": "wwwroot/Ting/css/CustomerService.css",
+    "inputFile": "wwwroot/Ting/css/CustomerService.scss"
   }
 ]
