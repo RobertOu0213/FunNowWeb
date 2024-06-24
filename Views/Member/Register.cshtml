@@ -20,12 +20,15 @@
                 <div class="card border-0 shadow rounded-3 my-5 ">
                     <div class="card-body p-4 p-sm-5 " style="white-space: nowrap;">
                         <h3 class="sc-fzqyvX kJWwZs kite-js-Typography ">免費入會</h3>
-                        <p style="height:8px"></p>
+                        <p style="height:8px"></p> 
+                        <button class="btn btn-success" id="demoCorrect">新註冊Demo</button>
+                        <button class="btn btn-danger" id="demoNo">錯誤Demo</button>
+                        <button class="btn btn-warning" id="demDone">已註冊過Demo</button>
                         <form>
                             <div class="mb-3">
                                 <label for="FirstNameInput" class="form-label" style="font-size:15px">護照英文名</label>
                                 <input type="text" class="form-control" id="FirstNameInput" name="FirstName" placeholder="護照英文名">
-                                <p id="firstNameError" class="form-text text-danger" style="display: none;">請輸入有效的名字，，限英文，不得為特殊符號或中文</p>
+                                <p id="firstNameError" class="form-text text-danger" style="display: none;">請輸入有效的名字，限英文，不得為特殊符號或中文</p>
                             </div>
 
                             <div class="mb-3">
@@ -35,7 +38,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="EmailInput" class="form-label" style="font-size:15px">電子信箱</label>
-                                <input type="email" class="form-control" id="EmailInput" name="Email" placeholder="電子信箱" onblur="validateEmail()" onchange="queryEmail()">
+                                <input type="email" class="form-control" id="EmailInput" name="Email" placeholder="電子信箱" onblur="queryEmail()" >
                                 <p id="emailError" class="form-text text-danger" style="display: none;">電子信箱欄位不得為空白</p>
                                 <p id="emailFormatError" class="form-text text-danger" style="display: none;">電子信箱格式不符，須包含@@及.，請重新確認</p>
                                 <p id="resultYes" style="display:none" class="form-text text-danger">Oops！這個Email已經註冊過囉！</p>
@@ -449,6 +452,9 @@
         }
 
         async function queryEmail() {
+
+            validateEmail();
+
             var emailInput = document.getElementById("EmailInput");
             var email = emailInput.value.trim();
             var emailFormatError = document.getElementById("emailFormatError");
@@ -461,7 +467,7 @@
             resultElementN.style.display = "none";
 
             // 檢查Email格式(須包含@@、.)
-            var emailPattern = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+            var emailPattern = /^[a-zA-Z0-9][^\s@@]*@@[a-zA-Z0-9][^\s@@]*[a-zA-Z0-9]\.[a-zA-Z0-9]+$/;
             if (!emailPattern.test(email)) {
                 emailFormatError.style.display = "block";
                 emailInput.classList.add("border", "border-danger");
@@ -513,6 +519,50 @@
             this.querySelector('i').classList.toggle('fa-eye');
             this.querySelector('i').classList.toggle('fa-eye-slash');
         });
+
+        //快速填入資料的Demo鍵
+        //新註冊正確資料
+        const btnDemoCorrect = document.getElementById("demoCorrect");
+
+        btnDemoCorrect.addEventListener('click', (evt) => {
+            evt.preventDefault(); 
+
+            document.querySelector('#FirstNameInput').value = "Ruby";
+            document.querySelector('#LastNameInput').value = "Hsu";
+            document.querySelector('#EmailInput').value = "rubyserendipity75@gmail.com";
+            document.querySelector('#PasswordInput').value = "Qqq123456!!";  //註冊密碼用Qqq123456!!，更改密碼用Aaa123456!!，重設密碼用Zzz123456!!
+            document.querySelector('#RecheckPasswordInput').value = "Qqq123456!!";
+        });
+
+
+        //錯誤資料
+        const btnDemoNo = document.getElementById("demoNo");
+
+        btnDemoNo.addEventListener('click', (evt) => {
+            evt.preventDefault(); 
+
+            document.querySelector('#FirstNameInput').value = "睿han";
+            document.querySelector('#LastNameInput').value = "r徐1@@";
+            document.querySelector('#EmailInput').value = "r@@.";
+            document.querySelector('#PasswordInput').value = "Qq1234";
+            document.querySelector('#RecheckPasswordInput').value = "Qq1235";
+        });
+
+
+        
+        //已經註冊過
+        const demDone = document.getElementById("demDone");
+
+        demDone.addEventListener('click', (evt) => {
+            evt.preventDefault();
+
+            document.querySelector('#FirstNameInput').value = "Micaheal";
+            document.querySelector('#LastNameInput').value = "chen";
+            document.querySelector('#EmailInput').value = "rubyccww@gmail.com";
+            document.querySelector('#PasswordInput').value = "Aaa1234@@";
+            document.querySelector('#RecheckPasswordInput').value = "Aaa1234@@";
+        });
+
 
     </script>
 }
