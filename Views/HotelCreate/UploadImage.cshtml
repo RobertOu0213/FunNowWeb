@@ -122,13 +122,13 @@
         const userId = "@ViewBag.UserID";
 
         //需再修改
-        $(window).on('load', function () {
+        // $(window).on('load', function () {
     
-            if (sessionStorage.getItem('forceRedirect') === 'true') {
-                showModal();
+        //     if (sessionStorage.getItem('forceRedirect') === 'true') {
+        //         showModal();
 
-            }
-        });
+        //     }
+        // });
 
         function showModal() {
             var resultModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
@@ -146,7 +146,7 @@
             const uploadSection = $('.file__upload');
             let imageCategoryStr = '';
 
-            //let newSize = 0; 這也要改
+            let newSize = 0;
 
             //Image Category
             const res = await fetch('https://localhost:7103/api/ImageCategory')
@@ -173,7 +173,7 @@
                 const files = Array.from(e.target.files);
 
                 const fileInput = $('#fileInput');
-                let newSize = 0;
+              
 
                 files.forEach((file, index) => {
 
