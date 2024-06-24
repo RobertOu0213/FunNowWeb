@@ -21,9 +21,7 @@
                         <h3 class="sc-fzqyvX kJWwZs kite-js-Typography ">FunNow咖登入</h3>
                         <p>為了保障你的個資安全，請先登入才能查看個人資訊</p>
                         
-                        <button class="btn btn-success" id="guestBtn">房客Demo(已驗證)</button>
-                        <button class="btn btn-warning" id="forbidBtn">房客Demo(未驗證)</button>
-                        </br>
+                        <button class="btn btn-success" id="guestBtn">房客Demo</button>
                         <button class="btn btn-secondary" id="adminBtn">管理員Demo</button> 
                         <button class="btn btn-danger" id="hostBtn">房東Demo</button>
 
@@ -469,7 +467,7 @@
 
         //快速填資訊Demo鍵
 
-        //房客Demo鍵(通過驗證)
+        //房客Demo鍵
         const guestBtn = document.getElementById("guestBtn");
 
         guestBtn.addEventListener('click', (evt) => {
@@ -480,16 +478,16 @@
             queryEmail();
         });
 
-        //房客Demo鍵(未驗證)
-        const forbidBtn = document.getElementById("forbidBtn");
+        // //房客Demo鍵(未驗證)
+        // const forbidBtn = document.getElementById("forbidBtn");
 
-        forbidBtn.addEventListener('click', (evt) => {
-            evt.preventDefault();
+        // forbidBtn.addEventListener('click', (evt) => {
+        //     evt.preventDefault();
 
-            document.querySelector('#EmailInput1').value = "rubyccww@@gmail.com"
-            document.querySelector('#PasswordInput1').value = "No123456@@";
-            queryEmail();
-        });
+        //     document.querySelector('#EmailInput1').value = "rubyccww@@gmail.com"
+        //     document.querySelector('#PasswordInput1').value = "No123456@@";
+        //     queryEmail();
+        // });
 
         //管理員Demo鍵
         const adminBtn = document.getElementById("adminBtn");
@@ -497,8 +495,8 @@
         adminBtn.addEventListener('click', (evt) => {
             evt.preventDefault();
 
-            document.querySelector('#EmailInput1').value = "管理員email"
-            document.querySelector('#PasswordInput1').value = "管理員密碼";
+            document.querySelector('#EmailInput1').value = "chechunou123@gmail.com"
+            document.querySelector('#PasswordInput1').value = "Qq12345!";
             queryEmail();
         });
 
@@ -509,8 +507,8 @@
         hostBtn.addEventListener('click', (evt) => {
             evt.preventDefault();
 
-            document.querySelector('#EmailInput1').value = "房東email"
-            document.querySelector('#PasswordInput1').value = "房東密碼";
+            document.querySelector('#EmailInput1').value = "starshining12345@gmail.com"
+            document.querySelector('#PasswordInput1').value = "Qq12345!";
             queryEmail();
         });
 
