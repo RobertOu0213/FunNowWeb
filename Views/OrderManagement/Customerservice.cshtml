@@ -114,10 +114,51 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.18/signalr.min.js"></script>
     <script>
-        var memberId = '@displayMemberId';
         document.addEventListener("DOMContentLoaded", function () {
+            function showConnectingMessage() {
+                const chatBox = document.getElementById("Content");
+                const connectingMessage = document.createElement("li");
+                connectingMessage.id = "connectingMessage";
+                connectingMessage.className = "list-group-item animate__animated animate__fadeInUp message";
+                connectingMessage.innerText = "與客服人員連線中請稍後...";
+                chatBox.appendChild(connectingMessage);
+            }
+
+            function showConnectingMessage() {
+                const chatBox = document.getElementById("Content");
+                const connectingMessage = document.createElement("li");
+                connectingMessage.id = "connectingMessage";
+                connectingMessage.className = "list-group-item animate__animated animate__fadeInUp message";
+                connectingMessage.innerHTML = "與客服人員連線中請稍後... <span id='countdown'>30</span> 秒";
+                chatBox.appendChild(connectingMessage);
+
+                let countdown = 30;
+                const countdownElement = document.getElementById("countdown");
+                const intervalId = setInterval(() => {
+                    countdown -= 1;
+                    countdownElement.textContent = countdown;
+                    if (countdown <= 0) {
+                        clearInterval(intervalId);
+                    }
+                }, 1000);
+
+                connectingMessage.dataset.intervalId = intervalId; // Save intervalId to message element
+            }
+
+            function hideConnectingMessage() {
+                const connectingMessage = document.getElementById("connectingMessage");
+                if (connectingMessage) {
+                    clearInterval(connectingMessage.dataset.intervalId); // Clear the countdown interval
+                    connectingMessage.remove();
+                }
+            }
+
+            showConnectingMessage();
+
+            var memberId = '@displayMemberId';
+
             function generateUniqueId() {
-                return 'guest'+ memberId +'_' + Math.random().toString(36).substr(2, 9);
+                return 'guest' + memberId + '_' + Math.random().toString(36).substr(2, 9);
             }
 
             const userId = generateUniqueId();
@@ -133,6 +174,7 @@
                 .catch(err => {
                     console.error('連線錯誤: ' + err.toString());
                     alert('連線錯誤: ' + err.toString());
+                    hideConnectingMessage(); // 隱藏「連線中」訊息
                 });
 
             connection.on("UpdSelfID", function (id) {
@@ -149,7 +191,13 @@
             });
 
             connection.on("ConfirmedConnection", function () {
-                alert('您已成功與客服人員連線');
+                hideConnectingMessage(); // 隱藏「連線中」訊息
+                const contentList = document.getElementById("Content");
+                const listItem = document.createElement("li");
+                listItem.className = "list-group-item animate__animated animate__fadeInUp message";
+                listItem.textContent = "您已成功與客服人員連線";
+                contentList.appendChild(listItem);
+                contentList.scrollTop = contentList.scrollHeight;
             });
 
             document.getElementById("sendButton").addEventListener("click", sendMessage);
@@ -184,5 +232,6 @@
             });
         });
     </script>
+
 </body>
 </html>

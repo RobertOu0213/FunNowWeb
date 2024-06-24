@@ -192,7 +192,10 @@
                     .then(() => {
                         // 清空輸入框並刷新對話
                         messageInput.value = ''; // 清空輸入框
-                        fetchChatDetails(senderId, receiverId, new Date());
+                        // 重新加載聊天詳細內容
+                        fetchChatDetails(selectedDialog.memberId, selectedDialog.calltoMemberId, selectedDialog.createAt);
+
+
                     })
                     .catch(error => console.error('Error sending message:', error));
             }
