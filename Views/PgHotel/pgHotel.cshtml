@@ -71,7 +71,7 @@
                         </div>
                     </div>
                     <div class="col-4 d-flex justify-content-end align-items-center">
-                        <h2>TWD @Model.HotelDetail.AverageRoomPrice</h2>
+                        <h2>NT$ @Model.HotelDetail.AverageRoomPrice.ToString("F0")</h2>
                         <a class="btn btn-primary btn-lg" href="#room-types">查看房型</a>
                     </div>
                 </div>
@@ -269,7 +269,7 @@
                             </div>
                         </div>
                         <div class="modal-footer d-flex justify-content-end align-items-center">
-                            <h3 class="mb-0">TWD @(Model.HotelDetail.AverageRoomPrice.ToString("F2"))</h3>
+                            <h3 class="mb-0">NT$ @(Model.HotelDetail.AverageRoomPrice.ToString("F0"))</h3>
                         </div>
                     </div>
                 </div>
@@ -362,7 +362,7 @@
                                             }
                                         </td>
                                         <td class="align-bottom">
-                                            <h3>TWD @room.RoomPrice</h3>
+                                            <h3>NT$ @room.RoomPrice.ToString("F0")</h3>
                                             <div style="margin-left: auto;">
                                                 @if (room.IsBooked)
                                                 {
@@ -485,7 +485,7 @@
                                 <i class="fa-solid fa-location-dot">@Model.HotelDetail.HotelAddress</i>
                             </div>
                             <div class="hotel-price">
-                                <h2>TWD @Model.HotelDetail.AverageRoomPrice</h2>
+                                    <h2>NT$ @Model.HotelDetail.AverageRoomPrice.ToString("F0")</h2>
                                 <a class="btn btn-primary btn-lg" href="#room-types">查看房型</a>
                             </div>
                         </div>
@@ -523,7 +523,7 @@
                                                 <i class="fa-solid fa-location-dot d-block mt-2">@hotel.HotelAddress</i>
                                                 <span style="color:red; text-decoration:underline; font-weight:700;">只剩 @hotel.AvailableRooms 間房!!!</span>
                                                 <div style="display:flex; align-items: center; margin-top: 10px;">
-                                                    <h3 class="mb-0 mr-3">TWD @(hotel.AverageRoomPrice.ToString("F2"))</h3>
+                                                        <h3 class="mb-0 mr-3">NT$ @(hotel.AverageRoomPrice.ToString("F0"))</h3>
                                                     <a class="btn btn-primary" href="/PgHotel/pgHotel?hotelId=@(hotel.HotelId)&checkInDate=@(Model.HotelDetail.CheckInDate)&checkOutDate=@(Model.HotelDetail.CheckOutDate)">查看房型</a>
                                                 </div>
                                             </div>
@@ -1031,7 +1031,7 @@
                     var roomImages = JSON.parse(roomItem.getAttribute('data-room-images'));
 
                     roomNameElement.textContent = roomName;
-                    roomPriceElement.textContent = 'TWD ' + parseFloat(roomPrice).toFixed(2);
+                        roomPriceElement.textContent = 'NT$ ' + parseFloat(roomPrice).toFixed(0);
 
                     roomEquipmentsElement.innerHTML = '';
                     roomEquipments.forEach(function (equip) {
