@@ -811,8 +811,6 @@
                     Accordion.style.display = 'none';
                 }
 
-
-
                 // 清空之前的內容
                 accordionContainer.innerHTML = '';
                 document.querySelector('#myModal .table tbody').innerHTML = '';
@@ -821,10 +819,28 @@
                 const accordionButton = document.querySelector('#accordionButton');
                 accordionButton.innerHTML = `已選擇住宿 (${compareDatas.length}/5)`;
 
+                // 獲取比較住宿按鈕
+                const compareButton = document.querySelector('#collapseOne .btn-primary');
+
+                // 根據 compareDatas 的長度決定是否啟用比較住宿按鈕
+                if (compareDatas.length >= 2 && compareDatas.length <= 5) {
+                    compareButton.disabled = false;
+                } else {
+                    compareButton.disabled = true;
+                }
+
+                // 限制最多只能選擇 5 間酒店
+                if (compareDatas.length > 5) {
+                    alert('最多只能選擇 5 間酒店');
+                    const lastCheckedCheckbox = document.querySelector('.form-check-input:checked:last-of-type');
+                    lastCheckedCheckbox.checked = false;
+                    updateUI();
+                    return;
+                }
+
+
                 // 更新展開收合區塊中的照片容器
                 compareDatas.forEach(hotel => {
-
-
                     // 0620 hotelImages !!!! 教官撈回來的data變成陣列了,且hotelImage改為hotelImages複數
                     const { hotelImages, hotelId } = hotel;
                     const HotelImage = getImageUrl(hotelImages[0]);
@@ -893,7 +909,7 @@
                     <td>${generateStars(levelStar)}</td>
                     <td>${hotelEquipmentNames.join(', ')}</td>
                      <td>${formattedScore}/10 ${ratingDescription}</td>
-                    <td>$${hotelPrice}</td>
+                    <td>NT$${hotelPrice}</td>
                     <td>
                         <button type="button" class="btn btn-secondary remove-row">移除</button>
                         <button type="button" class="btn btn-primary view-hotel">查看飯店</button>
@@ -941,7 +957,11 @@
 
                 });
             }
+
+
             
+
+
 
         }
 
