@@ -75,7 +75,7 @@
                             <div class="fw-bold fs-5 mb-4">基本資訊</div>
                             <div class="mb-3">
                                 <div class="mb-2 fw-bold">為住宿命名</div>
-                                <input type="text" class="form-control roomNames" placeholder="請輸入房間名稱" />
+                                <input type="text" class="form-control roomNames" placeholder="請輸入房間名稱" id="roomName" />
                                 <span class="alert-message"></span>
                             </div>
                             <div class="mb-4">
@@ -89,7 +89,7 @@
                                 <div class="mb-2 fw-bold">Room size</div>             
                                 <div class="d-flex">
                                     <div>
-                                        <input type="number" min="0" class="form-Room-size roomSizes" />
+                                        <input type="number" min="0" class="form-Room-size roomSizes" id="roomSize" />
                                     </div>
                                     <div class="form-Room-size-unit">平方公尺</div>
                                 </div>
@@ -111,7 +111,7 @@
                                 <div>該房型的最低房價，不包括促銷優惠、稅金或其他費用。</div>
                                 <div class="d-flex mt-2">
                                     <div>
-                                        <input type="number" min="0" step="1" class="form-Room-size roomPrice" />
+                                        <input type="number" min="0" step="1" class="form-Room-size roomPrice" id="roomPrice" />
                                     </div>
                                     <div class="form-Room-size-unit">TWD</div>
                                 </div>
@@ -130,7 +130,7 @@
                             <h5 class="fw-bold mt-5">房間簡介</h5>
                             <div class="panel descBox">
                                 <div class="form-floating">
-                                    <textarea class="form-control" placeholder="請介紹您的房間" style="height: 200px; resize: none"></textarea>
+                                    <textarea class="form-control" id="roomIntro" placeholder="請介紹您的房間" style="height: 200px; resize: none"></textarea>
                                     <label>請介紹您的房間</label>
                                 </div>
                                 <span class="alert-message"></span>
@@ -145,10 +145,12 @@
 
 
                 @*   button *@
-                <div class="d-flex justify-content-end my-5">
-
-                    <a href="@Url.Action("Address", "HotelCreate")" class="btn_previous">上一步</a>
-                    <button type="submit" class="btn_next" id="btnNext">下一步</button>
+                <div class="d-flex justify-content-between my-5">
+                    <button type="button" class="btn btn-danger" id="btnDemo">Demo</button>
+                    <div class="d-flex ">
+                        <a href="@Url.Action("Address", "HotelCreate")" class="btn_previous">上一步</a>
+                        <button type="submit" class="btn_next" id="btnNext">下一步</button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -177,7 +179,7 @@
                         `
                                   <div class="col mb-2">
                                           <label>
-                                               <input type="checkbox" value="${item.roomEquipmentId}" />
+                                               <input type="checkbox" value="${item.roomEquipmentId}"/>
                                                 ${item.roomEquipmentName}
                                           </label>
                                  </div>
@@ -239,9 +241,6 @@
 
 
             })();
-
-
-
 
 
             const bindClickHandlers = (panel) => {
@@ -511,6 +510,19 @@
             bindClickHandlers($('.panel__room:first'));
             updateDeleteButtonsAndRenumberRooms();
 
+
+            $('#btnDemo').click(function () {
+                $('#roomName').val('Demo Room');
+                $('#roomSize').val(80);
+                $('#roomPrice').val(2800);
+                $('#roomIntro').val('這是一家位於市中心的豪華酒店，提供現代化的設施和優質的服務。');
+                $('#roomType').val('1');
+                $('#roomEquipment input[type="checkbox"]').each(function () {
+                    if ($(this).val() == '1' || $(this).val() == '4') {
+                        $(this).prop('checked', true);
+                    }
+                });
+            });
 
 
         });

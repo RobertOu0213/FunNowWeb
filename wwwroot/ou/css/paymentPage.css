@@ -344,3 +344,49 @@ main {
   left: 0;
   z-index: 999;
 }
+
+.yellowStar {
+  color: #ECC43A;
+}
+
+.countdown-container {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  height: 60px;
+  padding: 4px 8px;
+  background-color: rgb(238, 244, 249);
+  border-radius: 2px;
+  margin-bottom: 8px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 3px 1px;
+}
+.countdown-container .iconClock {
+  color: #5684CE;
+  margin-right: 8px;
+}
+.countdown-container .countdownTitle {
+  margin-right: 8px;
+  font-size: 14px;
+  font-weight: 300;
+}
+
+#countdown {
+  font-weight: 500;
+  margin-right: 8px;
+  color: #396FC6;
+  font-size: 20px;
+  line-height: 26px;
+}
+
+#reset-button {
+  font-size: 1em;
+  padding: 12px;
+  background-color: #5392F9;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+#reset-button:hover {
+  opacity: 0.7;
+}

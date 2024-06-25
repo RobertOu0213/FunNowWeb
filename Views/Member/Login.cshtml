@@ -20,6 +20,11 @@
                     <div class="card-body p-4 p-sm-5 " style="white-space: nowrap;">
                         <h3 class="sc-fzqyvX kJWwZs kite-js-Typography ">FunNow咖登入</h3>
                         <p>為了保障你的個資安全，請先登入才能查看個人資訊</p>
+                        
+                        <button class="btn btn-success" id="guestBtn">房客Demo</button>
+                        <button class="btn btn-secondary" id="adminBtn">管理員Demo</button> 
+                        <button class="btn btn-danger" id="hostBtn">房東Demo</button>
+
                         <hr style="border-top: 3px solid #0D6EFD; ">
                         <form id="loginForm">
                             <div class="mb-3">
@@ -172,6 +177,38 @@
         .bb {
             padding: 0px;
         }
+
+        .spinner {
+            border: 10px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            animation: spin 1s linear infinite;
+        }
+
+        @@keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
     </style>
 }
 
@@ -274,7 +311,7 @@
                 });
                 console.log(loginData);
                 if (!response.ok) {
-                    alert("輸入帳號密碼錯誤，請重新輸入");
+                    alert("輸入帳號密碼錯誤，或有紅框錯誤，請檢查後重新輸入");
                     document.getElementById("PasswordInput1").value = "";
                     grecaptcha.reset();
                     return "loginError";
@@ -351,10 +388,39 @@
             }
         });
 
+
+        //===等待動畫相關==========================
+        // 顯示等待動畫的函數
+        function showLoadingAnimation() {
+            // 創建加載動畫元素
+            const loadingOverlay = document.createElement('div');
+            loadingOverlay.className = 'loading-overlay';
+            loadingOverlay.id = 'loading-animation';
+
+            const spinner = document.createElement('div');
+            spinner.className = 'spinner';
+
+            loadingOverlay.appendChild(spinner);
+            document.body.appendChild(loadingOverlay);
+        }
+
+        // 隱藏等待動畫的函數
+        function hideLoadingAnimation() {
+            const loadingElement = document.getElementById('loading-animation');
+            if (loadingElement) {
+                loadingElement.remove();
+            }
+        }
+
+
+        //=重寄驗證信====================
         document.getElementById("reSent").addEventListener("click", async function (event) {
             event.preventDefault();
 
             var email = document.getElementById("EmailInput1").value;
+
+            // 顯示等待動畫
+            showLoadingAnimation();
 
             try {
                 const response = await fetch("https://localhost:7103/api/Members/reSent", {
@@ -372,7 +438,11 @@
                         alert("你的Email已經驗證過囉！ 不必再重新驗證～");
                     } else if (data.message === "NOMember") {
                         alert("你的Email尚沒註冊過，請點選加入新朋友進行註冊！");
-                    } else {
+                    } else 
+                    {
+                        // 隱藏等待動畫
+                        hideLoadingAnimation();
+
                         alert("驗證信已經重新寄發至您的信箱，快去收信開通帳號！");
                     }
                 } else {
@@ -393,5 +463,54 @@
             this.querySelector('i').classList.toggle('fa-eye');
             this.querySelector('i').classList.toggle('fa-eye-slash');
         });
+
+
+        //快速填資訊Demo鍵
+
+        //房客Demo鍵
+        const guestBtn = document.getElementById("guestBtn");
+
+        guestBtn.addEventListener('click', (evt) => {
+            evt.preventDefault();
+
+            document.querySelector('#EmailInput1').value = "rubyserendipity75@gmail.com";
+            document.querySelector('#PasswordInput1').value = "Qqq123456!!"; //註冊密碼用Qqq123456!!，更改密碼用Aaa123456!!，重設密碼用Zzz123456!!
+            queryEmail();
+        });
+
+        // //房客Demo鍵(未驗證)
+        // const forbidBtn = document.getElementById("forbidBtn");
+
+        // forbidBtn.addEventListener('click', (evt) => {
+        //     evt.preventDefault();
+
+        //     document.querySelector('#EmailInput1').value = "rubyccww@@gmail.com"
+        //     document.querySelector('#PasswordInput1').value = "No123456@@";
+        //     queryEmail();
+        // });
+
+        //管理員Demo鍵
+        const adminBtn = document.getElementById("adminBtn");
+
+        adminBtn.addEventListener('click', (evt) => {
+            evt.preventDefault();
+
+            document.querySelector('#EmailInput1').value = "chechunou123@gmail.com"
+            document.querySelector('#PasswordInput1').value = "Qq12345!";
+            queryEmail();
+        });
+
+        //房東Demo鍵
+
+        const hostBtn = document.getElementById("hostBtn");
+
+        hostBtn.addEventListener('click', (evt) => {
+            evt.preventDefault();
+
+            document.querySelector('#EmailInput1').value = "starshining12345@gmail.com"
+            document.querySelector('#PasswordInput1').value = "Qq12345!";
+            queryEmail();
+        });
+
     </script>
 }

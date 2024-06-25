@@ -24,6 +24,13 @@
             <img src="~/ou/image/waiting.gif" alt="Loading..." />
         </div>
 
+        <div class="countdown-container">
+            <span class="countdownTitle">優惠價倒數中...</span>
+            <i class="fa-regular fa-clock fa-lg iconClock"></i>
+            <span id="countdown">00:01:00</span>
+            <button id="reset-button">我需要更多時間</button>
+        </div>
+
         <form id="reservationForm" method="POST">
             <input type="hidden" id="totalPrice" value="@Model.Sum(m => m.RoomPrice * m.NumberOfNights)" />
             @foreach(var item in Model)
@@ -106,7 +113,7 @@
                             <div>
                                 @for (int i = 0; i < item.LevelStar; i++)
                                 {
-                                    <i class="fa-solid fa-star fa-xs"></i>
+                                    <i class="fa-solid fa-star fa-xs yellowStar"></i>
                                 }
                             </div>
                             <div class="d-flex">
@@ -186,7 +193,6 @@
             }
             fetchRatings();
 
-
             $('#reservationForm').on('submit', async function (event) {
                 event.preventDefault();
                 $('#loading').show(); //spinning show
@@ -238,6 +244,43 @@
                     $('#loading').hide();
                 }
             });
+
+
+            // 倒數計時
+            let countdownElement = $('#countdown');
+            let resetButton = $('#reset-button');
+            let countdownTime = 60;
+            let timer;
+
+            function startCountdown() {
+                clearInterval(timer);
+                let time = countdownTime;
+                countdownElement.text(formatTime(time));
+
+                timer = setInterval(function () {
+                    time--;
+                    countdownElement.text(formatTime(time));
+
+                    if (time <= 0) {
+                        clearInterval(timer);
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    }
+                }, 1000);
+            }
+
+            function formatTime(seconds) {
+                let minutes = Math.floor(seconds / 60);
+                let secs = seconds % 60;
+                return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }
+            resetButton.on('click', function () {
+                startCountdown();
+            });
+
+            // 初始化計時器
+            startCountdown();
         });
 
         // 日期格式化

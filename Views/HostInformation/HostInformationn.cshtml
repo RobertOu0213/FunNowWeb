@@ -39,6 +39,7 @@
                     <h5>新增/變更個人照片 （非必填）</h5>
                 </div>
                 <p class="subtitle">新增相片可以加強房客印象。我們會將照片放到你的個人檔案，不論是房東或房客都可以看到。</p>
+                <button class="btn btn-danger" style="margin:5px 10px 10px 1175px" id="btnDemo">Demo</button>
 
                 <div class="card mb-3 ms-3">
                     <div class="card-body d-flex" style="padding-bottom: 0px; display: flex; align-items: center;">
@@ -905,6 +906,23 @@
                 console.error('更新國家和城市選擇器時出錯:', error);
             }
         }
+
+
+        //快速填資料
+        const btnDemo = document.getElementById("btnDemo");
+
+        btnDemo.addEventListener('click', (evt) => {
+            evt.preventDefault();
+
+            document.querySelector('#memberFirstName').value = "Jack王";
+            document.querySelector('#memberLastName').value = "Wang!!!";
+            document.querySelector('#memberBirth').value = "2000-05-09";
+            document.querySelector('#memberPhone').value = "091425836955555";
+            document.querySelector('#memberAddress').value = "大安區復興南路一段390號2樓";
+            document.querySelector('#memberIntroduction').value = "大家好，我是Jack Wang，是「資展青旅」的房東。多年來，我致力於提供安全、舒適的居住環境。我的房子設備齊全，位置便利，鄰近商圈和交通樞紐。我始終秉持熱情和誠信，隨時為房客解決問題，確保您有賓至如歸的居住體驗。期待您的入住！";
+
+        });
+
 
     </script>
 }

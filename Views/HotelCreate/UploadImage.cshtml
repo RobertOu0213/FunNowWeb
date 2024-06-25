@@ -122,31 +122,30 @@
         const userId = "@ViewBag.UserID";
 
         //需再修改
-        $(window).on('load', function () {
+        // $(window).on('load', function () {
     
-            if (sessionStorage.getItem('forceRedirect') === 'true') {
-                showModal();
+        //     if (sessionStorage.getItem('forceRedirect') === 'true') {
+        //         showModal();
 
-            }
-        });
+        //     }
+        // });
 
         function showModal() {
             var resultModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
             resultModal.show();
-            sessionStorage.setItem('forceRedirect', 'true');
+            // sessionStorage.setItem('forceRedirect', 'true');
         }
        
         $(document).ready(async () => {
 
 
-
             const maxTotalSize = 5 * 1024 * 1024; // 5MB
             let totalSize = 0;
+             let newSize = 0;
             let filenames = new Set();
             const uploadSection = $('.file__upload');
             let imageCategoryStr = '';
-
-            //let newSize = 0; 這也要改
+            
 
             //Image Category
             const res = await fetch('https://localhost:7103/api/ImageCategory')
@@ -171,9 +170,9 @@
 
                 const allowedTypes = ['image/jpeg', 'image/png'];
                 const files = Array.from(e.target.files);
-
+               
                 const fileInput = $('#fileInput');
-                let newSize = 0;
+              
 
                 files.forEach((file, index) => {
 
@@ -189,6 +188,7 @@
                     }
 
                     newSize += file.size;
+
                     if (totalSize + newSize > maxTotalSize) {
                         alert('所有照片加起來不能超過 5MB。');
                         return;
@@ -217,11 +217,9 @@
                         // 當所有文件都讀取完畢後，改變樣式、儲存fileName到set及計算儲存的容量
                         if (index === files.length - 1) {
 
-                            uploadSection.removeClass('file__upload').addClass('uploaded');
-
+                            // uploadSection.removeClass('file__upload').addClass('uploaded');
                             files.forEach(f => filenames.add(f.name));
                             totalSize += newSize;
-
                             fileInput.val('');
                         }
                     };
@@ -248,20 +246,20 @@
 
                 filenames.delete(fileName);
                 totalSize -= fileSize;
+                newSize -= fileSize;
+                
+              
 
                 if (confirm('確定要刪除這張圖片嗎？')) {
                     card.remove();
 
                     let hotelData = JSON.parse(sessionStorage.getItem('tHotel')) || {};
-
-                    // 創建一個新的數組，該數組不包含被刪除的物件
-                    hotelData.HotelImage = hotelData.HotelImage.filter(item => item.FileName !== fileName);
-
-
                     sessionStorage.setItem('tHotel', JSON.stringify(hotelData));
                 }
 
                 if (filenames.size === 0) {
+                    totalSize = 0;
+                    newSize = 0;
                     uploadSection.removeClass('uploaded').addClass('file__upload');
                 }
 
@@ -328,6 +326,7 @@
                             }
 
                             newSize += file.size;
+
                             if (totalSize + newSize > maxTotalSize) {
                                 alert('所有照片加起來不能超過 5MB。');
                                 return;
@@ -355,8 +354,6 @@
                                 // 當所有文件都讀取完畢後，改變樣式、儲存fileName到set及計算儲存的容量
                                 if (fileIndex === files.length - 1) {
 
-
-                                    //晚點改
                                     // $(`#uploadSection${index}`).removeClass('file__upload${index}').addClass('uploaded');
 
                                     files.forEach(f => filenames.add(f.name));
@@ -387,22 +384,21 @@
                         const fileName = imgElement.data('file-name');
                         const fileSize = parseInt(imgElement.data('file-size'), 10);
 
-                        filenames.delete(fileName);
+                        filenames.delete(fileName);                       
                         totalSize -= fileSize;
+                        newSize -= fileSize;
+                                       
 
                         if (confirm('確定要刪除這張圖片嗎？')) {
                             card.remove();
-                            let roomData = JSON.parse(sessionStorage.getItem('tRoom')) || {};
-
-                            roomData.forEach(room => {
-                                // 創建一個新的數組，該數組不包含被刪除的物件
-                                room.RoomImages = room.RoomImages.filter(item => item.FileName !== fileName);
-                            });
+                            let roomData = JSON.parse(sessionStorage.getItem('tRoom')) || {};                 
 
                             sessionStorage.setItem('tRoom', JSON.stringify(roomData));
                         }
 
                         if (filenames.size === 0) {
+                            totalSize = 0;
+                            newSize = 0;
 
                             // uploadSection.removeClass('uploaded').addClass('file__upload');
                         }
