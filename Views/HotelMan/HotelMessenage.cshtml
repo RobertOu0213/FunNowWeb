@@ -399,7 +399,7 @@
             if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
                 return imagePath;
             } else {
-                return window.location.origin + '/image/' + imagePath;
+                return window.location.origin  + imagePath;
             }
         }
 
