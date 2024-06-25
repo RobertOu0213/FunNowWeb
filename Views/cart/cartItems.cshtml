@@ -8,7 +8,7 @@
         <img src="~/image/ming_img/newnewLogo.png" alt="LOGO">
     </a>
 
-    <div class="user-container">
+    <div class=" d-flex justify-content-end user-container w-100">
         @{
             var firstInitial = string.IsNullOrEmpty(ViewBag.LastName) ? "" : ViewBag.LastName.Substring(0, 1) + ".";
             var avatar = string.IsNullOrEmpty(ViewBag.LastName) ? "" : ViewBag.LastName.Substring(0, 1);

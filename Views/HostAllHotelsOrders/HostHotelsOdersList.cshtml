@@ -63,7 +63,7 @@
                     <td>@item.HotelName</td>
                     <td>@item.CheckInDate.ToString("yyyy/MM/dd") - @item.CheckOutDate.ToString("yyyy/MM/dd")</td>
                     <td>NTD$@item.Price</td>
-                    <td style="color:@(item.Status == "已完成" ? "green" : "red")">@item.Status</td>
+                    <td style="color:@(item.Status == "已訂" ? "green" : "red")">@item.Status</td>
                     
                 </tr>
             }
