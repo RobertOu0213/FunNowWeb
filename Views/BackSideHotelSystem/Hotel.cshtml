@@ -55,6 +55,17 @@
         </tbody>
     </table>
 
+  @*   分頁 *@
+    <div class="container mt-3 d-flex justify-content-between">
+        <button id="firstPage" class="btn btn-primary">第一頁</button>
+        <button id="prevPage" class="btn btn-primary">上一頁</button>
+        <div>
+            Page <span id="currentPage">1</span> of <span id="totalPages">1</span>
+        </div>
+        <button id="nextPage" class="btn btn-primary">下一頁</button>
+        <button id="lastPage" class="btn btn-primary">最後一頁</button>
+    </div>
+
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <style>
@@ -152,6 +163,8 @@
     <script>
         let allHotels = [];
         let currentHotelID = null; // 確保 currentHotelID 已正確定義
+        let currentPage = 1;
+        const itemsPerPage = 10;
 
         // 獲取飯店資訊並更新顯示
         function fetchHotels() {
@@ -168,32 +181,34 @@
         }
 
         // 更新飯店顯示
-        function updateHotelDisplay(hotelList) {
-            let tableStr = "";
-            hotelList.forEach(item => {
-                let status = item.hotelIsActive ? "已上架" : "待審核";
-                let actionButton = item.hotelIsActive
-                    ? `<td class="room-type"><button class="btn btn-danger" onclick="toggleHotelStatus(${item.hotelID})">下架飯店</button></td>`
-                    : `<td class="room-type"><button class="btn btn-primary " onclick="toggleHotelStatus(${item.hotelID})">上架飯店</button></td>`;
+        // function updateHotelDisplay(hotelList) {
+        //     let tableStr = "";
+        //     hotelList.forEach(item => {
+        //         let status = item.hotelIsActive ? "已上架" : "待審核";
+        //         let actionButton = item.hotelIsActive
+        //             ? `<td class="room-type"><button class="btn btn-danger" onclick="toggleHotelStatus(${item.hotelID})">下架飯店</button></td>`
+        //             : `<td class="room-type"><button class="btn btn-primary " onclick="toggleHotelStatus(${item.hotelID})">上架飯店</button></td>`;
 
-                tableStr += `
-                            <tr data-hotel-id="${item.hotelID}">
-                                <td>${item.hotelID}</td>
-                                 <td class="room-name"">${item.hotelName}</td>
-                                <td>${item.hotelTypeName}</td>
-                                <td class="room-address">${item.hotelAddress}</td>
-                                <td>${item.hotelPhone}</td>
-                                <td>${status}</td>
-                                <td class="room-type"><button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="loadRooms(${item.hotelID})">詳細內容</button></td>
-                                ${actionButton}
-                            </tr>
-                        `;
-            });
+        //         tableStr += `
+        //                     <tr data-hotel-id="${item.hotelID}">
+        //                         <td>${item.hotelID}</td>
+        //                          <td class="room-name"">${item.hotelName}</td>
+        //                         <td>${item.hotelTypeName}</td>
+        //                         <td class="room-address">${item.hotelAddress}</td>
+        //                         <td>${item.hotelPhone}</td>
+        //                         <td>${status}</td>
+        //                         <td class="room-type"><button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="loadRooms(${item.hotelID})">詳細內容</button></td>
+        //                         ${actionButton}
+        //                     </tr>
+        //                 `;
+        //     });
 
-            document.getElementById('hotelContainer').innerHTML = tableStr;
-        }
+        //     document.getElementById('hotelContainer').innerHTML = tableStr;
+        // }
 
         // 切换飯店的isActive狀態
+
+
         function toggleHotelStatus(hotelID) {
             fetch(`https://localhost:7103/api/BackSideHotel/${hotelID}/toggleActive`, {
                 method: 'PUT'
@@ -296,11 +311,103 @@
         }
 
         // 應用篩選和搜索條件
-        function applyFiltersAndSearch() {
+        function applyFiltersAndSearch(resetPage = false, hotels = null) {
             let selectedHotelTypeName = document.getElementById('inputGroupSelecthotel').value;
             let selectedHotelStatus = document.getElementById('inputGroupSelectstatus').value;
             let searchBar = document.getElementById('searchBar').value.toLowerCase();
+            if (resetPage) {
+                currentPage = 1;
+            }
 
+            let filteredHotels = hotels || allHotels.filter(item => {
+                let matchesType = selectedHotelTypeName === "所有飯店類型" || item.hotelTypeName === selectedHotelTypeName;
+                let matchesStatus = selectedHotelStatus === "所有審核狀態" || item.hotelIsActive.toString() === selectedHotelStatus;
+                let matchesSearch = item.hotelName.toLowerCase().includes(searchBar) || item.hotelAddress.toLowerCase().includes(searchBar);
+                return matchesType && matchesStatus && matchesSearch;
+            });
+
+        
+            updateHotelDisplay(filteredHotels);
+        }
+
+
+
+        // 更新飯店顯示（修改為分頁）
+        function updateHotelDisplay(hotelList) {
+            const totalItems = hotelList.length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage);  // 計算總頁數
+
+            document.getElementById('currentPage').textContent = currentPage;
+            document.getElementById('totalPages').textContent = totalPages;
+
+            let start = (currentPage - 1) * itemsPerPage;
+            let end = start + itemsPerPage;
+            let paginatedHotels = hotelList.slice(start, end);
+
+            let tableStr = "";
+            paginatedHotels.forEach(item => {
+                let status = item.hotelIsActive ? "已上架" : "待審核";
+                let actionButton = item.hotelIsActive
+                    ? `<td><button class="btn btn-danger" onclick="toggleHotelStatus(${item.hotelID})">下架飯店</button></td>`
+                    : `<td><button class="btn btn-primary" onclick="toggleHotelStatus(${item.hotelID})">上架飯店</button></td>`;
+
+                tableStr += `
+                                    <tr data-hotel-id="${item.hotelID}">
+                                        <td>${item.hotelID}</td>
+                                        <td>${item.hotelName}</td>
+                                        <td>${item.hotelTypeName}</td>
+                                        <td>${item.hotelAddress}</td>
+                                        <td>${item.hotelPhone}</td>
+                                        <td>${status}</td>
+                                        <td><button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="loadRooms(${item.hotelID})">詳細內容</button></td>
+                                        ${actionButton}
+                                    </tr>
+                                `;
+            });
+
+            document.getElementById('hotelContainer').innerHTML = tableStr;
+            updatePaginationButtons(totalPages);
+        }
+
+        // 更新分頁按鈕狀態
+        function updatePaginationButtons(totalPages) {
+            document.getElementById('firstPage').disabled = currentPage === 1;
+            document.getElementById('prevPage').disabled = currentPage === 1;
+            document.getElementById('nextPage').disabled = currentPage === totalPages;
+            document.getElementById('lastPage').disabled = currentPage === totalPages;
+        }
+
+        // 切換到第一頁
+        document.getElementById('firstPage').addEventListener('click', () => {
+            if (currentPage !== 1) {
+                currentPage = 1;
+                applyFiltersAndSearch();
+            }
+        });
+
+        // 切換到上一頁
+        document.getElementById('prevPage').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                applyFiltersAndSearch();
+            }
+        });
+
+        // 切換到下一頁
+        document.getElementById('nextPage').addEventListener('click', () => {
+            const totalPages = Math.ceil(allHotels.length / itemsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                applyFiltersAndSearch();
+            }
+        });
+
+        // 切換到最後一頁
+        document.getElementById('lastPage').addEventListener('click', () => {
+            let selectedHotelTypeName = document.getElementById('inputGroupSelecthotel').value;
+            let selectedHotelStatus = document.getElementById('inputGroupSelectstatus').value;
+            let searchBar = document.getElementById('searchBar').value.toLowerCase();
+            //下面這邊要研究
             let filteredHotels = allHotels.filter(item => {
                 let matchesType = selectedHotelTypeName === "所有飯店類型" || item.hotelTypeName === selectedHotelTypeName;
                 let matchesStatus = selectedHotelStatus === "所有審核狀態" || item.hotelIsActive.toString() === selectedHotelStatus;
@@ -308,23 +415,21 @@
                 return matchesType && matchesStatus && matchesSearch;
             });
 
-            updateHotelDisplay(filteredHotels);
-        }
+            const totalPages = Math.ceil(filteredHotels.length / itemsPerPage);
+            if (currentPage !== totalPages) {
+                currentPage = totalPages;
+                applyFiltersAndSearch(false, filteredHotels);
+            }
+        });
 
         document.addEventListener('DOMContentLoaded', () => {
             fetchHotels();
 
-            document.getElementById('inputGroupSelecthotel').addEventListener('change', () => {
-                applyFiltersAndSearch();
-            });
+            document.getElementById('inputGroupSelecthotel').addEventListener('change', () => applyFiltersAndSearch(true));
 
-            document.getElementById('inputGroupSelectstatus').addEventListener('change', () => {
-                applyFiltersAndSearch();
-            });
+            document.getElementById('inputGroupSelectstatus').addEventListener('change', () => applyFiltersAndSearch(true));
 
-            document.getElementById('searchBtn').addEventListener('click', () => {
-                searchHotels();
-            });
+            document.getElementById('searchBar').addEventListener('input', () => applyFiltersAndSearch(true));
 
             document.getElementById('clearBtn').addEventListener('click', () => {
                 clearFilters();
