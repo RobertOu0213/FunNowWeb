@@ -402,11 +402,14 @@
                     // 從 sessionStorage 中讀取所有的客房資訊
                     const roomInfo = JSON.parse(sessionStorage.getItem('tRoom'));
 
-                    // 刪除對應的元素
-                    roomInfo.splice(roomIndex, 1);
-
-                    // 將更新後的數組寫回 sessionStorage
-                    sessionStorage.setItem('tRoom', JSON.stringify(roomInfo));
+                    if (roomInfo != null) {
+                        // 刪除對應的元素
+                        roomInfo.splice(roomIndex, 1);
+                        // 將更新後的數組寫回 sessionStorage
+                        sessionStorage.setItem('tRoom', JSON.stringify(roomInfo));
+                    
+                    }
+ 
 
                     $(this).closest('.panel__room').remove();
                     updateDeleteButtonsAndRenumberRooms();
@@ -484,13 +487,15 @@
                         // 從 sessionStorage 中讀取所有的客房資訊
                         const roomInfo = JSON.parse(sessionStorage.getItem('tRoom'));
 
-                        // 刪除對應的元素
-                        roomInfo.splice(roomIndex, 1);
+                        if(roomInfo != null) {
+                            // 刪除對應的元素
+                            roomInfo.splice(roomIndex, 1);
+                            // 將更新後的數組寫回 sessionStorage
+                            sessionStorage.setItem('tRoom', JSON.stringify(roomInfo));
+                        }
+                        
 
-                        // 將更新後的數組寫回 sessionStorage
-                        sessionStorage.setItem('tRoom', JSON.stringify(roomInfo));
-
-
+                       
                         $(this).closest('.panel__room').remove();
                         updateDeleteButtonsAndRenumberRooms();
                     }
