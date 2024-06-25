@@ -468,23 +468,21 @@
                     const response = await fetch(apiUrl, { method: method });
                     if (!response.ok) throw new Error("Failed to save details");
                     alert(`Saved: ${formattedDate}, Availability: ${availability}`);
-                    fetchOrderDetails(hotelId);
+                    await fetchOrderDetails(hotelId); // 重新获取订单详情
+                    renderCalendar(yearSelect.value, monthSelect.value); // 重新渲染日历
                 } catch (error) {
                     alert("Failed to save. Please try again.");
                 }
             }
 
             saveBtn.addEventListener("click", () => {
-                console.log("Save button clicked");  // 調試信息
                 if (selectedDate) {
                     const hotelId = @ViewData["HotelId"];
                     const dateValue = selectedDateInput.value;
-                    console.log("Selected date:", dateValue);  // 調試信息
                     const date = new Date(dateValue);
                     date.setDate(date.getDate() + 1);  // 增加一天
                     const formattedDate = date.toISOString().split('T')[0];
                     const availability = document.querySelector('input[name="availability"]:checked').value;
-                    console.log("Formatted date:", formattedDate, "Availability:", availability);  // 調試信息
 
                     saveDateDetails(hotelId, formattedDate, availability);
                 } else {
@@ -540,6 +538,9 @@
 
             populateYearMonthSelectors();
             fetchOrderDetails(@ViewData["HotelId"]);
+
+            // 调用 renderCalendar 来显示日历
+            renderCalendar(yearSelect.value, monthSelect.value);
         });
 
     </script>
