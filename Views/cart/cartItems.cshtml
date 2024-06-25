@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "預定清單";
+    ViewData["Title"] = "購物車";
    
 }
 
@@ -91,7 +91,7 @@
        
         const MemberId = @ViewBag.MemberID;
         $(document).ready(function () {
-
+            
 
             $('#avatarButton').on('click', function () {
                 $('#modal').toggle();
@@ -138,9 +138,10 @@
 
             $(document).on('click', '.cartRoom-bookingInfo', function () {
                 const checkbox = $(this).find('input[type="checkbox"]');
-                checkbox.prop('checked', !checkbox.prop('checked'));
-
-                updateTotalPriceAndItems();
+                if (!checkbox.prop('disabled')) {
+                    checkbox.prop('checked', !checkbox.prop('checked'));
+                    updateTotalPriceAndItems();
+                }
             });
 
             //前往PaymentPage
@@ -183,7 +184,7 @@
                 const data = await res.json();
                 if (data.success) {
                     const orderDetailDtos = data.orderDetailDtos;
-             
+                    // console.log(orderDetailDtos);
                     await Promise.all(orderDetailDtos.map(async (item) => {
                         const ratingRes = await fetch(`https://localhost:7103/api/Comment/AverageRatingText/${item.hotelID}`);
                         if (!ratingRes.ok) {
@@ -216,7 +217,7 @@
             orderDetailDtos.forEach(item => {
                 let stars = "";
                 for (let i = 0; i < item.levelStar; i++) {
-                    stars += `<i class="fa-solid fa-star"></i> `;
+                    stars += `<i class="fa-solid fa-star yellowStar"></i> `;
                 }
 
                 const days = getDaysBetweenDates(item.checkInDate, item.checkOutDate);
@@ -224,6 +225,9 @@
                 const checkInDate = formatDate(item.checkInDate);
                 const checkOutDate = formatDate(item.checkOutDate);
                 const imageUrl = getImageUrl(item.roomImage);
+                const isExpiredClass = item.isExpired ? ' expired' : '';
+                const disabledAttr = item.isExpired ? 'disabled' : '';
+                const textOpacityClass = item.isExpired ? ' text-opacity' : '';
 
                 cartRoomStr += `
                                         <div class="cartRoom">
@@ -250,27 +254,37 @@
                                                     <button class="trash-can-btn" data-id="${item.orderDetailID}"><i class="fa-solid fa-lg fa-trash-can"></i></button>
                                                 </div>
                                             </div>
-                                                <div class="cartRoom-bookingInfo" data-price="${totalPrice}" data-id="${item.orderDetailID}">
-                                                <div class="cartRoom-bookingInfo-div1">
-                                                    <label for="">
-                                                        <input type="checkbox" name="" ${checkedItems.includes(item.orderDetailID) ? 'checked' : ''}>
-                                                        <span>1 x ${item.roomType}</span>
+                                                  <div class="cartRoom-bookingInfo${isExpiredClass}" data-price="${totalPrice}" data-id="${item.orderDetailID}">
+                                                   <div class="cartRoom-bookingInfo-div1${textOpacityClass}">
+                                                    <label>
+                                                        <input type="checkbox" ${checkedItems.includes(item.orderDetailID) ? 'checked' : ''} ${disabledAttr}>
+                                                        <span${textOpacityClass}">1 x ${item.roomType}</span>
                                                     </label>
                                                 </div>
-                                                <div class="cartRoom-bookingInfo-div2">
+                                                   <div class="cartRoom-bookingInfo-div2${textOpacityClass}">
                                                     <span>${checkInDate}</span><span>-</span><span>${checkOutDate}</span>
                                                 </div>
-                                                <div class="cartRoom-bookingInfo-div3">
-                                                    <i class="fa-solid fa-users"></i>
-                                                       <span>住客人數 :  ${item.guestNumber !== null ? item.guestNumber : 0}位大人</span>
+                                                <div class="cartRoom-bookingInfo-div3${textOpacityClass}">
+                                                   <i class="fa-solid fa-users"></i>
+                                                   <span>住客人數 :  ${item.guestNumber !== null ? item.guestNumber : 0}位大人</span>
                                                 </div>
-                                                <div class="cartRoom-bookingInfo-div4">
-                                                    <span>NT $</span> <span>${totalPrice}</span>
-                                                </div>
-                                                <div class="cartRoom-bookingInfo-div5">
-                                                    包含稅金及附加費用
-                                                </div>
-                                            </div>
+                                                   ${item.isExpired ? `
+                                                      <div class="alertMain">
+                                                          <i class="fa-solid fa-triangle-exclamation"></i>
+                                                          <span class="soldout">此優惠已完售</span>
+                                                      </div>
+                                                      <div class="alertSub">
+                                                          <span>搜尋不同選項或日期</span>
+                                                      </div>
+                                                      ` : `
+                                                      <div class="cartRoom-bookingInfo-div4${textOpacityClass}">
+                                                          <span>NT $</span> <span>${totalPrice}</span>
+                                                      </div>
+                                                      <div class="cartRoom-bookingInfo-div5${textOpacityClass}">
+                                                          包含稅金及附加費用
+                                                      </div>
+                                                   `}
+                                               </div>
                                         </div>
                                     `;
             });
@@ -336,13 +350,8 @@
                 $('.totalPrice .inactive .cartCheck-container-div2 span').text('0項');
             }
 
-
-
         }
 
-
-
     </script>
-
 
 }

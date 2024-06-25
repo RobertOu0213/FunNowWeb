@@ -99,7 +99,8 @@
                 </div>
 
                 @*   button *@
-                <div class="d-flex justify-content-end my-5">
+                <div class="d-flex justify-content-between my-5">
+                    <button type="button" class="btn btn-danger" id="btnDemo">Demo</button>
                     <button type="submit" class="btn_next" id="btnNext">下一步</button>
                 </div>
             </form>
@@ -151,7 +152,6 @@
 
         })();
 
-
         //Hotel Equipment
         (async () => {
             const res = await fetch('https://localhost:7103/api/HotelEquipment')
@@ -178,7 +178,6 @@
 
 
         })();
-
 
         //下一步
         $('#btnNext').on('click', function () {
@@ -267,7 +266,17 @@
 
         })
 
-
+        $('#btnDemo').click(function () {
+            $('#iptHotelName').val('Demo Hotel');
+            $('#iptLevelStar').val(4);
+            $('#iptHotelPhone').val('123-456-7890');
+            $('#floatingTextarea').val('這是一家位於市中心的豪華酒店，提供現代化的設施和優質的服務。');
+            $('#hotelEquipment input[type="checkbox"]').each(function () {
+                if ($(this).val() == '2' || $(this).val() == '8') {
+                    $(this).prop('checked', true);
+                }
+            });
+        });
 
     </script>
 }

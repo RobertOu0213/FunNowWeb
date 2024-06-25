@@ -27,12 +27,11 @@
                     </a>
                 </div>
 
-
-                <!-- 模態框 -->
-                <div id="myModal" class="modal">
+                <!-- 地圖找房模態框 -->
+                <div id="mapModal" class="modal">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <span class="close">&times;</span>
+                            <span class="close" id="mapClose">&times;</span>
                             <h2>地圖找房</h2>
                         </div>
                         <div class="modal-body">
@@ -1009,23 +1008,19 @@
     @* //地圖找圖功能 *@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            var modal = document.getElementById("myModal");
+            var modal = document.getElementById("mapModal");
             var btn = document.getElementById("mapBtn");
-            var span = document.getElementsByClassName("close")[0];
+            var span = document.getElementById("mapClose");
 
             btn.onclick = function () {
                 modal.style.display = "block";
                 initMap();
+                document.body.style.overflow = 'hidden'; // 禁止滾動
             }
 
             span.onclick = function () {
                 modal.style.display = "none";
-            }
-
-            window.onclick = function (event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
-                }
+                document.body.style.overflow = ''; // 恢復滾動
             }
         });
 
@@ -1064,12 +1059,12 @@
                             });
 
                             var infowindowContent = `
-                                    <div>
-                                        <strong>${hotel.hotelName}</strong><br>
-                                        平均價格: NT$${hotel.hotelPrice}<br>
-                                        <img src="https://localhost:7284/image/${hotel.hotelImages[0]}" style="width: 100px; height: auto;" class="hotel-image" data-hotel-id="${hotel.hotelId}"> <!-- 顯示旅館照片 -->
-                                    </div>
-                                `;
+                                            <div>
+                                                <strong>${hotel.hotelName}</strong><br>
+                                                平均價格: NT$${hotel.hotelPrice}<br>
+                                                <img src="https://localhost:7284/image/${hotel.hotelImages[0]}" style="width: 100px; height: auto;" class="hotel-image" data-hotel-id="${hotel.hotelId}"> <!-- 顯示旅館照片 -->
+                                            </div>
+                                        `;
 
                             var infowindow = new google.maps.InfoWindow({
                                 content: infowindowContent
@@ -1466,8 +1461,8 @@
     </style>
     @* 地圖找房 *@
     <style>
-        /* 模態框樣式 */
-        .modal {
+        /* 地圖找房模態框樣式 */
+        #mapModal {
             display: none;
             position: fixed;
             z-index: 1050;
@@ -1476,55 +1471,56 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgba(0,0,0,0.8);
+            background-color: rgba(0, 0, 0, 0.8);
         }
 
-        .modal-content {
-            position: absolute;
-            background-color: #fefefe;
-            margin: auto;
-            padding: 0;
-            border: 1px solid #888;
-            width: 80%;
-            height: 80%;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            animation-name: animatetop;
-            animation-duration: 0.4s;
-        }
-
-        .close {
-            color: white;
-            float: right;
-            font-size: 18px; /* 調整關閉按鈕大小 */
-            font-weight: bold;
-            margin-right: 10px;
-        }
-
-            .close:hover,
-            .close:focus {
-                color: #000;
-                text-decoration: none;
-                cursor: pointer;
+            #mapModal .modal-content {
+                position: absolute;
+                background-color: #fefefe;
+                margin: auto;
+                padding: 0;
+                border: 1px solid #888;
+                width: 80%;
+                height: 80%;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+                animation-name: animatetop;
+                animation-duration: 0.4s;
             }
 
-        .modal-header {
-            padding: 2px 16px;
-            background-color: #5cb85c;
-            color: white;
-        }
+            #mapModal .close {
+                color: white;
+                float: right;
+                font-size: 36px; /* 調整關閉按鈕大小 */
+                font-weight: bold;
+                margin-right: 10px;
+            }
 
-        .modal-body {
-            padding: 2px 16px;
-        }
+                #mapModal .close:hover,
+                #mapModal .close:focus {
+                    color: #000;
+                    text-decoration: none;
+                    cursor: pointer;
+                }
 
-        .modal-footer {
-            padding: 2px 16px;
-            background-color: #5cb85c;
-            color: white;
-        }
+            #mapModal .modal-header {
+                padding: 2px 16px;
+                background-color: #5cb85c;
+                color: white;
+            }
+
+            #mapModal .modal-body {
+                padding: 2px 16px;
+                height: calc(100% - 50px); /* 調整地圖顯示高度 */
+            }
+
+            #mapModal .modal-footer {
+                padding: 2px 16px;
+                background-color: #5cb85c;
+                color: white;
+            }
     </style>
 
 
