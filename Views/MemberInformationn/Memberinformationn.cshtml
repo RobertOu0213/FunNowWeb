@@ -1257,8 +1257,8 @@
         NameDemo.addEventListener('click', (evt) => {
             evt.preventDefault();
 
-            document.querySelector('#FirstNameInput').value = "Kelly陳";
-            document.querySelector('#LastNameInput').value = "Hsu!!";
+            document.querySelector('#FirstNameInput').value = "Kelly";
+            document.querySelector('#LastNameInput').value = "Hsu";
             
         });
 
@@ -1268,7 +1268,7 @@
         PhoneDemo.addEventListener('click', (evt) => {
             evt.preventDefault();
 
-            document.querySelector('#PhoneInput').value = "09881472583"; 
+            document.querySelector('#PhoneInput').value = "0988147258"; 
         });
 
         //密碼Demo鍵
@@ -1277,7 +1277,8 @@
         PwdDemo.addEventListener('click', (evt) => {
             evt.preventDefault();
 
-            document.querySelector('#PasswordInput1').value = "Qqq123456!!"; //註冊密碼用Qqq123456!!，更改密碼用Aaa123456!!，重設密碼用Zzz123456!!
+            document.querySelector('#PasswordInput1').value = "Zzz123456!!";
+            //註冊密碼用Qqq123456!!，忘記密碼用Zzz123456!!，這邊因為忘記密碼的時候會把密碼改為Zzz123456!!
         });
 
 
@@ -1287,8 +1288,9 @@
         NewPwdDemo.addEventListener('click', (evt) => {
             evt.preventDefault();
 
-            document.querySelector('#NewPasswordInput').value = "Aaa123456!!";
-            document.querySelector('#NewRecheckPasswordInput').value = "Aaa123456!!"; //新密碼用Qqq123456!!，更改密碼用Aaa123456!!，重設密碼用Zzz123456!!
+            document.querySelector('#NewPasswordInput').value = "Qqq123456!!";
+            document.querySelector('#NewRecheckPasswordInput').value = "Qqq123456!!";
+            //新密碼用Qqq123456!!，重設密碼用Zzz123456!!，這邊會把密碼改回原本註冊的密碼
 
         });
 
