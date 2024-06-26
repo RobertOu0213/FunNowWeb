@@ -1058,13 +1058,15 @@
                                 icon: '/image/ming_img/hotel_icon.png' // 確認圖示路徑正確
                             });
 
+                            var hotelImageUrl = hotel.hotelImages.length > 0 ? getImageUrl(hotel.hotelImages[0]) : '';
+
                             var infowindowContent = `
-                                            <div>
-                                                <strong>${hotel.hotelName}</strong><br>
-                                                平均價格: NT$${hotel.hotelPrice}<br>
-                                                <img src="https://localhost:7284/image/${hotel.hotelImages[0]}" style="width: 100px; height: auto;" class="hotel-image" data-hotel-id="${hotel.hotelId}"> <!-- 顯示旅館照片 -->
-                                            </div>
-                                        `;
+                                <div>
+                                    <strong>${hotel.hotelName}</strong><br>
+                                    平均價格: NT$${hotel.hotelPrice}<br>
+                                    <img src="${hotelImageUrl}" style="width: 100px; height: auto;" class="hotel-image" data-hotel-id="${hotel.hotelId}"> <!-- 顯示旅館照片 -->
+                                </div>
+                            `;
 
                             var infowindow = new google.maps.InfoWindow({
                                 content: infowindowContent
