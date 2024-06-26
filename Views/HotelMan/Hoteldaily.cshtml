@@ -389,7 +389,8 @@
 
                     const orderDetail = orderDetails.find(od => {
                         const checkInDate = new Date(od.checkInDate);
-                        return date.toDateString() === checkInDate.toDateString();
+                        const checkOutDate = new Date(od.checkOutDate);
+                        return date >= checkInDate && date < checkOutDate;
                     });
 
                     if (date < todayDate) {
@@ -397,10 +398,10 @@
                     } else if (orderDetail && orderDetail.guestNumber === 0) {
                         div.className = "null-guest";
                         div.innerHTML = `
-                        ${i}
-                        <div class="room-name">封鎖</div>
-                        <div class="price">TWD ${orderDetail.roomPrice}</div>
-                        `;
+                    ${i}
+                    <div class="room-name">封鎖</div>
+                    <div class="price">TWD ${orderDetail.roomPrice}</div>
+                    `;
                         div.style.backgroundColor = "gray";
                     } else if (orderDetail) {
                         div.className = "booked";
@@ -452,6 +453,7 @@
                     calendar.appendChild(div);
                 }
             }
+
 
             async function saveDateDetails(hotelId, formattedDate, availability) {
                 let apiUrl;
