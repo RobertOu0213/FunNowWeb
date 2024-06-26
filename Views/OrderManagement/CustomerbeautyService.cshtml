@@ -9,6 +9,7 @@
     <title>客服對話總站</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             background-color: #f4f7f6;
@@ -96,23 +97,30 @@
             .bubble.me {
                 background-color: #e1ffc7;
                 margin-left: auto;
+                text-align: right;
             }
 
         .write {
             display: flex;
             align-items: center;
-            padding: 20px;
+            padding: 10px;
             border: 1px solid #ddd;
             border-radius: 10px;
             background-color: #fff;
         }
 
-            .write input {
+            .write input[type="text"] {
                 flex: 1;
                 padding: 10px;
                 border: 1px solid #ddd;
                 border-radius: 5px;
                 margin-right: 10px;
+            }
+
+            .write .fa-image {
+                font-size: 24px;
+                margin-right: 10px;
+                cursor: pointer;
             }
 
             .write .btn {
@@ -144,18 +152,24 @@
             </div>
             <div class="chat" id="Content"></div>
             <div class="write">
+                <input type="file" id="fileInput" style="display: none;">
+                <i class="fa-regular fa-image" id="fileButton" style="font-size: 24px; cursor: pointer; margin-right: 10px;"></i>
                 <input type="text" id="message" placeholder="發送消息">
                 <button type="button" class="btn" id="sendButton">發送消息</button>
             </div>
         </div>
     </div>
 
+    <script src="https://kit.fontawesome.com/091893cea4.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.18/signalr.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
+            // SignalR 連接
             const connection = new signalR.HubConnectionBuilder()
                 .withUrl("https://localhost:7103/chatHub")
                 .build();
+
+            let selectedFile = null;
 
             connection.start()
                 .then(() => {
@@ -199,28 +213,89 @@
                 contentList.scrollTop = contentList.scrollHeight; // 滾動到底部
             });
 
-            document.getElementById("sendButton").addEventListener("click", function () {
+            connection.on("ReceiveFile", function (senderId, fileData, fileName) {
+                const contentList = document.getElementById("Content");
+                const listItem = document.createElement("div");
+                listItem.className = senderId === "客服人員" ? "bubble me animate__animated animate__fadeInUp" : "bubble you animate__animated animate__fadeInUp";
+                const link = document.createElement("a");
+                link.href = `data:application/octet-stream;base64,${fileData}`;
+                link.download = fileName;
+                link.textContent = `文件: ${fileName}`;
+                listItem.appendChild(link);
+                contentList.appendChild(listItem);
+                contentList.scrollTop = contentList.scrollHeight;
+            });
+
+            document.getElementById("fileButton").addEventListener("click", function () {
+                document.getElementById("fileInput").click();
+            });
+
+            document.getElementById("fileInput").addEventListener("change", function (event) {
+                selectedFile = event.target.files[0];
+            });
+
+            document.getElementById("sendButton").addEventListener("click", sendMessage);
+
+            document.getElementById("message").addEventListener("keydown", function (event) {
+                if (event.key === "Enter") {
+                    sendMessage();
+                }
+            });
+
+            function sendMessage() {
+                const messageInput = document.getElementById("message");
+                const message = messageInput.value.trim();
                 const selectedGuest = document.getElementById("SelectedGuest").textContent;
-                const message = document.getElementById("message").value;
-                if (selectedGuest && message) {
-                    // 本地顯示發送的消息
+
+                if (!selectedGuest) {
+                    alert('請選擇房客');
+                    return;
+                }
+
+                if (message) {
+                    connection.invoke("SendMessage", "客服人員", message, selectedGuest).catch(err => {
+                        console.error('發送錯誤: ' + err.toString());
+                        alert('發送錯誤: ' + err.toString());
+                    });
+
                     const contentList = document.getElementById("Content");
                     const listItem = document.createElement("div");
                     listItem.className = "bubble me animate__animated animate__fadeInUp";
                     listItem.textContent = message;
                     contentList.appendChild(listItem);
-                    contentList.scrollTop = contentList.scrollHeight; // 滾動到底部
+                    contentList.scrollTop = contentList.scrollHeight;
 
-                    connection.invoke("SendMessage", "客服人員", message, selectedGuest).catch(err => {
-                        console.error('發送錯誤: ' + err.toString());
-                        alert('發送錯誤: ' + err.toString());
-                    });
-                    document.getElementById("message").value = ''; // 清空輸入框
-                } else {
-                    alert('請選擇房客並輸入消息');
+                    messageInput.value = '';
                 }
-            });
+
+                if (selectedFile) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const fileData = e.target.result.split(",")[1];
+                        connection.invoke("SendFile", "客服人員", fileData, selectedFile.name, selectedGuest).catch(err => {
+                            console.error('文件傳輸錯誤: ' + err.toString());
+                            alert('文件傳輸錯誤: ' + err.toString());
+                        });
+
+                        const contentList = document.getElementById("Content");
+                        const listItem = document.createElement("div");
+                        listItem.className = "bubble me animate__animated animate__fadeInUp";
+                        const link = document.createElement("a");
+                        link.href = URL.createObjectURL(selectedFile);
+                        link.download = selectedFile.name;
+                        link.textContent = `文件: ${selectedFile.name}`;
+                        listItem.appendChild(link);
+                        contentList.appendChild(listItem);
+                        contentList.scrollTop = contentList.scrollHeight;
+
+                        selectedFile = null; // 清除已選擇的文件
+                        document.getElementById("fileInput").value = ''; // 重置文件輸入
+                    };
+                    reader.readAsDataURL(selectedFile);
+                }
+            }
         });
+
     </script>
 </body>
 </html>
