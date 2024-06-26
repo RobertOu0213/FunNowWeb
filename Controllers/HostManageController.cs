@@ -65,9 +65,6 @@ namespace PrjFunNowWeb.Controllers
 
         public IActionResult HostHotelInfo(int? id)
         {
-            //env test
-            //Env.Load();
-            //string databaseUrl = Environment.GetEnvironmentVariable("API_KEY");
 
             var userID = HttpContext.Session.GetString("MemberID");
             if (string.IsNullOrEmpty(userID))
