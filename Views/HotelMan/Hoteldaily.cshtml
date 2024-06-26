@@ -88,7 +88,7 @@
 
                 .calendar div.null-guest {
                     background-color: #e0e0e0;
-                    color: #999;
+                    color: #808080; /* 灰色 */
                     cursor: pointer;
                 }
 
@@ -353,6 +353,7 @@
                     const response = await fetch(`https://localhost:7103/api/HotelDaily/details/${hotelId}`);
                     if (!response.ok) throw new Error("Failed to fetch order details");
                     orderDetails = await response.json();
+                    console.log("Fetched order details: ", orderDetails); // 檢查數據是否正確獲取
                     renderCalendar(yearSelect.value, monthSelect.value);
                 } catch (error) {
                     console.error(error);
@@ -365,6 +366,9 @@
                 const lastDateOfPrevMonth = new Date(year, month - 1, 0).getDate();
                 const today = new Date();
                 const todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+                console.log('Rendering calendar for:', year, month);
+                console.log('Order details:', orderDetails);
 
                 calendar.innerHTML = "";
                 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -389,19 +393,21 @@
 
                     const orderDetail = orderDetails.find(od => {
                         const checkInDate = new Date(od.checkInDate);
-                        return date.toDateString() === checkInDate.toDateString();
+                        const checkOutDate = new Date(od.checkOutDate);
+                        console.log(`Checking date ${date} against order: checkInDate ${checkInDate}, checkOutDate ${checkOutDate}`);
+                        return date >= checkInDate && date < new Date(checkOutDate.getTime() + 24 * 60 * 60 * 1000); // Including the checkout date
                     });
 
                     if (date < todayDate) {
                         div.className = "past";
                     } else if (orderDetail && orderDetail.guestNumber === 0) {
+                        console.log(`封鎖日期: ${date}, 房間名稱: ${orderDetail.roomName}`);
                         div.className = "null-guest";
                         div.innerHTML = `
                         ${i}
                         <div class="room-name">封鎖</div>
                         <div class="price">TWD ${orderDetail.roomPrice}</div>
-                        `;
-                        div.style.backgroundColor = "gray";
+                    `;
                     } else if (orderDetail) {
                         div.className = "booked";
                         const roomName = document.createElement("div");
@@ -452,6 +458,14 @@
                     calendar.appendChild(div);
                 }
             }
+
+
+
+
+            populateYearMonthSelectors();
+            fetchOrderDetails(@ViewData["HotelId"]);
+
+
 
             async function saveDateDetails(hotelId, formattedDate, availability) {
                 let apiUrl;
