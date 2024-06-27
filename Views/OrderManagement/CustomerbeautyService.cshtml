@@ -164,9 +164,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.18/signalr.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            // SignalR 連接
             const connection = new signalR.HubConnectionBuilder()
                 .withUrl("https://localhost:7103/chatHub")
+                .configureLogging(signalR.LogLevel.Information)
                 .build();
 
             let selectedFile = null;
@@ -174,22 +174,41 @@
             connection.start()
                 .then(() => {
                     console.log("Hub 連線完成");
-                    connection.invoke("RegisterUser", "客服人員");
+                    return connection.invoke("RegisterUser", "客服人員");
                 })
                 .catch(err => {
                     console.error('連線錯誤: ' + err.toString());
                     alert('連線錯誤: ' + err.toString());
                 });
 
-            connection.on("UpdList", function (jsonList) {
+            connection.on("UpdList", updateGuestList);
+            connection.on("UpdContent", updateContent);
+            connection.on("ReceiveFile", receiveFile);
+
+            document.getElementById("fileButton").addEventListener("click", () => {
+                document.getElementById("fileInput").click();
+            });
+
+            document.getElementById("fileInput").addEventListener("change", (event) => {
+                selectedFile = event.target.files[0];
+            });
+
+            document.getElementById("sendButton").addEventListener("click", sendMessage);
+            document.getElementById("message").addEventListener("keydown", (event) => {
+                if (event.key === "Enter") {
+                    sendMessage();
+                }
+            });
+
+            function updateGuestList(jsonList) {
                 const list = JSON.parse(jsonList);
                 const guestList = document.getElementById("GuestList");
-                guestList.innerHTML = ""; // 清空列表
+                guestList.innerHTML = "";
                 for (const [id, online] of Object.entries(list)) {
                     const listItem = document.createElement("li");
                     listItem.className = "list-group-item";
                     listItem.textContent = id + (online ? " (在線)" : " (等待中)");
-                    listItem.addEventListener("click", function () {
+                    listItem.addEventListener("click", () => {
                         document.getElementById("SelectedGuest").textContent = id;
                         connection.invoke("ConfirmConnection", id).catch(err => {
                             console.error('確認連線錯誤: ' + err.toString());
@@ -202,18 +221,18 @@
                     });
                     guestList.appendChild(listItem);
                 }
-            });
+            }
 
-            connection.on("UpdContent", function (msg) {
+            function updateContent(msg) {
                 const contentList = document.getElementById("Content");
                 const listItem = document.createElement("div");
                 listItem.className = "bubble you animate__animated animate__fadeInUp";
                 listItem.textContent = msg;
                 contentList.appendChild(listItem);
-                contentList.scrollTop = contentList.scrollHeight; // 滾動到底部
-            });
+                contentList.scrollTop = contentList.scrollHeight;
+            }
 
-            connection.on("ReceiveFile", function (senderId, fileData, fileName) {
+            function receiveFile(senderId, fileData, fileName) {
                 const contentList = document.getElementById("Content");
                 const listItem = document.createElement("div");
                 listItem.className = senderId === "客服人員" ? "bubble me animate__animated animate__fadeInUp" : "bubble you animate__animated animate__fadeInUp";
@@ -224,23 +243,7 @@
                 listItem.appendChild(link);
                 contentList.appendChild(listItem);
                 contentList.scrollTop = contentList.scrollHeight;
-            });
-
-            document.getElementById("fileButton").addEventListener("click", function () {
-                document.getElementById("fileInput").click();
-            });
-
-            document.getElementById("fileInput").addEventListener("change", function (event) {
-                selectedFile = event.target.files[0];
-            });
-
-            document.getElementById("sendButton").addEventListener("click", sendMessage);
-
-            document.getElementById("message").addEventListener("keydown", function (event) {
-                if (event.key === "Enter") {
-                    sendMessage();
-                }
-            });
+            }
 
             function sendMessage() {
                 const messageInput = document.getElementById("message");
@@ -288,13 +291,14 @@
                         contentList.appendChild(listItem);
                         contentList.scrollTop = contentList.scrollHeight;
 
-                        selectedFile = null; // 清除已選擇的文件
-                        document.getElementById("fileInput").value = ''; // 重置文件輸入
+                        selectedFile = null;
+                        document.getElementById("fileInput").value = '';
                     };
                     reader.readAsDataURL(selectedFile);
                 }
             }
         });
+
 
     </script>
 </body>
