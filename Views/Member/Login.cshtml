@@ -38,7 +38,8 @@
                             <p></p>
 
                             <div class="mb-3">
-                                <label for="PasswordInput" class="form-label" style="font-size:15px">密碼</label>
+                                <label for="PasswordInput" class="form-label" style="font-size:15px">密碼</label> 
+                                <label class="form-label" id="demoReset" style="font-size:13px; margin-left:250px ; text-decoration:underline;">給忘記密碼後使用</label>
                                 <div class="input-group">
                                     <input type="password" class="form-control" id="PasswordInput1" name="Password" placeholder="密碼" style="border-right:none;">
                                     <span class="input-group-text" id="togglePasswordIcon" style="background-color:white; border-left:none; height:38.5px;">
@@ -474,20 +475,10 @@
             evt.preventDefault();
 
             document.querySelector('#EmailInput1').value = "rubyserendipity75@gmail.com";
-            document.querySelector('#PasswordInput1').value = "Qqq123456!!"; //註冊密碼用Qqq123456!!，更改密碼用Aaa123456!!，重設密碼用Zzz123456!!
+            document.querySelector('#PasswordInput1').value = "Qqq123456!!"; //註冊密碼用Qqq123456!!，重設密碼用Zzz123456!!
             queryEmail();
         });
 
-        // //房客Demo鍵(未驗證)
-        // const forbidBtn = document.getElementById("forbidBtn");
-
-        // forbidBtn.addEventListener('click', (evt) => {
-        //     evt.preventDefault();
-
-        //     document.querySelector('#EmailInput1').value = "rubyccww@@gmail.com"
-        //     document.querySelector('#PasswordInput1').value = "No123456@@";
-        //     queryEmail();
-        // });
 
         //管理員Demo鍵
         const adminBtn = document.getElementById("adminBtn");
@@ -510,6 +501,16 @@
             document.querySelector('#EmailInput1').value = "starshining12345@gmail.com"
             document.querySelector('#PasswordInput1').value = "Qq12345!";
             queryEmail();
+        });
+
+        //重設密碼後的demo鍵  demoReset
+        const demoReset = document.getElementById("demoReset");
+
+        demoReset.addEventListener('click', (evt) => {
+            evt.preventDefault();
+
+            document.querySelector('#PasswordInput1').value = "Zzz123456!!";
+
         });
 
     </script>

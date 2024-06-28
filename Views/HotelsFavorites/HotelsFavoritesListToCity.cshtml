@@ -151,7 +151,7 @@
                 console.log(data);
 
                 const hotels = data.map(hotel => {
-                    const { hotelId, hotelImage, hotelName, city, country, levelStar, rating, totalComments, minimumPrice } = hotel;
+                    const { hotelId, hotelImage, hotelName, city, country, levelStar, rating, totalComments, hotelPrice } = hotel;
 
                     // 解析rating字符串以获取JSON对象   //rating 欄位是一個JSON字串，你需要使用 JSON.parse() 將這個字串轉換成JavaScript物件。
                     const ratingObj = JSON.parse(hotel.rating);
@@ -223,7 +223,7 @@
                     <span class="score">${formattedScore} ${ratingDescription}</span>
                     <span class="comment-count">${total} 則評論</span>
                     </p>
-                                                    <p class="price">$${minimumPrice} </p>
+                                                            <p class="price">NTD$${hotelPrice} </p>
                                                 </div>
                                                       </a>
                                      <i class="fa-solid fa-heart love-button"></i>

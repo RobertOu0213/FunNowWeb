@@ -1,0 +1,301 @@
+﻿@{
+    ViewData["Title"] = "CustomerbeautyService";
+    Layout = "_Layout_platform";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>客服對話總站</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: #f4f7f6;
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+        }
+
+        .wrapper {
+            display: flex;
+            height: 80vh;
+            width: 80%;
+            margin: 0 auto;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #fff;
+        }
+
+        .left {
+            width: 30%;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+        }
+
+        .right {
+            width: 70%;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+            .left h4, .right h4 {
+                margin-bottom: 20px;
+            }
+
+        .left ul {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .list-group-item {
+            background-color: #34495e;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            padding: 10px;
+            color: #ecf0f1;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+            .list-group-item:hover, .list-group-item.active {
+                background-color: #1abc9c;
+                color: #fff;
+            }
+
+        .right .chat {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .bubble {
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            max-width: 75%;
+            font-size: 14px;
+        }
+
+            .bubble.you {
+                background-color: #3498db;
+                color: #fff;
+                align-self: flex-start;
+            }
+
+            .bubble.me {
+                background-color: #e1ffc7;
+                margin-left: auto;
+                text-align: right;
+            }
+
+        .write {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #fff;
+        }
+
+            .write input[type="text"] {
+                flex: 1;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                margin-right: 10px;
+            }
+
+            .write .fa-image {
+                font-size: 24px;
+                margin-right: 10px;
+                cursor: pointer;
+            }
+
+            .write .btn {
+                padding: 10px 20px;
+                background-color: #3498db;
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+
+                .write .btn:hover {
+                    background-color: #2980b9;
+                }
+    </style>
+</head>
+<body>
+    <br />
+    <br />
+    <div class="wrapper">
+        <div class="left">
+            <h4 class="text-center">房客列表</h4>
+            <ul class="list-group" id="GuestList"></ul>
+        </div>
+        <div class="right">
+            <div class="p-4">
+                <h4>選擇的房客: <span id="SelectedGuest"></span></h4>
+            </div>
+            <div class="chat" id="Content"></div>
+            <div class="write">
+                <input type="file" id="fileInput" style="display: none;">
+                <i class="fa-regular fa-image" id="fileButton" style="font-size: 24px; cursor: pointer; margin-right: 10px;"></i>
+                <input type="text" id="message" placeholder="發送消息">
+                <button type="button" class="btn" id="sendButton">發送消息</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://kit.fontawesome.com/091893cea4.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.18/signalr.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // SignalR 連接
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl("https://localhost:7103/chatHub")
+                .build();
+
+            let selectedFile = null;
+
+            connection.start()
+                .then(() => {
+                    console.log("Hub 連線完成");
+                    connection.invoke("RegisterUser", "客服人員");
+                })
+                .catch(err => {
+                    console.error('連線錯誤: ' + err.toString());
+                    alert('連線錯誤: ' + err.toString());
+                });
+
+            connection.on("UpdList", function (jsonList) {
+                const list = JSON.parse(jsonList);
+                const guestList = document.getElementById("GuestList");
+                guestList.innerHTML = ""; // 清空列表
+                for (const [id, online] of Object.entries(list)) {
+                    const listItem = document.createElement("li");
+                    listItem.className = "list-group-item";
+                    listItem.textContent = id + (online ? " (在線)" : " (等待中)");
+                    listItem.addEventListener("click", function () {
+                        document.getElementById("SelectedGuest").textContent = id;
+                        connection.invoke("ConfirmConnection", id).catch(err => {
+                            console.error('確認連線錯誤: ' + err.toString());
+                            alert('確認連線錯誤: ' + err.toString());
+                        });
+                        connection.invoke("GetMessages", id).catch(err => {
+                            console.error('獲取消息錯誤: ' + err.toString());
+                            alert('獲取消息錯誤: ' + err.toString());
+                        });
+                    });
+                    guestList.appendChild(listItem);
+                }
+            });
+
+            connection.on("UpdContent", function (msg) {
+                const contentList = document.getElementById("Content");
+                const listItem = document.createElement("div");
+                listItem.className = "bubble you animate__animated animate__fadeInUp";
+                listItem.textContent = msg;
+                contentList.appendChild(listItem);
+                contentList.scrollTop = contentList.scrollHeight; // 滾動到底部
+            });
+
+            connection.on("ReceiveFile", function (senderId, fileData, fileName) {
+                const contentList = document.getElementById("Content");
+                const listItem = document.createElement("div");
+                listItem.className = senderId === "客服人員" ? "bubble me animate__animated animate__fadeInUp" : "bubble you animate__animated animate__fadeInUp";
+                const link = document.createElement("a");
+                link.href = `data:application/octet-stream;base64,${fileData}`;
+                link.download = fileName;
+                link.textContent = `文件: ${fileName}`;
+                listItem.appendChild(link);
+                contentList.appendChild(listItem);
+                contentList.scrollTop = contentList.scrollHeight;
+            });
+
+            document.getElementById("fileButton").addEventListener("click", function () {
+                document.getElementById("fileInput").click();
+            });
+
+            document.getElementById("fileInput").addEventListener("change", function (event) {
+                selectedFile = event.target.files[0];
+            });
+
+            document.getElementById("sendButton").addEventListener("click", sendMessage);
+
+            document.getElementById("message").addEventListener("keydown", function (event) {
+                if (event.key === "Enter") {
+                    sendMessage();
+                }
+            });
+
+            function sendMessage() {
+                const messageInput = document.getElementById("message");
+                const message = messageInput.value.trim();
+                const selectedGuest = document.getElementById("SelectedGuest").textContent;
+
+                if (!selectedGuest) {
+                    alert('請選擇房客');
+                    return;
+                }
+
+                if (message) {
+                    connection.invoke("SendMessage", "客服人員", message, selectedGuest).catch(err => {
+                        console.error('發送錯誤: ' + err.toString());
+                        alert('發送錯誤: ' + err.toString());
+                    });
+
+                    const contentList = document.getElementById("Content");
+                    const listItem = document.createElement("div");
+                    listItem.className = "bubble me animate__animated animate__fadeInUp";
+                    listItem.textContent = message;
+                    contentList.appendChild(listItem);
+                    contentList.scrollTop = contentList.scrollHeight;
+
+                    messageInput.value = '';
+                }
+
+                if (selectedFile) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const fileData = e.target.result.split(",")[1];
+                        connection.invoke("SendFile", "客服人員", fileData, selectedFile.name, selectedGuest).catch(err => {
+                            console.error('文件傳輸錯誤: ' + err.toString());
+                            alert('文件傳輸錯誤: ' + err.toString());
+                        });
+
+                        const contentList = document.getElementById("Content");
+                        const listItem = document.createElement("div");
+                        listItem.className = "bubble me animate__animated animate__fadeInUp";
+                        const link = document.createElement("a");
+                        link.href = URL.createObjectURL(selectedFile);
+                        link.download = selectedFile.name;
+                        link.textContent = `文件: ${selectedFile.name}`;
+                        listItem.appendChild(link);
+                        contentList.appendChild(listItem);
+                        contentList.scrollTop = contentList.scrollHeight;
+
+                        selectedFile = null; // 清除已選擇的文件
+                        document.getElementById("fileInput").value = ''; // 重置文件輸入
+                    };
+                    reader.readAsDataURL(selectedFile);
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>

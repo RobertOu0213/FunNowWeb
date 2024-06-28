@@ -16,6 +16,7 @@
         body {
             background-color: #f8f9fa;
             position: relative;
+            font-family: 'Arial', sans-serif;
         }
 
         .chat-button {
@@ -29,10 +30,10 @@
             position: fixed;
             bottom: 80px;
             right: 20px;
-            width: 300px;
+            width: 280px; /* 調整寬度 */
             max-width: 90%;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
             background-color: #fff;
             display: none;
             flex-direction: column;
@@ -44,12 +45,15 @@
             color: #fff;
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
+            padding: 10px 15px;
+            text-align: center;
         }
 
         .chat-container {
             display: flex;
             flex-direction: column;
-            height: 400px;
+            height: 300px; /* 調整高度 */
+            padding: 10px;
         }
 
         .chat-box {
@@ -69,29 +73,57 @@
 
             .chat-input input {
                 flex: 1;
-                padding: 5px;
+                padding: 10px;
                 border: 1px solid #ccc;
                 border-radius: 5px;
+                margin-right: 10px;
+                min-width: 0; /* 防止輸入框過大 */
             }
 
             .chat-input button {
-                margin-left: 10px;
+                margin-left: 5px;
+                padding: 8px 12px;
             }
 
-        .message {
-            padding: 5px;
-            margin-bottom: 5px;
-            border-radius: 5px;
+        .fa-image {
+            font-size: 20px;
+            margin-right: 10px;
+            color: #343a40;
+            cursor: pointer;
         }
+
+        .message {
+            padding: 8px 12px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            max-width: 80%;
+            word-wrap: break-word;
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+            .message .countdown {
+                display: inline;
+                white-space: nowrap;
+            }
 
             .message.self {
                 background-color: #d1ecf1;
+                align-self: flex-end;
                 text-align: right;
             }
 
             .message.other {
                 background-color: #f8d7da;
+                align-self: flex-start;
+                text-align: left;
             }
+
+        .list-group-item {
+            border: none;
+            padding: 5px 10px;
+        }
+
     </style>
 </head>
 <body>
@@ -106,11 +138,17 @@
                 <ul class="list-group" id="Content"></ul>
             </div>
             <div class="chat-input">
-                <input type="text" id="message" placeholder="請完整輸入您的問題">
+                <input type="file" id="fileInput" style="display: none;">
+                <i class="fa-regular fa-image" id="fileButton" style="width: 24px; height: 24px; cursor: pointer;"></i>
+                <input type="text" id="message" placeholder="請輸入問題">
                 <button type="button" class="btn btn-primary" id="sendButton">傳送</button>
             </div>
         </div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.18/signalr.min.js"></script>
+
+    <script src="https://kit.fontawesome.com/091893cea4.js" crossorigin="anonymous"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.18/signalr.min.js"></script>
     <script>
@@ -120,16 +158,7 @@
                 const connectingMessage = document.createElement("li");
                 connectingMessage.id = "connectingMessage";
                 connectingMessage.className = "list-group-item animate__animated animate__fadeInUp message";
-                connectingMessage.innerText = "與客服人員連線中請稍後...";
-                chatBox.appendChild(connectingMessage);
-            }
-
-            function showConnectingMessage() {
-                const chatBox = document.getElementById("Content");
-                const connectingMessage = document.createElement("li");
-                connectingMessage.id = "connectingMessage";
-                connectingMessage.className = "list-group-item animate__animated animate__fadeInUp message";
-                connectingMessage.innerHTML = "與客服人員連線中請稍後... <span id='countdown'>30</span> 秒";
+                connectingMessage.innerHTML = "與客服人員連線中請稍後... <span id='countdown' class='countdown'>30</span> 秒";
                 chatBox.appendChild(connectingMessage);
 
                 let countdown = 30;
@@ -163,22 +192,25 @@
 
             const userId = generateUniqueId();
             const connection = new signalR.HubConnectionBuilder()
-                .withUrl("https://localhost:7103/chatHub")
+                .withUrl("https://localhost:7103/chatHub")  // 使用完整URL
                 .build();
 
             connection.start()
                 .then(() => {
                     console.log("Hub 連線完成");
-                    connection.invoke("RegisterUser", userId);
+                    return connection.invoke("RegisterUser", userId);
+                })
+                .then(() => {
+                    console.log("用戶註冊成功");
                 })
                 .catch(err => {
-                    console.error('連線錯誤: ' + err.toString());
+                    console.error('連線錯誤: ', err);
                     alert('連線錯誤: ' + err.toString());
                     hideConnectingMessage(); // 隱藏「連線中」訊息
                 });
 
             connection.on("UpdSelfID", function (id) {
-                document.getElementById("${memberId}").textContent = id;
+                document.getElementById(memberId).textContent = id;
             });
 
             connection.on("UpdContent", function (msg) {
@@ -200,7 +232,21 @@
                 contentList.scrollTop = contentList.scrollHeight;
             });
 
+            connection.on("ReceiveFile", function (senderId, fileData, fileName) {
+                const contentList = document.getElementById("Content");
+                const listItem = document.createElement("li");
+                listItem.className = senderId === userId ? "list-group-item animate__animated animate__fadeInUp message self" : "list-group-item animate__animated animate__fadeInUp message other";
+                const link = document.createElement("a");
+                link.href = `data:application/octet-stream;base64,${fileData}`;
+                link.download = fileName;
+                link.textContent = `文件: ${fileName}`;
+                listItem.appendChild(link);
+                contentList.appendChild(listItem);
+                contentList.scrollTop = contentList.scrollHeight;
+            });
+
             document.getElementById("sendButton").addEventListener("click", sendMessage);
+            document.getElementById("fileInput").addEventListener("change", sendFile);
             document.getElementById("message").addEventListener("keydown", function (event) {
                 if (event.key === "Enter") {
                     sendMessage();
@@ -227,10 +273,37 @@
                 }
             }
 
+            function sendFile(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const fileData = e.target.result.split(",")[1];
+                        connection.invoke("SendFile", userId, fileData, file.name, "客服人員").catch(err => {
+                            console.error('文件傳輸錯誤: ' + err.toString());
+                            alert('文件傳輸錯誤: ' + err.toString());
+                        });
+
+                        const contentList = document.getElementById("Content");
+                        const listItem = document.createElement("li");
+                        listItem.className = "list-group-item animate__animated animate__fadeInUp message self";
+                        const link = document.createElement("a");
+                        link.href = URL.createObjectURL(file);
+                        link.download = file.name;
+                        link.textContent = `文件: ${file.name}`;
+                        listItem.appendChild(link);
+                        contentList.appendChild(listItem);
+                        contentList.scrollTop = contentList.scrollHeight;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+
             document.getElementById("needHelpBtn").addEventListener("click", function () {
                 document.getElementById("chatWindow").style.display = 'flex';
             });
         });
+
     </script>
 
 </body>

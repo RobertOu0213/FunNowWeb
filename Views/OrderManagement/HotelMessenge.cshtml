@@ -159,9 +159,9 @@
                                 message.classList.add('received');
                             }
                             message.innerHTML = `
+                                 <span class="message-time">${new Date(dialog.createAt).toLocaleString()}</span>
                                 <div class="message-content">
-                                    <p>${dialog.detail}</p>
-                                    <span class="message-time">${new Date(dialog.createAt).toLocaleString()}</span>
+                                      <p>${dialog.detail}</p>
                                 </div>
                             `;
                             chatContent.appendChild(message);

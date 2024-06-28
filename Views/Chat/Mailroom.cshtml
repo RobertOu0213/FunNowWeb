@@ -96,13 +96,14 @@
             display: none;
             flex-direction: column;
             height: 300px; /* 固定高度 */
-            position: absolute; /* 絕對定位 */
+            position: fixed; /* 絕對定位 */
             bottom: 60px; /* 確保緊貼在按鈕上方 */
             /* 調整對話框位置0624針對對話框的大小調整 */
-            width: 400px;
+            width: 380px;
             height: 70vh;
             max-height: 600px;
             overflow: hidden;
+            z-index: 1000;
         }
 
         .chatbox-header {
@@ -344,7 +345,7 @@
                 </div>
                 <button class="minimize-chat">-</button>
             </div>
-            <iframe src='https://webchat.botframework.com/embed/0619-chatbot-bot?s=h5kAoRobqWU.jQiq7j_QBmyzbGFmlLI4L75VMWID74v2P_LUOrJ6KYs' style='min-width: 400px; width: 100%; min-height: 500px;'></iframe>
+            <iframe src='https://webchat.botframework.com/embed/0619-chatbot-bot?s=h5kAoRobqWU.jQiq7j_QBmyzbGFmlLI4L75VMWID74v2P_LUOrJ6KYs' style='min-width: 380px; width: 100%; min-height: 500px;'></iframe>
         </div>
 
       
