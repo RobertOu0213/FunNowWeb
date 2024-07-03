@@ -270,7 +270,7 @@
                     let data = await res.json();
 
                     if (data.success) {
-                        console.log(data);
+              
                         $('#spnHotelName').text(data.updatedHotel.hotelName);
                         $('#spnCityName').text(data.updatedHotel.cityName + ',');
                         $('#spnCountryName').text(data.updatedHotel.countryName);
