@@ -14,5 +14,6 @@ namespace PrjFunNowWeb.Models
     public partial interface IFunNowContextProcedures
     {
         Task<int> UpdateIsExpiredAsync(OutputParameter<int> returnValue = null, CancellationToken cancellationToken = default);
+        Task<int> UpdateOrderStatusIfCheckOutDatePassedAsync(OutputParameter<int> returnValue = null, CancellationToken cancellationToken = default);
     }
 }

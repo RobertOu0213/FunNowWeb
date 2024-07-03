@@ -145,6 +145,10 @@
       {
          "Name": "[dbo].[UpdateIsExpired]",
          "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[UpdateOrderStatusIfCheckOutDatePassed]",
+         "ObjectType": 1
       }
    ],
    "UiHint": null,
